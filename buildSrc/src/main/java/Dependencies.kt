@@ -13,6 +13,11 @@ object Application {
 }
 
 object Versions {
+    object Rhino {
+        const val Engine = "1.7.12"
+        const val Helper = "1.5"
+    }
+
     object Network {
         const val Jsoup = "1.13.1"
         const val Retrofit = "2.9.0"
@@ -63,6 +68,11 @@ object Versions {
 }
 
 object Dependencies {
+    object Rhino {
+        const val Engine = "org.mozilla:rhino:${Versions.Rhino.Engine}"
+        const val Helper = "com.faendir.rhino:rhino-android:${Versions.Rhino.Helper}"
+    }
+
     object Network {
         const val Jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
         const val Retrofit = "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}"

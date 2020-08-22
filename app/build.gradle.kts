@@ -52,17 +52,15 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-    generateStubs = true
-}
-
 dependencies {
     fun def(vararg strings: String) {
         for (string in strings) implementation(string)
     }
 
     def(
+        Dependencies.Rhino.Engine,
+        Dependencies.Rhino.Helper,
+
         Dependencies.Network.Jsoup,
         Dependencies.Network.Retrofit,
         Dependencies.Network.OkHttp,

@@ -165,5 +165,7 @@
     <string name="danger">위험</string>
     <string name="content_none">표시할 항목이 없어요</string>
     <string name="next">다음</string>
+    <string name="input_bot_source">봇 소스 입력…</string>
+    <string name="default_sourcecode"><![CDATA[const response = (room, msg, sender, isGroupChat, replier, ImageDB, packageName) => {\n\n}]]></string>
 
 </resources>
