@@ -47,6 +47,8 @@ object Versions {
     }
 
     object Ui {
+        const val Browser = "1.3.0-alpha05"
+        const val ShapeOfView = "1.3.2"
         const val YoYo = "2.3@aar"
         const val Lottie = "3.4.1"
         const val MaterialPopupMenu = "4.0.1"
@@ -60,6 +62,7 @@ object Versions {
     }
 
     object Utils {
+        const val GsonConverter = "2.6.2"
         const val YoYoHelper = "2.1@aar"
         const val HangulParser = "1.0.0"
         const val AndroidUtils = "3.2.0"
@@ -102,6 +105,8 @@ object Dependencies {
     }
 
     object Ui {
+        const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
+        const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
         const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"
         const val Lottie = "com.airbnb.android:lottie:${Versions.Ui.Lottie}"
         const val MaterialPopupMenu =
@@ -118,6 +123,7 @@ object Dependencies {
     }
 
     object Utils {
+        const val GsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.Utils.GsonConverter}"
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
         const val YoyoHelper = "com.daimajia.easing:library:${Versions.Utils.YoYoHelper}"
         const val HangulParser = "com.github.kimkevin:hangulparser:${Versions.Utils.HangulParser}"

@@ -1,4 +1,7 @@
 <resources>
+    <string name="github_client_id">3c273fbcbc9f47ebb67a</string>
+    <string name="github_client_secret">b576aa46edf9cc8515b6e14e5dcce6041b3042fe</string>
+
     <string name="app_name">GitKakaoBot</string>
     <string name="copyright">© 2020 SungBin</string>
     <string name="need_permission_use_service">앱 사용 시 필요한 권한이에요.</string>
@@ -167,5 +170,10 @@
     <string name="next">다음</string>
     <string name="input_bot_source">봇 소스 입력…</string>
     <string name="default_sourcecode"><![CDATA[const response = (room, msg, sender, isGroupChat, replier, ImageDB, packageName) => {\n\n}]]></string>
+    <string name="welcome">환영합니다!</string>
+    <string name="need_setting_before_start">시작하기 앞서,\n몇가지 설정이 필요해요.</string>
+    <string name="permission_grant">권한 부여됨</string>
+    <string name="start_with_github_login">깃허브 로그인으로 시작하기</string>
+    <string name="loading">불러오는중…</string>
 
 </resources>

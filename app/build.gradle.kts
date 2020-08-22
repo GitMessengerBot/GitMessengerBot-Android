@@ -78,6 +78,8 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
+        Dependencies.Ui.Browser,
+        Dependencies.Ui.ShapeOfYou,
         Dependencies.Ui.YoYo,
         Dependencies.Ui.Lottie,
         Dependencies.Ui.MaterialPopupMenu,
@@ -89,6 +91,7 @@ dependencies {
         Dependencies.Ui.CardView,
         Dependencies.Ui.ConstraintLayout,
 
+        Dependencies.Utils.GsonConverter,
         Dependencies.Utils.YoyoHelper,
         Dependencies.Utils.HangulParser,
         Dependencies.Utils.AndroidUtils,

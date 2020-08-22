@@ -38,7 +38,7 @@ class KakaoTalkListener : NotificationListenerService() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
-        UiUtil.toast(context, "Power ON - 22")
+        UiUtil.toast(context, "Power ON")
         init(context)
     }
 
@@ -156,7 +156,7 @@ class KakaoTalkListener : NotificationListenerService() {
             }
         }
 
-        private class ImageDB(private val bitmap: Bitmap?) {
+        class ImageDB(private val bitmap: Bitmap?) {
             fun getProfileImage(): String? {
                 if (bitmap == null) return null
                 val baos = ByteArrayOutputStream()
