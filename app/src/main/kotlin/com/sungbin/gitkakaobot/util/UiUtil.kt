@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
-object UiUtils {
+object UiUtil {
 
     fun toast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
