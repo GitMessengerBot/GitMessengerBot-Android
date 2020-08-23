@@ -16,6 +16,7 @@ import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.sungbintool.LogUtils
 import com.sungbin.sungbintool.Utils
 import com.sungbin.sungbintool.extensions.clear
 import com.sungbin.sungbintool.extensions.hide
@@ -97,7 +98,10 @@ class BotFragment : Fragment(), OnBackPressedUtil {
                 BotUtil.getLastIndex(BotType.JS, viewModel.jsBotList.value!!) + 1,
                 Utils.makeRandomUUID()
             )
-            viewModel.jsBotList.value!!.add(bot)
+            viewModel.jsBotList.run {
+                value?.add(bot)
+                postValue(value)
+            }
             BotUtil.createNewBot(requireContext(), bot)
             mbtg_container.check(R.id.btn_javascript)
             tiet_bot_name.clear()
@@ -106,6 +110,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         viewModel.jsBotList.observe(viewLifecycleOwner, {
+            LogUtils.w(it)
             adapter = BotAdapter(it)
             rv_bot.adapter = adapter
             if (it.isNullOrEmpty()) {
