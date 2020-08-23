@@ -18,6 +18,7 @@ import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.gitkakaobot.util.manager.StackManager.scripts
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
@@ -49,7 +50,7 @@ class KakaoTalkListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (!DataUtil.read(applicationContext, "power", "false").toBoolean()
+        if (!DataUtil.read(applicationContext, PathManager.POWER, "false").toBoolean()
             || sbn.packageName != "com.kakao.talk"
         ) return
         val wExt = Notification.WearableExtender(sbn.notification)

@@ -55,9 +55,8 @@ object Versions {
         const val SimpleCodeEditor = "1.0.2"
         const val JsonViewer = "v1.1"
         const val Licenser = "2.0.0"
-        const val Material = "1.2.0"
+        const val Material = "1.2.0-alpha06"
         const val Glide = "4.11.0"
-        const val CardView = "1.0.0"
         const val ConstraintLayout = "1.1.3"
     }
 
@@ -117,7 +116,6 @@ object Dependencies {
         const val Licenser = "com.github.marcoscgdev:Licenser:${Versions.Ui.Licenser}"
         const val Material = "com.google.android.material:material:${Versions.Ui.Material}"
         const val Glide = "com.github.bumptech.glide:glide:${Versions.Ui.Glide}"
-        const val CardView = "androidx.cardview:cardview:${Versions.Ui.CardView}"
         const val ConstraintLayout =
             "androidx.constraintlayout:constraintlayout:${Versions.Ui.ConstraintLayout}"
     }

@@ -88,7 +88,6 @@ dependencies {
         Dependencies.Ui.Licenser,
         Dependencies.Ui.Material,
         Dependencies.Ui.Glide,
-        Dependencies.Ui.CardView,
         Dependencies.Ui.ConstraintLayout,
 
         Dependencies.Utils.GsonConverter,

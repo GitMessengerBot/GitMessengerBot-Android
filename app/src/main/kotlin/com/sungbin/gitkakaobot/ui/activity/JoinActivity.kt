@@ -14,11 +14,13 @@ import androidx.core.content.ContextCompat
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
-import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.DataUtil
+import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_join.*
+import org.jetbrains.anko.startActivity
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -64,6 +66,8 @@ class JoinActivity : AppCompatActivity() {
                 CODE_REQUEST_STORAGE_ACCESS
             )
         }
+
+        checkAllGrantPermissions()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,8 +77,8 @@ class JoinActivity : AppCompatActivity() {
                 if (getNotificationListenerPermission()) {
                     btn_request_notification_read.apply {
                         text = getString(R.string.permission_grant)
+                        setOnClickListener { }
                         alpha = 0.5f
-                        isEnabled = false
                     }
                 }
                 checkAllGrantPermissions()
@@ -93,8 +97,8 @@ class JoinActivity : AppCompatActivity() {
         ) {
             btn_request_storage.apply {
                 text = getString(R.string.permission_grant)
+                setOnClickListener { }
                 alpha = 0.5f
-                isEnabled = false
             }
             checkAllGrantPermissions()
         }
@@ -117,9 +121,20 @@ class JoinActivity : AppCompatActivity() {
             == PackageManager.PERMISSION_GRANTED &&
             getNotificationListenerPermission()
         ) {
+            btn_request_notification_read.apply {
+                text = getString(R.string.permission_grant)
+                alpha = 0.5f
+                setOnClickListener { }
+            }
+
+            btn_request_storage.apply {
+                text = getString(R.string.permission_grant)
+                alpha = 0.5f
+                setOnClickListener { }
+            }
+
             btn_start_with_github.apply {
-                alpha = 1.0f
-                isEnabled = true
+                alpha = 1f
                 setOnClickListener {
                     val builder = CustomTabsIntent.Builder()
                     val customTabsIntent = builder.build()
@@ -147,10 +162,16 @@ class JoinActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ json ->
-                        UiUtil.toast(applicationContext, json["access_token"].asString)
+                        DataUtil.save(
+                            applicationContext,
+                            PathManager.TOKEN,
+                            json["access_token"].asString
+                        )
                     }, { throwable ->
                         loadingDialog.setError(throwable)
                     }, {
+                        finish()
+                        startActivity<DashboardActivity>()
                         loadingDialog.close()
                     })
             }

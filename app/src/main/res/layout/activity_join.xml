@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:ignore="MissingConstraints">
+    android:layout_height="match_parent">
 
     <com.github.florent37.shapeofview.shapes.ArcView
         android:id="@+id/av_container"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:elevation="@dimen/margin_half"
+        app:layout_constraintTop_toTopOf="parent"
         app:shape_arc_cropDirection="outside"
         app:shape_arc_height="20dp"
         app:shape_arc_position="bottom">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:paddingTop="@dimen/margin_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:paddingTop="@dimen/margin_default">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -73,18 +73,18 @@
             android:id="@+id/fl_storage_icon_frame"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_twice"
-            android:background="@drawable/bg_all_round">
+            android:background="@drawable/bg_all_round_30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_storage_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_save_24"
                 android:contentDescription="@string/storage_permission"
-                app:tint="@color/colorWhite"/>
+                android:src="@drawable/ic_baseline_save_24"
+                app:tint="@color/colorWhite" />
 
         </FrameLayout>
 
@@ -97,7 +97,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"/>
+            app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/storage_description"
@@ -105,7 +106,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="@dimen/margin_half"
-            android:fontFamily="@font/nanumgothic"
             android:text="@string/reason_for_storage_permission"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
@@ -116,9 +116,9 @@
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/btn_request_storage"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginTop="@dimen/margin_half"
-            android:background="@drawable/bg_all_round"
+            android:background="@drawable/bg_all_round_30"
             android:paddingStart="@dimen/margin_default"
             android:paddingEnd="@dimen/margin_default"
             android:text="@string/give_permission"
@@ -141,18 +141,18 @@
             android:id="@+id/fl_notification_icon_frame"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_twice"
-            android:background="@drawable/bg_all_round">
+            android:background="@drawable/bg_all_round_30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_notification_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_notifications_24"
                 android:contentDescription="@string/read_notification_permission"
-                app:tint="@color/colorWhite"/>
+                android:src="@drawable/ic_baseline_notifications_24"
+                app:tint="@color/colorWhite" />
 
         </FrameLayout>
 
@@ -165,7 +165,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"/>
+            app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/notification_description"
@@ -173,7 +174,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="@dimen/margin_half"
-            android:fontFamily="@font/nanumgothic"
             android:text="@string/reason_for_read_notification_permission"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
@@ -184,9 +184,9 @@
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/btn_request_notification_read"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginTop="@dimen/margin_half"
-            android:background="@drawable/bg_all_round"
+            android:background="@drawable/bg_all_round_30"
             android:paddingStart="@dimen/margin_default"
             android:paddingEnd="@dimen/margin_default"
             android:text="@string/give_permission"
@@ -200,11 +200,10 @@
         android:id="@+id/btn_start_with_github"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:background="@drawable/bg_all_round"
+        android:background="@drawable/bg_all_round_30"
         android:textColor="@color/colorWhite"
         android:alpha="0.5"
         android:text="@string/start_with_github_login"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

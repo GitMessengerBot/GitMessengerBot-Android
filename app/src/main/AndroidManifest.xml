@@ -27,8 +27,8 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppThemeWhiteStatusBar.NoActionBar" />
+            android:name=".ui.activity.DashboardActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.activity.JoinActivity"

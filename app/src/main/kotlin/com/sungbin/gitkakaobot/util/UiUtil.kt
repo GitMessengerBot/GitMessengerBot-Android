@@ -5,6 +5,10 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * Created by SungBin on 2020-08-23.
+ */
+
 object UiUtil {
 
     fun toast(context: Context, message: String) {

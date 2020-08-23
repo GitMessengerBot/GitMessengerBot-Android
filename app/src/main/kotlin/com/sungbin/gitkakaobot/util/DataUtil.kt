@@ -3,6 +3,10 @@ package com.sungbin.gitkakaobot.util
 import android.content.Context
 import androidx.core.content.edit
 
+/**
+ * Created by SungBin on 2020-08-23.
+ */
+
 object DataUtil {
 
     fun save(context: Context, title: String, value: String) {

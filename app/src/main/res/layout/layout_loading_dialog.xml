@@ -6,9 +6,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/margin_default"
-    android:background="@drawable/bg_all_round"
+    android:background="@drawable/bg_all_round_30"
     android:backgroundTint="@color/colorWhite"
-    tools:context=".ui.activity.MainActivity"
     tools:ignore="MissingConstraints,RtlSymmetry" >
 
     <com.airbnb.lottie.LottieAnimationView
