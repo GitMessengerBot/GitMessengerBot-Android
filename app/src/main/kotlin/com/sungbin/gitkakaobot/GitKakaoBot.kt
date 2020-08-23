@@ -1,6 +1,7 @@
 package com.sungbin.gitkakaobot
 
 import android.app.Application
+import android.content.Context
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -9,4 +10,15 @@ import dagger.hilt.android.HiltAndroidApp
  */
 
 @HiltAndroidApp
-class GitKakaoBot : Application()
+class GitKakaoBot : Application() {
+
+    companion object {
+        lateinit var context: Context
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        context = applicationContext
+    }
+
+}

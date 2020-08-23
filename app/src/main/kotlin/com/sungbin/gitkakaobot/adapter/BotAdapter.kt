@@ -19,7 +19,7 @@ import java.util.*
  */
 
 class BotAdapter constructor(
-    private val items: List<BotItem>
+    private val items: ArrayList<BotItem>
 ) : RecyclerView.Adapter<BotAdapter.ViewHolder>() {
 
     init {
@@ -61,7 +61,6 @@ class BotAdapter constructor(
         viewholder.bindViewHolder(items[position])
     }
 
-    fun getAllItems() = items
     override fun getItemCount() = items.size
     override fun getItemId(position: Int) = position.toLong()
     override fun getItemViewType(position: Int) = position

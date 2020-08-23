@@ -7,8 +7,8 @@ import com.sungbin.gitkakaobot.util.BotUtil
 
 class BotViewModel : ViewModel() {
 
-    val jsBotList: MutableLiveData<List<BotItem>> = MutableLiveData()
-    val simpleBotList: MutableLiveData<List<BotItem>> = MutableLiveData()
+    val jsBotList: MutableLiveData<ArrayList<BotItem>> = MutableLiveData()
+    val simpleBotList: MutableLiveData<ArrayList<BotItem>> = MutableLiveData()
 
     fun initBotList() {
         jsBotList.value = BotUtil.jsBotItems

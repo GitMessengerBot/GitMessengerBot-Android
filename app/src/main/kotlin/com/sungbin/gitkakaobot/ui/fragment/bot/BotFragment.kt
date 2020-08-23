@@ -16,7 +16,6 @@ import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
 import com.sungbin.gitkakaobot.util.UiUtil
-import com.sungbin.sungbintool.LogUtils
 import com.sungbin.sungbintool.Utils
 import com.sungbin.sungbintool.extensions.clear
 import com.sungbin.sungbintool.extensions.hide
@@ -37,13 +36,6 @@ class BotFragment : Fragment(), OnBackPressedUtil {
     private var fromPos = -1
     private var toPos = -1
     private var adapter: BotAdapter? = null
-    private val bots = arrayListOf<BotItem>(
-        /*BotItem("test-bot-1", true, true, BotType.JS, "없음", 1, Utils.makeRandomUUID()),
-        BotItem("test-bot-2", true, false, BotType.SIMPLE, "어제", 2, Utils.makeRandomUUID()),
-        BotItem("test-bot-3", false, true, BotType.JS, "오늘", 3, Utils.makeRandomUUID()),
-        BotItem("test-bot-4", false, false, BotType.JS, "내일", 4, Utils.makeRandomUUID()),
-        BotItem("test-bot-5", true, true, BotType.JS, "내년", 5, Utils.makeRandomUUID())*/
-    )
 
     private val viewModel by viewModels<BotViewModel>()
 
@@ -68,7 +60,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             rv_bot.show()
         }
 
-        adapter = BotAdapter(bots)
+        adapter = BotAdapter(viewModel.jsBotList.value ?: arrayListOf())
         rv_bot.adapter = adapter
         rv_bot.apply {
             setHasFixedSize(true)
@@ -94,25 +86,36 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         btn_add.setOnClickListener {
+            val botType =
+                if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
             val bot = BotItem(
                 tiet_bot_name.text.toString(),
                 false,
                 false,
-                if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE,
+                botType,
                 "없음",
-                getLastIndex() + 1,
+                BotUtil.getLastIndex(BotType.JS, viewModel.jsBotList.value!!) + 1,
                 Utils.makeRandomUUID()
             )
+            viewModel.jsBotList.value!!.add(bot)
             BotUtil.createNewBot(requireContext(), bot)
             mbtg_container.check(R.id.btn_javascript)
             tiet_bot_name.clear()
             tsl_container.finishTransform()
             UiUtil.snackbar(it, requireContext().getString(R.string.added_new_bot))
         }
-    }
 
-    private fun getLastIndex(): Int {
-        return 1
+        viewModel.jsBotList.observe(viewLifecycleOwner, {
+            adapter = BotAdapter(it)
+            rv_bot.adapter = adapter
+            if (it.isNullOrEmpty()) {
+                cl_empty.show()
+                rv_bot.hide()
+            } else {
+                cl_empty.hide()
+                rv_bot.show()
+            }
+        })
     }
 
     private val dragCallback = object : ItemTouchHelper.Callback() {
@@ -157,13 +160,15 @@ class BotFragment : Fragment(), OnBackPressedUtil {
                 moveItem(dragFrom, dragTo)
             }
             dragTo = -1
-            dragFrom = dragTo
+            dragFrom = -1
         }
 
         private fun moveItem(oldPos: Int, newPos: Int) {
-            val oldItem = bots[oldPos]
-            val newItem = bots[newPos]
-            bots.run {
+            val oldItem = viewModel.jsBotList.value!![oldPos]
+            val newItem = viewModel.jsBotList.value!![newPos]
+            BotUtil.changeBotIndex(oldItem, newPos)
+            BotUtil.changeBotIndex(newItem, oldPos)
+            viewModel.jsBotList.value!!.run {
                 removeAt(oldPos)
                 add(oldPos, newItem)
                 removeAt(newPos)
@@ -188,13 +193,6 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             }
         }
         return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        adapter!!.getAllItems().map {
-            LogUtils.w(it.toString())
-        }
     }
 
 }
