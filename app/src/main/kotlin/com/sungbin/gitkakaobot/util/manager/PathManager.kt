@@ -8,11 +8,13 @@ object PathManager {
 
     const val POWER = "power"
     const val TOKEN = "github-token"
-    const val JS = "GitKakaoBot/Bots/js"
-    const val SIMPLE = "GitKakaoBot/Bots/simple"
+    const val DEFAULT_CODE = "default-code"
+
+    const val JS = "GitKakaoBot/bot/js"
+    const val SIMPLE = "GitKakaoBot/bot/simple"
     const val LOG = "GitKakaoBot/log"
-    const val SENDER = "GitKakaoBot/Debug/sender"
-    const val ROOM = "GitKakaoBot/Debug/room"
+    const val SENDER = "GitKakaoBot/debug/sender"
+    const val ROOM = "GitKakaoBot/debug/room"
     const val DATABASE = "GitKakaoBot/database"
 
 }

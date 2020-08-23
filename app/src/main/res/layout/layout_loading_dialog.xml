@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_default"
     android:background="@drawable/bg_all_round_30"
     android:backgroundTint="@color/colorWhite"
-    tools:ignore="MissingConstraints,RtlSymmetry" >
+    android:padding="@dimen/margin_default"
+    tools:ignore="MissingConstraints,RtlSymmetry">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lav_load"
@@ -18,17 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"
         app:lottie_enableMergePathsForKitKatAndAbove="true"
+        app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading"
         app:lottie_renderMode="hardware" />
 
     <TextView
-        android:gravity="center"
-        android:paddingStart="@dimen/margin_twice"
         android:id="@+id/tv_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="@dimen/margin_twice"
         android:text="@string/loading"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"

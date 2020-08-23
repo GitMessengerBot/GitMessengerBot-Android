@@ -32,7 +32,6 @@
     <string name="remove">Remove</string>
     <string name="saerch">Search</string>
     <string name="bots">Bots</string>
-    <string name="add_bot">Add Bot</string>
     <string name="bot_name">봇 이름</string>
     <string name="bot_add">봇 추가</string>
     <string name="added_new_bot">새로운 봇이 추가되었습니다.</string>
@@ -175,7 +174,7 @@
     <string name="permission_grant">권한 부여됨</string>
     <string name="start_with_github_login">깃허브 로그인으로 시작하기</string>
     <string name="loading">불러오는중…</string>
-    <string name="empty_bot">추가된 봇이 없어요 😢\n봇을 새롭게 만들어보세요!</string>
+    <string name="empty_bot">추가된 봇이 없어요 😢\n봇을 새로 추가해보세요!</string>
     <string name="edit">수정</string>
 
 </resources>

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
+import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -121,6 +122,10 @@ class JoinActivity : AppCompatActivity() {
             == PackageManager.PERMISSION_GRANTED &&
             getNotificationListenerPermission()
         ) {
+            Thread {
+                BotUtil.initBotList()
+            }.start()
+
             btn_request_notification_read.apply {
                 text = getString(R.string.permission_grant)
                 alpha = 0.5f

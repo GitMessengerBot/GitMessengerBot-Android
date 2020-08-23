@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.sungbin.gitkakaobot.R
+import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.jetbrains.anko.startActivity
@@ -27,6 +28,12 @@ class SplashActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
+        if (DataUtil.read(applicationContext, PathManager.TOKEN, "null") != "null") {
+            Thread {
+                BotUtil.initBotList()
+            }.start()
+        }
+
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
             if (DataUtil.read(applicationContext, PathManager.TOKEN, "null") == "null") {
@@ -35,7 +42,7 @@ class SplashActivity : AppCompatActivity() {
                 startActivity<DashboardActivity>()
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }, 3000)
+        }, 1500)
     }
 
     override fun onBackPressed() {}

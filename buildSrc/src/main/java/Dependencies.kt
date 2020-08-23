@@ -47,6 +47,7 @@ object Versions {
     }
 
     object Ui {
+        const val TransformationLayout = "1.0.5"
         const val Browser = "1.3.0-alpha05"
         const val ShapeOfView = "1.3.2"
         const val YoYo = "2.3@aar"
@@ -64,7 +65,7 @@ object Versions {
         const val GsonConverter = "2.6.2"
         const val YoYoHelper = "2.1@aar"
         const val HangulParser = "1.0.0"
-        const val AndroidUtils = "3.2.1"
+        const val AndroidUtils = "3.2.2"
         const val CarshReporter = "1.1.0"
     }
 }
@@ -104,6 +105,7 @@ object Dependencies {
     }
 
     object Ui {
+        const val TransformationLayout = "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
         const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"

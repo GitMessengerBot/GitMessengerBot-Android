@@ -1,18 +1,18 @@
 package com.sungbin.gitkakaobot.ui.fragment.bot
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.util.BotUtil
 
 class BotViewModel : ViewModel() {
 
-    /*val recentlySongsItem: MutableLiveData<List<SongItem>> = MutableLiveData()
-    val songsItem: MutableLiveData<List<SongItem>> = MutableLiveData()
+    val jsBotList: MutableLiveData<List<BotItem>> = MutableLiveData()
+    val simpleBotList: MutableLiveData<List<BotItem>> = MutableLiveData()
 
-    fun initSongs(context: Context) {
-        songsItem.value = SongUtils.getAllAudioData(context)
+    fun initBotList() {
+        jsBotList.value = BotUtil.jsBotItems
+        simpleBotList.value = BotUtil.simpleBotItems
     }
-
-    fun initRecentlySongs() {
-        recentlySongsItem.value = SongUtils.sampleSongItemList
-    }*/
 
 }

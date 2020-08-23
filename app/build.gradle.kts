@@ -78,6 +78,7 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
+        Dependencies.Ui.TransformationLayout,
         Dependencies.Ui.Browser,
         Dependencies.Ui.ShapeOfYou,
         Dependencies.Ui.YoYo,
@@ -93,7 +94,8 @@ dependencies {
         Dependencies.Utils.GsonConverter,
         Dependencies.Utils.YoyoHelper,
         Dependencies.Utils.HangulParser,
-        Dependencies.Utils.AndroidUtils,
+        //Dependencies.Utils.AndroidUtils,
+        "com.github.sungbin5304:SBT:3.2.2",
         Dependencies.Utils.CrashReporter
     )
 

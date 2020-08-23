@@ -11,6 +11,7 @@ import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.sungbintool.extensions.setTint
+import java.util.*
 
 
 /**
@@ -18,8 +19,14 @@ import com.sungbin.sungbintool.extensions.setTint
  */
 
 class BotAdapter constructor(
-    private val items: ArrayList<BotItem>
+    private val items: List<BotItem>
 ) : RecyclerView.Adapter<BotAdapter.ViewHolder>() {
+
+    init {
+        Collections.sort(items, Comparator { item, item2 ->
+            return@Comparator item.index.compareTo(item2.index)
+        })
+    }
 
     class ViewHolder(private val itemBinding: LayoutBotBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
@@ -54,6 +61,7 @@ class BotAdapter constructor(
         viewholder.bindViewHolder(items[position])
     }
 
+    fun getAllItems() = items
     override fun getItemCount() = items.size
     override fun getItemId(position: Int) = position.toLong()
     override fun getItemViewType(position: Int) = position

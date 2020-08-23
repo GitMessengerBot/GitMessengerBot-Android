@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,13 +22,13 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:textStyle="bold"
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textColor="@color/colorWhite"
                     android:textSize="17sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/tv_subtitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -36,10 +37,10 @@
                     android:id="@+id/tv_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_half"
                     android:text="@string/copyright"
                     android:textColor="@color/colorWhite"
                     android:textSize="13sp"
-                    android:layout_marginBottom="@dimen/margin_half"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -63,7 +64,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bnv_navigation"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:layout="@layout/fragment_bot"/>
+        tools:layout="@layout/fragment_bot" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bnv_navigation"
