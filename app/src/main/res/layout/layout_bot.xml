@@ -6,7 +6,7 @@
     <data>
         <variable
             name="Item"
-            type="com.sungbin.gitkakaobot.model.BotData" />
+            type="com.sungbin.gitkakaobot.model.BotItem" />
 
         <variable
             name="BotType"
@@ -25,7 +25,6 @@
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:checkable="true"
             app:cardBackgroundColor="@color/colorWhite"
             app:cardCornerRadius="@dimen/margin_half"
             app:cardElevation="1dp">
@@ -95,19 +94,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/triv_icon">
 
                     <ImageView
-                        android:id="@+id/iv_edit"
-                        android:contentDescription="@string/edit"
-                        android:src="@drawable/ic_baseline_edit_24"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-
-                    <ImageView
                         android:contentDescription="@string/reload"
                         android:id="@+id/iv_reload"
                         android:src="@drawable/ic_baseline_replay_24"
                         android:rotation="300"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:id="@+id/iv_edit"
+                        android:contentDescription="@string/edit"
+                        android:src="@drawable/ic_baseline_edit_24"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>

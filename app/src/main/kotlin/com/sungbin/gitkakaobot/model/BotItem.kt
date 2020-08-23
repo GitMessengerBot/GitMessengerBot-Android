@@ -5,7 +5,7 @@ package com.sungbin.gitkakaobot.model
  * Created by SungBin on 2020-08-23.
  */
 
-data class BotData(
+data class BotItem(
     val name: String,
     val isCompiled: Boolean,
     val power: Boolean,

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.adapter.BotAdapter
-import com.sungbin.gitkakaobot.model.BotData
+import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.sungbintool.extensions.hide
 import com.sungbin.sungbintool.extensions.show
@@ -29,11 +29,11 @@ class BotFragment : Fragment() {
     private var toPos = -1
     private var adapter: BotAdapter? = null
     private val bots = arrayListOf(
-        BotData("test-bot-1", true, true, BotType.JS, "없음", 1),
-        BotData("test-bot-2", true, false, BotType.SIMPLE, "어제", 2),
-        BotData("test-bot-3", false, true, BotType.JS, "오늘", 3),
-        BotData("test-bot-4", false, false, BotType.JS, "내일", 4),
-        BotData("test-bot-5", true, true, BotType.JS, "내년", 5)
+        BotItem("test-bot-1", true, true, BotType.JS, "없음", 1),
+        BotItem("test-bot-2", true, false, BotType.SIMPLE, "어제", 2),
+        BotItem("test-bot-3", false, true, BotType.JS, "오늘", 3),
+        BotItem("test-bot-4", false, false, BotType.JS, "내일", 4),
+        BotItem("test-bot-5", true, true, BotType.JS, "내년", 5)
     )
 
     private val viewModel by viewModels<BotViewModel>()
