@@ -17,11 +17,11 @@ import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.util.DataUtil
-import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.gitkakaobot.util.manager.StackManager.scripts
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
+import com.sungbin.gitkakaobot.util.ui.UiUtil
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.ScriptableObject
 import java.io.ByteArrayOutputStream

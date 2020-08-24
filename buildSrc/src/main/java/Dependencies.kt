@@ -47,12 +47,12 @@ object Versions {
     }
 
     object Ui {
+        const val SlidingRootNavigation = "1.1.1"
         const val TransformationLayout = "1.0.5"
         const val Browser = "1.3.0-alpha05"
         const val ShapeOfView = "1.3.2"
         const val YoYo = "2.3@aar"
         const val Lottie = "3.4.1"
-        const val MaterialPopupMenu = "4.0.1"
         const val SimpleCodeEditor = "1.0.2"
         const val JsonViewer = "v1.1"
         const val Licenser = "2.0.0"
@@ -105,13 +105,12 @@ object Dependencies {
     }
 
     object Ui {
+        const val SlidingRootNavigation = "com.yarolegovich:sliding-root-nav:${Versions.Ui.SlidingRootNavigation}"
         const val TransformationLayout = "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
         const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"
         const val Lottie = "com.airbnb.android:lottie:${Versions.Ui.Lottie}"
-        const val MaterialPopupMenu =
-            "com.github.zawadz88.materialpopupmenu:material-popup-menu:${Versions.Ui.MaterialPopupMenu}"
         const val SimpleCodeEditor =
             "com.github.sungbin5304:SimpleCodeEditor:${Versions.Ui.SimpleCodeEditor}"
         const val JsonViewer = "com.github.pvarry:android-json-viewer:${Versions.Ui.JsonViewer}"

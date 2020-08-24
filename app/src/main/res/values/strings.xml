@@ -176,5 +176,10 @@
     <string name="loading">불러오는중…</string>
     <string name="empty_bot">추가된 봇이 없어요 😢\n봇을 새로 추가해보세요!</string>
     <string name="edit">수정</string>
+    <string name="menu">메뉴</string>
+    <string name="editor_tool">에디터 도구</string>
+    <string name="make_pretty">코드 예쁘게 만들기</string>
+    <string name="make_minify">코드 최소한 줄이기</string>
+    <string name="javascript_beautify">JavaScript Beautify</string>
 
 </resources>

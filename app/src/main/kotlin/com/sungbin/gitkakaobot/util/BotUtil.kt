@@ -27,9 +27,20 @@ object BotUtil {
         return maxIndex
     }
 
-    fun updateBotData(bot: BotItem) {
+    fun getBotCode(bot: BotItem) = StorageUtils.read(
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        "",
+        true
+    ).toString()
+
+    fun saveBotCode(bot: BotItem, code: String) = StorageUtils.save(
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        code,
+        true
+    ).toString()
+
+    fun updateBotData(bot: BotItem) =
         StorageUtils.save("${getBotPath(bot)}/data.json", bot.toString(), true)
-    }
 
     fun changeBotIndex(bot: BotItem, newPos: Int) {
         val botJsonPath = "${getBotPath(bot)}/data.json"
@@ -60,6 +71,16 @@ object BotUtil {
         )
     }
 
+    fun createBotItem(botJsonObject: JSONObject) = BotItem(
+        botJsonObject.getString("name"),
+        botJsonObject.getBoolean("isCompiled"),
+        botJsonObject.getBoolean("power"),
+        botJsonObject.getInt("type"),
+        botJsonObject.getString("lastRunTime"),
+        botJsonObject.getInt("index"),
+        botJsonObject.getString("uuid")
+    )
+
     fun initBotList() {
         jsBotItems.clear()
         simpleBotItems.clear()
@@ -68,17 +89,8 @@ object BotUtil {
             val botJsonPath = "${it.path}/data.json"
             val botJson = StorageUtils.read(botJsonPath, null, false)
             botJson?.let { json ->
-                val botJsonObject = JSONObject(json)
                 jsBotItems.add(
-                    BotItem(
-                        botJsonObject.getString("name"),
-                        botJsonObject.getBoolean("isCompiled"),
-                        botJsonObject.getBoolean("power"),
-                        botJsonObject.getInt("type"),
-                        botJsonObject.getString("lastRunTime"),
-                        botJsonObject.getInt("index"),
-                        botJsonObject.getString("uuid")
-                    )
+                    createBotItem(JSONObject(json))
                 )
             }
         }

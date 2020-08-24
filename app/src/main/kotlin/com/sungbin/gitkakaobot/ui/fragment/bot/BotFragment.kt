@@ -15,8 +15,7 @@ import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
-import com.sungbin.gitkakaobot.util.UiUtil
-import com.sungbin.sungbintool.LogUtils
+import com.sungbin.gitkakaobot.util.ui.UiUtil
 import com.sungbin.sungbintool.Utils
 import com.sungbin.sungbintool.extensions.clear
 import com.sungbin.sungbintool.extensions.hide
@@ -50,6 +49,13 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         retainInstance = false
 
         viewModel.initBotList()
+        viewModel.jsBotList.postValue(
+            arrayListOf(
+                BotItem(
+                    "DEBUG-BOT", false, true, BotType.JS, "없음", 1, Utils.makeRandomUUID()
+                )
+            )
+        )
 
         if (viewModel.jsBotList.value.isNullOrEmpty()
             && viewModel.simpleBotList.value.isNullOrEmpty()
@@ -61,7 +67,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             rv_bot.show()
         }
 
-        adapter = BotAdapter(viewModel.jsBotList.value ?: arrayListOf())
+        adapter = BotAdapter(viewModel.jsBotList.value ?: arrayListOf(), requireActivity())
         rv_bot.adapter = adapter
         rv_bot.apply {
             setHasFixedSize(true)
@@ -110,8 +116,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         viewModel.jsBotList.observe(viewLifecycleOwner, {
-            LogUtils.w(it)
-            adapter = BotAdapter(it)
+            adapter = BotAdapter(it, requireActivity())
             rv_bot.adapter = adapter
             if (it.isNullOrEmpty()) {
                 cl_empty.show()

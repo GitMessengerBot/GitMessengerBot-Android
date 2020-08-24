@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:id="@+id/cl_header_senders"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    tools:ignore="MissingConstraints">
+
+    <!--<com.sungbin.sungbintool.ui.TagableRoundImageView
+            android:id="@+id/triv_profile"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_margin="@dimen/margin_default"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+            android:id="@+id/sw_eval_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"
+            android:fontFamily="@font/nanumgothic"
+            android:text="@string/mode_eval"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/triv_profile"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+            android:id="@+id/sw_group_chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:fontFamily="@font/nanumgothic"
+            android:text="@string/open_room"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/triv_profile"
+            app:layout_constraintTop_toBottomOf="@+id/sw_eval_mode"
+            tools:visibility="visible" />
+
+    <EditText
+            android:hint="@string/debug_room_name"
+            android:background="@null"
+            android:id="@+id/et_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumgothic"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/triv_profile"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+    <TextView
+            android:textSize="18sp"
+            android:fontFamily="@font/nanumgothic"
+            android:id="@+id/tv_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_triple_and_half"
+            android:layout_marginStart="@dimen/margin_default"
+            android:text="@string/string_sender"
+            app:layout_constraintTop_toTopOf="@+id/et_room"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/ms_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sender"/>
+
+    <TextView
+            android:textSize="18sp"
+            android:fontFamily="@font/nanumgothic"
+            android:id="@+id/tv_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twice"
+            android:layout_marginStart="@dimen/margin_default"
+            android:text="@string/string_room"
+            app:layout_constraintTop_toBottomOf="@+id/ms_sender"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/ms_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_room"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -78,12 +78,12 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
+        Dependencies.Ui.SlidingRootNavigation,
         Dependencies.Ui.TransformationLayout,
         Dependencies.Ui.Browser,
         Dependencies.Ui.ShapeOfYou,
         Dependencies.Ui.YoYo,
         Dependencies.Ui.Lottie,
-        Dependencies.Ui.MaterialPopupMenu,
         Dependencies.Ui.SimpleCodeEditor,
         Dependencies.Ui.JsonViewer,
         Dependencies.Ui.Licenser,
@@ -94,8 +94,7 @@ dependencies {
         Dependencies.Utils.GsonConverter,
         Dependencies.Utils.YoyoHelper,
         Dependencies.Utils.HangulParser,
-        //Dependencies.Utils.AndroidUtils,
-        "com.github.sungbin5304:SBT:3.2.2",
+        Dependencies.Utils.AndroidUtils,
         Dependencies.Utils.CrashReporter
     )
 

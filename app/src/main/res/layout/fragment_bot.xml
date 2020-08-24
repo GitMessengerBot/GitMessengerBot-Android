@@ -64,6 +64,7 @@
         android:orientation="vertical"
         android:overScrollMode="never"
         android:visibility="invisible"
+        android:layoutAnimation="@anim/layout_animation"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/layout_bot" />
 

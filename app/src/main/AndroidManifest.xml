@@ -31,6 +31,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".ui.activity.CodeEditActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".ui.activity.JoinActivity"
             android:theme="@style/AppTheme.NoActionBarWithNoLimit"
             android:launchMode="singleTask">

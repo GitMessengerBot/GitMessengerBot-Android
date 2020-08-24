@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:theme="@style/ToolbarMenuWhiteTint"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_default">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/script_name_preview"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/save"
+                    android:src="@drawable/ic_baseline_save_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/colorWhite" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/space_top"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintTop_toBottomOf="@+id/abl_container" />
+
+    <View
+        android:id="@+id/space_end"
+        android:layout_width="4dp"
+        android:layout_height="0dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/hsv_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/abl_container" />
+
+    <com.sungbin.texteditor.library.ui.SimpleCodeEditor
+        android:id="@+id/sce_editor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/hsv_container"
+        app:layout_constraintEnd_toStartOf="@+id/space_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/space_top"
+        app:sce_lineColor="@color/colorGray"
+        app:sce_lineNumberColor="@color/colorGray"
+        app:sce_selectLineColor="@color/colorPrimary" />
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_container"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        android:overScrollMode="never"
+        android:scrollbars="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            tools:ignore="HardcodedText">
+
+            <TextView
+                android:id="@+id/append_auto"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="@string/auto_complete"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:ignore="SmallSp" />
+
+            <ImageView
+                android:id="@+id/iv_tab"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/colorWhite"
+                android:contentDescription="@string/indent"
+                android:padding="@dimen/margin_half"
+                android:rotation="-90"
+                android:src="@drawable/ic_baseline_vertical_align_bottom_24"
+                app:tint="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/iv_undo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/undo_done"
+                android:padding="@dimen/margin_half"
+                android:src="@drawable/ic_baseline_undo_24"
+                app:tint="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/iv_redo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/redo_done"
+                android:padding="@dimen/margin_half"
+                android:src="@drawable/ic_baseline_redo_24"
+                app:tint="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_right_big"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="{"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_left_big"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="}"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_right_small"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="("
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_left_small"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text=")"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_big_quote"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="&quot;"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_small_quote"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="'"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_underbar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="_"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_right_slash"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="/"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_left_slash"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="\"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_dot"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="."
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_semicolon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text=";"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_plus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_minus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
