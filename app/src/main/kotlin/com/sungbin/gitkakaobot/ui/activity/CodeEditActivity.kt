@@ -26,8 +26,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_code_edit.*
 import kotlinx.android.synthetic.main.layout_editor_tool.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import org.mozilla.javascript.CompilerEnvirons
 import org.mozilla.javascript.Context
@@ -112,7 +110,7 @@ class CodeEditActivity : AppCompatActivity() {
                     loadingDialog.show()
 
                     requestMinify(
-                        editText.text.toString().toRequestBody("text/plain".toMediaType())
+                        editText.text.toString()
                     )
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
