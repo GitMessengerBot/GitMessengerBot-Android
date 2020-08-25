@@ -9,7 +9,6 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.`interface`.BeautifyInterface
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.BotUtil
@@ -19,13 +18,8 @@ import com.sungbin.sungbintool.extensions.afterTextChanged
 import com.sungbin.sungbintool.extensions.hide
 import com.sungbin.sungbintool.extensions.show
 import com.sungbin.sungbintool.extensions.toEditable
-import com.yarolegovich.slidingrootnav.SlideGravity
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_code_edit.*
-import kotlinx.android.synthetic.main.layout_editor_tool.*
 import org.json.JSONObject
 import org.mozilla.javascript.CompilerEnvirons
 import org.mozilla.javascript.Context
@@ -66,15 +60,6 @@ class CodeEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_code_edit)
 
-         SlidingRootNavBuilder(this)
-            .withMenuOpened(false)
-            .withContentClickableWhenMenuOpened(true)
-            .withSavedState(savedInstanceState)
-            .withToolbarMenuToggle(toolbar)
-            .withGravity(SlideGravity.LEFT)
-            .withMenuLayout(R.layout.layout_editor_tool)
-            .inject()
-
         val botJsonString = intent.getStringExtra("bot").toString()
         val bot = BotUtil.createBotItem(JSONObject(botJsonString))
 
@@ -92,15 +77,15 @@ class CodeEditActivity : AppCompatActivity() {
         editText.setPadding(16, 16, 16, 16)
         editText.text = BotUtil.getBotCode(bot).toEditable()
 
-        iv_save.setOnClickListener {
+        /*iv_save.setOnClickListener {
             BotUtil.saveBotCode(bot, editText.text.toString())
             UiUtil.toast(
                 applicationContext,
                 getString(R.string.saved)
             )
         }
-
-        btn_beautify.setOnClickListener {
+*/
+        /*btn_beautify.setOnClickListener {
 
         }
 
@@ -122,7 +107,7 @@ class CodeEditActivity : AppCompatActivity() {
                             loadingDialog.close()
                         })
                 }
-        }
+        }*/
 
         /*val textSize = DataUtils.readData(applicationContext, "TextSize", "17").toInt()
         val autoSave = DataUtils.readData(applicationContext, "AutoSave", "true").toBoolean()

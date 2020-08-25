@@ -78,7 +78,7 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
-        Dependencies.Ui.SlidingRootNavigation,
+        Dependencies.Ui.OverlappingPanels,
         Dependencies.Ui.TransformationLayout,
         Dependencies.Ui.Browser,
         Dependencies.Ui.ShapeOfYou,

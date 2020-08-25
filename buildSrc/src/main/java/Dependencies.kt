@@ -47,7 +47,7 @@ object Versions {
     }
 
     object Ui {
-        const val SlidingRootNavigation = "1.1.1"
+        const val OverlappingPanels = "0.1.1"
         const val TransformationLayout = "1.0.5"
         const val Browser = "1.3.0-alpha05"
         const val ShapeOfView = "1.3.2"
@@ -105,7 +105,7 @@ object Dependencies {
     }
 
     object Ui {
-        const val SlidingRootNavigation = "com.yarolegovich:sliding-root-nav:${Versions.Ui.SlidingRootNavigation}"
+        const val OverlappingPanels = "com.github.discord:OverlappingPanels:${Versions.Ui.OverlappingPanels}"
         const val TransformationLayout = "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
