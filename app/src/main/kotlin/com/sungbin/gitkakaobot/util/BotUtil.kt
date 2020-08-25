@@ -9,12 +9,22 @@ import com.sungbin.gitkakaobot.util.manager.PathManager.JS
 import com.sungbin.gitkakaobot.util.manager.PathManager.SIMPLE
 import com.sungbin.sungbintool.StorageUtils
 import org.json.JSONObject
+import org.mozilla.javascript.Function
 import java.io.File
 
 object BotUtil {
 
+    object Event {
+        const val ERROR = -1
+        const val MESSAGE = 0
+        const val COMPILE_START = 1
+        const val COMPILE_END = 2
+        const val DEBUG = 999
+    }
+
     val jsBotItems = ArrayList<BotItem>()
     val simpleBotItems = ArrayList<BotItem>()
+    val functions = HashMap<String, HashMap<Int, Function>>()
 
     private fun getBotPath(bot: BotItem) =
         "${if (bot.type == BotType.JS) JS else SIMPLE}/${bot.uuid}"

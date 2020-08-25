@@ -16,13 +16,14 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
+import com.sungbin.gitkakaobot.model.BotCompileItem
+import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.gitkakaobot.util.manager.StackManager.scripts
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
-import org.mozilla.javascript.Function
 import org.mozilla.javascript.ScriptableObject
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -32,7 +33,7 @@ import java.util.*
  * Created by SungBin on 2020-08-22.
  */
 
-class KakaoTalkListener : NotificationListenerService() {
+class MessageListener : NotificationListenerService() {
 
     private lateinit var context: Context
 
@@ -203,22 +204,21 @@ class KakaoTalkListener : NotificationListenerService() {
             profileImage: Bitmap?,
             packageName: String
         ) {
-            val parseContext = RhinoAndroidHelper().enterContext().apply {
+            val rhino = RhinoAndroidHelper().enterContext().apply {
                 languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                 optimizationLevel = -1
             }
-            val responder = scripts[name]
             val scope = scopes[name]
             try {
-                if (responder == null || scope == null) {
+                if (scope == null) {
                     org.mozilla.javascript.Context.exit()
                     UiUtil.toast(
                         context,
                         context.getString(R.string.reload_script_first).replace("{name}", name)
                     )
                 } else {
-                    responder.call(
-                        parseContext,
+                    BotUtil.eventFunction[BotUtil.Event.DEBUG].call(
+                        rhino,
                         scope,
                         scope,
                         arrayOf(
@@ -234,7 +234,7 @@ class KakaoTalkListener : NotificationListenerService() {
             }
         }
 
-        fun compileJavaScript(name: String, sourceCode: String): String {
+        fun compileJavaScript(name: String, sourceCode: String): BotCompileItem {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
@@ -242,16 +242,13 @@ class KakaoTalkListener : NotificationListenerService() {
                 }
 
                 val scope = rhino.initStandardObjects()
-                ScriptableObject.putConstProperty(scope, "context", context)
+                ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
                 rhino.compileString(sourceCode, name, 1, null).exec(rhino, scope)
-
-                val responder = scope["response", scope] as Function
-                scripts[name] = responder
                 scopes[name] = scope
                 org.mozilla.javascript.Context.exit()
-                "컴파일 성공"
+                BotCompileItem(true, null)
             } catch (e: Exception) {
-                e.message.toString()
+                BotCompileItem(false, e)
             }
         }
 
