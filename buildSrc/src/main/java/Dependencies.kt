@@ -65,7 +65,7 @@ object Versions {
         const val GsonConverter = "2.6.2"
         const val YoYoHelper = "2.1@aar"
         const val HangulParser = "1.0.0"
-        const val AndroidUtils = "3.2.2"
+        const val AndroidUtils = "3.2.3"
         const val CarshReporter = "1.1.0"
     }
 }
@@ -126,7 +126,7 @@ object Dependencies {
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
         const val YoyoHelper = "com.daimajia.easing:library:${Versions.Utils.YoYoHelper}"
         const val HangulParser = "com.github.kimkevin:hangulparser:${Versions.Utils.HangulParser}"
-        const val AndroidUtils = "com.github.sungbin5304:AndroidUtils:${Versions.Utils.AndroidUtils}"
+        const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Utils.AndroidUtils}"
         const val CrashReporter = "com.balsikandar.android:crashreporter:${Versions.Utils.CarshReporter}"
     }
 }

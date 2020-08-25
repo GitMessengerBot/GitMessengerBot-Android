@@ -75,13 +75,13 @@
         <View
             android:id="@+id/space_top"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="@dimen/margin_twice_half"
             android:background="@color/colorWhite"
             app:layout_constraintTop_toBottomOf="@+id/abl_container" />
 
         <View
             android:id="@+id/space_end"
-            android:layout_width="4dp"
+            android:layout_width="@dimen/margin_twice_half"
             android:layout_height="0dp"
             android:background="@color/colorWhite"
             app:layout_constraintBottom_toTopOf="@+id/hsv_container"
@@ -93,6 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorWhite"
+            android:importantForAutofill="no"
             android:backgroundTint="@color/colorWhite"
             app:layout_constraintBottom_toTopOf="@+id/hsv_container"
             app:layout_constraintEnd_toStartOf="@+id/space_end"

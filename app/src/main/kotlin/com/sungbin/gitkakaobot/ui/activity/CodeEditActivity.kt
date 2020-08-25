@@ -3,6 +3,7 @@ package com.sungbin.gitkakaobot.ui.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -10,11 +11,15 @@ import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.BotUtil
+import com.sungbin.gitkakaobot.util.RhinoUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.sungbintool.DialogUtils
+import com.sungbin.sungbintool.extensions.hideKeyboard
 import com.sungbin.sungbintool.extensions.toEditable
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_code_edit.*
+import kotlinx.android.synthetic.main.activity_code_edit.tv_title
+import kotlinx.android.synthetic.main.layout_editor_debug.*
 import kotlinx.android.synthetic.main.layout_editor_tool.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +69,7 @@ class CodeEditActivity : AppCompatActivity() {
         val bot = BotUtil.createBotItem(JSONObject(botJsonString))
 
         tv_title.text = bot.name
+        tv_console.movementMethod = ScrollingMovementMethod()
 
         DialogUtils.showOnce(
             this,
@@ -128,6 +134,11 @@ class CodeEditActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        iv_run.setOnClickListener {
+            RhinoUtil.debug(sce_console.text.toString(), tv_console)
+            sce_console.hideKeyboard()
         }
 
         /*val textSize = DataUtils.readData(applicationContext, "TextSize", "17").toInt()

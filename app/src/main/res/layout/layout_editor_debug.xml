@@ -43,6 +43,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/iv_run"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_default"
@@ -63,18 +64,35 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/colorWhite"
-            android:padding="@dimen/margin_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/abl_container">
 
+            <View
+                android:id="@+id/space_top"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_twice_half"
+                android:background="@color/colorWhite"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/space_end"
+                android:layout_width="@dimen/margin_twice_half"
+                android:layout_height="0dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/tv_console"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.sungbin.texteditor.library.SimpleCodeEditor
                 android:id="@+id/sce_console"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/margin_default"
+                android:importantForAutofill="no"
                 app:layout_constraintBottom_toTopOf="@+id/tv_console"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/space_end"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/space_top"
                 app:sce_focusLineColor="@color/colorPrimary"
                 app:sce_lineColor="@color/colorGray"
                 app:sce_lineNumberColor="@color/colorGray" />
@@ -82,7 +100,10 @@
             <TextView
                 android:id="@+id/tv_console"
                 android:layout_width="match_parent"
+                android:scrollHorizontally="true"
                 android:layout_height="180dp"
+                android:padding="@dimen/margin_default"
+                android:text="@string/debug_hint"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

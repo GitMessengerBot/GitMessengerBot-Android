@@ -242,7 +242,7 @@ class KakaoTalkListener : NotificationListenerService() {
                 }
 
                 val scope = rhino.initStandardObjects()
-                ScriptableObject.putProperty(scope, "context", context)
+                ScriptableObject.putConstProperty(scope, "context", context)
                 rhino.compileString(sourceCode, name, 1, null).exec(rhino, scope)
 
                 val responder = scope["response", scope] as Function
