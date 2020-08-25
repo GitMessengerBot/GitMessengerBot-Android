@@ -15,7 +15,7 @@ import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
-import com.sungbin.gitkakaobot.util.ui.UiUtil
+import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.sungbintool.Utils
 import com.sungbin.sungbintool.extensions.clear
 import com.sungbin.sungbintool.extensions.hide

@@ -53,7 +53,7 @@ object Versions {
         const val ShapeOfView = "1.3.2"
         const val YoYo = "2.3@aar"
         const val Lottie = "3.4.1"
-        const val SimpleCodeEditor = "1.0.2"
+        const val SimpleCodeEditor = "2.0.3"
         const val JsonViewer = "v1.1"
         const val Licenser = "2.0.0"
         const val Material = "1.2.0-alpha06"

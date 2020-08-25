@@ -181,5 +181,7 @@
     <string name="make_pretty">코드 예쁘게 만들기</string>
     <string name="make_minify">코드 최소한 줄이기</string>
     <string name="javascript_beautify">JavaScript Beautify</string>
+    <string name="run">run</string>
+    <string name="javascript_console">자바스크립트 콘솔</string>
 
 </resources>

@@ -4,8 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import org.jsoup.Jsoup
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -21,15 +20,14 @@ class BeautifyClient {
     @Named("pretty")
     @Provides
     @Singleton
-    fun pretty() = instance("https://www.prettifyjs.net/")
+    fun pretty() = instance("https://amp.prettifyjs.net")
 
     @Named("minify")
     @Provides
     @Singleton
-    fun minify() = instance("https://javascript-minifier.com/")
+    fun minify() = instance("https://javascript-minifier.com/raw")
 
-    private fun instance(baseUrl: String) = Retrofit.Builder()
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .baseUrl(baseUrl)
-        .build()
+    private fun instance(baseUrl: String) = Jsoup.connect(baseUrl)
+        .ignoreContentType(true)
+        .ignoreHttpErrors(true)
 }

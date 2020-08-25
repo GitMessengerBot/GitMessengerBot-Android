@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.sungbin.gitkakaobot.R
+import com.sungbin.sungbintool.extensions.get
+import com.sungbin.sungbintool.extensions.hide
 import com.sungbin.sungbintool.extensions.plusAssign
 
 
@@ -45,23 +47,35 @@ class LoadingDialog constructor(private val activity: Activity) {
         layout.invalidate()
     }
 
-    fun setError(throwable: Throwable) {
-        layout.findViewById<LottieAnimationView>(R.id.lav_load).run {
-            setAnimation(R.raw.error)
-            playAnimation()
+    fun setError(throwable: Throwable, isCustomMessage: Boolean = false) {
+        if (!isCustomMessage) {
+            (layout[R.id.lav_load] as LottieAnimationView).run {
+                setAnimation(R.raw.error)
+                playAnimation()
+            }
+            (layout[R.id.tv_loading] as TextView).run {
+                val message =
+                    "서버 요청 중 오류가 발생했습니다!\n\n${throwable.message} #${throwable.stackTrace[0].lineNumber}"
+                val ssb = SpannableStringBuilder(message)
+                ssb.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorLightRed)),
+                    message.lastIndexOf("\n"),
+                    message.lastIndex + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                text = ssb
+                movementMethod = ScrollingMovementMethod()
+            }
         }
-        layout.findViewById<TextView>(R.id.tv_loading).run {
-            val message =
-                "서버 요청 중 오류가 발생했습니다!\n\n${throwable.message} #${throwable.stackTrace[0].lineNumber}"
-            val ssb = SpannableStringBuilder(message)
-            ssb.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorLightRed)),
-                message.lastIndexOf("\n"),
-                message.lastIndex + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            text = ssb
-            movementMethod = ScrollingMovementMethod()
+        else {
+            (layout[R.id.lav_load] as LottieAnimationView).run {
+                cancelAnimation()
+                hide(true)
+            }
+            (layout[R.id.tv_loading] as TextView).run {
+                text = throwable.message
+                movementMethod = ScrollingMovementMethod()
+            }
         }
         layout.invalidate()
     }

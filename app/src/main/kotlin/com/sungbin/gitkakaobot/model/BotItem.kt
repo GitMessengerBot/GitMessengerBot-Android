@@ -3,9 +3,6 @@ package com.sungbin.gitkakaobot.model
 import org.json.JSONObject
 
 
-
-
-
 /**
  * Created by SungBin on 2020-08-23.
  */

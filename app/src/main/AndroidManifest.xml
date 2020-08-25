@@ -14,7 +14,6 @@
         android:name=".GitKakaoBot"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:supportsRtl="true"
         android:theme="@style/AppThemeWhiteStatusBar.NoActionBarWithNoLimit"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,UnusedAttribute">

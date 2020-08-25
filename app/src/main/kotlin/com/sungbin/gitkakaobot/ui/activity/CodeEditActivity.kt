@@ -3,29 +3,29 @@ package com.sungbin.gitkakaobot.ui.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
-import android.text.Selection
 import android.widget.EditText
-import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.BotUtil
-import com.sungbin.gitkakaobot.util.ui.UiUtil
+import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.sungbintool.DialogUtils
-import com.sungbin.sungbintool.extensions.afterTextChanged
-import com.sungbin.sungbintool.extensions.hide
-import com.sungbin.sungbintool.extensions.show
 import com.sungbin.sungbintool.extensions.toEditable
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_code_edit.*
+import kotlinx.android.synthetic.main.layout_editor_tool.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.jsoup.Connection
 import org.mozilla.javascript.CompilerEnvirons
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Parser
 import org.mozilla.javascript.ast.NodeVisitor
-import retrofit2.Retrofit
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -45,13 +45,13 @@ class CodeEditActivity : AppCompatActivity() {
 
     @Named("pretty")
     @Inject
-    lateinit var prettyClient: Retrofit
+    lateinit var beautifyClient: Connection
 
     @Named("minify")
     @Inject
-    lateinit var minifyClient: Retrofit
+    lateinit var minifyClient: Connection
 
-    val loadingDialog by lazy {
+    private val loadingDialog by lazy {
         LoadingDialog(this)
     }
 
@@ -73,41 +73,62 @@ class CodeEditActivity : AppCompatActivity() {
             null, false
         )
 
-        val editText = sce_editor.editor
-        editText.setPadding(16, 16, 16, 16)
-        editText.text = BotUtil.getBotCode(bot).toEditable()
+        sce_editor.apply {
+            setPadding(16, 16, 16, 16)
+            text = BotUtil.getBotCode(bot).toEditable()
+        }
 
-        /*iv_save.setOnClickListener {
-            BotUtil.saveBotCode(bot, editText.text.toString())
+        iv_save.setOnClickListener {
+            BotUtil.saveBotCode(bot, sce_editor.text.toString())
             UiUtil.toast(
                 applicationContext,
                 getString(R.string.saved)
             )
         }
-*/
-        /*btn_beautify.setOnClickListener {
 
+        btn_beautify.setOnClickListener {
+            loadingDialog.show()
+            CoroutineScope(Dispatchers.Default).launch {
+                val minifyCode =
+                    withContext(Dispatchers.IO) {
+                        JSONObject(
+                            beautifyClient.data("input", sce_editor.text.toString())
+                                .post().wholeText()
+                        )["output"].toString()
+                    }
+                sce_editor.text = minifyCode.toEditable()
+                runOnUiThread {
+                    loadingDialog.close()
+                }
+            }
         }
 
         btn_minify.setOnClickListener {
-            minifyClient
-                .create(BeautifyInterface::class.java).run {
-                    loadingDialog.show()
-
-                    requestMinify(
-                        editText.text.toString()
-                    )
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            editText.text = response.string().toEditable()
-                        }, { throwable ->
-                            loadingDialog.setError(throwable)
-                        }, {
-                            loadingDialog.close()
-                        })
+            loadingDialog.show()
+            CoroutineScope(Dispatchers.Default).launch {
+                val minifyCode =
+                    withContext(Dispatchers.IO) {
+                        minifyClient.data("input", sce_editor.text.toString())
+                            .post().wholeText()
+                    }
+                if (minifyCode.contains("Error") &&
+                    minifyCode.contains("Line") &&
+                    minifyCode.contains("Col")
+                ) {
+                    runOnUiThread {
+                        loadingDialog.setError(
+                            Throwable("스크립트 소스에 오류가 있습니다.\n오류 수정 후 다시 시도해 주세요.\n\n\n$minifyCode"),
+                            true
+                        )
+                    }
+                } else {
+                    sce_editor.text = minifyCode.toEditable()
+                    runOnUiThread {
+                        loadingDialog.close()
+                    }
                 }
-        }*/
+            }
+        }
 
         /*val textSize = DataUtils.readData(applicationContext, "TextSize", "17").toInt()
         val autoSave = DataUtils.readData(applicationContext, "AutoSave", "true").toBoolean()
@@ -117,7 +138,7 @@ class CodeEditActivity : AppCompatActivity() {
         /*val headerView = LayoutInflater
             .from(applicationContext)
             .inflate(R.layout.header_editor_find, null, false)
-        val etFind = headerView.findViewById<TextInputEditText>(R.id.et_find)
+        val etFind = headerView.findViewById<TextInputsce_editor>(R.id.et_find)
         val swIgnoreUpper = headerView.findViewById<SwitchMaterial>(R.id.sw_ignore)
         val rvList = headerView.findViewById<RecyclerView>(R.id.rv_list)
 
@@ -139,7 +160,7 @@ class CodeEditActivity : AppCompatActivity() {
                      for (i in result.indices) {
                          val array = result[i]
                          val item = EditorFindItem(
-                             editText.text.split("\n")[array[0]],
+                             sce_editor.text.split("\n")[array[0]],
                              etFind.text.toString(),
                              array[0],
                              array[1]
@@ -159,8 +180,8 @@ class CodeEditActivity : AppCompatActivity() {
                  val adapter = EditorFindAdapter(items)
                  adapter.setOnItemClickListener { findText, _, line, index ->
                      if (index > 0) {
-                         val i = editText.getStartIndex(line, index)
-                         editText.setSelection(i, i + findText.length)
+                         val i = sce_editor.getStartIndex(line, index)
+                         sce_editor.setSelection(i, i + findText.length)
                      }
                  }
                  rvList.adapter = adapter
@@ -170,9 +191,9 @@ class CodeEditActivity : AppCompatActivity() {
          }*/
 
         val typeface = ResourcesCompat.getFont(applicationContext, R.font.d2coding)
-        editText.typeface = typeface
+        sce_editor.typeface = typeface
 
-        /*editText.textSize = textSize.toFloat()
+        /*sce_editor.textSize = textSize.toFloat()
         if(autoSave){
 
         }*/
@@ -180,7 +201,7 @@ class CodeEditActivity : AppCompatActivity() {
         timer.schedule(
             AutoSaveTimer(
                 this,
-                editText,
+                sce_editor,
                 bot
             ),
             300000,
@@ -231,29 +252,29 @@ class CodeEditActivity : AppCompatActivity() {
         )
 
         tv_left_slash.text = "\\"
-        iv_tab.setOnClickListener { editText.insert("\t\t\t\t") }
+        iv_tab.setOnClickListener { sce_editor.insert("\t\t\t\t") }
         iv_undo.setOnClickListener { sce_editor.undo() }
         iv_redo.setOnClickListener { sce_editor.redo() }
-        tv_right_big.setOnClickListener { editText.insert("{") }
-        tv_left_big.setOnClickListener { editText.insert("}") }
-        tv_right_small.setOnClickListener { editText.insert("(") }
-        tv_left_small.setOnClickListener { editText.insert(")") }
-        tv_right_slash.setOnClickListener { editText.insert("/") }
-        tv_left_slash.setOnClickListener { editText.insert("\\") }
-        tv_big_quote.setOnClickListener { editText.insert("\"") }
-        tv_small_quote.setOnClickListener { editText.insert("'") }
-        tv_dot.setOnClickListener { editText.insert(".") }
-        tv_semicolon.setOnClickListener { editText.insert(";") }
-        tv_plus.setOnClickListener { editText.insert("+") }
-        tv_minus.setOnClickListener { editText.insert("-") }
-        tv_underbar.setOnClickListener { editText.insert("_") }
+        tv_right_big.setOnClickListener { sce_editor.insert("{") }
+        tv_left_big.setOnClickListener { sce_editor.insert("}") }
+        tv_right_small.setOnClickListener { sce_editor.insert("(") }
+        tv_left_small.setOnClickListener { sce_editor.insert(")") }
+        tv_right_slash.setOnClickListener { sce_editor.insert("/") }
+        tv_left_slash.setOnClickListener { sce_editor.insert("\\") }
+        tv_big_quote.setOnClickListener { sce_editor.insert("\"") }
+        tv_small_quote.setOnClickListener { sce_editor.insert("'") }
+        tv_dot.setOnClickListener { sce_editor.insert(".") }
+        tv_semicolon.setOnClickListener { sce_editor.insert(";") }
+        tv_plus.setOnClickListener { sce_editor.insert("+") }
+        tv_minus.setOnClickListener { sce_editor.insert("-") }
+        tv_underbar.setOnClickListener { sce_editor.insert("_") }
 
-        editText.afterTextChanged {
+        /*sce_editor.afterTextChanged {
             try {
                 suggestList.clear()
-                loadClassName(editText.text.toString())
-                val layout = editText.layout
-                val selectionStart = Selection.getSelectionStart(editText.text)
+                loadClassName(sce_editor.text.toString())
+                val layout = sce_editor.layout
+                val selectionStart = Selection.getSelectionStart(sce_editor.text)
                 val now = it.toString().split("\n")[layout.getLineForOffset(selectionStart)]
                     .trim() //지금 쓰고있는 단어 가져오기
                     .split(" ")[it.toString().split("\n")
@@ -279,7 +300,7 @@ class CodeEditActivity : AppCompatActivity() {
                             append_auto.text = suggestList[0]
                             append_auto.setOnClickListener {
                                 append_auto.hide(true)
-                                editText.insert(suggestList[0].replace(now, ""))
+                                sce_editor.insert(suggestList[0].replace(now, ""))
                             }
                         }
                     } else if (suggestList.size != highlightingKeywords.size &&
@@ -294,7 +315,7 @@ class CodeEditActivity : AppCompatActivity() {
                             }
                             p.setOnMenuItemClickListener { item ->
                                 append_auto.hide(true)
-                                editText.insert(
+                                sce_editor.insert(
                                     item.title.toString().replace(now, "")
                                 )
                                 return@setOnMenuItemClickListener false
@@ -306,7 +327,7 @@ class CodeEditActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }*/
     }
 
     private fun EditText.getStartIndex(line: Int, index: Int): Int {

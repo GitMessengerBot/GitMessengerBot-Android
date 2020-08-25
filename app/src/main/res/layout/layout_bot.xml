@@ -13,6 +13,7 @@
         <variable
             name="BotType"
             type="com.sungbin.gitkakaobot.model.BotType" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

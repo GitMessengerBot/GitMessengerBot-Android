@@ -1,4 +1,4 @@
-package com.sungbin.gitkakaobot.util.ui
+package com.sungbin.gitkakaobot.util
 
 import android.content.Context
 import android.view.View

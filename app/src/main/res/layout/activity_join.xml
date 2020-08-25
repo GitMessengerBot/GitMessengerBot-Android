@@ -10,7 +10,7 @@
         android:id="@+id/av_container"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:elevation="@dimen/margin_half"
+        android:elevation="@dimen/margin_default"
         app:layout_constraintTop_toTopOf="parent"
         app:shape_arc_cropDirection="outside"
         app:shape_arc_height="20dp"
