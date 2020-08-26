@@ -22,8 +22,7 @@ object BotUtil {
         const val DEBUG = 999
     }
 
-    val jsBotItems = ArrayList<BotItem>()
-    val simpleBotItems = ArrayList<BotItem>()
+    val botItems = ArrayList<BotItem>()
     val functions = HashMap<String, HashMap<Int, Function>>()
 
     private fun getBotPath(bot: BotItem) =
@@ -92,16 +91,13 @@ object BotUtil {
     )
 
     fun initBotList() {
-        jsBotItems.clear()
-        simpleBotItems.clear()
+        botItems.clear()
 
         File("${StorageUtils.sdcard}/$JS").listFiles()?.map {
             val botJsonPath = "${it.path}/data.json"
             val botJson = StorageUtils.read(botJsonPath, null, false)
             botJson?.let { json ->
-                jsBotItems.add(
-                    createBotItem(JSONObject(json))
-                )
+                botItems.add(createBotItem(JSONObject(json)))
             }
         }
         File("${StorageUtils.sdcard}/$SIMPLE").listFiles()?.map {
@@ -109,17 +105,7 @@ object BotUtil {
             val botJson = StorageUtils.read(botJsonPath, null, false)
             botJson?.let { json ->
                 val botJsonObject = JSONObject(json)
-                simpleBotItems.add(
-                    BotItem(
-                        botJsonObject.getString("name"),
-                        botJsonObject.getBoolean("isCompiled"),
-                        botJsonObject.getBoolean("power"),
-                        botJsonObject.getInt("type"),
-                        botJsonObject.getString("lastRunTime"),
-                        botJsonObject.getInt("index"),
-                        botJsonObject.getString("uuid")
-                    )
-                )
+                botItems.add(createBotItem(JSONObject(json)))
             }
         }
     }

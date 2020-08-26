@@ -17,12 +17,14 @@ import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.model.BotCompileItem
+import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.util.BotUtil
+import com.sungbin.gitkakaobot.util.BotUtil.botItems
+import com.sungbin.gitkakaobot.util.BotUtil.functions
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
-import com.sungbin.gitkakaobot.util.manager.StackManager.scripts
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
 import org.mozilla.javascript.ScriptableObject
 import java.io.ByteArrayOutputStream
@@ -118,8 +120,9 @@ class MessageListener : NotificationListenerService() {
                     }
 
                     if (!sessions.containsKey(room)) sessions[room!!] = act
+
                     chatHook(
-                        "script", room!!, msg!!, sender!!, isGroupChat, act,
+                        room!!, msg!!, sender!!, isGroupChat, act,
                         ((sbn.notification.getLargeIcon())
                             .loadDrawable(context) as BitmapDrawable).bitmap,
                         sbn.packageName
@@ -169,7 +172,6 @@ class MessageListener : NotificationListenerService() {
         }
 
         fun chatHook(
-            name: String,
             room: String,
             msg: String,
             sender: String,
@@ -179,23 +181,25 @@ class MessageListener : NotificationListenerService() {
             packageName: String,
         ) {
             try {
-                callJsResponder(
-                    name,
-                    room,
-                    msg,
-                    sender,
-                    isGroupChat,
-                    session,
-                    profileImage,
-                    packageName
-                )
+                for (bot in botItems) {
+                    callJsResponder(
+                        bot,
+                        room,
+                        msg,
+                        sender,
+                        isGroupChat,
+                        session,
+                        profileImage,
+                        packageName
+                    )
+                }
             } catch (e: Exception) {
-                UiUtil.toast(context, e.message.toString())
+                UiUtil.error(context, e)
             }
         }
 
         private fun callJsResponder(
-            name: String,
+            bot: BotItem,
             room: String,
             msg: String,
             sender: String,
@@ -208,16 +212,16 @@ class MessageListener : NotificationListenerService() {
                 languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                 optimizationLevel = -1
             }
-            val scope = scopes[name]
+            val scope = scopes[bot.uuid]
             try {
                 if (scope == null) {
                     org.mozilla.javascript.Context.exit()
                     UiUtil.toast(
                         context,
-                        context.getString(R.string.reload_script_first).replace("{name}", name)
+                        context.getString(R.string.reload_script_first).replace("{name}", bot.name)
                     )
                 } else {
-                    BotUtil.eventFunction[BotUtil.Event.DEBUG].call(
+                    functions[bot.uuid]?.get(BotUtil.Event.MESSAGE)?.call(
                         rhino,
                         scope,
                         scope,
@@ -230,11 +234,16 @@ class MessageListener : NotificationListenerService() {
                 }
                 org.mozilla.javascript.Context.exit()
             } catch (e: Exception) {
-                UiUtil.toast(context, e.message.toString())
+                functions[bot.uuid]?.get(BotUtil.Event.ERROR)?.call(
+                    rhino,
+                    scope,
+                    scope,
+                    arrayOf(bot.name, e)
+                )
             }
         }
 
-        fun compileJavaScript(name: String, sourceCode: String): BotCompileItem {
+        fun compileJavaScript(bot: BotItem): BotCompileItem {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
@@ -243,8 +252,8 @@ class MessageListener : NotificationListenerService() {
 
                 val scope = rhino.initStandardObjects()
                 ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
-                rhino.compileString(sourceCode, name, 1, null).exec(rhino, scope)
-                scopes[name] = scope
+                rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
+                scopes[bot.uuid] = scope
                 org.mozilla.javascript.Context.exit()
                 BotCompileItem(true, null)
             } catch (e: Exception) {
@@ -252,7 +261,7 @@ class MessageListener : NotificationListenerService() {
             }
         }
 
-        private fun replyToSession(session: Notification.Action?, value: String) {
+        fun replyToSession(session: Notification.Action?, value: String) {
             if (session == null) {
                 UiUtil.toast(context, context.getString(R.string.cant_load_session))
             } else {
@@ -266,7 +275,7 @@ class MessageListener : NotificationListenerService() {
                 try {
                     session.actionIntent.send(context, 0, sendIntent)
                 } catch (e: Exception) {
-                    UiUtil.toast(context, e.message.toString())
+                    UiUtil.error(context, e)
                 }
             }
         }

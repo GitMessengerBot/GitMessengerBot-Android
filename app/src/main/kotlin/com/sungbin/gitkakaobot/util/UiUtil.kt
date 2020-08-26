@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 
 object UiUtil {
 
+    fun error(context: Context, exception: Exception) {}
+
     fun toast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
