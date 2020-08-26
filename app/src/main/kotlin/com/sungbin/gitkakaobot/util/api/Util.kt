@@ -7,7 +7,7 @@ import com.sungbin.sungbintool.NotificationUtils
 import com.sungbin.sungbintool.Utils
 
 @Suppress("DEPRECATION")
-object Utils {
+object Util {
     private lateinit var context: Context
     private lateinit var vibrator: Vibrator
     fun init(context: Context) {

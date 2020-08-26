@@ -26,6 +26,8 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
+            isUseProguard = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -78,6 +80,7 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
+        Dependencies.Ui.SpotLight,
         Dependencies.Ui.OverlappingPanels,
         Dependencies.Ui.TransformationLayout,
         Dependencies.Ui.Browser,

@@ -9,353 +9,306 @@ import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.sungbintool.StorageUtils
 import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.annotations.JSStaticFunction
+import org.mozilla.javascript.annotations.JSFunction
 import java.text.SimpleDateFormat
 import java.util.*
 
 object ApiClass {
 
     private lateinit var context: Context
-    fun setContext(ctx: Context) {
-        context = ctx
+    fun init(context: Context) {
+        context.let {
+            this.context = it
+            com.sungbin.gitkakaobot.util.api.Api.init(it)
+            com.sungbin.gitkakaobot.util.api.AppData.init(it)
+            com.sungbin.gitkakaobot.util.api.Black.init(it)
+            com.sungbin.gitkakaobot.util.api.Device.init(it)
+            com.sungbin.gitkakaobot.util.api.Util.init(it)
+        }
     }
 
     class Log : ScriptableObject() {
-        override fun getClassName(): String {
-            return "Log"
+        override fun getClassName() = "Log"
+
+        @JSFunction
+        fun d(name: String, content: String) {
+            val now = System.currentTimeMillis()
+            val date = Date(now)
+            val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+            val time = sdf.format(date)
+
+            //LogUtils.save(name, content, time, LogUtils.Type.DEBUG)
         }
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun d(name: String, content: String) {
-                val now = System.currentTimeMillis()
-                val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
-                val time = sdf.format(date)
+        @JSFunction
+        fun e(name: String, content: String) {
+            val now = System.currentTimeMillis()
+            val date = Date(now)
+            val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+            val time = sdf.format(date)
 
-                //LogUtils.save(name, content, time, LogUtils.Type.DEBUG)
-            }
+            //LogUtils.save(name, content, time, LogUtils.Type.ERROR)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun e(name: String, content: String) {
-                val now = System.currentTimeMillis()
-                val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
-                val time = sdf.format(date)
+        @JSFunction
+        fun i(name: String, content: String) {
+            val now = System.currentTimeMillis()
+            val date = Date(now)
+            val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+            val time = sdf.format(date)
 
-                //LogUtils.save(name, content, time, LogUtils.Type.ERROR)
-            }
+            //LogUtils.save(name, content, time, LogUtils.Type.INFO)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun i(name: String, content: String) {
-                val now = System.currentTimeMillis()
-                val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
-                val time = sdf.format(date)
+        @JSFunction
+        fun s(name: String, content: String) {
+            val now = System.currentTimeMillis()
+            val date = Date(now)
+            val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+            val time = sdf.format(date)
 
-                //LogUtils.save(name, content, time, LogUtils.Type.INFO)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun s(name: String, content: String) {
-                val now = System.currentTimeMillis()
-                val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
-                val time = sdf.format(date)
-
-                //LogUtils.save(name, content, time, LogUtils.Type.SUCCESS)
-            }
-
+            //LogUtils.save(name, content, time, LogUtils.Type.SUCCESS)
         }
     }
 
     class AppData : ScriptableObject() {
         override fun getClassName() = "AppData"
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun putInt(name: String, value: Int) {
-                com.sungbin.gitkakaobot.util.api.AppData.putInt(name, value)
-            }
+        @JSFunction
+        fun putInt(name: String, value: Int) {
+            com.sungbin.gitkakaobot.util.api.AppData.putInt(name, value)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun putString(name: String, value: String) {
-                com.sungbin.gitkakaobot.util.api.AppData.putString(name, value)
-            }
+        @JSFunction
+        fun putString(name: String, value: String) {
+            com.sungbin.gitkakaobot.util.api.AppData.putString(name, value)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun putBoolean(name: String, value: Boolean) {
-                com.sungbin.gitkakaobot.util.api.AppData.putBoolean(name, value)
-            }
+        @JSFunction
+        fun putBoolean(name: String, value: Boolean) {
+            com.sungbin.gitkakaobot.util.api.AppData.putBoolean(name, value)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getInt(name: String, value: Int) =
-                com.sungbin.gitkakaobot.util.api.AppData.getInt(name, value)
+        @JSFunction
+        fun getInt(name: String, value: Int) =
+            com.sungbin.gitkakaobot.util.api.AppData.getInt(name, value)
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getString(name: String, value: String) =
-                com.sungbin.gitkakaobot.util.api.AppData.getString(name, value)
+        @JSFunction
+        fun getString(name: String, value: String) =
+            com.sungbin.gitkakaobot.util.api.AppData.getString(name, value)
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getBoolean(name: String, value: Boolean) =
-                com.sungbin.gitkakaobot.util.api.AppData.getBoolean(name, value)
+        @JSFunction
+        fun getBoolean(name: String, value: Boolean) =
+            com.sungbin.gitkakaobot.util.api.AppData.getBoolean(name, value)
 
-            @JvmStatic
-            @JSStaticFunction
-            fun clear() {
-                com.sungbin.gitkakaobot.util.api.AppData.clear()
-            }
+        @JSFunction
+        fun clear() {
+            com.sungbin.gitkakaobot.util.api.AppData.clear()
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun remove(name: String) {
-                com.sungbin.gitkakaobot.util.api.AppData.remove(name)
-            }
+        @JSFunction
+        fun remove(name: String) {
+            com.sungbin.gitkakaobot.util.api.AppData.remove(name)
         }
     }
 
     class Api : ScriptableObject() {
         override fun getClassName() = "Api"
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun getContext() = context
+        @JSFunction
+        fun getContext() = context
 
-            @JvmStatic
-            @JSStaticFunction
-            fun replyRoom(room: String, msg: String) =
-                com.sungbin.gitkakaobot.util.api.Api.replyRoom(room, msg)
+        @JSFunction
+        fun replyRoom(room: String, msg: String) =
+            com.sungbin.gitkakaobot.util.api.Api.replyRoom(room, msg)
 
-            @JvmStatic
-            @JSStaticFunction
-            fun replyRoomShowAll(room: String, msg1: String, msg2: String) =
-                com.sungbin.gitkakaobot.util.api.Api.replyRoomShowAll(room, msg1, msg2)
-        }
+        @JSFunction
+        fun replyRoomShowAll(room: String, msg1: String, msg2: String) =
+            com.sungbin.gitkakaobot.util.api.Api.replyRoomShowAll(room, msg1, msg2)
     }
 
     class Game : ScriptableObject() {
         override fun getClassName() = "Game"
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun getRandomChosungQuiz() =
-                com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(ChosungType.getRandom())
+        @JSFunction
+        fun getRandomChosungQuiz() =
+            com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(ChosungType.getRandom())
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getChosungQuiz(type: Int) = com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(type)
-        }
+        @JSFunction
+        fun getChosungQuiz(type: Int) =
+            com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(type)
     }
+
 
     class Device : ScriptableObject() {
         override fun getClassName() = "Device"
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun getBattery() = com.sungbin.gitkakaobot.util.api.Device.battery
+        @JSFunction
+        fun getBattery() = com.sungbin.gitkakaobot.util.api.Device.battery
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getPhoneModel() = com.sungbin.gitkakaobot.util.api.Device.phoneModel
+        @JSFunction
+        fun getPhoneModel() = com.sungbin.gitkakaobot.util.api.Device.phoneModel
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getAndroidSDKVersion() = com.sungbin.gitkakaobot.util.api.Device.androidVersion
+        @JSFunction
+        fun getAndroidSDKVersion() =
+            com.sungbin.gitkakaobot.util.api.Device.androidVersion
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getAndroidVersion() = com.sungbin.gitkakaobot.util.api.Device.androidVersion
+        @JSFunction
+        fun getAndroidVersion() =
+            com.sungbin.gitkakaobot.util.api.Device.androidVersion
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getIsCharging() = com.sungbin.gitkakaobot.util.api.Device.isCharging
-        }
+        @JSFunction
+        fun getIsCharging() = com.sungbin.gitkakaobot.util.api.Device.isCharging
     }
 
-    class Bridge : ScriptableObject() {
-        override fun getClassName(): String {
-            return "Bridge"
-        }
+    class Scope : ScriptableObject() {
+        override fun getClassName() = "Scope"
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun get(name: String) = scopes[name]
-        }
+        @JSFunction
+        fun get(name: String) = scopes[name]
     }
 
     class DataBase : ScriptableObject() {
-        override fun getClassName(): String {
-            return "DataBase"
+        override fun getClassName() = "DataBase"
+
+        @JSFunction
+        fun read(name: String) = StorageUtils.read("$DATABASE/$name", null)
+
+        @JSFunction
+        fun save(name: String, content: String) {
+            StorageUtils.save("$DATABASE/$name", content)
         }
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun read(name: String) = StorageUtils.read("$DATABASE/$name", null)
-
-            @JvmStatic
-            @JSStaticFunction
-            fun save(name: String, content: String) {
-                StorageUtils.save("$DATABASE/$name", content)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun remove(name: String) {
-                StorageUtils.delete("$DATABASE/$name")
-            }
+        @JSFunction
+        fun remove(name: String) {
+            StorageUtils.delete("$DATABASE/$name")
         }
     }
 
     class File : ScriptableObject() {
-        override fun getClassName(): String {
-            return "File"
-        }
+        override fun getClassName() = "File"
 
-        companion object {
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun read(path: String, _null: String?, autoInputSdcardPath: Boolean = false) =
-                StorageUtils.read(path, _null, autoInputSdcardPath)
+        @JSFunction
+        fun read(
+            path: String,
+            _null: String?,
+            autoInputSdcardPath: Boolean = false
+        ) =
+            StorageUtils.read(path, _null, autoInputSdcardPath)
 
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun save(path: String, content: String, autoInputSdcardPath: Boolean = false) =
-                StorageUtils.save(path, content, autoInputSdcardPath)
+        @JSFunction
+        fun save(
+            path: String,
+            content: String,
+            autoInputSdcardPath: Boolean = false
+        ) =
+            StorageUtils.save(path, content, autoInputSdcardPath)
 
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun append(
-                path: String,
-                content: String,
-                autoInputSdcardPath: Boolean = false
-            ) = StorageUtils.save(
-                path,
-                "${StorageUtils.read(path, "")}$content",
-                autoInputSdcardPath
-            )
+        @JSFunction
+        fun append(
+            path: String,
+            content: String,
+            autoInputSdcardPath: Boolean = false
+        ) = StorageUtils.save(
+            path,
+            "${StorageUtils.read(path, "")}$content",
+            autoInputSdcardPath
+        )
 
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun delete(path: String, autoInputSdcardPath: Boolean = false) =
-                StorageUtils.delete(path, autoInputSdcardPath)
+        @JSFunction
+        fun delete(path: String, autoInputSdcardPath: Boolean = false) =
+            StorageUtils.delete(path, autoInputSdcardPath)
 
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun deleteAll(path: String, autoInputSdcardPath: Boolean = false) =
-                StorageUtils.deleteAll(path, autoInputSdcardPath)
-        }
+        @JSFunction
+        fun deleteAll(path: String, autoInputSdcardPath: Boolean = false) =
+            StorageUtils.deleteAll(path, autoInputSdcardPath)
     }
 
     class Black : ScriptableObject() {
-        override fun getClassName(): String {
-            return "Black"
+        override fun getClassName() = "Black"
+
+        @JSFunction
+        fun getSender() =
+            com.sungbin.gitkakaobot.util.api.Black.readSender()
+
+        @JSFunction
+        fun getRoom() = com.sungbin.gitkakaobot.util.api.Black.readRoom()
+
+        @JSFunction
+        fun addRoom(room: String) {
+            com.sungbin.gitkakaobot.util.api.Black.addRoom(room)
         }
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun getSender() = com.sungbin.gitkakaobot.util.api.Black.readSender()
+        @JSFunction
+        fun addSender(sender: String) {
+            com.sungbin.gitkakaobot.util.api.Black.addSender(sender)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun getRoom() = com.sungbin.gitkakaobot.util.api.Black.readRoom()
+        @JSFunction
+        fun removeRoom(room: String) {
+            com.sungbin.gitkakaobot.util.api.Black.removeRoom(room)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun addRoom(room: String) {
-                com.sungbin.gitkakaobot.util.api.Black.addRoom(room)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun addSender(sender: String) {
-                com.sungbin.gitkakaobot.util.api.Black.addSender(sender)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun removeRoom(room: String) {
-                com.sungbin.gitkakaobot.util.api.Black.removeRoom(room)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun removeSender(sender: String) {
-                com.sungbin.gitkakaobot.util.api.Black.removeSender(sender)
-            }
+        @JSFunction
+        fun removeSender(sender: String) {
+            com.sungbin.gitkakaobot.util.api.Black.removeSender(sender)
         }
     }
 
-    class Utils : ScriptableObject() {
-        override fun getClassName(): String {
-            return "Utils"
+    class Util : ScriptableObject() {
+        override fun getClassName() = "Util"
+
+        @JSFunction
+        fun makeToast(content: String) {
+            UiUtil.toast(context, content)
         }
 
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun makeToast(content: String) {
-                UiUtil.toast(context, content)
-            }
+        @JSFunction
+        fun delay(time: Int) {
+            Thread.sleep((time * 1000).toLong())
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun delay(time: Int) {
-                Thread.sleep((time * 1000).toLong())
-            }
+        @JSFunction
+        fun makeNoti(title: String, content: String) {
+            com.sungbin.gitkakaobot.util.api.Util.makeNoti(
+                title,
+                content
+            )
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun makeNoti(title: String, content: String) {
-                com.sungbin.gitkakaobot.util.api.Utils.makeNoti(title, content)
-            }
+        @JSFunction
+        fun getHtml(link: String, fromJsoup: Boolean = true) =
+            if (!fromJsoup) {
+                com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJava(
+                    link
+                )
+            } else com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJsoup(
+                link
+            )
 
-            @JvmStatic
-            @JvmOverloads
-            @JSStaticFunction
-            fun getHtml(link: String, fromJsoup: Boolean = true) = if (!fromJsoup) {
-                com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJava(link)
-            } else com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJsoup(link)
+        @JSFunction
+        fun post(
+            address: String,
+            postName: NativeArray,
+            postData: NativeArray
+        ) =
+            com.sungbin.gitkakaobot.util.api.Api.post(
+                address,
+                postName,
+                postData
+            )
 
-            @JvmStatic
-            @JSStaticFunction
-            fun post(address: String, postName: NativeArray, postData: NativeArray) = com.sungbin.gitkakaobot.util.api.Api.post(address, postName, postData)
+        @JSFunction
+        fun showAll() = MessageListener.showAll
 
-            @JvmStatic
-            @JSStaticFunction
-            fun showAll() =  MessageListener.showAll
+        @JSFunction
+        fun makeVibration(time: Int) {
+            com.sungbin.gitkakaobot.util.api.Util.makeVibration(time)
+        }
 
-            @JvmStatic
-            @JSStaticFunction
-            fun makeVibration(time: Int) {
-                com.sungbin.gitkakaobot.util.api.Utils.makeVibration(time)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun copy(content: String) {
-                com.sungbin.gitkakaobot.util.api.Utils.copy(content)
-            }
+        @JSFunction
+        fun copy(content: String) {
+            com.sungbin.gitkakaobot.util.api.Util.copy(content)
         }
     }
 }

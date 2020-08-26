@@ -12,19 +12,19 @@ data class BotItem(
     val isCompiled: Boolean,
     val power: Boolean,
     val type: Int,
+    val optimization: Int,
     val lastRunTime: String,
     val index: Int,
     val uuid: String
 ) {
-    override fun toString(): String {
-        return JSONObject().run {
-            put("name", name)
-            put("isCompiled", isCompiled)
-            put("power", power)
-            put("type", type)
-            put("lastRunTime", lastRunTime)
-            put("index", index)
-            put("uuid", uuid)
-        }.toString()
-    }
+    override fun toString() = JSONObject().run {
+        put("name", name)
+        put("isCompiled", isCompiled)
+        put("power", power)
+        put("type", type)
+        put("optimization", optimization)
+        put("lastRunTime", lastRunTime)
+        put("index", index)
+        put("uuid", uuid)
+    }.toString()
 }

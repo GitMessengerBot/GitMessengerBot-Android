@@ -33,10 +33,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         fun instance() = instance
     }
 
-    private var fromPos = -1
-    private var toPos = -1
-    private var adapter: BotAdapter? = null
-
+    private lateinit var adapter: BotAdapter
     private val viewModel by viewModels<BotViewModel>()
 
     override fun onCreateView(
@@ -49,17 +46,22 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         retainInstance = false
 
         viewModel.initBotList()
-        viewModel.jsBotList.postValue(
+        viewModel.botList.postValue(
             arrayListOf(
                 BotItem(
-                    "DEBUG-BOT", false, true, BotType.JS, "없음", 1, Utils.makeRandomUUID()
+                    "DEBUG-BOT",
+                    false,
+                    true,
+                    BotType.JS,
+                    -1,
+                    "없음",
+                    1,
+                    Utils.makeRandomUUID()
                 )
             )
         )
 
-        if (viewModel.jsBotList.value.isNullOrEmpty()
-            && viewModel.simpleBotList.value.isNullOrEmpty()
-        ) {
+        if (viewModel.botList.value.isNullOrEmpty()) {
             cl_empty.show()
             rv_bot.hide()
         } else {
@@ -67,7 +69,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             rv_bot.show()
         }
 
-        adapter = BotAdapter(viewModel.jsBotList.value ?: arrayListOf(), requireActivity())
+        adapter = BotAdapter(viewModel.botList.value ?: arrayListOf(), requireActivity())
         rv_bot.adapter = adapter
         rv_bot.apply {
             setHasFixedSize(true)
@@ -100,11 +102,12 @@ class BotFragment : Fragment(), OnBackPressedUtil {
                 false,
                 false,
                 botType,
+                -1,
                 "없음",
-                BotUtil.getLastIndex(BotType.JS, viewModel.jsBotList.value!!) + 1,
+                BotUtil.getLastIndex(viewModel.botList.value!!) + 1,
                 Utils.makeRandomUUID()
             )
-            viewModel.jsBotList.run {
+            viewModel.botList.run {
                 value?.add(bot)
                 postValue(value)
             }
@@ -115,7 +118,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             UiUtil.snackbar(it, requireContext().getString(R.string.added_new_bot))
         }
 
-        viewModel.jsBotList.observe(viewLifecycleOwner, {
+        viewModel.botList.observe(viewLifecycleOwner, {
             adapter = BotAdapter(it, requireActivity())
             rv_bot.adapter = adapter
             if (it.isNullOrEmpty()) {
@@ -174,18 +177,18 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         private fun moveItem(oldPos: Int, newPos: Int) {
-            val oldItem = viewModel.jsBotList.value!![oldPos]
-            val newItem = viewModel.jsBotList.value!![newPos]
+            val oldItem = viewModel.botList.value!![oldPos]
+            val newItem = viewModel.botList.value!![newPos]
             BotUtil.changeBotIndex(oldItem, newPos)
             BotUtil.changeBotIndex(newItem, oldPos)
-            viewModel.jsBotList.value!!.run {
+            viewModel.botList.value!!.run {
                 removeAt(oldPos)
                 add(oldPos, newItem)
                 removeAt(newPos)
                 add(newPos, oldItem)
             }
             rv_bot.post {
-                adapter?.run {
+                adapter.run {
                     notifyItemChanged(oldPos)
                     notifyItemChanged(newPos)
                 }

@@ -63,19 +63,32 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_default"
-                    android:layout_marginEnd="@dimen/margin_default"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@{Item.name}"
+                    android:layout_marginEnd="@dimen/margin_half"
                     app:layout_constraintBottom_toBottomOf="@+id/triv_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/switchMaterial"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_last_runtime"
                     app:layout_constraintStart_toEndOf="@+id/triv_icon"
                     app:layout_constraintTop_toTopOf="@+id/triv_icon"
                     tools:text="@string/script_name_preview" />
 
+                <TextView
+                    android:textSize="10sp"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:id="@+id/tv_last_runtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{Item.lastRunTime}"
+                    app:layout_constraintBottom_toBottomOf="@+id/triv_icon"
+                    app:layout_constraintEnd_toStartOf="@+id/sw_power"
+                    app:layout_constraintTop_toTopOf="@+id/triv_icon"
+                    tools:text="@string/last_runtime"
+                    tools:ignore="SmallSp" />
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switchMaterial"
+                    android:id="@+id/sw_power"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="@{Item.power}"
@@ -85,15 +98,16 @@
                     tools:checked="true" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_container"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/margin_twice"
                     android:layout_marginTop="@dimen/margin_half"
-                    android:layout_marginEnd="@dimen/margin_default"
                     android:layout_marginBottom="@dimen/margin_half"
                     android:orientation="horizontal"
                     android:weightSum="6"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view"
                     app:layout_constraintTop_toBottomOf="@+id/triv_icon">
 
                     <ImageView

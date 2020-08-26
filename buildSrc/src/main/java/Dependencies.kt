@@ -47,6 +47,7 @@ object Versions {
     }
 
     object Ui {
+        const val SpotLight = "2.0.1"
         const val OverlappingPanels = "0.1.1"
         const val TransformationLayout = "1.0.5"
         const val Browser = "1.3.0-alpha05"
@@ -105,6 +106,7 @@ object Dependencies {
     }
 
     object Ui {
+        const val SpotLight = "com.github.takusemba:spotlight:${Versions.Ui.SpotLight}"
         const val OverlappingPanels = "com.github.discord:OverlappingPanels:${Versions.Ui.OverlappingPanels}"
         const val TransformationLayout = "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"

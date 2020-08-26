@@ -23,10 +23,14 @@ import com.sungbin.gitkakaobot.util.BotUtil.botItems
 import com.sungbin.gitkakaobot.util.BotUtil.functions
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.api.ApiClass
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
+import org.mozilla.javascript.Function
+import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
+import org.mozilla.javascript.annotations.JSStaticFunction
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -41,9 +45,12 @@ class MessageListener : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
-        UiUtil.toast(context, "Power ON")
-        init(context)
+        applicationContext.let {
+            context = it
+            ApiClass.init(it)
+            UiUtil.toast(it, "Power ON")
+            init(it)
+        }
     }
 
     override fun onDestroy() {
@@ -243,6 +250,35 @@ class MessageListener : NotificationListenerService() {
             }
         }
 
+        class Bot constructor(private val botItem: BotItem): ScriptableObject() {
+            override fun getClassName(): String {
+                bot = botItem
+                return "Bot"
+            }
+
+            companion object {
+                lateinit var bot: BotItem
+
+                @JvmStatic
+                @JSStaticFunction
+                fun getTestMessage() = "TEST-MESSAGE"
+
+                @JvmStatic
+                @JSStaticFunction
+                fun getTestValue(any: Any) = any
+
+                @JvmStatic
+                @JSStaticFunction
+                fun getCurrentBot() = bot
+
+                @JvmStatic
+                @JSStaticFunction
+                fun addListener(bot: BotItem, event: Int, function: Function) {
+                    functions[bot.uuid] = hashMapOf(event to function)
+                }
+            }
+        }
+
         fun compileJavaScript(bot: BotItem): BotCompileItem {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
@@ -250,7 +286,18 @@ class MessageListener : NotificationListenerService() {
                     optimizationLevel = -1
                 }
 
-                val scope = rhino.initStandardObjects()
+                val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
+                ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.DataBase::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Game::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Util::class.java, false, true)
+
                 ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
                 rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
                 scopes[bot.uuid] = scope

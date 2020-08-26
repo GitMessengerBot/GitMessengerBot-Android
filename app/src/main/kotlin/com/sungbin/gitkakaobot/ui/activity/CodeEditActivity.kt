@@ -50,11 +50,11 @@ class CodeEditActivity : AppCompatActivity() {
 
     @Named("pretty")
     @Inject
-    lateinit var beautifyClient: Connection
+    lateinit var beautifyClient: Connection // Jsoup
 
     @Named("minify")
     @Inject
-    lateinit var minifyClient: Connection
+    lateinit var minifyClient: Connection // Jsoup
 
     private val loadingDialog by lazy {
         LoadingDialog(this)

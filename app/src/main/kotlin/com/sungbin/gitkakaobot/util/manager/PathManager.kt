@@ -12,6 +12,8 @@ object PathManager {
 
     const val JS = "GitKakaoBot/bot/js"
     const val SIMPLE = "GitKakaoBot/bot/simple"
+    const val DEBUG = "GitKakaoBot/bot/debug"
+
     const val LOG = "GitKakaoBot/log"
     const val SENDER = "GitKakaoBot/debug/sender"
     const val ROOM = "GitKakaoBot/debug/room"
