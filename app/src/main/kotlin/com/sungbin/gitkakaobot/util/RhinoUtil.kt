@@ -5,6 +5,7 @@ import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil.functions
+import com.sungbin.gitkakaobot.util.api.ApiClass
 import com.sungbin.sungbintool.extensions.clear
 import com.sungbin.sungbintool.extensions.plusAssign
 import com.sungbin.sungbintool.extensions.toEditable
@@ -75,6 +76,7 @@ object RhinoUtil {
     }
 
     fun debug(code: String, debugView: TextView) {
+        ApiClass.init(debugView.context)
         this.debugView = debugView
         debugView.clear()
         val rhino = RhinoAndroidHelper().enterContext().apply {
@@ -86,16 +88,16 @@ object RhinoUtil {
             ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
             ScriptableObject.defineProperty(scope, "Bot", Bot(code).conv(), 0)
             ScriptableObject.defineProperty(scope, "console", console().conv(), 0)
-            /*ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.DataBase::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Game::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Util::class.java, false, true)*/
+            ScriptableObject.defineProperty(scope, "Log", ApiClass.Log().conv(), 0)
+            ScriptableObject.defineProperty(scope, "AppData", ApiClass.AppData().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Api", ApiClass.Api().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Device", ApiClass.Device().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Scope", ApiClass.Scope().conv(), 0)
+            ScriptableObject.defineProperty(scope, "File", ApiClass.File().conv(), 0)
+            ScriptableObject.defineProperty(scope, "DataBase", ApiClass.DataBase().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Black", ApiClass.Black().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Game", ApiClass.Game().conv(), 0)
+            ScriptableObject.defineProperty(scope, "Util", ApiClass.Util().conv(), 0)
             rhino.compileString(code, "DEBUG", 1, null).exec(rhino, scope)
             /*val result = rhino.evaluateString(scope, code, "DEBUG", 1, null)
             functions["-1"]!![BotUtil.Event.DEBUG]?.call(

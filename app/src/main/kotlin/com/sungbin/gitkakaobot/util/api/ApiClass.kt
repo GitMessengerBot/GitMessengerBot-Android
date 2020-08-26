@@ -264,8 +264,8 @@ object ApiClass {
         }
 
         @JSFunction
-        fun delay(time: Int) {
-            Thread.sleep((time * 1000).toLong())
+        fun delay(ms: Int) {
+            Thread.sleep(ms.toLong())
         }
 
         @JSFunction
