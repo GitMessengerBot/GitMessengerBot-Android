@@ -26,11 +26,11 @@ object BotUtil {
     val botItems = ArrayList<BotItem>()
     val functions = HashMap<String, HashMap<Int, Function>>()
 
-    private fun getBotPath(bot: BotItem) = when (bot.type) {
+    private fun getBotPath(bot: BotItem) = "${when (bot.type) {
         BotType.DEBUG -> DEBUG
         BotType.JS -> JS
         else -> SIMPLE
-    }
+    }}/${bot.name}"
 
     fun getLastIndex(botList: ArrayList<BotItem>): Int {
         var maxIndex = 0
@@ -85,7 +85,6 @@ object BotUtil {
         ).toString()*/
         val defaultCode = context.getString(R.string.default_sourcecode)
         val path = getBotPath(bot)
-        botItems.add(bot)
         StorageUtils.createFolder(path, true)
         StorageUtils.createFile(
             "$path/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
@@ -122,6 +121,7 @@ object BotUtil {
             val botJsonPath = "${it.path}/data.json"
             val botJson = StorageUtils.read(botJsonPath, null, false)
             botJson?.let { json ->
+                StorageUtils.save(botJsonPath.replace("/",""), json, true)
                 botItems.add(createBotItem(JSONObject(json)))
             }
         }
@@ -129,7 +129,6 @@ object BotUtil {
             val botJsonPath = "${it.path}/data.json"
             val botJson = StorageUtils.read(botJsonPath, null, false)
             botJson?.let { json ->
-                val botJsonObject = JSONObject(json)
                 botItems.add(createBotItem(JSONObject(json)))
             }
         }
