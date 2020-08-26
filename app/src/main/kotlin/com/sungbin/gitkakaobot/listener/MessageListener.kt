@@ -32,7 +32,7 @@ import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.annotations.JSStaticFunction
+import org.mozilla.javascript.annotations.JSFunction
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -219,7 +219,7 @@ class MessageListener : NotificationListenerService() {
         ) {
             val rhino = RhinoAndroidHelper().enterContext().apply {
                 languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                optimizationLevel = -1
+                optimizationLevel = bot.optimization
             }
             val scope = scopes[bot.uuid]
             try {
@@ -252,32 +252,28 @@ class MessageListener : NotificationListenerService() {
             }
         }
 
-        class Bot constructor(private val botItem: BotItem): ScriptableObject() {
-            override fun getClassName(): String {
-                bot = botItem
-                return "Bot"
+        class BotManager(private var bot: BotItem) : ScriptableObject() {
+            override fun getClassName() = "BotManager"
+            override fun toString() = "TODO"
+
+            @JSFunction
+            fun getTestMessage() = "TEST-MESSAGE"
+
+            @JSFunction
+            fun getTestValue(any: Any) = any
+
+            @JSFunction
+            fun getCurrentBot() = bot
+
+            @JSFunction
+            fun on(event: Int, function: Function) {
+                addListener(event, function)
             }
 
-            companion object {
-                lateinit var bot: BotItem
-
-                @JvmStatic
-                @JSStaticFunction
-                fun getTestMessage() = "TEST-MESSAGE"
-
-                @JvmStatic
-                @JSStaticFunction
-                fun getTestValue(any: Any) = any
-
-                @JvmStatic
-                @JSStaticFunction
-                fun getCurrentBot() = bot
-
-                @JvmStatic
-                @JSStaticFunction
-                fun addListener(bot: BotItem, event: Int, function: Function) {
-                    functions[bot.uuid] = hashMapOf(event to function)
-                }
+            @JSFunction
+            fun addListener(event: Int, function: Function) {
+                if (functions[bot.uuid] == null) functions[bot.uuid] = hashMapOf(event to function)
+                else functions[bot.uuid]!![event] = function
             }
         }
 
@@ -285,12 +281,12 @@ class MessageListener : NotificationListenerService() {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                    optimizationLevel = -1
+                    optimizationLevel = bot.optimization
                 }
 
                 val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
                 ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
-//                ScriptableObject.defineProperty(scope, "Bot", RhinoUtil.Bot(code).conv(), 0)
+                ScriptableObject.defineProperty(scope, "BotManager", BotManager(bot).conv(), 0)
                 ScriptableObject.defineProperty(scope, "console", RhinoUtil.console().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Log", ApiClass.Log().conv(), 0)
                 ScriptableObject.defineProperty(scope, "AppData", ApiClass.AppData().conv(), 0)
@@ -302,8 +298,6 @@ class MessageListener : NotificationListenerService() {
                 ScriptableObject.defineProperty(scope, "Black", ApiClass.Black().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Game", ApiClass.Game().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Util", ApiClass.Util().conv(), 0)
-
-                ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
                 rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
                 scopes[bot.uuid] = scope
                 org.mozilla.javascript.Context.exit()

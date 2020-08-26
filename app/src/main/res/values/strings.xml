@@ -65,7 +65,8 @@
     <string name="input">Input…</string>
     <string name="send">전송</string>
     <string name="last_runtime">마지막작동: @time</string>
-    <string name="mode_eval">eval 모마지막작동: @time드</string>
+    <string name="reload_done">리로드 성공\n걸린 시간 : @timems</string>
+    <string name="mode_eval">eval 모드</string>
     <string name="log_time_preview">14:24:42</string>
     <string name="login_success">로그인 성공!</string>
     <string name="group_chatting">그룹 채팅</string>
@@ -168,7 +169,7 @@
     <string name="content_none">표시할 항목이 없어요</string>
     <string name="next">다음</string>
     <string name="input_bot_source">봇 소스 입력…</string>
-    <string name="default_sourcecode"><![CDATA[const response = (room, msg, sender, isGroupChat, replier, ImageDB, packageName) => {\n\n}]]></string>
+    <string name="default_sourcecode"><![CDATA[let response = (room, msg, sender, isGroupChat, replier, ImageDB, packageName) => {\n\n}\n\nBotManager.on(Event.MESSAGE, response);]]></string>
     <string name="welcome">환영합니다!</string>
     <string name="need_setting_before_start">시작하기 앞서,\n몇가지 설정이 필요해요.</string>
     <string name="permission_grant">권한 부여됨</string>
@@ -184,6 +185,11 @@
     <string name="run">run</string>
     <string name="javascript_console">자바스크립트 콘솔</string>
     <string name="debug_hint">여기에 디버그 내용이 표시됩니다.\n(console.log를 통해 디버그를 기록할 수 있습니다)</string>
-    <string name="default_console_code"><![CDATA[let debug = (value) => {\n  console.log(value);\n}\n\nlet error = (name, exception) => {\n  console.log(exception);\n}\n\nBot.on(Event.DEBUG, debug);\nBot.on(Event.ERROR, error);]]></string>
+    <string name="default_console_code"><![CDATA[let debug = (value) => {\n  console.log(value);\n}\n\nlet error = (name, exception) => {\n  console.log(exception);\n}\n\nBotManager.addListener(Event.DEBUG, debug);\nBotManager.addListener(Event.ERROR, error);]]></string>
+    <string name="search">검색</string>
+    <string name="base64_tool">Base64 도구</string>
+    <string name="base64_preview">Base64 미리보기</string>
+    <string name="base64_encode">Base64 인코딩</string>
+    <string name="please_input_script_name">스크립트 이름을 입력해 주세요.</string>
 
 </resources>

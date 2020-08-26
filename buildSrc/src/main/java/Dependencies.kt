@@ -54,7 +54,7 @@ object Versions {
         const val ShapeOfView = "1.3.2"
         const val YoYo = "2.3@aar"
         const val Lottie = "3.4.1"
-        const val SimpleCodeEditor = "2.0.3"
+        const val SimpleCodeEditor = "2.0.4"
         const val JsonViewer = "v1.1"
         const val Licenser = "2.0.0"
         const val Material = "1.2.0-alpha06"
@@ -66,7 +66,7 @@ object Versions {
         const val GsonConverter = "2.6.2"
         const val YoYoHelper = "2.1@aar"
         const val HangulParser = "1.0.0"
-        const val AndroidUtils = "3.2.3"
+        const val AndroidUtils = "3.2.4"
         const val CarshReporter = "1.1.0"
     }
 }

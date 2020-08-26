@@ -4,12 +4,10 @@ import android.content.Context
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
-import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.PathManager.DEBUG
 import com.sungbin.gitkakaobot.util.manager.PathManager.JS
 import com.sungbin.gitkakaobot.util.manager.PathManager.SIMPLE
 import com.sungbin.sungbintool.StorageUtils
-import com.sungbin.sungbintool.StorageUtils.sdcard
 import com.sungbin.sungbintool.Utils
 import org.json.JSONObject
 import org.mozilla.javascript.Function
@@ -80,13 +78,14 @@ object BotUtil {
     }
 
     fun createNewBot(context: Context, bot: BotItem) {
-        val defaultCode = DataUtil.read(
+        /*val defaultCode = DataUtil.read(
             context,
             PathManager.DEFAULT_CODE,
             context.getString(R.string.default_sourcecode)
-        ).toString()
+        ).toString()*/
+        val defaultCode = context.getString(R.string.default_sourcecode)
         val path = getBotPath(bot)
-        if (File("$sdcard/$path").exists()) return
+        botItems.add(bot)
         StorageUtils.createFolder(path, true)
         StorageUtils.createFile(
             "$path/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",

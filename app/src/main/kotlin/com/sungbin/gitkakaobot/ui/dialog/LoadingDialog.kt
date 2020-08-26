@@ -39,15 +39,16 @@ class LoadingDialog constructor(private val activity: Activity) {
                 )
             )
         )
+        alert.setCancelable(false)
         alert.show()
     }
 
     fun updateTitle(title: String) {
-        layout.findViewById<TextView>(R.id.tv_loading) += title
+        (layout[R.id.tv_loading] as TextView) += title
         layout.invalidate()
     }
 
-    fun setError(throwable: Throwable, isCustomMessage: Boolean = false) {
+    fun setError(exception: Exception, isCustomMessage: Boolean = false) {
         if (!isCustomMessage) {
             (layout[R.id.lav_load] as LottieAnimationView).run {
                 setAnimation(R.raw.error)
@@ -55,7 +56,7 @@ class LoadingDialog constructor(private val activity: Activity) {
             }
             (layout[R.id.tv_loading] as TextView).run {
                 val message =
-                    "서버 요청 중 오류가 발생했습니다!\n\n${throwable.message} #${throwable.stackTrace[0].lineNumber}"
+                    "서버 요청 중 오류가 발생했습니다!\n\n${exception.message} #${exception.stackTrace[0].lineNumber}"
                 val ssb = SpannableStringBuilder(message)
                 ssb.setSpan(
                     ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorLightRed)),
@@ -64,7 +65,6 @@ class LoadingDialog constructor(private val activity: Activity) {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 text = ssb
-                movementMethod = ScrollingMovementMethod()
             }
         }
         else {
@@ -73,10 +73,11 @@ class LoadingDialog constructor(private val activity: Activity) {
                 hide(true)
             }
             (layout[R.id.tv_loading] as TextView).run {
-                text = throwable.message
-                movementMethod = ScrollingMovementMethod()
+                text = exception.message
             }
         }
+        (layout[R.id.tv_loading] as TextView).movementMethod = ScrollingMovementMethod()
+        alert.setCancelable(true)
         layout.invalidate()
     }
 

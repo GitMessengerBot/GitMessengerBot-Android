@@ -175,36 +175,33 @@ object ApiClass {
         fun read(name: String) = StorageUtils.read("$DATABASE/$name", null)
 
         @JSFunction
-        fun save(name: String, content: String) {
-            StorageUtils.save("$DATABASE/$name", content)
-        }
+        fun save(name: String, content: String) = StorageUtils.save("$DATABASE/$name", content)
 
         @JSFunction
-        fun remove(name: String) {
-            StorageUtils.delete("$DATABASE/$name")
-        }
+        fun remove(name: String) = StorageUtils.delete("$DATABASE/$name")
     }
 
     class File : ScriptableObject() {
         override fun getClassName() = "File"
 
         @JSFunction
+        //@JvmOverloads
         fun read(
             path: String,
             _null: String?,
             autoInputSdcardPath: Boolean = false
-        ) =
-            StorageUtils.read(path, _null, autoInputSdcardPath)
+        ) = StorageUtils.read(path, _null, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun save(
             path: String,
             content: String,
             autoInputSdcardPath: Boolean = false
-        ) =
-            StorageUtils.save(path, content, autoInputSdcardPath)
+        ) = StorageUtils.save(path, content, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun append(
             path: String,
             content: String,
@@ -216,10 +213,12 @@ object ApiClass {
         )
 
         @JSFunction
+        //@JvmOverloads
         fun delete(path: String, autoInputSdcardPath: Boolean = false) =
             StorageUtils.delete(path, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun deleteAll(path: String, autoInputSdcardPath: Boolean = false) =
             StorageUtils.deleteAll(path, autoInputSdcardPath)
     }
@@ -228,8 +227,7 @@ object ApiClass {
         override fun getClassName() = "Black"
 
         @JSFunction
-        fun getSender() =
-            com.sungbin.gitkakaobot.util.api.Black.readSender()
+        fun getSender() = com.sungbin.gitkakaobot.util.api.Black.readSender()
 
         @JSFunction
         fun getRoom() = com.sungbin.gitkakaobot.util.api.Black.readRoom()
@@ -277,6 +275,7 @@ object ApiClass {
         }
 
         @JSFunction
+        //@JvmOverloads
         fun getHtml(link: String, fromJsoup: Boolean = true) =
             if (!fromJsoup) {
                 com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJava(
@@ -291,19 +290,18 @@ object ApiClass {
             address: String,
             postName: NativeArray,
             postData: NativeArray
-        ) =
-            com.sungbin.gitkakaobot.util.api.Api.post(
-                address,
-                postName,
-                postData
-            )
+        ) = com.sungbin.gitkakaobot.util.api.Api.post(
+            address,
+            postName,
+            postData
+        )
 
         @JSFunction
         fun showAll() = MessageListener.showAll
 
         @JSFunction
-        fun makeVibration(time: Int) {
-            com.sungbin.gitkakaobot.util.api.Util.makeVibration(time)
+        fun makeVibration(ms: Int) {
+            com.sungbin.gitkakaobot.util.api.Util.makeVibration(ms)
         }
 
         @JSFunction

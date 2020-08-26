@@ -2,6 +2,7 @@ package com.sungbin.gitkakaobot.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.EditText
@@ -123,7 +124,7 @@ class CodeEditActivity : AppCompatActivity() {
                 ) {
                     runOnUiThread {
                         loadingDialog.setError(
-                            Throwable("스크립트 소스에 오류가 있습니다.\n오류 수정 후 다시 시도해 주세요.\n\n\n$minifyCode"),
+                            Exception("스크립트 소스에 오류가 있습니다.\n오류 수정 후 다시 시도해 주세요.\n\n\n$minifyCode"),
                             true
                         )
                     }
@@ -364,7 +365,14 @@ class CodeEditActivity : AppCompatActivity() {
                 val type = it.javaClass.name
                 if (type == "org.mozilla.javascript.ast.Name") {
                     val name = it.toSource()
-                    highlightingKeywords.add(name)
+                    if (name[0].isUpperCase()) {
+                        sce_editor.highlighter.addReservedWord(name, Color.parseColor("#3F51B5"))
+                        highlightingKeywords.add(name)
+                    }
+                    else {
+                        sce_editor.highlighter.addReservedWord(name)
+                        highlightingKeywords.add(name)
+                    }
                 }
                 true
             }

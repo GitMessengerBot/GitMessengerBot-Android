@@ -46,7 +46,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         retainInstance = false
 
         viewModel.initBotList()
-        viewModel.botList.postValue(
+        /*viewModel.botList.postValue(
             arrayListOf(
                 BotItem(
                     "DEBUG-BOT",
@@ -59,7 +59,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
                     Utils.makeRandomUUID()
                 )
             )
-        )
+        )*/
 
         if (viewModel.botList.value.isNullOrEmpty()) {
             cl_empty.show()
@@ -95,27 +95,32 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         btn_add.setOnClickListener {
-            val botType =
-                if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
-            val bot = BotItem(
-                tiet_bot_name.text.toString(),
-                false,
-                false,
-                botType,
-                -1,
-                "없음",
-                BotUtil.getLastIndex(viewModel.botList.value!!) + 1,
-                Utils.makeRandomUUID()
-            )
-            viewModel.botList.run {
-                value?.add(bot)
-                postValue(value)
+            if (tiet_bot_name.text.toString().isBlank()) {
+                UiUtil.snackbar(it, getString(R.string.please_input_script_name))
             }
-            BotUtil.createNewBot(requireContext(), bot)
-            mbtg_container.check(R.id.btn_javascript)
-            tiet_bot_name.clear()
-            tsl_container.finishTransform()
-            UiUtil.snackbar(it, requireContext().getString(R.string.added_new_bot))
+            else {
+                val botType =
+                    if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
+                val bot = BotItem(
+                    tiet_bot_name.text.toString(),
+                    false,
+                    false,
+                    botType,
+                    -1,
+                    "없음",
+                    BotUtil.getLastIndex(viewModel.botList.value!!) + 1,
+                    Utils.makeRandomUUID()
+                )
+                viewModel.botList.run {
+                    value?.add(bot)
+                    postValue(value)
+                }
+                BotUtil.createNewBot(requireContext(), bot)
+                mbtg_container.check(R.id.btn_javascript)
+                tiet_bot_name.clear()
+                tsl_container.finishTransform()
+                UiUtil.snackbar(it, getString(R.string.added_new_bot))
+            }
         }
 
         viewModel.botList.observe(viewLifecycleOwner, {

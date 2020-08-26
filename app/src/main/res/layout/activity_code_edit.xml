@@ -37,8 +37,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
                 android:background="@drawable/bg_top_round_8"
+                android:backgroundTint="@color/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,15 +93,19 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorWhite"
-            android:importantForAutofill="no"
             android:backgroundTint="@color/colorWhite"
+            android:importantForAutofill="no"
             app:layout_constraintBottom_toTopOf="@+id/hsv_container"
             app:layout_constraintEnd_toStartOf="@+id/space_end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/space_top"
+            app:sce_annotationColor="@color/colorAnnotation"
+            app:sce_focusLineColor="@color/colorPrimary"
             app:sce_lineColor="@color/colorGray"
             app:sce_lineNumberColor="@color/colorGray"
-            app:sce_focusLineColor="@color/colorPrimary" />
+            app:sce_numberColor="@color/colorNumber"
+            app:sce_reservedColor="@color/colorMethod"
+            app:sce_stringColor="@color/colorString" />
 
         <HorizontalScrollView
             android:id="@+id/hsv_container"

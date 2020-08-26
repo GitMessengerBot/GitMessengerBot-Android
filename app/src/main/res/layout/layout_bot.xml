@@ -119,6 +119,13 @@
                         android:rotation="300"
                         android:src="@drawable/ic_baseline_replay_24" />
 
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:id="@+id/pb_reloading"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
                     <ImageView
                         android:id="@+id/iv_edit"
                         android:layout_width="0dp"

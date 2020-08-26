@@ -22,4 +22,5 @@ interface GithubInterface {
         @Field("client_secret") clientSecret: String,
         @Field("code") code: String
     ): Flowable<JsonObject>
+
 }

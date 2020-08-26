@@ -94,16 +94,20 @@
                 app:layout_constraintEnd_toStartOf="@+id/space_end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/space_top"
+                app:sce_annotationColor="@color/colorAnnotation"
                 app:sce_focusLineColor="@color/colorPrimary"
                 app:sce_lineColor="@color/colorGray"
-                app:sce_lineNumberColor="@color/colorGray" />
+                app:sce_lineNumberColor="@color/colorGray"
+                app:sce_numberColor="@color/colorNumber"
+                app:sce_reservedColor="@color/colorMethod"
+                app:sce_stringColor="@color/colorString" />
 
             <TextView
                 android:id="@+id/tv_console"
                 android:layout_width="match_parent"
-                android:scrollHorizontally="true"
                 android:layout_height="180dp"
                 android:padding="@dimen/margin_default"
+                android:scrollHorizontally="true"
                 android:text="@string/debug_hint"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

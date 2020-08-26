@@ -173,7 +173,7 @@ class JoinActivity : AppCompatActivity() {
                             json["access_token"].asString
                         )
                     }, { throwable ->
-                        loadingDialog.setError(throwable)
+                        loadingDialog.setError(Exception(throwable.message))
                     }, {
                         finish()
                         startActivity<DashboardActivity>()

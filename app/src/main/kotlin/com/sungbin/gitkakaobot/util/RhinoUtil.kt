@@ -7,7 +7,6 @@ import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil.functions
 import com.sungbin.gitkakaobot.util.api.ApiClass
 import com.sungbin.sungbintool.extensions.clear
-import com.sungbin.sungbintool.extensions.plusAssign
 import com.sungbin.sungbintool.extensions.toEditable
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Function
@@ -41,8 +40,8 @@ object RhinoUtil {
         return allList.toTypedArray()
     }
 
-    class Bot(private var code: String) : ScriptableObject() {
-        override fun getClassName() = "Bot"
+    class BotManager : ScriptableObject() {
+        override fun getClassName() = "BotManager"
         override fun toString() = "TODO"
 
         @JSFunction
@@ -61,7 +60,8 @@ object RhinoUtil {
 
         @JSFunction
         fun addListener(event: Int, function: Function) {
-            functions["-1"] = hashMapOf(event to function)
+            if (functions["-1"] == null) functions["-1"] = hashMapOf(event to function)
+            else functions["-1"]!![event] = function
         }
     }
 
@@ -75,10 +75,12 @@ object RhinoUtil {
         }
     }
 
-    fun debug(code: String, debugView: TextView) {
-        ApiClass.init(debugView.context)
-        this.debugView = debugView
-        debugView.clear()
+    fun debug(code: String, view: TextView) {
+        if (!::debugView.isInitialized) {
+            ApiClass.init(view.context)
+            debugView = view
+        }
+        view.clear()
         val rhino = RhinoAndroidHelper().enterContext().apply {
             languageVersion = Context.VERSION_ES6
             optimizationLevel = -1
@@ -86,7 +88,7 @@ object RhinoUtil {
         val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
         try {
             ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
-            ScriptableObject.defineProperty(scope, "Bot", Bot(code).conv(), 0)
+            ScriptableObject.defineProperty(scope, "BotManager", BotManager().conv(), 0)
             ScriptableObject.defineProperty(scope, "console", console().conv(), 0)
             ScriptableObject.defineProperty(scope, "Log", ApiClass.Log().conv(), 0)
             ScriptableObject.defineProperty(scope, "AppData", ApiClass.AppData().conv(), 0)
@@ -98,23 +100,22 @@ object RhinoUtil {
             ScriptableObject.defineProperty(scope, "Black", ApiClass.Black().conv(), 0)
             ScriptableObject.defineProperty(scope, "Game", ApiClass.Game().conv(), 0)
             ScriptableObject.defineProperty(scope, "Util", ApiClass.Util().conv(), 0)
-            rhino.compileString(code, "DEBUG", 1, null).exec(rhino, scope)
-            /*val result = rhino.evaluateString(scope, code, "DEBUG", 1, null)
-            functions["-1"]!![BotUtil.Event.DEBUG]?.call(
+            val value = rhino.compileString(code, "DEBUG", 1, null).exec(rhino, scope)
+            functions["-1"]?.get(BotUtil.Event.DEBUG)?.call(
                 rhino,
                 scope,
                 scope,
-                arrayOf(result)
-            )*/
+                arrayOf(value)
+            )
             Context.exit()
         } catch (e: Exception) {
-            /*functions["-1"]?.get(BotUtil.Event.ERROR)?.call(
+            functions["-1"]?.get(BotUtil.Event.ERROR)?.call(
                 rhino,
                 scope,
                 scope,
                 arrayOf("DEBUG", e)
-            )*/
-            debugView += e.toString()
+            )
+            e.printStackTrace()
         }
     }
 

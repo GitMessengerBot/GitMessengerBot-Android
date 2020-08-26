@@ -1,6 +1,5 @@
 package com.sungbin.gitkakaobot.adapter
 
-import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -19,10 +18,8 @@ import com.sungbin.gitkakaobot.model.EditorFindItem
  * Created by SungBin on 2020-05-12.
  */
 
-class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
+class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
     RecyclerView.Adapter<EditorFindAdapter.EditorFindViewHolder>() {
-
-    private var ctx: Context? = null
 
     interface OnItemClickListener {
         fun onItemClick(findText: String, text: String, line: Int, index: Int)
@@ -46,8 +43,8 @@ class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): EditorFindViewHolder {
-        ctx = viewGroup.context
-        val view = LayoutInflater.from(ctx).inflate(R.layout.layout_editor_find_textview, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.layout_editor_find_textview, viewGroup, false)
         return EditorFindViewHolder(view)
     }
 
@@ -58,41 +55,28 @@ class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
         val index = list[position].index
         viewholder.textview.isSelected = true
 
-        if(index > 0){
+        if (index > 0) {
             val span = SpannableStringBuilder(text)
             span.setSpan(
                 ForegroundColorSpan(
-                    ContextCompat.getColor(ctx!!, R.color.colorAccent)
+                    ContextCompat.getColor(viewholder.textview.context, R.color.colorAccent)
                 ),
                 index,
                 index + findText.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             viewholder.textview.text = span
-        }
-        else viewholder.textview.text = text
+        } else viewholder.textview.text = text
 
         viewholder.textview.setOnClickListener {
-            if(listener != null) {
+            if (listener != null) {
                 listener!!.onItemClick(findText, text, line, index)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
-
-    fun getItem(position: Int): EditorFindItem {
-        return list[position]
-    }
-
+    override fun getItemCount() = list.size
+    override fun getItemId(position: Int) = position.toLong()
+    override fun getItemViewType(position: Int) = position
+    fun getItem(position: Int) = list[position]
 }

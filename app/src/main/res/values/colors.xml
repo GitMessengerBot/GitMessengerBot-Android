@@ -12,4 +12,8 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorLightRed">#EF5350</color>
     <color name="colorBlack">#000</color>
+    <color name="colorAnnotation">#9E9E9E</color>
+    <color name="colorNumber">#8D6E63</color>
+    <color name="colorMethod">#AB47BC</color>
+    <color name="colorString">#F36663</color>
 </resources>

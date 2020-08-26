@@ -27,8 +27,8 @@ object Util {
         )
     }
 
-    fun makeVibration(time: Int) {
-        vibrator.vibrate(time * 1000.toLong())
+    fun makeVibration(ms: Int) {
+        vibrator.vibrate(ms * 1000.toLong())
     }
 
     fun copy(content: String) {
