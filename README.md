@@ -1,2 +1,2 @@
 # GitMessengerBot
-a Messenger Auto-Reply bot with Git service.
+a Messenger Auto-Reply bot application with Git service.
