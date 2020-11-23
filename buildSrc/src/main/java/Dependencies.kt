@@ -62,7 +62,7 @@ object Versions {
         const val ConstraintLayout = "1.1.3"
     }
 
-    object Utils {
+    object Util {
         const val GsonConverter = "2.6.2"
         const val YoYoHelper = "2.1@aar"
         const val HangulParser = "1.0.0"
@@ -123,12 +123,12 @@ object Dependencies {
             "androidx.constraintlayout:constraintlayout:${Versions.Ui.ConstraintLayout}"
     }
 
-    object Utils {
-        const val GsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.Utils.GsonConverter}"
+    object Util {
+        const val GsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.Util.GsonConverter}"
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
-        const val YoyoHelper = "com.daimajia.easing:library:${Versions.Utils.YoYoHelper}"
-        const val HangulParser = "com.github.kimkevin:hangulparser:${Versions.Utils.HangulParser}"
-        const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Utils.AndroidUtils}"
-        const val CrashReporter = "com.balsikandar.android:crashreporter:${Versions.Utils.CarshReporter}"
+        const val YoyoHelper = "com.daimajia.easing:library:${Versions.Util.YoYoHelper}"
+        const val HangulParser = "com.github.kimkevin:hangulparser:${Versions.Util.HangulParser}"
+        const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Util.AndroidUtils}"
+        const val CrashReporter = "com.balsikandar.android:crashreporter:${Versions.Util.CarshReporter}"
     }
 }
