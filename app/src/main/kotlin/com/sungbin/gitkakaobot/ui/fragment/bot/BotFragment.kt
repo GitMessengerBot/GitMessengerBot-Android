@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.adapter.BotAdapter
-import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
@@ -101,7 +101,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             else {
                 val botType =
                     if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
-                val bot = BotItem(
+                val bot = Bot(
                     tiet_bot_name.text.toString(),
                     false,
                     false,

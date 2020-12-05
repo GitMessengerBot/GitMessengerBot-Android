@@ -10,6 +10,7 @@ import com.sungbin.sungbintool.Utils
 object Util {
     private lateinit var context: Context
     private lateinit var vibrator: Vibrator
+
     fun init(context: Context) {
         this.context = context
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator

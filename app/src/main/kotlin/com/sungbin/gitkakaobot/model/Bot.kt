@@ -7,7 +7,7 @@ import org.json.JSONObject
  * Created by SungBin on 2020-08-23.
  */
 
-data class BotItem(
+data class Bot(
     val name: String,
     val isCompiled: Boolean,
     val power: Boolean,

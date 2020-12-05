@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_join.*
 import org.jetbrains.anko.startActivity
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
@@ -36,12 +37,11 @@ class JoinActivity : AppCompatActivity() {
     private val CODE_REQUEST_NOTIFICATION_READ = 3000
     private val CODE_REQUEST_STORAGE_ACCESS = 3001
 
+    @Named("github")
     @Inject
     lateinit var client: Retrofit
 
-    private val loadingDialog by lazy {
-        LoadingDialog(this)
-    }
+    private val loadingDialog by lazy { LoadingDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
