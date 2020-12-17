@@ -48,4 +48,5 @@
     <string name="codeedit_editor_experimental_function_description">스크립트 에디터에 실험적인 기능이 있습니다.\n때때로 의도한대로 작동하지 않을 수 있습니다.\n양해 부탁드립니다.\n\n또한 에디터에서 작성중인 내용이 저장되지 않을 수 있습니다.\n즉 내용을 수시로 복사하여 백업해두시는걸 추천드립니다.(저장시 자동 복사)</string>
 
     <string name="sandbox_experimental_function_description">센드박스는 실험적인 기능입니다.\n때때로 의도한대로 작동하지 않을 수 있습니다.</string>
+    <string name="bot_confim_exit">한 번 더 눌러 앱 종료</string>
 </resources>

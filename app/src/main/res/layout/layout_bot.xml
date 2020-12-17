@@ -38,7 +38,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_bot_container"
                 android:layout_width="match_parent"
-                android:layout_height="70dp">
+                android:layout_height="100dp">
 
                 <View
                     android:id="@+id/v_compile_statue"
@@ -51,11 +51,11 @@
 
                 <com.sungbin.androidutils.ui.TagableRoundImageView
                     android:id="@+id/triv_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="@dimen/margin_half"
-                    android:layout_marginTop="@dimen/margin_half"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="@dimen/margin_default"
                     android:src="@{Item.type == BotType.JS ? @drawable/ic_baseline_javascript_24 : @drawable/ic_baseline_message_24}"
+                    app:layout_constraintBottom_toTopOf="@+id/ll_menu_container"
                     app:layout_constraintStart_toEndOf="@+id/v_compile_statue"
                     app:layout_constraintTop_toTopOf="parent"
                     app:triv_imageRadius="@dimen/margin_half"
@@ -71,6 +71,8 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@{Item.name}"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/triv_icon"
                     app:layout_constraintStart_toEndOf="@+id/triv_icon"
                     app:layout_constraintTop_toTopOf="@+id/triv_icon"
@@ -89,16 +91,15 @@
 
                 <LinearLayout
                     android:id="@+id/ll_menu_container"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_half"
                     android:layout_marginBottom="@dimen/margin_half"
                     android:orientation="horizontal"
                     android:weightSum="6"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/v_compile_statue"
-                    app:layout_constraintTop_toBottomOf="@+id/triv_icon">
+                    app:layout_constraintStart_toEndOf="@+id/v_compile_statue">
 
                     <ImageView
                         android:id="@+id/iv_reload"
@@ -146,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:contentDescription="@string/database"
-                        android:src="@drawable/ic_baseline_adb_24" />
+                        android:src="@drawable/ic_baseline_folder_24" />
 
                     <ImageView
                         android:id="@+id/iv_setting"

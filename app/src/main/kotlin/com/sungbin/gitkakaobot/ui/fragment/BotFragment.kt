@@ -15,11 +15,13 @@ import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.botList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.initBotList
+import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.onBackPressedAction
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 
 class BotFragment : Fragment() {
 
+    private var onBackPressedTime = 0L
     private val binding by lazy { FragmentBotBinding.inflate(layoutInflater) }
     private lateinit var adapter: BotAdapter
 
@@ -32,6 +34,7 @@ class BotFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         initBotList()
+        initOnBackPressedAction()
         statusViewInit()
 
         adapter = BotAdapter(botList.value ?: arrayListOf(), requireActivity())
@@ -45,6 +48,12 @@ class BotFragment : Fragment() {
 
         binding.efabAdd.setOnClickListener {
             binding.tslContainer.startTransform()
+            onBackPressedAction = {
+                binding.mbtgContainer.check(R.id.btn_javascript)
+                binding.tietBotName.clear()
+                binding.tslContainer.finishTransform()
+                binding.tietBotName.hideKeyboard()
+            }
         }
 
         binding.btnAdd.setOnClickListener {
@@ -73,6 +82,7 @@ class BotFragment : Fragment() {
                 binding.tslContainer.finishTransform()
                 UiUtil.snackbar(it, getString(R.string.bot_added_new_bot))
                 binding.tietBotName.hideKeyboard()
+                initOnBackPressedAction()
             }
         }
 
@@ -92,6 +102,17 @@ class BotFragment : Fragment() {
             binding.fblEmptyFile.hide(true)
             binding.lavEmpty.cancelAnimation()
             binding.rvBot.show()
+        }
+    }
+
+    private fun initOnBackPressedAction() {
+        onBackPressedAction = {
+            if (System.currentTimeMillis() - onBackPressedTime <= 3000) {
+                requireActivity().finish()
+            } else {
+                onBackPressedTime = System.currentTimeMillis()
+                UiUtil.toast(requireContext(), getString(R.string.bot_confim_exit))
+            }
         }
     }
 
