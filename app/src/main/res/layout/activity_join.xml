@@ -8,7 +8,7 @@
     <com.github.florent37.shapeofview.shapes.ArcView
         android:id="@+id/av_notice_container"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="275dp"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="@dimen/margin_default"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_twice_half"
+                android:layout_marginBottom="@dimen/margin_half"
                 android:text="@string/join_welcome"
                 android:textColor="@color/colorWhite"
                 android:textSize="40sp" />
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_twice_half"
+                android:layout_marginTop="@dimen/margin_half"
                 android:gravity="center"
                 android:text="@string/join_require_setting"
                 android:textColor="@color/colorWhite"
@@ -45,16 +45,14 @@
 
     </com.github.florent37.shapeofview.shapes.ArcView>
 
-    <com.google.android.flexbox.FlexboxLayout
+    <LinearLayout
+        android:layout_height="wrap_content"
         android:id="@+id/fbl_permission_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_twice_and_half"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default"
-        app:alignItems="center"
-        app:flexDirection="column"
-        app:justifyContent="center"
-        app:layout_constraintBottom_toTopOf="@id/btn_start_with_github"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/av_notice_container">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,6 +120,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="@dimen/margin_twice"
             android:id="@+id/cl_notification_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -185,13 +184,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_with_github"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="@dimen/margin_default"
+        android:layout_marginBottom="@dimen/margin_twice_and_half"
         android:alpha="0.5"
         android:background="@drawable/bg_all_round_30"
         android:text="@string/join_start_with_github_login"

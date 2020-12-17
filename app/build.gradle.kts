@@ -4,6 +4,7 @@ plugins {
     id("name.remal.check-dependency-updates") version "1.1.6"
     kotlin("android")
     kotlin("kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {

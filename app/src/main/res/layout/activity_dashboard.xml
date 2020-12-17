@@ -25,6 +25,7 @@
         app:cornerRadius="@dimen/margin_default"
         app:iconTint="@color/colorTwiceLightGray"
         app:iconTintActive="@color/colorPrimary"
+        app:itemFontFamily="@font/nanumgothic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_main"
         app:textColor="@color/colorPrimary" />

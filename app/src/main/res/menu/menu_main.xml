@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-            android:id="@+id/bot"
-        android:title="@string/bot"
-            android:icon="@drawable/sic_navigation_dashboard"/>
+        android:id="@+id/bot"
+        android:icon="@drawable/sic_navigation_dashboard"
+        android:title="@string/bot" />
 
     <item
         android:id="@+id/sandbox"
-        android:title="@string/bot_sandbox"
-        android:icon="@drawable/sic_navigation_extension"/>
+        android:icon="@drawable/sic_navigation_extension"
+        android:title="@string/bot_sandbox" />
 
     <item
         android:id="@+id/setting"
-        android:title="@string/bot_setting"
-        android:icon="@drawable/sic_navigation_setting"/>
+        android:icon="@drawable/sic_navigation_setting"
+        android:title="@string/bot_setting" />
 
 </menu>

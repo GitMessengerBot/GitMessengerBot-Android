@@ -7,6 +7,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Di.Hilt}")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.Jetpack.Navigation}")
         classpath("com.google.gms:google-services:${Versions.Essential.Google}")
     }
 }
