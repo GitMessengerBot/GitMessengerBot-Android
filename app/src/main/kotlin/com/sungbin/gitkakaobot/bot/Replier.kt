@@ -1,7 +1,7 @@
 package com.sungbin.gitkakaobot.bot
 
 import android.app.Notification
-import com.sungbin.gitkakaobot.listener.MessageListener.Companion.replyToSession
+import com.sungbin.gitkakaobot.bot.Bot.replyToSession
 import com.sungbin.gitkakaobot.util.BotUtil.showAll
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
 

@@ -1,5 +1,6 @@
 package com.sungbin.gitkakaobot.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,17 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.androidutils.extensions.*
+import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.Util
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.adapter.BotAdapter
 import com.sungbin.gitkakaobot.databinding.FragmentBotBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
+import com.sungbin.gitkakaobot.service.ForgroundService
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.botList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.initBotList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.onBackPressedAction
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.manager.PathManager
 
 class BotFragment : Fragment() {
 
@@ -54,6 +58,18 @@ class BotFragment : Fragment() {
                 binding.tslContainer.finishTransform()
                 binding.tietBotName.hideKeyboard()
             }
+        }
+
+        if (DataUtil.readData(requireContext(), PathManager.POWER, "false").toBoolean()) {
+            requireContext().startService(Intent(requireActivity(), ForgroundService::class.java))
+            binding.swPower.isChecked = true
+        }
+
+        binding.swPower.setOnCheckedChangeListener { _, isChecked ->
+            DataUtil.saveData(requireContext(), PathManager.POWER, isChecked.toString())
+            val foregroundIntent = Intent(requireActivity(), ForgroundService::class.java)
+            if (!isChecked) requireContext().stopService(foregroundIntent)
+            else requireContext().startService(foregroundIntent)
         }
 
         binding.btnAdd.setOnClickListener {
@@ -111,7 +127,7 @@ class BotFragment : Fragment() {
                 requireActivity().finish()
             } else {
                 onBackPressedTime = System.currentTimeMillis()
-                UiUtil.toast(requireContext(), getString(R.string.bot_confim_exit))
+                UiUtil.toast(requireContext(), getString(R.string.bot_confirm_exit))
             }
         }
     }

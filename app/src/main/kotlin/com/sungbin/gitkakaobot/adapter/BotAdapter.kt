@@ -7,12 +7,9 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.sungbin.androidutils.extensions.hide
 import com.sungbin.androidutils.extensions.setTint
-import com.sungbin.androidutils.extensions.show
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
-import com.sungbin.gitkakaobot.listener.MessageListener
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.ui.activity.CodeEditActivity
@@ -48,26 +45,26 @@ class BotAdapter(
                 item = bot
                 tvName.isSelected = true
                 ivReload.setOnClickListener {
-                    ivReload.hide(true)
-                    pbReloading.show()
+//                    AnimationUtil.rotateOnce(ivReload)
                     CoroutineScope(Dispatchers.Default).launch {
                         val ms = System.currentTimeMillis()
-                        val status = async { MessageListener.compileJavaScript(bot) }
+                        val status =
+                            async { com.sungbin.gitkakaobot.bot.Bot.compileJavaScript(bot) }
                         status.await().let {
                             val ms2 = System.currentTimeMillis()
                             val reloadTime = ms2 - ms
-                            ivReload.show()
-                            pbReloading.hide(true)
-                            if (it.isCompiled) {
-                                UiUtil.snackbar(
-                                    activity.window.decorView,
-                                    activity.getString(R.string.bot_reload_done, reloadTime)
-                                )
-                            } else {
-                                loadingDialog.setError(
-                                    Exception("${it.exception}\n\n리로드 시간 : $reloadTime ms")
-                                )
-                                loadingDialog.show()
+                            activity.runOnUiThread {
+                                if (it.isCompiled) {
+                                    UiUtil.snackbar(
+                                        activity.window.decorView,
+                                        activity.getString(R.string.bot_reload_done, reloadTime)
+                                    )
+                                } else {
+                                    loadingDialog.setError(
+                                        Exception("${it.exception}\n\n리로드 시간: $reloadTime ms")
+                                    )
+                                    loadingDialog.show()
+                                }
                             }
                         }
                     }

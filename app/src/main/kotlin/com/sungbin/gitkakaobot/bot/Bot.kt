@@ -13,6 +13,7 @@ import com.sungbin.gitkakaobot.model.BotCompile
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.StackManager
+import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
 
@@ -59,7 +60,9 @@ object Bot {
             ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
             rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
+            val function = scope["response", scope] as Function
             StackManager.scopes[bot.uuid] = scope
+            StackManager.functions[bot.uuid] = function
             org.mozilla.javascript.Context.exit()
             BotCompile(true, null)
         } catch (exception: Exception) {

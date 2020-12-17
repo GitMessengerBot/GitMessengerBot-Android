@@ -49,6 +49,8 @@ class CodeEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
         val botJsonString = intent.getStringExtra("bot").toString()
         val bot = BotUtil.createBotItem(JSONObject(botJsonString))
 

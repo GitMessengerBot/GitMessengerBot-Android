@@ -91,7 +91,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_menu_container"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_half"
                     android:layout_marginBottom="@dimen/margin_half"
@@ -109,13 +109,6 @@
                         android:contentDescription="@string/reload"
                         android:rotation="300"
                         android:src="@drawable/ic_baseline_replay_24" />
-
-                    <ProgressBar
-                        android:id="@+id/pb_reloading"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/iv_edit"

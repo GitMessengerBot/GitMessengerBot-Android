@@ -8,6 +8,26 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
+    <TextView
+        android:id="@+id/tv_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_default"
+        android:text="@string/bot_copyright"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sw_power"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sw_power" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/sw_power"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/fbl_empty_file"
         android:layout_width="wrap_content"
@@ -43,7 +63,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bot"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default"
         android:clipChildren="false"
@@ -55,6 +75,8 @@
         android:paddingBottom="@dimen/margin_half"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sw_power"
         tools:listitem="@layout/layout_bot"
         tools:visibility="visible" />
 

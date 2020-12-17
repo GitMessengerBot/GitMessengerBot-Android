@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import com.sungbin.androidutils.util.BatteryUtil
 import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.PermissionUtil
 import com.sungbin.gitkakaobot.R
@@ -32,6 +33,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class JoinActivity : AppCompatActivity() {
 
+    private var isBatteryButtonClicked = false
     private val codeRequestNotificationRead = 3000
     private val codeRequestAccessStorage = 4000
 
@@ -67,7 +69,19 @@ class JoinActivity : AppCompatActivity() {
             )
         }
 
-        checkAllGrantPermissions()
+        binding.btnRequestBatteryIgnoreOptimization.setOnClickListener {
+            BatteryUtil.requestIgnoreBatteryOptimization(applicationContext)
+            isBatteryButtonClicked = true
+            checkAllPermissionsGrant()
+
+            binding.btnRequestBatteryIgnoreOptimization.apply {
+                text = getString(R.string.join_permission_grant)
+                alpha = 0.5f
+                setOnClickListener { }
+            }
+        }
+
+        checkAllPermissionsGrant()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,7 +95,7 @@ class JoinActivity : AppCompatActivity() {
                         alpha = 0.5f
                     }
                 }
-                checkAllGrantPermissions()
+                checkAllPermissionsGrant()
             }
         }
     }
@@ -100,7 +114,7 @@ class JoinActivity : AppCompatActivity() {
                 setOnClickListener { }
                 alpha = 0.5f
             }
-            checkAllGrantPermissions()
+            checkAllPermissionsGrant()
         }
     }
 
@@ -114,14 +128,13 @@ class JoinActivity : AppCompatActivity() {
         )
     }
 
-    private fun checkAllGrantPermissions() {
+    private fun checkAllPermissionsGrant() {
         if (PermissionUtil.checkPermissionsAllGrant(
                 applicationContext, arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
-            ) &&
-            getNotificationListenerPermission()
+            ) && getNotificationListenerPermission() && isBatteryButtonClicked
         ) {
             binding.btnRequestNotificationRead.apply {
                 text = getString(R.string.join_permission_grant)
