@@ -94,6 +94,7 @@ dependencies {
         Dependencies.Ui.ShapeOfYou,
         Dependencies.Ui.YoYo,
         Dependencies.Ui.Lottie,
+        Dependencies.Ui.SuperBottomSheet,
         Dependencies.Ui.SimpleCodeEditor,
         Dependencies.Ui.SmoothBottomBar,
         Dependencies.Ui.Flexbox,

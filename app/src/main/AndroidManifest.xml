@@ -16,11 +16,13 @@
         android:name=".GitKakaoBot"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppThemeWhiteStatusBar.NoActionBarWithNoLimit"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,UnusedAttribute">
 
-        <activity android:name=".ui.activity.SplashActivity">
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBarWithNoLimit">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,11 +31,11 @@
 
         <activity
             android:name=".ui.activity.DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.WhiteStatusBar" />
 
         <activity
             android:name=".ui.activity.CodeEditActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.WhiteStatusBar" />
 
         <activity
             android:name=".ui.activity.JoinActivity"
@@ -44,24 +46,19 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="authorization"
                     android:scheme="gitkakaobot" />
-
             </intent-filter>
-
         </activity>
 
         <service
             android:name=".listener.MessageListener"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
-
         </service>
 
     </application>

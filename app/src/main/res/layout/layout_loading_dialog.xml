@@ -20,8 +20,7 @@
         app:lottie_autoPlay="true"
         app:lottie_enableMergePathsForKitKatAndAbove="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_renderMode="hardware" />
+        app:lottie_rawRes="@raw/loading" />
 
     <TextView
         android:id="@+id/tv_loading"

@@ -1,4 +1,4 @@
-package com.sungbin.gitkakaobot.ui.fragment.bot
+package com.sungbin.gitkakaobot.ui.fragment
 
 import android.app.Activity
 import android.os.Build
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
@@ -34,7 +33,6 @@ class BotFragment : Fragment(), OnBackPressedUtil {
     }
 
     private lateinit var adapter: BotAdapter
-    private val viewModel by viewModels<BotViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +110,7 @@ class BotFragment : Fragment(), OnBackPressedUtil {
                     Utils.makeRandomUUID()
                 )
                 viewModel.botList.run {
-                    value?.add(bot)
+                    value.add(bot)
                     postValue(value)
                 }
                 BotUtil.createNewBot(requireContext(), bot)

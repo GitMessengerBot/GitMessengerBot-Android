@@ -1,212 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.github.florent37.shapeofview.shapes.ArcView
-        android:id="@+id/av_container"
+        android:id="@+id/av_notice_container"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:backgroundTint="@color/colorPrimary"
         android:elevation="@dimen/margin_default"
         app:layout_constraintTop_toTopOf="parent"
         app:shape_arc_cropDirection="outside"
         app:shape_arc_height="20dp"
         app:shape_arc_position="bottom">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/fbl_notice_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:paddingTop="@dimen/margin_default">
+            app:alignItems="center"
+            app:flexDirection="column"
+            app:justifyContent="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_twice_half"
-                android:text="@string/welcome"
+                android:text="@string/join_welcome"
                 android:textColor="@color/colorWhite"
-                android:textSize="40sp"
-                app:layout_constraintBottom_toTopOf="@+id/view_center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/view_center"
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_marginBottom="@dimen/margin_half"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/colorPrimary"
-                tools:layout_height="5dp" />
+                android:textSize="40sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_twice_half"
                 android:gravity="center"
-                android:text="@string/need_setting_before_start"
+                android:text="@string/join_require_setting"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_center" />
+                android:textSize="20sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.flexbox.FlexboxLayout>
 
     </com.github.florent37.shapeofview.shapes.ArcView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_storage"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/fbl_permission_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_twice_and_half"
         android:layout_marginEnd="@dimen/margin_default"
-        app:layout_constraintTop_toBottomOf="@+id/av_container">
+        app:alignItems="center"
+        app:flexDirection="column"
+        app:justifyContent="center"
+        app:layout_constraintBottom_toTopOf="@id/btn_start_with_github"
+        app:layout_constraintTop_toBottomOf="@+id/av_notice_container">
 
-        <FrameLayout
-            android:id="@+id/fl_storage_icon_frame"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_all_round_30"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_storage_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_storage_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/storage_permission"
-                android:src="@drawable/ic_baseline_save_24"
-                app:tint="@color/colorWhite" />
+            <FrameLayout
+                android:id="@+id/fl_storage_icon_frame"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_all_round_30"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+                <ImageView
+                    android:id="@+id/iv_storage_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/join_storage_permission"
+                    android:src="@drawable/ic_baseline_save_24"
+                    app:tint="@color/colorWhite" />
 
-        <TextView
-            android:id="@+id/tv_storage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:text="@string/storage_permission"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"
-            app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
 
-        <TextView
-            android:id="@+id/storage_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_half"
-            android:text="@string/reason_for_storage_permission"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"
-            app:layout_constraintTop_toBottomOf="@+id/tv_storage" />
+            <TextView
+                android:id="@+id/tv_storage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:text="@string/join_storage_permission"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btn_request_storage"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="@dimen/margin_half"
-            android:background="@drawable/bg_all_round_30"
-            android:paddingStart="@dimen/margin_default"
-            android:paddingEnd="@dimen/margin_default"
-            android:text="@string/give_permission"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/storage_description" />
+            <TextView
+                android:id="@+id/storage_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:text="@string/join_reason_for_storage_permission"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/fl_storage_icon_frame"
+                app:layout_constraintTop_toBottomOf="@+id/tv_storage" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_request_storage"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/margin_half"
+                android:background="@drawable/bg_all_round_30"
+                android:paddingStart="@dimen/margin_default"
+                android:paddingEnd="@dimen/margin_default"
+                android:text="@string/join_give_permission"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/storage_description" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_notification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_twice"
-        android:layout_marginEnd="@dimen/margin_default"
-        app:layout_constraintTop_toBottomOf="@+id/cl_storage">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <FrameLayout
-            android:id="@+id/fl_notification_icon_frame"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_all_round_30"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_notification_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_notification_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/read_notification_permission"
-                android:src="@drawable/ic_baseline_notifications_24"
-                app:tint="@color/colorWhite" />
+            <FrameLayout
+                android:id="@+id/fl_notification_icon_frame"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_all_round_30"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+                <ImageView
+                    android:id="@+id/iv_notification_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/join_read_notification_permission"
+                    android:src="@drawable/ic_baseline_notifications_24"
+                    app:tint="@color/colorWhite" />
 
-        <TextView
-            android:id="@+id/tv_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:text="@string/storage_permission"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"
-            app:layout_constraintTop_toTopOf="parent" />
+            </FrameLayout>
 
-        <TextView
-            android:id="@+id/notification_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_half"
-            android:text="@string/reason_for_read_notification_permission"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"
-            app:layout_constraintTop_toBottomOf="@+id/tv_notification" />
+            <TextView
+                android:id="@+id/tv_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:text="@string/join_read_notification_permission"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btn_request_notification_read"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="@dimen/margin_half"
-            android:background="@drawable/bg_all_round_30"
-            android:paddingStart="@dimen/margin_default"
-            android:paddingEnd="@dimen/margin_default"
-            android:text="@string/give_permission"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notification_description" />
+            <TextView
+                android:id="@+id/notification_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:text="@string/join_reason_for_read_notification_permission"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/fl_notification_icon_frame"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notification" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_request_notification_read"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/margin_half"
+                android:background="@drawable/bg_all_round_30"
+                android:paddingStart="@dimen/margin_default"
+                android:paddingEnd="@dimen/margin_default"
+                android:text="@string/join_give_permission"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notification_description" />
 
-    <Button
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_with_github"
         android:layout_width="250dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/margin_default"
         android:alpha="0.5"
         android:background="@drawable/bg_all_round_30"
-        android:text="@string/start_with_github_login"
+        android:text="@string/join_start_with_github_login"
         android:textColor="@color/colorWhite"
+        app:cornerRadius="@dimen/margin_twice_and_half"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_notification" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_main"
+    android:id="@+id/cl_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_empty"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/fbl_empty_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:alignItems="center"
+        app:flexDirection="column"
+        app:justifyContent="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,26 +22,9 @@
             android:id="@+id/lav_empty"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            app:layout_constraintBottom_toTopOf="@+id/view_line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:lottie_autoPlay="true"
-            app:lottie_enableMergePathsForKitKatAndAbove="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/empty"
-            app:lottie_renderMode="hardware" />
-
-        <View
-            android:id="@+id/view_line"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/colorPrimary"
-            tools:layout_height="5dp" />
+            app:lottie_rawRes="@raw/empty" />
 
         <TextView
             android:id="@+id/tv_songs_empty"
@@ -47,26 +32,28 @@
             android:layout_height="75dp"
             android:layout_marginTop="@dimen/margin_half"
             android:gravity="center"
-            android:text="@string/empty_bot"
+            android:text="@string/bot_empty_bot"
             android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_line" />
+            android:textSize="20sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </com.google.android.flexbox.FlexboxLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:clipToPadding="false"
+        android:layoutAnimation="@anim/layout_animation"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:visibility="invisible"
-        android:layoutAnimation="@anim/layout_animation"
+        android:paddingTop="@dimen/margin_half"
+        android:paddingBottom="@dimen/margin_half"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/layout_bot" />
+        tools:listitem="@layout/layout_bot"
+        tools:visibility="visible" />
 
     <com.skydoves.transformationlayout.TransformationLayout
         android:id="@+id/tsl_container"
@@ -82,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_default"
-            android:text="@string/bot_add"
+            android:text="@string/bot_bot_add"
             android:textColor="@color/colorWhite"
             app:backgroundTint="@color/colorPrimary"
             app:icon="@drawable/ic_baseline_add_24"
@@ -99,13 +86,14 @@
         app:cardBackgroundColor="@color/colorWhite"
         app:cardCornerRadius="@dimen/margin_half"
         app:contentPadding="@dimen/margin_default"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/colorLightGray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/colorLightGray"
+        app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_card_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -118,22 +106,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:selectionRequired="true"
-                app:singleSelection="true"
-                tools:background="@color/colorAccent">
+                app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_javascript"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/javscript" />
+                    android:text="@string/bot_javscript" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_simple"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/simple_reply" />
+                    android:text="@string/bot_simple_reply" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -143,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_half"
-                android:hint="@string/bot_name"
+                android:hint="@string/bot_bot_name"
                 app:layout_constraintTop_toBottomOf="@+id/mbtg_container"
                 tools:ignore="ExtraText">
 
@@ -159,13 +146,13 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_done"
                 android:layout_marginTop="@dimen/margin_default"
-                app:strokeColor="@color/colorPrimary"
+                android:text="@string/bot_added_done"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_container" />
+                app:layout_constraintTop_toBottomOf="@+id/til_container"
+                app:strokeColor="@color/colorPrimary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

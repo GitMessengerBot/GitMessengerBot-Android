@@ -66,6 +66,7 @@ object Versions {
         const val Flexbox = "2.0.1"
         const val SmoothBottomBar = "1.7.6"
         const val YoYo = "2.4@aar"
+        const val SuperBottomSheet = "2.0.0"
         const val Lottie = "3.5.0"
         const val SimpleCodeEditor = "2.0.4"
         const val JsonViewer = "v1.1"
@@ -147,6 +148,8 @@ object Dependencies {
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
         const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"
         const val Lottie = "com.airbnb.android:lottie:${Versions.Ui.Lottie}"
+        const val SuperBottomSheet =
+            "com.github.andrefrsousa:SuperBottomSheet:${Versions.Ui.SuperBottomSheet}"
         const val SimpleCodeEditor =
             "com.github.sungbin5304:SimpleCodeEditor:${Versions.Ui.SimpleCodeEditor}"
         const val JsonViewer = "com.github.pvarry:android-json-viewer:${Versions.Ui.JsonViewer}"

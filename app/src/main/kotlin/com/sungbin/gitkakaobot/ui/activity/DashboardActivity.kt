@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commitNow
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.ui.fragment.bot.BotFragment
+import com.sungbin.gitkakaobot.ui.fragment.BotFragment
 import com.sungbin.gitkakaobot.util.OnBackPressedUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.sungbintool.StorageUtils

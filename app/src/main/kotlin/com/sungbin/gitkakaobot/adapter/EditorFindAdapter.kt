@@ -44,7 +44,7 @@ class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): EditorFindViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.layout_editor_find_textview, viewGroup, false)
+            .inflate(R.layout.layout_editor_found_Item, viewGroup, false)
         return EditorFindViewHolder(view)
     }
 

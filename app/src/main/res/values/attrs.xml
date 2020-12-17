@@ -1,5 +1,0 @@
-<resources>
-    <declare-styleable name="OverlappingPanelsLayout">
-        <attr name="maxSidePanelNonFullScreenWidth" format="dimension|reference" />
-    </declare-styleable>
-</resources>
