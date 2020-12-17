@@ -71,7 +71,7 @@ class BotFragment : Fragment() {
                 binding.mbtgContainer.check(R.id.btn_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
-                UiUtil.snackbar(it, getString(R.string.added_new_bot))
+                UiUtil.snackbar(it, getString(R.string.bot_added_new_bot))
                 binding.tietBotName.hideKeyboard()
             }
         }

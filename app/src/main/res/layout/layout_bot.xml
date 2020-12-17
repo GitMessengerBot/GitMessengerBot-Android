@@ -74,7 +74,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/triv_icon"
                     app:layout_constraintStart_toEndOf="@+id/triv_icon"
                     app:layout_constraintTop_toTopOf="@+id/triv_icon"
-                    tools:text="@string/script_name_preview" />
+                    tools:text="@string/codeedit_script_name_preview" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/sw_power"
@@ -105,7 +105,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_reload"
+                        android:contentDescription="@string/reload"
                         android:rotation="300"
                         android:src="@drawable/ic_baseline_replay_24" />
 
@@ -121,7 +121,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_edit"
+                        android:contentDescription="@string/edit"
                         android:src="@drawable/ic_baseline_edit_24" />
 
                     <ImageView
@@ -129,7 +129,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_sandbox"
+                        android:contentDescription="@string/sandbox"
                         android:src="@drawable/ic_baseline_extension_24" />
 
                     <ImageView
@@ -137,7 +137,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_log"
+                        android:contentDescription="@string/log"
                         android:src="@drawable/ic_baseline_info_24" />
 
                     <ImageView
@@ -145,7 +145,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_database"
+                        android:contentDescription="@string/database"
                         android:src="@drawable/ic_baseline_adb_24" />
 
                     <ImageView
@@ -153,7 +153,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="@string/bot_setting"
+                        android:contentDescription="@string/setting"
                         android:src="@drawable/ic_baseline_settings_24" />
 
                 </LinearLayout>

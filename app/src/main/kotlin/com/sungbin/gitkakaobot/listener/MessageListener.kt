@@ -279,7 +279,7 @@ class MessageListener : NotificationListenerService() {
 
         fun replyToSession(session: Notification.Action?, value: String) {
             if (session == null) {
-                UiUtil.toast(context, context.getString(R.string.cant_load_session))
+                UiUtil.toast(context, context.getString(R.string.bot_cant_load_session))
             } else {
                 val sendIntent = Intent()
                 val msg = Bundle()

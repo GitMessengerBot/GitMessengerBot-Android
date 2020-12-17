@@ -116,14 +116,14 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/bot_javscript" />
+                    android:text="@string/javascript" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_simple"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/bot_simple_reply" />
+                    android:text="@string/simple_reply" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

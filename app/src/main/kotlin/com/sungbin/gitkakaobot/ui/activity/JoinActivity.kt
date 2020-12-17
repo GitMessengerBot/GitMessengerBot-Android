@@ -76,7 +76,7 @@ class JoinActivity : AppCompatActivity() {
             codeRequestNotificationRead -> {
                 if (getNotificationListenerPermission()) {
                     binding.btnRequestNotificationRead.apply {
-                        text = getString(R.string.permission_grant)
+                        text = getString(R.string.join_permission_grant)
                         setOnClickListener { }
                         alpha = 0.5f
                     }
@@ -96,7 +96,7 @@ class JoinActivity : AppCompatActivity() {
             && grantResults[1] == PackageManager.PERMISSION_GRANTED
         ) {
             binding.btnRequestStorage.apply {
-                text = getString(R.string.permission_grant)
+                text = getString(R.string.join_permission_grant)
                 setOnClickListener { }
                 alpha = 0.5f
             }
@@ -124,13 +124,13 @@ class JoinActivity : AppCompatActivity() {
             getNotificationListenerPermission()
         ) {
             binding.btnRequestNotificationRead.apply {
-                text = getString(R.string.permission_grant)
+                text = getString(R.string.join_permission_grant)
                 alpha = 0.5f
                 setOnClickListener { }
             }
 
             binding.btnRequestStorage.apply {
-                text = getString(R.string.permission_grant)
+                text = getString(R.string.join_permission_grant)
                 alpha = 0.5f
                 setOnClickListener { }
             }
