@@ -13,19 +13,28 @@ object Application {
 }
 
 object Versions {
+    object Firebase {
+        const val Bom = "26.1.1"
+    }
+
     object Rhino {
-        const val Engine = "1.7.12"
-        const val Helper = "1.5"
+        const val Engine = "1.7.13"
+        const val Helper = "1.5.2"
     }
 
     object Network {
         const val Jsoup = "1.13.1"
         const val Retrofit = "2.9.0"
-        const val OkHttp = "4.8.1"
+        const val OkHttp = "4.9.0"
+    }
+
+    object Jetpack {
+        const val Navigation = "2.3.2"
+        const val DataStore = "1.0.0-alpha05"
     }
 
     object Rx {
-        const val Kotlin = "3.0.0"
+        const val Kotlin = "3.0.1"
         const val Android = "3.0.0"
         const val Retrofit = "2.9.0"
     }
@@ -33,13 +42,15 @@ object Versions {
     object Essential {
         const val AppCompat = "1.2.0"
         const val Anko = "0.10.8"
-        const val Kotlin = "1.4.0"
-        const val Gradle = "4.0.1"
+        const val Gradle = "4.1.1"
+        const val Kotlin = "1.4.21"
+        const val Google = "4.3.3"
     }
 
     object Ktx {
-        const val Core = "1.3.1"
-        const val Fragment = "2.3.0"
+        const val Core = "1.3.2"
+        const val Fragment = "2.3.2"
+        const val LifeCycleLiveData = "2.2.0"
     }
 
     object Di {
@@ -47,31 +58,42 @@ object Versions {
     }
 
     object Ui {
-        const val SpotLight = "2.0.1"
+        const val SpotLight = "2.0.3"
         const val OverlappingPanels = "0.1.1"
-        const val TransformationLayout = "1.0.5"
-        const val Browser = "1.3.0-alpha05"
-        const val ShapeOfView = "1.3.2"
-        const val YoYo = "2.3@aar"
-        const val Lottie = "3.4.1"
+        const val TransformationLayout = "1.0.6"
+        const val Browser = "1.3.0"
+        const val ShapeOfView = "1.4.7"
+        const val Flexbox = "2.0.1"
+        const val SmoothBottomBar = "1.7.6"
+        const val YoYo = "2.4@aar"
+        const val Lottie = "3.5.0"
         const val SimpleCodeEditor = "2.0.4"
         const val JsonViewer = "v1.1"
         const val Licenser = "2.0.0"
         const val Material = "1.2.0-alpha06"
         const val Glide = "4.11.0"
-        const val ConstraintLayout = "1.1.3"
+        const val ConstraintLayout = "2.0.4"
     }
 
     object Util {
-        const val GsonConverter = "2.6.2"
-        const val YoYoHelper = "2.1@aar"
+        const val GsonConverter = "2.9.0"
+        const val YoYoHelper = "2.4@aar"
         const val HangulParser = "1.0.0"
-        const val AndroidUtils = "3.2.4"
+        const val AndroidUtils = "4.2.3"
         const val CarshReporter = "1.1.0"
     }
 }
 
 object Dependencies {
+    object Firebase {
+        const val Bom = "com.google.firebase:firebase-bom:${Versions.Firebase.Bom}"
+    }
+
+    object Jetpack {
+        const val DataStore =
+            "androidx.datastore:datastore-preferences:${Versions.Jetpack.DataStore}"
+    }
+
     object Rhino {
         const val Engine = "org.mozilla:rhino:${Versions.Rhino.Engine}"
         const val Helper = "com.faendir.rhino:rhino-android:${Versions.Rhino.Helper}"
@@ -96,8 +118,15 @@ object Dependencies {
     }
 
     object Ktx {
+        const val Config = "com.google.firebase:firebase-config-ktx"
+        const val NavigationFragment =
+            "androidx.navigation:navigation-fragment-ktx:${Versions.Jetpack.Navigation}"
+        const val NavigationUi =
+            "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}"
         const val Core = "androidx.core:core-ktx:${Versions.Ktx.Core}"
         const val Fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.Ktx.Fragment}"
+        const val LifeCycleLiveData =
+            "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Ktx.LifeCycleLiveData}"
     }
 
     object Di {
@@ -106,9 +135,14 @@ object Dependencies {
     }
 
     object Ui {
+        const val Flexbox = "com.google.android:flexbox:${Versions.Ui.Flexbox}"
+        const val SmoothBottomBar =
+            "com.github.ibrahimsn98:SmoothBottomBar:${Versions.Ui.SmoothBottomBar}"
         const val SpotLight = "com.github.takusemba:spotlight:${Versions.Ui.SpotLight}"
-        const val OverlappingPanels = "com.github.discord:OverlappingPanels:${Versions.Ui.OverlappingPanels}"
-        const val TransformationLayout = "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
+        const val OverlappingPanels =
+            "com.github.discord:OverlappingPanels:${Versions.Ui.OverlappingPanels}"
+        const val TransformationLayout =
+            "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
         const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"

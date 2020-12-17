@@ -1,9 +1,8 @@
 plugins {
     id("com.android.application")
     id("dagger.hilt.android.plugin")
-    id("name.remal.check-dependency-updates") version "1.0.211"
+    id("name.remal.check-dependency-updates") version "1.1.6"
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -20,13 +19,13 @@ android {
 
     buildFeatures {
         dataBinding = true
+        viewBinding = true
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            isUseProguard = true
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -55,6 +54,8 @@ android {
 }
 
 dependencies {
+    "implementation"(platform(Dependencies.Firebase.Bom))
+
     fun def(vararg strings: String) {
         for (string in strings) implementation(string)
     }
@@ -67,6 +68,8 @@ dependencies {
         Dependencies.Network.Retrofit,
         Dependencies.Network.OkHttp,
 
+        Dependencies.Jetpack.DataStore,
+
         Dependencies.Rx.Kotlin,
         Dependencies.Rx.Android,
         Dependencies.Rx.Retrofit,
@@ -76,7 +79,11 @@ dependencies {
         Dependencies.Essential.Kotlin,
 
         Dependencies.Ktx.Core,
+        Dependencies.Ktx.Config,
         Dependencies.Ktx.Fragment,
+        Dependencies.Ktx.NavigationUi,
+        Dependencies.Ktx.NavigationFragment,
+        Dependencies.Ktx.LifeCycleLiveData,
 
         Dependencies.Di.Hilt,
 
@@ -88,6 +95,8 @@ dependencies {
         Dependencies.Ui.YoYo,
         Dependencies.Ui.Lottie,
         Dependencies.Ui.SimpleCodeEditor,
+        Dependencies.Ui.SmoothBottomBar,
+        Dependencies.Ui.Flexbox,
         Dependencies.Ui.JsonViewer,
         Dependencies.Ui.Licenser,
         Dependencies.Ui.Material,
