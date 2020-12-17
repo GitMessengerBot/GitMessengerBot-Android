@@ -4,13 +4,25 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
-import com.sungbin.gitkakaobot.model.Bot
+import com.sungbin.gitkakaobot.listener.MessageListener
+import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.ui.activity.CodeEditActivity
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
+import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.sungbintool.extensions.hide
+import com.sungbin.sungbintool.extensions.setTint
+import com.sungbin.sungbintool.extensions.show
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.startActivity
 import java.util.*
 
 
@@ -19,7 +31,7 @@ import java.util.*
  */
 
 class BotAdapter constructor(
-    private val items: ArrayList<Bot>,
+    private val items: ArrayList<BotItem>,
     private val activity: Activity
 ) : RecyclerView.Adapter<BotAdapter.ViewHolder>() {
 
@@ -34,7 +46,7 @@ class BotAdapter constructor(
 
         val loadingDialog = LoadingDialog(activity)
 
-        fun bindViewHolder(bot: Bot) {
+        fun bindViewHolder(bot: BotItem) {
             with(itemBinding) {
                 item = bot
                 tvName.isSelected = true

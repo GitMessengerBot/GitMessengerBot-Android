@@ -3,6 +3,7 @@ package com.sungbin.gitkakaobot.util.api
 import android.content.Context
 import com.sungbin.gitkakaobot.listener.MessageListener
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.api.game.chosung.ChosungType
 import com.sungbin.gitkakaobot.util.manager.PathManager.DATABASE
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.sungbintool.StorageUtils
@@ -126,6 +127,19 @@ object ApiClass {
             com.sungbin.gitkakaobot.util.api.Api.replyRoomShowAll(room, msg1, msg2)
     }
 
+    class Game : ScriptableObject() {
+        override fun getClassName() = "Game"
+
+        @JSFunction
+        fun getRandomChosungQuiz() =
+            com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(ChosungType.getRandom())
+
+        @JSFunction
+        fun getChosungQuiz(type: Int) =
+            com.sungbin.gitkakaobot.util.api.Game.chosungQuiz(type)
+    }
+
+
     class Device : ScriptableObject() {
         override fun getClassName() = "Device"
 
@@ -171,6 +185,7 @@ object ApiClass {
         override fun getClassName() = "File"
 
         @JSFunction
+        //@JvmOverloads
         fun read(
             path: String,
             _null: String?,
@@ -178,6 +193,7 @@ object ApiClass {
         ) = StorageUtils.read(path, _null, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun save(
             path: String,
             content: String,
@@ -185,6 +201,7 @@ object ApiClass {
         ) = StorageUtils.save(path, content, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun append(
             path: String,
             content: String,
@@ -196,19 +213,51 @@ object ApiClass {
         )
 
         @JSFunction
+        //@JvmOverloads
         fun delete(path: String, autoInputSdcardPath: Boolean = false) =
             StorageUtils.delete(path, autoInputSdcardPath)
 
         @JSFunction
+        //@JvmOverloads
         fun deleteAll(path: String, autoInputSdcardPath: Boolean = false) =
             StorageUtils.deleteAll(path, autoInputSdcardPath)
+    }
+
+    class Black : ScriptableObject() {
+        override fun getClassName() = "Black"
+
+        @JSFunction
+        fun getSender() = com.sungbin.gitkakaobot.util.api.Black.readSender()
+
+        @JSFunction
+        fun getRoom() = com.sungbin.gitkakaobot.util.api.Black.readRoom()
+
+        @JSFunction
+        fun addRoom(room: String) {
+            com.sungbin.gitkakaobot.util.api.Black.addRoom(room)
+        }
+
+        @JSFunction
+        fun addSender(sender: String) {
+            com.sungbin.gitkakaobot.util.api.Black.addSender(sender)
+        }
+
+        @JSFunction
+        fun removeRoom(room: String) {
+            com.sungbin.gitkakaobot.util.api.Black.removeRoom(room)
+        }
+
+        @JSFunction
+        fun removeSender(sender: String) {
+            com.sungbin.gitkakaobot.util.api.Black.removeSender(sender)
+        }
     }
 
     class Util : ScriptableObject() {
         override fun getClassName() = "Util"
 
         @JSFunction
-        fun toast(content: String) {
+        fun makeToast(content: String) {
             UiUtil.toast(context, content)
         }
 
@@ -218,7 +267,7 @@ object ApiClass {
         }
 
         @JSFunction
-        fun notification(title: String, content: String) {
+        fun makeNoti(title: String, content: String) {
             com.sungbin.gitkakaobot.util.api.Util.makeNoti(
                 title,
                 content
@@ -226,9 +275,15 @@ object ApiClass {
         }
 
         @JSFunction
-        fun getHtml(link: String, fromJsoup: Boolean) =
-            if (!fromJsoup) com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJava(link)
-            else com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJsoup(link)
+        //@JvmOverloads
+        fun getHtml(link: String, fromJsoup: Boolean = true) =
+            if (!fromJsoup) {
+                com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJava(
+                    link
+                )
+            } else com.sungbin.gitkakaobot.util.api.Api.getHtmlFromJsoup(
+                link
+            )
 
         @JSFunction
         fun post(
@@ -243,6 +298,11 @@ object ApiClass {
 
         @JSFunction
         fun showAll() = MessageListener.showAll
+
+        @JSFunction
+        fun makeVibration(ms: Int) {
+            com.sungbin.gitkakaobot.util.api.Util.makeVibration(ms)
+        }
 
         @JSFunction
         fun copy(content: String) {

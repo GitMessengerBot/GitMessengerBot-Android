@@ -11,14 +11,14 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.EditorFind
+import com.sungbin.gitkakaobot.model.EditorFindItem
 
 
 /**
  * Created by SungBin on 2020-05-12.
  */
 
-class EditorFindAdapter(private val list: ArrayList<EditorFind>) :
+class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
     RecyclerView.Adapter<EditorFindAdapter.EditorFindViewHolder>() {
 
     interface OnItemClickListener {

@@ -2,7 +2,7 @@ package com.sungbin.gitkakaobot.util
 
 import android.content.Context
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.Bot
+import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.manager.PathManager.DEBUG
 import com.sungbin.gitkakaobot.util.manager.PathManager.JS
@@ -23,10 +23,10 @@ object BotUtil {
         const val DEBUG = 999
     }
 
-    val botItems = ArrayList<Bot>()
+    val botItems = ArrayList<BotItem>()
     val functions = HashMap<String, HashMap<Int, Function>>()
 
-    private fun getBotPath(bot: Bot) = "${
+    private fun getBotPath(bot: BotItem) = "${
         when (bot.type) {
             BotType.DEBUG -> DEBUG
             BotType.JS -> JS
@@ -34,7 +34,7 @@ object BotUtil {
         }
     }/${bot.name}"
 
-    fun getLastIndex(botList: ArrayList<Bot>): Int {
+    fun getLastIndex(botList: ArrayList<BotItem>): Int {
         var maxIndex = 0
         botList.map {
             if (it.index > maxIndex) maxIndex = it.index
@@ -42,8 +42,8 @@ object BotUtil {
         return maxIndex
     }
 
-    fun getDebugBot(context: Context, name: String, isRuningRoom: Boolean = false): Bot {
-        val bot = Bot(
+    fun getDebugBot(context: Context, name: String, isRuningRoom: Boolean = false): BotItem {
+        val bot = BotItem(
             name,
             false,
             false,
@@ -57,29 +57,29 @@ object BotUtil {
         return bot
     }
 
-    fun getBotCode(bot: Bot) = StorageUtils.read(
+    fun getBotCode(bot: BotItem) = StorageUtils.read(
         "${getBotPath(bot)}/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
         "",
         true
     ).toString()
 
-    fun saveBotCode(bot: Bot, code: String) = StorageUtils.save(
+    fun saveBotCode(bot: BotItem, code: String) = StorageUtils.save(
         "${getBotPath(bot)}/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
         code,
         true
     ).toString()
 
-    fun updateBotData(bot: Bot) =
+    fun updateBotData(bot: BotItem) =
         StorageUtils.save("${getBotPath(bot)}/data.json", bot.toString(), true)
 
-    fun changeBotIndex(bot: Bot, newPos: Int) {
+    fun changeBotIndex(bot: BotItem, newPos: Int) {
         val botJsonPath = "${getBotPath(bot)}/data.json"
         val botJson = JSONObject(StorageUtils.read(botJsonPath, "", true)!!)
         botJson.put("index", newPos)
         StorageUtils.save(botJsonPath, botJson.toString(), true)
     }
 
-    fun createNewBot(context: Context, bot: Bot) {
+    fun createNewBot(context: Context, bot: BotItem) {
         /*val defaultCode = DataUtil.read(
             context,
             PathManager.DEFAULT_CODE,
@@ -105,7 +105,7 @@ object BotUtil {
         )
     }
 
-    fun createBotItem(botJsonObject: JSONObject) = Bot(
+    fun createBotItem(botJsonObject: JSONObject) = BotItem(
         botJsonObject.getString("name"),
         botJsonObject.getBoolean("isCompiled"),
         botJsonObject.getBoolean("power"),

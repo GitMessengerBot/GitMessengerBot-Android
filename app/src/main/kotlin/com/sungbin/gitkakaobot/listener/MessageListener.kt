@@ -16,8 +16,8 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.Bot
-import com.sungbin.gitkakaobot.model.BotCompile
+import com.sungbin.gitkakaobot.model.BotCompileItem
+import com.sungbin.gitkakaobot.model.BotItem
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.BotUtil.botItems
 import com.sungbin.gitkakaobot.util.BotUtil.functions
@@ -208,7 +208,7 @@ class MessageListener : NotificationListenerService() {
         }
 
         private fun callJsResponder(
-            bot: Bot,
+            bot: BotItem,
             room: String,
             msg: String,
             sender: String,
@@ -252,7 +252,7 @@ class MessageListener : NotificationListenerService() {
             }
         }
 
-        class BotManager(private var bot: Bot) : ScriptableObject() {
+        class BotManager(private var bot: BotItem) : ScriptableObject() {
             override fun getClassName() = "BotManager"
             override fun toString() = "TODO"
 
@@ -277,7 +277,7 @@ class MessageListener : NotificationListenerService() {
             }
         }
 
-        fun compileJavaScript(bot: Bot): BotCompile {
+        fun compileJavaScript(bot: BotItem): BotCompileItem {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
@@ -301,9 +301,9 @@ class MessageListener : NotificationListenerService() {
                 rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
                 scopes[bot.uuid] = scope
                 org.mozilla.javascript.Context.exit()
-                BotCompile(true, null)
+                BotCompileItem(true, null)
             } catch (e: Exception) {
-                BotCompile(false, e)
+                BotCompileItem(false, e)
             }
         }
 

@@ -13,6 +13,7 @@ import com.sungbin.gitkakaobot.R
  */
 
 object UiUtil {
+
     fun error(context: Context, exception: Exception) {}
 
     fun toast(context: Context, message: String) {
