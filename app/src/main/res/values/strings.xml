@@ -192,6 +192,6 @@
     <string name="base64_tool">Base64 도구</string>
     <string name="base64_preview">Base64 미리보기</string>
     <string name="base64_encode">Base64 인코딩</string>
-    <string name="please_input_script_name">스크립트 이름을 입력해 주세요.</string>
+    <string name="bot_please_input_script_name">스크립트 이름을 입력해 주세요.</string>
 
 </resources>

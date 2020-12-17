@@ -3,11 +3,14 @@ package com.sungbin.gitkakaobot.ui.activity
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.sungbin.androidutils.util.StorageUtil
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.ActivityDashboardBinding
+import com.sungbin.gitkakaobot.model.Bot
+import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 
 
@@ -19,6 +22,12 @@ class DashboardActivity : AppCompatActivity() {
 
     companion object {
         lateinit var onBackPressedAction: () -> Unit
+
+        // todo: viewmodel 쓰기
+        val botList: MutableLiveData<ArrayList<Bot>> = MutableLiveData()
+        fun initBotList() {
+            if (botList.value?.isEmpty() != false) botList.value = BotUtil.botItems
+        }
     }
 
     private lateinit var navController: NavController
@@ -36,8 +45,6 @@ class DashboardActivity : AppCompatActivity() {
         StorageUtil.createFolder(PathManager.SIMPLE)
         StorageUtil.createFolder(PathManager.DATABASE)
         StorageUtil.createFolder(PathManager.LOG)
-        StorageUtil.createFolder(PathManager.SENDER)
-        StorageUtil.createFolder(PathManager.ROOM)
 
         supportActionBar?.hide()
     }

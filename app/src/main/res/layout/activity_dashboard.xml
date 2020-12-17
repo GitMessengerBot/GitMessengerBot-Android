@@ -20,6 +20,8 @@
         android:id="@+id/sbb_navigation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:clickable="true"
+        android:focusable="true"
         app:activeItem="0"
         app:backgroundColor="@color/colorWhite"
         app:cornerRadius="@dimen/margin_default"

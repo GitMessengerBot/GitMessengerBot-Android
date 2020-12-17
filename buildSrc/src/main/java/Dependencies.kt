@@ -14,7 +14,7 @@ object Application {
 
 object Versions {
     object Firebase {
-        const val Bom = "26.1.1"
+        const val Bom = "26.2.0"
     }
 
     object Rhino {
@@ -125,7 +125,7 @@ object Dependencies {
         const val NavigationUi =
             "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}"
         const val Core = "androidx.core:core-ktx:${Versions.Ktx.Core}"
-        const val Fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.Ktx.Fragment}"
+        const val Fragment = "androidx.fragment:fragment-ktx:${Versions.Ktx.Fragment}"
         const val LifeCycleLiveData =
             "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Ktx.LifeCycleLiveData}"
     }

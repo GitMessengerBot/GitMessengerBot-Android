@@ -33,11 +33,11 @@ object BotUtil {
             BotType.JS -> PathManager.JS
             else -> PathManager.SIMPLE
         }
-    }/${bot.name}"
+    }/${bot.name}-${bot.uuid.substring(0..5)}"
 
-    fun getLastIndex(botList: ArrayList<Bot>): Int {
+    fun getLastIndex(botList: ArrayList<Bot>?): Int {
         var maxIndex = 0
-        botList.map {
+        botList?.map {
             if (it.index > maxIndex) maxIndex = it.index
         }
         return maxIndex
@@ -63,7 +63,7 @@ object BotUtil {
         StorageUtil.save(botJsonPath, botJson.toString())
     }
 
-    fun createNewBot(context: Context, bot: Bot) {
+    fun createNewBot(bot: Bot) {
         val path = getBotPath(bot)
         StorageUtil.createFolder(path)
         StorageUtil.createFile(

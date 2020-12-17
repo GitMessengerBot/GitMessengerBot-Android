@@ -81,7 +81,7 @@ dependencies {
 
         Dependencies.Ktx.Core,
         Dependencies.Ktx.Config,
-        Dependencies.Ktx.Fragment,
+        // Dependencies.Ktx.Fragment,
         Dependencies.Ktx.NavigationUi,
         Dependencies.Ktx.NavigationFragment,
         Dependencies.Ktx.LifeCycleLiveData,

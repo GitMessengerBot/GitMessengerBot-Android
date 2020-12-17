@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_main_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/fbl_empty_file"
@@ -44,6 +46,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:layoutAnimation="@anim/layout_animation"
         android:orientation="vertical"
@@ -137,7 +140,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tiet_bot_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true" />
                 ​
             </com.google.android.material.textfield.TextInputLayout>
 
