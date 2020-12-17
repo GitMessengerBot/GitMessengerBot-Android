@@ -81,7 +81,6 @@ dependencies {
 
         Dependencies.Ktx.Core,
         Dependencies.Ktx.Config,
-        // Dependencies.Ktx.Fragment,
         Dependencies.Ktx.NavigationUi,
         Dependencies.Ktx.NavigationFragment,
         Dependencies.Ktx.LifeCycleLiveData,
@@ -93,21 +92,15 @@ dependencies {
         Dependencies.Ui.TransformationLayout,
         Dependencies.Ui.Browser,
         Dependencies.Ui.ShapeOfYou,
-        Dependencies.Ui.YoYo,
         Dependencies.Ui.Lottie,
-        Dependencies.Ui.SuperBottomSheet,
         Dependencies.Ui.SimpleCodeEditor,
         Dependencies.Ui.SmoothBottomBar,
         Dependencies.Ui.Flexbox,
-        Dependencies.Ui.JsonViewer,
-        Dependencies.Ui.Licenser,
         Dependencies.Ui.Material,
         Dependencies.Ui.Glide,
         Dependencies.Ui.ConstraintLayout,
 
         Dependencies.Util.GsonConverter,
-        Dependencies.Util.YoyoHelper,
-        Dependencies.Util.HangulParser,
         Dependencies.Util.AndroidUtils,
         Dependencies.Util.CrashReporter
     )

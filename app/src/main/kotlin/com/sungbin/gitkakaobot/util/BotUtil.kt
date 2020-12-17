@@ -8,14 +8,13 @@ import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.json.JSONObject
-import org.mozilla.javascript.Function
 import java.io.File
 
 object BotUtil {
 
+    val showAll = "\u200b".repeat(500)
     private lateinit var context: Context
     val botItems = ArrayList<Bot>()
-    val functions = HashMap<String, HashMap<Int, Function>>()
 
     fun init(context: Context) {
         this.context = context

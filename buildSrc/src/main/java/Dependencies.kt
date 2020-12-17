@@ -49,7 +49,6 @@ object Versions {
 
     object Ktx {
         const val Core = "1.3.2"
-        const val Fragment = "2.3.2"
         const val LifeCycleLiveData = "2.2.0"
     }
 
@@ -65,12 +64,8 @@ object Versions {
         const val ShapeOfView = "1.4.7"
         const val Flexbox = "2.0.1"
         const val SmoothBottomBar = "1.7.6"
-        const val YoYo = "2.4@aar"
-        const val SuperBottomSheet = "2.0.0"
         const val Lottie = "3.5.0"
         const val SimpleCodeEditor = "2.0.4"
-        const val JsonViewer = "v1.1"
-        const val Licenser = "2.0.0"
         const val Material = "1.2.0-alpha06"
         const val Glide = "4.11.0"
         const val ConstraintLayout = "2.0.4"
@@ -78,8 +73,6 @@ object Versions {
 
     object Util {
         const val GsonConverter = "2.9.0"
-        const val YoYoHelper = "2.4@aar"
-        const val HangulParser = "1.0.0"
         const val AndroidUtils = "4.2.3"
         const val CarshReporter = "1.1.0"
     }
@@ -125,7 +118,6 @@ object Dependencies {
         const val NavigationUi =
             "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}"
         const val Core = "androidx.core:core-ktx:${Versions.Ktx.Core}"
-        const val Fragment = "androidx.fragment:fragment-ktx:${Versions.Ktx.Fragment}"
         const val LifeCycleLiveData =
             "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Ktx.LifeCycleLiveData}"
     }
@@ -146,14 +138,9 @@ object Dependencies {
             "com.github.skydoves:transformationlayout:${Versions.Ui.TransformationLayout}"
         const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
         const val ShapeOfYou = "com.github.florent37:shapeofview:${Versions.Ui.ShapeOfView}"
-        const val YoYo = "com.daimajia.androidanimations:library:${Versions.Ui.YoYo}"
         const val Lottie = "com.airbnb.android:lottie:${Versions.Ui.Lottie}"
-        const val SuperBottomSheet =
-            "com.github.andrefrsousa:SuperBottomSheet:${Versions.Ui.SuperBottomSheet}"
         const val SimpleCodeEditor =
             "com.github.sungbin5304:SimpleCodeEditor:${Versions.Ui.SimpleCodeEditor}"
-        const val JsonViewer = "com.github.pvarry:android-json-viewer:${Versions.Ui.JsonViewer}"
-        const val Licenser = "com.github.marcoscgdev:Licenser:${Versions.Ui.Licenser}"
         const val Material = "com.google.android.material:material:${Versions.Ui.Material}"
         const val Glide = "com.github.bumptech.glide:glide:${Versions.Ui.Glide}"
         const val ConstraintLayout =
@@ -163,8 +150,6 @@ object Dependencies {
     object Util {
         const val GsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.Util.GsonConverter}"
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
-        const val YoyoHelper = "com.daimajia.easing:library:${Versions.Util.YoYoHelper}"
-        const val HangulParser = "com.github.kimkevin:hangulparser:${Versions.Util.HangulParser}"
         const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Util.AndroidUtils}"
         const val CrashReporter = "com.balsikandar.android:crashreporter:${Versions.Util.CarshReporter}"
     }
