@@ -7,7 +7,7 @@
 
         <variable
             name="Item"
-            type="com.sungbin.gitkakaobot.model.BotItem" />
+            type="com.sungbin.gitkakaobot.model.Bot" />
 
         <variable
             name="BotType"

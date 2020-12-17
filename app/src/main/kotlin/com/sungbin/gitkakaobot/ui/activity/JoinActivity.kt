@@ -10,17 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
+import com.sungbin.androidutils.util.DataUtil
+import com.sungbin.androidutils.util.PermissionUtil
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
+import com.sungbin.gitkakaobot.databinding.ActivityJoinBinding
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
-import com.sungbin.gitkakaobot.util.BotUtil
-import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_join.*
 import org.jetbrains.anko.startActivity
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -33,15 +32,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class JoinActivity : AppCompatActivity() {
 
-    private val CODE_REQUEST_NOTIFICATION_READ = 3000
-    private val CODE_REQUEST_STORAGE_ACCESS = 3001
+    private val codeRequestNotificationRead = 3000
+    private val codeRequestAccessStorage = 4000
 
     @Inject
     lateinit var client: Retrofit
 
-    private val loadingDialog by lazy {
-        LoadingDialog(this)
-    }
+    private val loadingDialog by lazy { LoadingDialog(this) }
+
+    private val binding by lazy { ActivityJoinBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,20 +50,20 @@ class JoinActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-        setContentView(R.layout.activity_join)
+        setContentView(binding.root)
 
-        btn_request_notification_read.setOnClickListener {
+        binding.btnRequestNotificationRead.setOnClickListener {
             requestNotificationListenerPermission()
         }
 
-        btn_request_storage.setOnClickListener {
+        binding.btnRequestStorage.setOnClickListener {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ),
-                CODE_REQUEST_STORAGE_ACCESS
+                codeRequestAccessStorage
             )
         }
 
@@ -74,9 +73,9 @@ class JoinActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            CODE_REQUEST_NOTIFICATION_READ -> {
+            codeRequestNotificationRead -> {
                 if (getNotificationListenerPermission()) {
-                    btn_request_notification_read.apply {
+                    binding.btnRequestNotificationRead.apply {
                         text = getString(R.string.permission_grant)
                         setOnClickListener { }
                         alpha = 0.5f
@@ -96,7 +95,7 @@ class JoinActivity : AppCompatActivity() {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED
             && grantResults[1] == PackageManager.PERMISSION_GRANTED
         ) {
-            btn_request_storage.apply {
+            binding.btnRequestStorage.apply {
                 text = getString(R.string.permission_grant)
                 setOnClickListener { }
                 alpha = 0.5f
@@ -111,34 +110,32 @@ class JoinActivity : AppCompatActivity() {
     private fun requestNotificationListenerPermission() {
         startActivityForResult(
             Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"),
-            CODE_REQUEST_NOTIFICATION_READ
+            codeRequestNotificationRead
         )
     }
 
     private fun checkAllGrantPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_GRANTED &&
+        if (PermissionUtil.checkPermissionsAllGrant(
+                applicationContext, arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            ) &&
             getNotificationListenerPermission()
         ) {
-            Thread {
-                BotUtil.initBotList()
-            }.start()
-
-            btn_request_notification_read.apply {
+            binding.btnRequestNotificationRead.apply {
                 text = getString(R.string.permission_grant)
                 alpha = 0.5f
                 setOnClickListener { }
             }
 
-            btn_request_storage.apply {
+            binding.btnRequestStorage.apply {
                 text = getString(R.string.permission_grant)
                 alpha = 0.5f
                 setOnClickListener { }
             }
 
-            btn_start_with_github.apply {
+            binding.btnStartWithGithub.apply {
                 alpha = 1f
                 setOnClickListener {
                     val builder = CustomTabsIntent.Builder()
@@ -167,7 +164,7 @@ class JoinActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ json ->
-                        DataUtil.save(
+                        DataUtil.saveData(
                             applicationContext,
                             PathManager.TOKEN,
                             json["access_token"].asString
@@ -175,9 +172,9 @@ class JoinActivity : AppCompatActivity() {
                     }, { throwable ->
                         loadingDialog.setError(Exception(throwable.message))
                     }, {
+                        loadingDialog.close()
                         finish()
                         startActivity<DashboardActivity>()
-                        loadingDialog.close()
                     })
             }
 

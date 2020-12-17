@@ -18,13 +18,13 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 class GithubClient {
 
-    private val BASE_URL = "https://github.com/"
+    private val baseUrl = "https://github.com/"
 
     @Provides
     @Singleton
     fun instance() = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .build()
 }

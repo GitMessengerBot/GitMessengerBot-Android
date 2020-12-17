@@ -1,7 +1,7 @@
 package com.sungbin.gitkakaobot
 
 import android.app.Application
-import android.content.Context
+import com.sungbin.gitkakaobot.util.BotUtil
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -12,13 +12,10 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class GitKakaoBot : Application() {
 
-    companion object {
-        lateinit var context: Context
-    }
-
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
+
+        BotUtil.init(applicationContext)
     }
 
 }

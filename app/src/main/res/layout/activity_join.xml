@@ -12,7 +12,6 @@
         android:backgroundTint="@color/colorPrimary"
         android:elevation="@dimen/margin_default"
         app:layout_constraintTop_toTopOf="parent"
-        app:shape_arc_cropDirection="outside"
         app:shape_arc_height="20dp"
         app:shape_arc_position="bottom">
 

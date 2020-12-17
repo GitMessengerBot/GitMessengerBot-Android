@@ -1,13 +1,12 @@
 package com.sungbin.gitkakaobot.ui.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.sungbin.gitkakaobot.R
+import com.sungbin.androidutils.extensions.doDelay
+import com.sungbin.androidutils.util.DataUtil
+import com.sungbin.gitkakaobot.databinding.ActivitySplashBinding
 import com.sungbin.gitkakaobot.util.BotUtil
-import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.jetbrains.anko.startActivity
 
@@ -18,6 +17,8 @@ import org.jetbrains.anko.startActivity
 
 class SplashActivity : AppCompatActivity() {
 
+    private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,23 +27,21 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
 
-        if (DataUtil.read(applicationContext, PathManager.TOKEN, "null") != "null") {
-            Thread {
-                BotUtil.initBotList()
-            }.start()
+        if (DataUtil.readData(applicationContext, PathManager.TOKEN, "null") != "null") {
+            Thread { BotUtil.initBotList() }.start()
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        doDelay(1500) {
             finish()
-            if (DataUtil.read(applicationContext, PathManager.TOKEN, "null") == "null") {
+            if (DataUtil.readData(applicationContext, PathManager.TOKEN, "null") == "null") {
                 startActivity<JoinActivity>()
             } else {
                 startActivity<DashboardActivity>()
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }, 1500)
+        }
     }
 
     override fun onBackPressed() {}

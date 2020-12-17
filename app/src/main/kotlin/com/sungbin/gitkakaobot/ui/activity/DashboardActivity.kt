@@ -2,12 +2,9 @@ package com.sungbin.gitkakaobot.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commitNow
-import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.ui.fragment.BotFragment
-import com.sungbin.gitkakaobot.util.OnBackPressedUtil
+import com.sungbin.androidutils.util.StorageUtil
+import com.sungbin.gitkakaobot.databinding.ActivityDashboardBinding
 import com.sungbin.gitkakaobot.util.manager.PathManager
-import com.sungbin.sungbintool.StorageUtils
 
 
 /**
@@ -16,26 +13,26 @@ import com.sungbin.sungbintool.StorageUtils
 
 class DashboardActivity : AppCompatActivity() {
 
+    companion object {
+        lateinit var onBackPressedAction: () -> Unit
+    }
+
+    private val binding by lazy { ActivityDashboardBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
+        setContentView(binding.root)
 
-        StorageUtils.createFolder(PathManager.JS, true)
-        StorageUtils.createFolder(PathManager.SIMPLE, true)
-        StorageUtils.createFolder(PathManager.DATABASE, true)
-        StorageUtils.createFolder(PathManager.LOG, true)
-        StorageUtils.createFolder(PathManager.SENDER, true)
-        StorageUtils.createFolder(PathManager.ROOM, true)
-
-        supportFragmentManager.commitNow {
-            add(R.id.fl_container, BotFragment.instance())
-        }
+        StorageUtil.createFolder(PathManager.JS)
+        StorageUtil.createFolder(PathManager.SIMPLE)
+        StorageUtil.createFolder(PathManager.DATABASE)
+        StorageUtil.createFolder(PathManager.LOG)
+        StorageUtil.createFolder(PathManager.SENDER)
+        StorageUtil.createFolder(PathManager.ROOM)
     }
 
     override fun onBackPressed() {
-        val fragment =
-            this.supportFragmentManager.findFragmentById(R.id.fl_container)
-        (fragment as? OnBackPressedUtil)?.onBackPressed(this)
+        onBackPressedAction()
     }
 
 }

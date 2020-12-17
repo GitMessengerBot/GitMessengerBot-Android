@@ -29,5 +29,5 @@ class BeautifyClient {
 
     private fun instance(baseUrl: String) = Jsoup.connect(baseUrl)
         .ignoreContentType(true)
-        .ignoreHttpErrors(true)
+        .ignoreHttpErrors(true)!!
 }

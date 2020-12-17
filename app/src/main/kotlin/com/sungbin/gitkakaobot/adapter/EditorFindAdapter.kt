@@ -3,7 +3,6 @@ package com.sungbin.gitkakaobot.adapter
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,14 +10,16 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.EditorFindItem
+import com.sungbin.gitkakaobot.databinding.LayoutEditorFoundItemBinding
+import com.sungbin.gitkakaobot.model.EditorFind
+import org.jetbrains.anko.layoutInflater
 
 
 /**
  * Created by SungBin on 2020-05-12.
  */
 
-class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
+class EditorFindAdapter(private val list: ArrayList<EditorFind>) :
     RecyclerView.Adapter<EditorFindAdapter.EditorFindViewHolder>() {
 
     interface OnItemClickListener {
@@ -43,9 +44,8 @@ class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): EditorFindViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.layout_editor_found_Item, viewGroup, false)
-        return EditorFindViewHolder(view)
+        val view = LayoutEditorFoundItemBinding.inflate(viewGroup.context.layoutInflater)
+        return EditorFindViewHolder(view.root)
     }
 
     override fun onBindViewHolder(@NonNull viewholder: EditorFindViewHolder, position: Int) {

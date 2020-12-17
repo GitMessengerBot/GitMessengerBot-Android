@@ -7,21 +7,18 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.sungbin.androidutils.extensions.hide
+import com.sungbin.androidutils.extensions.setTint
+import com.sungbin.androidutils.extensions.show
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
 import com.sungbin.gitkakaobot.listener.MessageListener
-import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.ui.activity.CodeEditActivity
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.UiUtil
-import com.sungbin.sungbintool.extensions.hide
-import com.sungbin.sungbintool.extensions.setTint
-import com.sungbin.sungbintool.extensions.show
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivity
 import java.util.*
 
@@ -30,23 +27,23 @@ import java.util.*
  * Created by SungBin on 2020-08-23.
  */
 
-class BotAdapter constructor(
-    private val items: ArrayList<BotItem>,
+class BotAdapter(
+    private val items: ArrayList<Bot>,
     private val activity: Activity
 ) : RecyclerView.Adapter<BotAdapter.ViewHolder>() {
 
     init {
-        Collections.sort(items, Comparator { item, item2 ->
-            return@Comparator item.index.compareTo(item2.index)
-        })
+        items.sortWith { item, item2 ->
+            return@sortWith item.index.compareTo(item2.index)
+        }
     }
 
     class ViewHolder(private val itemBinding: LayoutBotBinding, private val activity: Activity) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        val loadingDialog = LoadingDialog(activity)
+        private val loadingDialog by lazy { LoadingDialog(activity) }
 
-        fun bindViewHolder(bot: BotItem) {
+        fun bindViewHolder(bot: Bot) {
             with(itemBinding) {
                 item = bot
                 tvName.isSelected = true
@@ -54,24 +51,21 @@ class BotAdapter constructor(
                     ivReload.hide(true)
                     pbReloading.show()
                     CoroutineScope(Dispatchers.Default).launch {
-                        val ms1 = System.currentTimeMillis()
-                        val status = withContext(Dispatchers.Default) {
-                            MessageListener.compileJavaScript(bot)
-                        }
-                        withContext(Dispatchers.Main) {
+                        val ms = System.currentTimeMillis()
+                        val status = async { MessageListener.compileJavaScript(bot) }
+                        status.await().let {
                             val ms2 = System.currentTimeMillis()
-                            val reloadTime = (ms2 - ms1).toString()
+                            val reloadTime = ms2 - ms
                             ivReload.show()
                             pbReloading.hide(true)
-                            if (status.isCompiled) {
+                            if (it.isCompiled) {
                                 UiUtil.snackbar(
                                     activity.window.decorView,
-                                    activity.getString(R.string.reload_done).replace("@time", reloadTime)
+                                    activity.getString(R.string.bot_reload_done, reloadTime)
                                 )
                             } else {
                                 loadingDialog.setError(
-                                    Exception("${status.exception}\n\n리로드 시간 : ${reloadTime}ms"),
-                                    true
+                                    Exception("${it.exception}\n\n리로드 시간 : $reloadTime ms")
                                 )
                                 loadingDialog.show()
                             }

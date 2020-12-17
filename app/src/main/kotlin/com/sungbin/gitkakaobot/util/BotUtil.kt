@@ -1,40 +1,41 @@
 package com.sungbin.gitkakaobot.util
 
 import android.content.Context
+import com.sungbin.androidutils.util.DataUtil
+import com.sungbin.androidutils.util.StorageUtil
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
-import com.sungbin.gitkakaobot.util.manager.PathManager.DEBUG
-import com.sungbin.gitkakaobot.util.manager.PathManager.JS
-import com.sungbin.gitkakaobot.util.manager.PathManager.SIMPLE
-import com.sungbin.sungbintool.StorageUtils
-import com.sungbin.sungbintool.Utils
+import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.json.JSONObject
 import org.mozilla.javascript.Function
 import java.io.File
 
 object BotUtil {
 
-    object Event {
-        const val ERROR = -1
-        const val MESSAGE = 0
-        const val COMPILE_START = 1
-        const val COMPILE_END = 2
-        const val DEBUG = 999
-    }
-
-    val botItems = ArrayList<BotItem>()
+    private lateinit var context: Context
+    val botItems = ArrayList<Bot>()
     val functions = HashMap<String, HashMap<Int, Function>>()
 
-    private fun getBotPath(bot: BotItem) = "${
+    fun init(context: Context) {
+        this.context = context
+    }
+
+    private val defaultCode: String
+        get() = DataUtil.readData(
+            context,
+            PathManager.DEFAULT_CODE,
+            context.getString(R.string.bot_default_sourcecode)
+        ).toString()
+
+    private fun getBotPath(bot: Bot) = "${
         when (bot.type) {
-            BotType.DEBUG -> DEBUG
-            BotType.JS -> JS
-            else -> SIMPLE
+            BotType.JS -> PathManager.JS
+            else -> PathManager.SIMPLE
         }
     }/${bot.name}"
 
-    fun getLastIndex(botList: ArrayList<BotItem>): Int {
+    fun getLastIndex(botList: ArrayList<Bot>): Int {
         var maxIndex = 0
         botList.map {
             if (it.index > maxIndex) maxIndex = it.index
@@ -42,70 +43,44 @@ object BotUtil {
         return maxIndex
     }
 
-    fun getDebugBot(context: Context, name: String, isRuningRoom: Boolean = false): BotItem {
-        val bot = BotItem(
-            name,
-            false,
-            false,
-            BotType.DEBUG,
-            -1,
-            "없음",
-            -1,
-            if (isRuningRoom) "-1" else Utils.makeRandomUUID()
-        )
-        createNewBot(context, bot)
-        return bot
-    }
-
-    fun getBotCode(bot: BotItem) = StorageUtils.read(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
-        "",
-        true
+    fun getBotCode(bot: Bot) = StorageUtil.read(
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        defaultCode
     ).toString()
 
-    fun saveBotCode(bot: BotItem, code: String) = StorageUtils.save(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
-        code,
-        true
+    fun saveBotCode(bot: Bot, code: String) = StorageUtil.save(
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        code
     ).toString()
 
-    fun updateBotData(bot: BotItem) =
-        StorageUtils.save("${getBotPath(bot)}/data.json", bot.toString(), true)
+    fun updateBotData(bot: Bot) =
+        StorageUtil.save("${getBotPath(bot)}/data.json", bot.toString())
 
-    fun changeBotIndex(bot: BotItem, newPos: Int) {
+    fun changeBotIndex(bot: Bot, newPos: Int) {
         val botJsonPath = "${getBotPath(bot)}/data.json"
-        val botJson = JSONObject(StorageUtils.read(botJsonPath, "", true)!!)
+        val botJson = JSONObject(StorageUtil.read(botJsonPath, "")!!)
         botJson.put("index", newPos)
-        StorageUtils.save(botJsonPath, botJson.toString(), true)
+        StorageUtil.save(botJsonPath, botJson.toString())
     }
 
-    fun createNewBot(context: Context, bot: BotItem) {
-        /*val defaultCode = DataUtil.read(
-            context,
-            PathManager.DEFAULT_CODE,
-            context.getString(R.string.default_sourcecode)
-        ).toString()*/
-        val defaultCode = context.getString(R.string.default_sourcecode)
+    fun createNewBot(context: Context, bot: Bot) {
         val path = getBotPath(bot)
-        StorageUtils.createFolder(path, true)
-        StorageUtils.createFile(
-            "$path/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
-            true
+        StorageUtil.createFolder(path)
+        StorageUtil.createFile(
+            "$path/index.${if (bot.type == BotType.JS) "js" else "srd"}"
         )
-        StorageUtils.createFile("$path/data.json", true)
-        StorageUtils.save(
+        StorageUtil.createFile("$path/data.json")
+        StorageUtil.save(
             "$path/data.json",
-            bot.toString(),
-            true
+            bot.toString()
         )
-        StorageUtils.save(
-            "$path/index.${if (bot.type == BotType.JS || bot.type == BotType.DEBUG) "js" else "srd"}",
-            defaultCode,
-            true
+        StorageUtil.save(
+            "$path/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+            defaultCode
         )
     }
 
-    fun createBotItem(botJsonObject: JSONObject) = BotItem(
+    fun createBotItem(botJsonObject: JSONObject) = Bot(
         botJsonObject.getString("name"),
         botJsonObject.getBoolean("isCompiled"),
         botJsonObject.getBoolean("power"),
@@ -119,17 +94,16 @@ object BotUtil {
     fun initBotList() {
         botItems.clear()
 
-        File("${StorageUtils.sdcard}/$JS").listFiles()?.map {
+        File("${StorageUtil.sdcard}/${PathManager.JS}").listFiles()?.map {
             val botJsonPath = "${it.path}/data.json"
-            val botJson = StorageUtils.read(botJsonPath, null, false)
+            val botJson = StorageUtil.read(botJsonPath, null)
             botJson?.let { json ->
-                StorageUtils.save(botJsonPath.replace("/",""), json, true)
                 botItems.add(createBotItem(JSONObject(json)))
             }
         }
-        File("${StorageUtils.sdcard}/$SIMPLE").listFiles()?.map {
+        File("${StorageUtil.sdcard}/${PathManager.SIMPLE}").listFiles()?.map {
             val botJsonPath = "${it.path}/data.json"
-            val botJson = StorageUtils.read(botJsonPath, null, false)
+            val botJson = StorageUtil.read(botJsonPath, null)
             botJson?.let { json ->
                 botItems.add(createBotItem(JSONObject(json)))
             }

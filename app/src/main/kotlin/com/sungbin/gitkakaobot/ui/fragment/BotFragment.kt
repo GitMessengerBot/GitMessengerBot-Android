@@ -1,138 +1,27 @@
 package com.sungbin.gitkakaobot.ui.fragment
 
-import android.app.Activity
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.adapter.BotAdapter
-import com.sungbin.gitkakaobot.model.BotItem
-import com.sungbin.gitkakaobot.model.BotType
+import com.sungbin.gitkakaobot.databinding.FragmentBotBinding
+import com.sungbin.gitkakaobot.ui.fragment.vm.BotViewModel
 import com.sungbin.gitkakaobot.util.BotUtil
-import com.sungbin.gitkakaobot.util.OnBackPressedUtil
-import com.sungbin.gitkakaobot.util.UiUtil
-import com.sungbin.sungbintool.Utils
-import com.sungbin.sungbintool.extensions.clear
-import com.sungbin.sungbintool.extensions.hide
-import com.sungbin.sungbintool.extensions.show
-import kotlinx.android.synthetic.main.fragment_bot.*
 
+class BotFragment : Fragment() {
 
-class BotFragment : Fragment(), OnBackPressedUtil {
-
-    companion object {
-        private val instance by lazy {
-            BotFragment()
-        }
-
-        fun instance() = instance
-    }
-
+    private val vm by viewModels<BotViewModel>()
+    private val binding by lazy { FragmentBotBinding.inflate(layoutInflater) }
     private lateinit var adapter: BotAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_bot, container, false)!!
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        retainInstance = false
-
-        viewModel.initBotList()
-        /*viewModel.botList.postValue(
-            arrayListOf(
-                BotItem(
-                    "DEBUG-BOT",
-                    false,
-                    true,
-                    BotType.JS,
-                    -1,
-                    "없음",
-                    1,
-                    Utils.makeRandomUUID()
-                )
-            )
-        )*/
-
-        if (viewModel.botList.value.isNullOrEmpty()) {
-            cl_empty.show()
-            rv_bot.hide()
-        } else {
-            cl_empty.hide()
-            rv_bot.show()
-        }
-
-        adapter = BotAdapter(viewModel.botList.value ?: arrayListOf(), requireActivity())
-        rv_bot.adapter = adapter
-        rv_bot.apply {
-            setHasFixedSize(true)
-            isNestedScrollingEnabled = true
-        }
-        ItemTouchHelper(dragCallback).attachToRecyclerView(rv_bot)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rv_bot.setOnScrollChangeListener { _, _, y, _, oldY ->
-                if (y > oldY) {
-                    // Down
-                    efab_add.shrink()
-                }
-                if (y < oldY) {
-                    // Up
-                    efab_add.extend()
-                }
-            }
-        }
-
-        efab_add.setOnClickListener {
-            tsl_container.startTransform()
-        }
-
-        btn_add.setOnClickListener {
-            if (tiet_bot_name.text.toString().isBlank()) {
-                UiUtil.snackbar(it, getString(R.string.please_input_script_name))
-            }
-            else {
-                val botType =
-                    if (mbtg_container.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
-                val bot = BotItem(
-                    tiet_bot_name.text.toString(),
-                    false,
-                    false,
-                    botType,
-                    -1,
-                    "없음",
-                    BotUtil.getLastIndex(viewModel.botList.value!!) + 1,
-                    Utils.makeRandomUUID()
-                )
-                viewModel.botList.run {
-                    value.add(bot)
-                    postValue(value)
-                }
-                BotUtil.createNewBot(requireContext(), bot)
-                mbtg_container.check(R.id.btn_javascript)
-                tiet_bot_name.clear()
-                tsl_container.finishTransform()
-                UiUtil.snackbar(it, getString(R.string.added_new_bot))
-            }
-        }
-
-        viewModel.botList.observe(viewLifecycleOwner, {
-            adapter = BotAdapter(it, requireActivity())
-            rv_bot.adapter = adapter
-            if (it.isNullOrEmpty()) {
-                cl_empty.show()
-                rv_bot.hide()
-            } else {
-                cl_empty.hide()
-                rv_bot.show()
-            }
-        })
-    }
+    ) = binding.root
 
     private val dragCallback = object : ItemTouchHelper.Callback() {
         var dragFrom = -1
@@ -161,15 +50,9 @@ class BotFragment : Fragment(), OnBackPressedUtil {
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
-        override fun isLongPressDragEnabled(): Boolean {
-            return true
-        }
-
-        override fun isItemViewSwipeEnabled(): Boolean {
-            return false
-        }
-
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
+        override fun isLongPressDragEnabled() = true
+        override fun isItemViewSwipeEnabled() = false
         override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
             if (dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
@@ -180,35 +63,23 @@ class BotFragment : Fragment(), OnBackPressedUtil {
         }
 
         private fun moveItem(oldPos: Int, newPos: Int) {
-            val oldItem = viewModel.botList.value!![oldPos]
-            val newItem = viewModel.botList.value!![newPos]
+            val oldItem = vm.botList.value!![oldPos]
+            val newItem = vm.botList.value!![newPos]
             BotUtil.changeBotIndex(oldItem, newPos)
             BotUtil.changeBotIndex(newItem, oldPos)
-            viewModel.botList.value!!.run {
+            vm.botList.value!!.run {
                 removeAt(oldPos)
                 add(oldPos, newItem)
                 removeAt(newPos)
                 add(newPos, oldItem)
             }
-            rv_bot.post {
+            binding.rvBot.post {
                 adapter.run {
                     notifyItemChanged(oldPos)
                     notifyItemChanged(newPos)
                 }
             }
         }
-    }
-
-    override fun onBackPressed(activity: Activity): Boolean {
-        when (tsl_container.isTransformed) {
-            true -> {
-                tsl_container.finishTransform()
-            }
-            else -> {
-                activity.finish()
-            }
-        }
-        return true
     }
 
 }

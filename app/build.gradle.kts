@@ -40,7 +40,7 @@ android {
 
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/library_release.kotlin_module")
+        exclude("META-INF/*.kotlin_module")
     }
 
     compileOptions {

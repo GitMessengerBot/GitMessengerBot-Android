@@ -15,24 +15,18 @@ import android.util.Base64.encodeToString
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
+import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.model.BotCompileItem
-import com.sungbin.gitkakaobot.model.BotItem
+import com.sungbin.gitkakaobot.model.Bot
+import com.sungbin.gitkakaobot.model.BotCompile
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.BotUtil.botItems
-import com.sungbin.gitkakaobot.util.BotUtil.functions
-import com.sungbin.gitkakaobot.util.DataUtil
-import com.sungbin.gitkakaobot.util.RhinoUtil
-import com.sungbin.gitkakaobot.util.RhinoUtil.conv
 import com.sungbin.gitkakaobot.util.UiUtil
-import com.sungbin.gitkakaobot.util.api.ApiClass
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.scopes
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
-import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.annotations.JSFunction
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -49,7 +43,7 @@ class MessageListener : NotificationListenerService() {
         super.onCreate()
         applicationContext.let {
             context = it
-            ApiClass.init(it)
+            // ApiClass.init(it)
             UiUtil.toast(it, "Power ON")
             init(it)
         }
@@ -62,13 +56,13 @@ class MessageListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (!DataUtil.read(applicationContext, PathManager.POWER, "false").toBoolean()
-            || sbn.packageName != "com.kakao.talk"
+        if (!DataUtil.readData(applicationContext, PathManager.POWER, "false").toBoolean()
+        // || sbn.packageName != "com.kakao.talk" todo: 커스텀 패키지 추가
         ) return
         val wExt = Notification.WearableExtender(sbn.notification)
         for (act in wExt.actions) {
             if (act.remoteInputs.isNotEmpty()) {
-                if (act.title.toString().toLowerCase(Locale.getDefault()).contains("reply")
+                if (act.title.toString().toLowerCase(Locale.KOREA).contains("reply")
                     || act.title.toString().contains("답장")
                 ) {
                     val extras = sbn.notification.extras
@@ -141,6 +135,7 @@ class MessageListener : NotificationListenerService() {
         }
     }
 
+    // todo: 클래스 분리 및 API 1로 변경
     companion object {
         val showAll = "\u200b".repeat(500)
         private lateinit var context: Context
@@ -208,7 +203,7 @@ class MessageListener : NotificationListenerService() {
         }
 
         private fun callJsResponder(
-            bot: BotItem,
+            bot: Bot,
             room: String,
             msg: String,
             sender: String,
@@ -217,7 +212,7 @@ class MessageListener : NotificationListenerService() {
             profileImage: Bitmap?,
             packageName: String
         ) {
-            val rhino = RhinoAndroidHelper().enterContext().apply {
+            /*val rhino = RhinoAndroidHelper().enterContext().apply {
                 languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                 optimizationLevel = bot.optimization
             }
@@ -249,35 +244,10 @@ class MessageListener : NotificationListenerService() {
                     scope,
                     arrayOf(bot.name, e)
                 )
-            }
+            }*/
         }
 
-        class BotManager(private var bot: BotItem) : ScriptableObject() {
-            override fun getClassName() = "BotManager"
-            override fun toString() = "TODO"
-
-            @JSFunction
-            fun getTestMessage() = "TEST-MESSAGE"
-
-            @JSFunction
-            fun getTestValue(any: Any) = any
-
-            @JSFunction
-            fun getCurrentBot() = bot
-
-            @JSFunction
-            fun on(event: Int, function: Function) {
-                addListener(event, function)
-            }
-
-            @JSFunction
-            fun addListener(event: Int, function: Function) {
-                if (functions[bot.uuid] == null) functions[bot.uuid] = hashMapOf(event to function)
-                else functions[bot.uuid]!![event] = function
-            }
-        }
-
-        fun compileJavaScript(bot: BotItem): BotCompileItem {
+        fun compileJavaScript(bot: Bot): BotCompile {
             return try {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
@@ -285,7 +255,7 @@ class MessageListener : NotificationListenerService() {
                 }
 
                 val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
-                ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
+                /*ScriptableObject.defineProperty(scope, "Event", BotUtil.Event, 0)
                 ScriptableObject.defineProperty(scope, "BotManager", BotManager(bot).conv(), 0)
                 ScriptableObject.defineProperty(scope, "console", RhinoUtil.console().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Log", ApiClass.Log().conv(), 0)
@@ -297,13 +267,13 @@ class MessageListener : NotificationListenerService() {
                 ScriptableObject.defineProperty(scope, "DataBase", ApiClass.DataBase().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Black", ApiClass.Black().conv(), 0)
                 ScriptableObject.defineProperty(scope, "Game", ApiClass.Game().conv(), 0)
-                ScriptableObject.defineProperty(scope, "Util", ApiClass.Util().conv(), 0)
+                ScriptableObject.defineProperty(scope, "Util", ApiClass.Util().conv(), 0)*/
                 rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
                 scopes[bot.uuid] = scope
                 org.mozilla.javascript.Context.exit()
-                BotCompileItem(true, null)
-            } catch (e: Exception) {
-                BotCompileItem(false, e)
+                BotCompile(true, null)
+            } catch (exception: Exception) {
+                BotCompile(false, exception)
             }
         }
 
