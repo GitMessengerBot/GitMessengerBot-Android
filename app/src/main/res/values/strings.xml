@@ -16,6 +16,7 @@
     <string name="push">push</string>
     <string name="merge">merge</string>
     <string name="tool">도구</string>
+    <string name="back">back</string>
     <string name="show_all">전체보기</string>
     <string name="log">로그</string>
     <string name="database">데이터베이스</string>
@@ -57,6 +58,7 @@
     <string name="codeedit_script_name_preview">Script Name</string>
     <string name="codeedit_auto_saved">자동저장 되었습니다.</string>
     <string name="codeedit_experimental_function">실험적 기능</string>
+    <string name="codeedit_input_search">검색어 입력</string>
     <string name="codeedit_editor_experimental_function_description">스크립트 에디터에 실험적인 기능이 있습니다.\n때때로 의도한대로 작동하지 않을 수 있습니다.\n양해 부탁드립니다.\n\n또한 에디터에서 작성중인 내용이 저장되지 않을 수 있습니다.\n즉 내용을 수시로 복사하여 백업해두시는걸 추천드립니다.(저장시 자동 복사)</string>
 
     <string name="sandbox_experimental_function_description">센드박스는 실험적인 기능입니다.\n때때로 의도한대로 작동하지 않을 수 있습니다.</string>
@@ -68,5 +70,6 @@
 
     <string name="debug_input">input…</string>
     <string name="debug_eval_mode">eval 모드</string>
+    <string name="codeedit_search_empty">검색결과가 없어요</string>
 
 </resources>
