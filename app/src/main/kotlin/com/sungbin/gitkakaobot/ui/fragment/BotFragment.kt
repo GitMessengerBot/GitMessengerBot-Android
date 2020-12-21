@@ -15,7 +15,7 @@ import com.sungbin.gitkakaobot.adapter.BotAdapter
 import com.sungbin.gitkakaobot.databinding.FragmentBotBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
-import com.sungbin.gitkakaobot.service.ForgroundService
+import com.sungbin.gitkakaobot.service.ForegroundService
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.botList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.initBotList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.onBackPressedAction
@@ -61,13 +61,13 @@ class BotFragment : Fragment() {
         }
 
         if (DataUtil.readData(requireContext(), PathManager.POWER, "false").toBoolean()) {
-            requireContext().startService(Intent(requireActivity(), ForgroundService::class.java))
+            requireContext().startService(Intent(requireActivity(), ForegroundService::class.java))
             binding.swPower.isChecked = true
         }
 
         binding.swPower.setOnCheckedChangeListener { _, isChecked ->
             DataUtil.saveData(requireContext(), PathManager.POWER, isChecked.toString())
-            val foregroundIntent = Intent(requireActivity(), ForgroundService::class.java)
+            val foregroundIntent = Intent(requireActivity(), ForegroundService::class.java)
             if (!isChecked) requireContext().stopService(foregroundIntent)
             else requireContext().startService(foregroundIntent)
         }

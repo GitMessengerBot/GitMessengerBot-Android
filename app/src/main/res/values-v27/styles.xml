@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.WhiteStatusBar" parent="AppTheme">
+    <style name="AppTheme.BackgroundWhiteStatusBar" parent="AppTheme">
         <item name="android:statusBarColor">@color/colorBackgroundWhite</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/colorWhite</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="AppTheme.WhiteStatusBar" parent="AppTheme">
+        <item name="android:statusBarColor">@color/colorWhite</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/colorWhite</item>
         <item name="android:windowLightNavigationBar">true</item>

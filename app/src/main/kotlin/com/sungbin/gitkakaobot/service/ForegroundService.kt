@@ -14,7 +14,7 @@ import com.sungbin.gitkakaobot.R
  * Created by SungBin on 2020-12-14.
  */
 
-class ForgroundService : Service() {
+class ForegroundService : Service() {
 
     private val pm by lazy { getSystemService(Context.POWER_SERVICE) as PowerManager }
     private val wakeLock by lazy { pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, wakeLockLabel) }

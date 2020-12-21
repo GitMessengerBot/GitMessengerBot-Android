@@ -1,125 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_top_round_8"
     android:backgroundTint="@color/colorWhite">
 
-    <!--<androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintEnd_toStartOf="@+id/view_left"
-        app:layout_constraintStart_toStartOf="parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:backgroundTint="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/abl_container"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_top_round_8"
-            app:elevation="0dp"
-            app:layout_constraintTop_toTopOf="parent">
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_default">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/codeedit_debug_bot"
+                    android:textColor="@color/colorBlack"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_title"
-                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/javascript_console"
-                        android:textColor="@color/colorWhite"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/iv_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/reload"
+                    android:src="@drawable/ic_baseline_replay_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/colorBlack" />
 
-                    <ImageView
-                        android:id="@+id/iv_run"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_default"
-                        android:contentDescription="@string/run"
-                        android:src="@drawable/ic_baseline_play_arrow_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/colorWhite" />
+                <ImageView
+                    android:id="@+id/iv_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:contentDescription="@string/clear"
+                    android:src="@drawable/ic_baseline_clear_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_reload"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/colorBlack" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/abl_container">
-
-            <View
-                android:id="@+id/space_top"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_twice_half"
-                android:background="@color/colorWhite"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/space_end"
-                android:layout_width="@dimen/margin_twice_half"
-                android:layout_height="0dp"
-                android:background="@color/colorWhite"
-                app:layout_constraintBottom_toTopOf="@+id/tv_console"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.sungbin.texteditor.library.SimpleCodeEditor
-                android:id="@+id/sce_console"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:importantForAutofill="no"
-                android:text="@string/default_console_code"
-                app:layout_constraintBottom_toTopOf="@+id/tv_console"
-                app:layout_constraintEnd_toStartOf="@+id/space_end"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/space_top"
-                app:sce_annotationColor="@color/colorAnnotation"
-                app:sce_focusLineColor="@color/colorPrimary"
-                app:sce_lineColor="@color/colorGray"
-                app:sce_lineNumberColor="@color/colorGray"
-                app:sce_numberColor="@color/colorNumber"
-                app:sce_reservedColor="@color/colorMethod"
-                app:sce_stringColor="@color/colorString" />
-
-            <TextView
-                android:id="@+id/tv_console"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:padding="@dimen/margin_default"
-                android:scrollHorizontally="true"
-                android:text="@string/debug_hint"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/view_left"
-        android:layout_width="@dimen/margin_twice_half"
-        android:layout_height="0dp"
+    <LinearLayout
+        android:id="@+id/ll_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:maxHeight="150dp"
+        android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
+        tools:layout_height="150dp">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanumgothic"
+            android:hint="@string/debug_input"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:maxHeight="150dp"
+            tools:text="@string/bot_default_sourcecode" />
+
+        <ImageView
+            android:id="@+id/iv_send"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:contentDescription="@string/send"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_send_24"
+            app:tint="@color/colorPrimary" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

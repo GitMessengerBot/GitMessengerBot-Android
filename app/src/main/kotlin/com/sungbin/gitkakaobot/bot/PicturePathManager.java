@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+// 왜 코틀린으로하면 작동이 안될까?
 public class PicturePathManager {
     private static final String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
     private static final String PICTURE_PATH = sdcard + "/Android/data/com.kakao.talk/contents/Mg==";

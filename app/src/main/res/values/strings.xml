@@ -3,7 +3,9 @@
     <string name="github_client_secret">b576aa46edf9cc8515b6e14e5dcce6041b3042fe</string>
     <string name="app_name">GitKakaoBot</string>
 
+    <string name="send">send</string>
     <string name="saved">저장되었습니다.</string>
+    <string name="clear">clear</string>
     <string name="save">저장</string>
     <string name="close">닫기</string>
     <string name="loading">불러오는중…</string>
@@ -29,6 +31,7 @@
     <string name="join_welcome">환영합니다!</string>
     <string name="join_require_setting">시작하기 앞서,\n몇가지 설정이 필요해요.</string>
     <string name="join_permission_grant">권한 부여됨</string>
+    <string name="join_reason_for_battery_ignored_optimization">봇이 빠른 속도로 동작하기 위해 필요해요</string>
     <string name="join_start_with_github_login">깃허브 로그인으로 시작하기</string>
 
     <string name="bot_copyright">GitKakaoBot © 2020 SungBin</string>
@@ -44,6 +47,7 @@
     <string name="bot_confirm_exit">한 번 더 눌러 앱 종료</string>
     <string name="bot_battery_ignored_optimization">배터리 최적화 제외</string>
 
+    <string name="codeedit_debug_bot">Debug Bot</string>
     <string name="codeedit_script_name_preview">Script Name</string>
     <string name="codeedit_auto_saved">자동저장 되었습니다.</string>
     <string name="codeedit_experimental_function">실험적 기능</string>
@@ -55,5 +59,7 @@
     <string name="messagelistener_power_off">Power OFF</string>
 
     <string name="foregroundservice_running_bot">봇이 작동중 입니다…</string>
-    <string name="join_reason_for_battery_ignored_optimization">봇이 빠른 속도로 동작하기 위해 필요해요</string>
+
+    <string name="debug_input">input…</string>
+
 </resources>
