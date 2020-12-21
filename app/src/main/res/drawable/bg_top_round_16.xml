@@ -6,7 +6,7 @@
         android:color="@color/colorPrimary" />
 
     <corners
-        android:topLeftRadius="@dimen/margin_half"
-        android:topRightRadius="@dimen/margin_half" />
+        android:topLeftRadius="@dimen/margin_default"
+        android:topRightRadius="@dimen/margin_default" />
 
 </shape>

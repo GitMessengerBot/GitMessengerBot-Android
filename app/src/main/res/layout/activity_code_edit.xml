@@ -11,10 +11,7 @@
         android:id="@+id/cl_start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@drawable/bg_top_round_8"
-        android:backgroundTint="@color/colorWhite"
-        android:focusableInTouchMode="true">
+        android:layout_gravity="start">
 
         <include layout="@layout/layout_editor_tool" />
 
@@ -25,14 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/bg_top_round_8"
-        android:backgroundTint="@color/colorWhite">
+        android:background="@color/colorWhite">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl_container"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/bg_top_round_8"
+            android:background="@drawable/bg_top_round_16"
             android:backgroundTint="@color/colorWhite"
             app:elevation="0dp"
             app:layout_constraintTop_toTopOf="parent">
@@ -96,8 +92,7 @@
         android:id="@+id/cl_end"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@color/colorBackgroundWhite">
+        android:layout_gravity="end">
 
         <include layout="@layout/layout_editor_debug" />
 
