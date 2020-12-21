@@ -76,6 +76,7 @@ object Versions {
         const val AndroidUtils = "4.2.3"
         const val CarshReporter = "1.1.0"
     }
+
 }
 
 object Dependencies {
@@ -148,9 +149,11 @@ object Dependencies {
     }
 
     object Util {
-        const val GsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.Util.GsonConverter}"
+        const val GsonConverter =
+            "com.squareup.retrofit2:converter-gson:${Versions.Util.GsonConverter}"
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
         const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Util.AndroidUtils}"
-        const val CrashReporter = "com.balsikandar.android:crashreporter:${Versions.Util.CarshReporter}"
+        const val CrashReporter =
+            "com.balsikandar.android:crashreporter:${Versions.Util.CarshReporter}"
     }
 }

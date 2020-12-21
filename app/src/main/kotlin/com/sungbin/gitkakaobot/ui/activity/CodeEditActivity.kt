@@ -18,6 +18,9 @@ import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import org.jsoup.Connection
@@ -82,58 +85,59 @@ class CodeEditActivity : AppCompatActivity() {
         }
 
         binding.btnBeautify.setOnClickListener {
-            runOnUiThread {
-                loadingDialog.show()
-            }
-            CoroutineScope(Dispatchers.IO).launch {
-                val beautifyCode = async {
+            loadingDialog.show()
+
+            Thread {
+                Observable.just(
                     JSONObject(
                         beautifyClient.data("input", binding.sceEditor.text.toString())
-                            .post().wholeText() // todo: how can i fix warning?
-                    )["output"].toString()
-                }
-                beautifyCode.await().let { code ->
-                    runOnUiThread {
-                        binding.sceEditor.text = code.toEditable()
+                            .post().wholeText()
+                    )["output"].toString().toEditable()
+                ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ beautifyCode ->
+                        binding.sceEditor.text = beautifyCode
+                    }, { throwable ->
+                        loadingDialog.setError(
+                            Exception("오류가 발생했습니다.\n\n\n${throwable.localizedMessage}"),
+                        )
+                    }, {
                         loadingDialog.close()
-                    }
-                }
-            }
+                    })
+            }.start()
+
         }
 
         binding.btnMinify.setOnClickListener {
-            runOnUiThread {
-                loadingDialog.show()
-            }
-            CoroutineScope(Dispatchers.IO).launch {
-                val minifyCode = async {
+            loadingDialog.show()
+
+            Thread {
+                Observable.just(
                     minifyClient.data("input", binding.sceEditor.text.toString())
-                        .post().wholeText() // todo: how can i fix warning?
-                }
-                minifyCode.await().let { code ->
-                    if (code.contains("Error") &&
-                        code.contains("Line") &&
-                        code.contains("Col")
-                    ) {
-                        runOnUiThread {
+                        .post().wholeText()
+                ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ minifyCode ->
+                        if (minifyCode.contains("Error") &&
+                            minifyCode.contains("Line") &&
+                            minifyCode.contains("Col")
+                        ) {
                             loadingDialog.setError(
                                 Exception("스크립트 코드에 오류가 있습니다.\n오류 수정 후 다시 시도해 주세요.\n\n\n$minifyCode"),
                             )
+                        } else {
+                            binding.sceEditor.text = minifyCode.toEditable()
                         }
-                    } else {
-                        runOnUiThread {
-                            binding.sceEditor.text = code.toEditable()
-                            loadingDialog.close()
-                        }
-                    }
-                }
-            }
-        }
+                    }, { throwable ->
+                        loadingDialog.setError(
+                            Exception("오류가 발생했습니다.\n\n\n${throwable.localizedMessage}"),
+                        )
+                    }, {
+                        loadingDialog.close()
+                    })
+            }.start()
 
-        /*debugBinding.ivSend.setOnClickListener {
-            RhinoUtil.debug(sce_console.text.toString(), tv_console)
-            sce_console.hideKeyboard()
-        }*/
+        }
 
         binding.tietSearch.setOnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_SEARCH) {

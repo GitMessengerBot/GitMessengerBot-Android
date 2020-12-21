@@ -17,12 +17,12 @@ import com.sungbin.gitkakaobot.databinding.LayoutLoadingDialogBinding
 class LoadingDialog(private val activity: Activity) {
 
     private lateinit var alert: AlertDialog
-    private val layout by lazy { LayoutLoadingDialogBinding.inflate(LayoutInflater.from(activity)) }
+    private val binding by lazy { LayoutLoadingDialogBinding.inflate(LayoutInflater.from(activity)) }
 
     fun show() {
         if (!::alert.isInitialized) {
             val dialog = AlertDialog.Builder(activity)
-            dialog.setView(layout.root)
+            dialog.setView(binding.root)
             dialog.setCancelable(false)
 
             alert = dialog.create()
@@ -36,13 +36,13 @@ class LoadingDialog(private val activity: Activity) {
             )
         }
 
-        if (alert.isShowing) alert.cancel()
+        // if (alert.isShowing) alert.cancel()
         alert.show()
     }
 
     fun updateTitle(title: String) {
-        layout.tvLoading.text = title
-        layout.root.invalidate()
+        binding.tvLoading.text = title
+        binding.root.invalidate()
     }
 
     fun setCustomState(
@@ -51,22 +51,22 @@ class LoadingDialog(private val activity: Activity) {
         canDismiss: Boolean,
         dismissListener: () -> Unit
     ) {
-        layout.lavLoad.setAnimation(lottie)
-        layout.lavLoad.playAnimation()
-        layout.tvLoading += message
-        layout.tvLoading.movementMethod = ScrollingMovementMethod()
+        binding.lavLoad.setAnimation(lottie)
+        binding.lavLoad.playAnimation()
+        binding.tvLoading += message
+        binding.tvLoading.movementMethod = ScrollingMovementMethod()
         alert.setCancelable(canDismiss)
         alert.setOnDismissListener { dismissListener() }
-        layout.root.invalidate()
+        binding.root.invalidate()
     }
 
     fun setError(throwable: Throwable) {
         throwable.printStackTrace()
-        layout.lavLoad.run {
+        binding.lavLoad.run {
             setAnimation(R.raw.error)
             playAnimation()
         }
-        layout.tvLoading.run {
+        binding.tvLoading.run {
             val message =
                 "서버 요청 중 오류가 발생했습니다!\n\n${throwable.message} #${throwable.stackTrace[0].lineNumber}"
             val ssb = SpannableStringBuilder(message)
@@ -80,7 +80,7 @@ class LoadingDialog(private val activity: Activity) {
             movementMethod = ScrollingMovementMethod()
         }
         alert.setCancelable(true)
-        layout.root.invalidate()
+        binding.root.invalidate()
     }
 
     fun close() {
