@@ -45,25 +45,34 @@ class BotAdapter(
                 item = bot
                 tvName.isSelected = true
                 ivReload.setOnClickListener {
-//                    AnimationUtil.rotateOnce(ivReload)
-                    CoroutineScope(Dispatchers.Default).launch {
-                        val ms = System.currentTimeMillis()
-                        val status =
-                            async { com.sungbin.gitkakaobot.bot.Bot.compileJavaScript(bot) }
-                        status.await().let {
-                            val ms2 = System.currentTimeMillis()
-                            val reloadTime = ms2 - ms
-                            activity.runOnUiThread {
-                                if (it.isCompiled) {
-                                    UiUtil.snackbar(
-                                        activity.window.decorView,
-                                        activity.getString(R.string.bot_reload_done, reloadTime)
-                                    )
-                                } else {
-                                    loadingDialog.setError(
-                                        Exception("${it.exception}\n\n리로드 시간: $reloadTime ms")
-                                    )
-                                    loadingDialog.show()
+                    when (bot.type) {
+                        BotType.SIMPLE -> {
+                            // todo
+                        }
+                        else -> {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                val ms = System.currentTimeMillis()
+                                val status =
+                                    async { com.sungbin.gitkakaobot.bot.Bot.compileJavaScript(bot) }
+                                status.await().let {
+                                    val ms2 = System.currentTimeMillis()
+                                    val reloadTime = ms2 - ms
+                                    activity.runOnUiThread {
+                                        if (it.isCompiled) {
+                                            UiUtil.snackbar(
+                                                activity.window.decorView,
+                                                activity.getString(
+                                                    R.string.bot_reload_done,
+                                                    reloadTime
+                                                )
+                                            )
+                                        } else {
+                                            loadingDialog.setError(
+                                                Exception("${it.exception}\n\n리로드 시간: $reloadTime ms")
+                                            )
+                                            loadingDialog.show()
+                                        }
+                                    }
                                 }
                             }
                         }

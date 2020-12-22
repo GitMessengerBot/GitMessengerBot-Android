@@ -126,7 +126,7 @@
                 android:id="@+id/mbtg_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:checkedButton="@id/btn_javascript"
+                app:checkedButton="@id/btn_v8_javascript"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -134,18 +134,25 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_javascript"
+                    android:id="@+id/btn_rhino_javascript"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/javascript" />
+                    android:text="@string/bot_rhino_javascript" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_v8_javascript"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bot_v8_javascript" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_simple"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/simple_reply" />
+                    android:text="@string/bot_simple_reply" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

@@ -22,6 +22,7 @@ object Versions {
         const val Helper = "1.5.2"
     }
 
+
     object Network {
         const val Jsoup = "1.13.1"
         const val Retrofit = "2.9.0"
@@ -76,7 +77,6 @@ object Versions {
         const val AndroidUtils = "4.2.3"
         const val CarshReporter = "1.1.0"
     }
-
 }
 
 object Dependencies {
@@ -84,14 +84,14 @@ object Dependencies {
         const val Bom = "com.google.firebase:firebase-bom:${Versions.Firebase.Bom}"
     }
 
-    object Jetpack {
-        const val DataStore =
-            "androidx.datastore:datastore-preferences:${Versions.Jetpack.DataStore}"
-    }
-
     object Rhino {
         const val Engine = "org.mozilla:rhino:${Versions.Rhino.Engine}"
         const val Helper = "com.faendir.rhino:rhino-android:${Versions.Rhino.Helper}"
+    }
+
+    object Jetpack {
+        const val DataStore =
+            "androidx.datastore:datastore-preferences:${Versions.Jetpack.DataStore}"
     }
 
     object Network {

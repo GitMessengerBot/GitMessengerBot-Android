@@ -6,13 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import com.eclipsesource.v8.V8
+import com.eclipsesource.v8.V8Object
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.R
+import com.sungbin.gitkakaobot.bot.rhino.ApiClass
+import com.sungbin.gitkakaobot.bot.rhino.ImageDB
+import com.sungbin.gitkakaobot.bot.rhino.Replier
+import com.sungbin.gitkakaobot.bot.v8.V8Replier
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotCompile
+import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.StackManager
+import com.sungbin.gitkakaobot.util.toBase64String
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
@@ -50,21 +58,37 @@ object Bot {
 
     fun compileJavaScript(bot: Bot): BotCompile {
         return try {
-            val rhino = RhinoAndroidHelper().enterContext().apply {
-                languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                optimizationLevel = bot.optimization
+            if (bot.type == BotType.RHINOJS) {
+                val rhino = RhinoAndroidHelper().enterContext().apply {
+                    languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+                    optimizationLevel = bot.optimization
+                }
+                val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
+                ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
+                rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
+                val function = scope["response", scope] as Function
+                StackManager.scopes[bot.uuid] = scope
+                StackManager.functions[bot.uuid] = function
+                org.mozilla.javascript.Context.exit()
+                BotCompile(true, null)
+            } else { // v8 js
+                val v8 = V8.createV8Runtime()
+                val v8Replier = V8Object(v8)
+                v8Replier.registerJavaMethod(
+                    V8Replier(),
+                    "reply",
+                    "reply",
+                    arrayOf(String::class.java, String::class.java)
+                )
+                v8.add("v8Replier", v8Replier)
+                v8Replier.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
+                v8.executeScript(BotUtil.getBotCode(bot))
+                StackManager.v8[bot.uuid] = v8
+                BotCompile(true, null)
             }
-            val scope = rhino.initStandardObjects(ImporterTopLevel(rhino)) as ScriptableObject
-            ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
-            rhino.compileString(BotUtil.getBotCode(bot), bot.name, 1, null).exec(rhino, scope)
-            val function = scope["response", scope] as Function
-            StackManager.scopes[bot.uuid] = scope
-            StackManager.functions[bot.uuid] = function
-            org.mozilla.javascript.Context.exit()
-            BotCompile(true, null)
         } catch (exception: Exception) {
             BotCompile(false, exception)
         }
@@ -73,7 +97,7 @@ object Bot {
     fun callJsResponder(
         bot: Bot,
         room: String,
-        msg: String,
+        message: String,
         sender: String,
         isGroupChat: Boolean,
         session: Notification.Action?,
@@ -82,27 +106,42 @@ object Bot {
         isDebugMode: Boolean
     ) {
         try {
-            val rhino = RhinoAndroidHelper().enterContext().apply {
-                languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                optimizationLevel = bot.optimization
-            }
-            val scope = StackManager.scopes[bot.uuid]
-            val function = StackManager.functions[bot.uuid]
-            if (!isDebugMode) {
-                function?.call(
-                    rhino,
-                    scope,
-                    scope,
-                    arrayOf(
-                        room, msg, sender, isGroupChat,
-                        Replier(session),
-                        ImageDB(profileImage), packageName
+            if (bot.type == BotType.RHINOJS) {
+                val rhino = RhinoAndroidHelper().enterContext().apply {
+                    languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+                    optimizationLevel = bot.optimization
+                }
+                val scope = StackManager.scopes[bot.uuid]
+                val function = StackManager.functions[bot.uuid]
+                if (!isDebugMode) {
+                    function?.call(
+                        rhino,
+                        scope,
+                        scope,
+                        arrayOf(
+                            room, message, sender, isGroupChat,
+                            Replier(session),
+                            ImageDB(profileImage), packageName
+                        )
                     )
-                )
-            } else {
-                // todo: 디버그 모드
+                } else {
+                    // todo: 디버그 모드
+                }
+                org.mozilla.javascript.Context.exit()
+            } else { // V8 JS
+                val v8 = StackManager.v8[bot.uuid]
+
+                val arguments = V8Object(v8).run {
+                    add("room", room)
+                    add("message", message)
+                    add("sender", sender)
+                    add("isGroupChat", isGroupChat)
+                    add("profileImage", profileImage.toBase64String())
+                    add("packageName", packageName)
+                }
+
+                v8?.executeJSFunction("response", arguments)
             }
-            org.mozilla.javascript.Context.exit()
         } catch (exception: Exception) {
             // todo: 오류처리
         }

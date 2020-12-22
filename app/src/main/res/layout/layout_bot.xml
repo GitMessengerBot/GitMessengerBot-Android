@@ -54,7 +54,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="@dimen/margin_default"
-                    android:src="@{Item.type == BotType.JS ? @drawable/ic_baseline_javascript_24 : @drawable/ic_baseline_message_24}"
+                    android:src="@{Item.type == BotType.SIMPLE ? @drawable/ic_baseline_message_24 : @drawable/ic_baseline_javascript_24}"
                     app:layout_constraintBottom_toTopOf="@+id/ll_menu_container"
                     app:layout_constraintStart_toEndOf="@+id/v_compile_statue"
                     app:layout_constraintTop_toTopOf="parent"

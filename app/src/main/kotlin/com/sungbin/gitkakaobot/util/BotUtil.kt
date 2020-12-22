@@ -29,8 +29,8 @@ object BotUtil {
 
     private fun getBotPath(bot: Bot) = "${
         when (bot.type) {
-            BotType.JS -> PathManager.JS
-            else -> PathManager.SIMPLE
+            BotType.SIMPLE -> PathManager.SIMPLE
+            else -> PathManager.JS
         }
     }/${bot.name}-${bot.uuid.substring(0..5)}"
 
@@ -43,12 +43,12 @@ object BotUtil {
     }
 
     fun getBotCode(bot: Bot) = StorageUtil.read(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}",
         defaultCode
     ).toString()
 
     fun saveBotCode(bot: Bot, code: String) = StorageUtil.save(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+        "${getBotPath(bot)}/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}",
         code
     ).toString()
 
@@ -66,7 +66,7 @@ object BotUtil {
         val path = getBotPath(bot)
         StorageUtil.createFolder(path)
         StorageUtil.createFile(
-            "$path/index.${if (bot.type == BotType.JS) "js" else "srd"}"
+            "$path/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}"
         )
         StorageUtil.createFile("$path/data.json")
         StorageUtil.save(
@@ -74,7 +74,7 @@ object BotUtil {
             bot.toString()
         )
         StorageUtil.save(
-            "$path/index.${if (bot.type == BotType.JS) "js" else "srd"}",
+            "$path/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}",
             defaultCode
         )
     }

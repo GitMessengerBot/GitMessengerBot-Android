@@ -53,7 +53,7 @@ class BotFragment : Fragment() {
         binding.efabAdd.setOnClickListener {
             binding.tslContainer.startTransform()
             onBackPressedAction = {
-                binding.mbtgContainer.check(R.id.btn_javascript)
+                binding.mbtgContainer.check(R.id.btn_rhino_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
                 binding.tietBotName.hideKeyboard()
@@ -76,8 +76,11 @@ class BotFragment : Fragment() {
             if (binding.tietBotName.text.toString().isBlank()) {
                 UiUtil.snackbar(it, getString(R.string.bot_please_input_script_name))
             } else {
-                val botType =
-                    if (binding.mbtgContainer.checkedButtonId == R.id.btn_javascript) BotType.JS else BotType.SIMPLE
+                val botType = when (binding.mbtgContainer.checkedButtonId) {
+                    R.id.btn_v8_javascript -> BotType.V8JS
+                    R.id.btn_rhino_javascript -> BotType.RHINOJS
+                    else -> BotType.SIMPLE
+                }
                 val bot = Bot(
                     name = binding.tietBotName.text.toString(),
                     isCompiled = false,
@@ -93,7 +96,7 @@ class BotFragment : Fragment() {
                     postValue(value)
                 }
                 BotUtil.createNewBot(bot)
-                binding.mbtgContainer.check(R.id.btn_javascript)
+                binding.mbtgContainer.check(R.id.btn_v8_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
                 UiUtil.snackbar(it, getString(R.string.bot_added_new_bot))
