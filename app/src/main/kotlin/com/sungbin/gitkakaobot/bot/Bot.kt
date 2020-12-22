@@ -9,10 +9,12 @@ import android.os.Bundle
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import com.faendir.rhino_android.RhinoAndroidHelper
+import com.sungbin.androidutils.util.Logger
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.bot.rhino.ApiClass
 import com.sungbin.gitkakaobot.bot.rhino.ImageDB
 import com.sungbin.gitkakaobot.bot.rhino.Replier
+import com.sungbin.gitkakaobot.bot.v8.V8Log
 import com.sungbin.gitkakaobot.bot.v8.V8Replier
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotCompile
@@ -77,16 +79,26 @@ object Bot {
             } else { // v8 js
                 val v8 = V8.createV8Runtime()
                 val v8Replier = V8Object(v8)
+                v8.add("v8Replier", v8Replier)
                 v8Replier.registerJavaMethod(
                     V8Replier(),
                     "reply",
                     "reply",
                     arrayOf(String::class.java, String::class.java)
                 )
-                v8.add("v8Replier", v8Replier)
                 v8Replier.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
+                val v8Log = V8Object(v8)
+                v8.add("v8Log", v8Log)
+                v8Log.registerJavaMethod(
+                    V8Log(),
+                    "log",
+                    "log",
+                    arrayOf(String::class.java)
+                )
+                v8Log.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
                 v8.executeScript(BotUtil.getBotCode(bot))
                 StackManager.v8[bot.uuid] = v8
+                v8.locker.release()
                 BotCompile(true, null)
             }
         } catch (exception: Exception) {
@@ -129,8 +141,9 @@ object Bot {
                 }
                 org.mozilla.javascript.Context.exit()
             } else { // V8 JS
-                val v8 = StackManager.v8[bot.uuid]
-
+                val v8 = StackManager.v8[bot.uuid]!!
+                v8.locker.acquire()
+                Logger.w("AAAAAAAAA", bot.name)
                 val arguments = V8Object(v8).run {
                     add("room", room)
                     add("message", message)
@@ -139,8 +152,13 @@ object Bot {
                     add("profileImage", profileImage.toBase64String())
                     add("packageName", packageName)
                 }
-
-                v8?.executeJSFunction("response", arguments)
+                v8.executeJSFunction(
+                    "response", room, message, sender, isGroupChat,
+                    Replier(session),
+                    ImageDB(profileImage), packageName
+                )
+                // v8.executeJSFunction("response", arguments)
+                v8.locker.release()
             }
         } catch (exception: Exception) {
             // todo: 오류처리

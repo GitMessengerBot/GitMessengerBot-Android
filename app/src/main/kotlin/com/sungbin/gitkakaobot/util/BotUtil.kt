@@ -42,14 +42,14 @@ object BotUtil {
         return maxIndex
     }
 
+    private fun getBotSuffix(bot: Bot) = if (bot.type == BotType.SIMPLE) "srd" else "js"
+
     fun getBotCode(bot: Bot) = StorageUtil.read(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}",
-        defaultCode
+        "${getBotPath(bot)}/index.${getBotSuffix(bot)}", defaultCode
     ).toString()
 
     fun saveBotCode(bot: Bot, code: String) = StorageUtil.save(
-        "${getBotPath(bot)}/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}",
-        code
+        "${getBotPath(bot)}/index.${getBotSuffix(bot)}", code
     ).toString()
 
     fun updateBotData(bot: Bot) =
@@ -66,7 +66,7 @@ object BotUtil {
         val path = getBotPath(bot)
         StorageUtil.createFolder(path)
         StorageUtil.createFile(
-            "$path/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}"
+            "$path/index.${getBotSuffix(bot)}"
         )
         StorageUtil.createFile("$path/data.json")
         StorageUtil.save(
@@ -74,7 +74,7 @@ object BotUtil {
             bot.toString()
         )
         StorageUtil.save(
-            "$path/index.${if (bot.type == BotType.SIMPLE) "srd" else "js"}}",
+            "$path/index.${getBotSuffix(bot)}",
             defaultCode
         )
     }

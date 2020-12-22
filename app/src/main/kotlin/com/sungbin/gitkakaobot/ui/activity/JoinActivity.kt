@@ -41,7 +41,6 @@ class JoinActivity : AppCompatActivity() {
     lateinit var client: Retrofit
 
     private val loadingDialog by lazy { LoadingDialog(this) }
-
     private val binding by lazy { ActivityJoinBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
