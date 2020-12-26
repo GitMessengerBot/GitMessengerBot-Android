@@ -12,11 +12,13 @@ import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.databinding.ActivityDashboardBinding
 import com.sungbin.gitkakaobot.model.Bot
+import com.sungbin.gitkakaobot.model.Repo
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.json.JSONObject
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -68,12 +70,15 @@ class DashboardActivity : AppCompatActivity() {
                 }
                 log("시작됨")
 
+                val json = JSONObject()
+                json.put("name", "YEEEEEEEEEEEEEEEEEE")
+
                 updateRepo(
                     "sungbin5304",
                     "test1",
-                    "test222"
+                    Repo("aaaaaaaaaaa")
                 )
-                    .subscribeOn(Schedulers.computation())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ json ->
                         log(json.toString())

@@ -1,6 +1,7 @@
 package com.sungbin.gitkakaobot.`interface`
 
 import com.google.gson.JsonObject
+import com.sungbin.gitkakaobot.model.Repo
 import io.reactivex.rxjava3.core.Flowable
 import retrofit2.http.*
 
@@ -22,13 +23,12 @@ interface GithubInterface {
         @Field("code") code: String
     ): Flowable<JsonObject>
 
-    @FormUrlEncoded
     @PATCH("repos/{owner}/{repo}")
     @Headers("Accept: application/json")
     fun updateRepo(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
-        @Field("name") name: String
+        @Body body: Repo
     ): Flowable<JsonObject>
 
 

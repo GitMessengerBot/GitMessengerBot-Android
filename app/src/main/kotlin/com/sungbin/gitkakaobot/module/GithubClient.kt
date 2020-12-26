@@ -36,7 +36,9 @@ class GithubClient {
             )
             Logger.w("github token", token)
             val builder = chain.request().newBuilder()
-                .addHeader("Authorization", "token 1f08ab309166e6d6df8d785fb095eeed6c8a59e5")
+                .addHeader("Authorization", "token 365b9c02f2394119578ce4b7c6af21a8060ebfa6")
+            /*val builder = chain.request().newBuilder()
+                .addHeader("Authorization", "token $token")*/
             return chain.proceed(builder.build())
         }
     }
