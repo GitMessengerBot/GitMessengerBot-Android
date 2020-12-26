@@ -13,6 +13,7 @@
     <string name="github">깃허브</string>
     <string name="push">push</string>
     <string name="merge">merge</string>
+    <string name="input">입력…</string>
     <string name="tool">도구</string>
     <string name="back">back</string>
     <string name="show_all">전체보기</string>
@@ -23,6 +24,9 @@
 
     <string name="image_description_redo_done">앞으로 되돌리기</string>
     <string name="image_description_undo_done">전으로 되돌리기</string>
+
+    <string name="exception_except">오류가 발생했어요 😔</string>
+    <string name="exception_preview_except">FATAL EXCEPTION: main exception</string>
 
     <string name="join_storage_permission">저장소 접근 권한</string>
     <string name="join_give_permission">권한 허용하기</string>
@@ -63,14 +67,25 @@
     <string name="codeedit_auto_saved">자동저장 되었어요</string>
     <string name="codeedit_experimental_function">실험적 기능</string>
     <string name="codeedit_input_search">검색어 입력</string>
-    <string name="codeedit_editor_experimental_function_description">스크립트 에디터에 실험적인 기능이 있습니다.\n때때로 의도한대로 작동하지 않을 수 있습니다.\n양해 부탁드립니다.\n\n또한 에디터에서 작성중인 내용이 저장되지 않을 수 있습니다.\n즉 내용을 수시로 복사하여 백업해두시는걸 추천드립니다.(저장시 자동 복사)</string>
+    <string name="codeedit_editor_experimental_function_description">스크립트 에디터에 실험적인 기능이 있어요.\n때때로 의도한대로 작동하지 않을 수 있으니, 양해 부탁드려요.\n\n또한 에디터에서 작성중인 내용이 저장되지 않을 수 있어요.\n즉, 내용을 수시로 복사하여 백업해두시는걸 추천해요. (저장시 자동 복사)</string>
 
-    <string name="sandbox_experimental_function_description">센드박스는 실험적인 기능이에요.\n때때로 의도한대로 작동하지 않을 수 있어요.</string>
+    <string name="codeedit_github_user_name">깃허브 유저 이름:</string>
+    <string name="codeedit_github_repo_name">레포 이름:</string>
+    <string name="codeedit_github_file_path">파일 경로:</string>
+    <string name="codeedit_github_branch">branch:</string>
+    <string name="codeedit_github_default_branch">master</string>
+    <string name="codeedit_github_create_repo">새로 만드는 레포일 경우 클릭</string>
+    <string name="codeedit_github_created_repo">%s 레포를 생성했어요.</string>
+    <string name="codeedit_github_unknown_repo_name">존재하지 않는 레포에요.</string>
+    <string name="codeedit_github_push_success">Push 성공!</string>
+    <string name="codeedit_github_wait_repo_created">레포가 생성됬다는 멘트가 뜰 때까지 기다려 주세요!!</string>
+
+    <string name="sandbox_experimental_function_description">샌드박스는 실험적인 기능이에요.\n때때로 의도한대로 작동하지 않을 수 있어요.</string>
 
     <string name="messagelistener_power_on">Power ON</string>
     <string name="messagelistener_power_off">Power OFF</string>
 
-    <string name="foregroundservice_running_bot">봇이 작동중 입니다…</string>
+    <string name="foregroundservice_running_bot">봇이 작동중 이에요</string>
 
     <string name="debug_input">input…</string>
     <string name="debug_eval_mode">eval 모드</string>

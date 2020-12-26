@@ -16,4 +16,9 @@ object PathManager {
     const val LOG = "GitMessengerBot/log"
     const val DATABASE = "GitMessengerBot/database"
 
+    const val GITHUB_USER = "github-user-name"
+    const val GITHUB_REPO = "github-repo-name"
+    const val GITHUB_PATH = "github_file-path"
+    const val GITHUB_BRANCH = "github-repo-branch"
+
 }

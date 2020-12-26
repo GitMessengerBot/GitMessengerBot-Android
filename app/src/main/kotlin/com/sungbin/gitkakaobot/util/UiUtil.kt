@@ -2,11 +2,17 @@ package com.sungbin.gitkakaobot.util
 
 import android.content.Context
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.balsikandar.crashreporter.CrashReporter
 import com.google.android.material.snackbar.Snackbar
 import com.sungbin.androidutils.extensions.toColorStateList
+import com.sungbin.androidutils.util.ToastLength
+import com.sungbin.androidutils.util.ToastType
+import com.sungbin.androidutils.util.ToastUtil
 import com.sungbin.gitkakaobot.R
+import com.sungbin.gitkakaobot.ui.activity.ExceptionActivity
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
 
 /**
  * Created by SungBin on 2020-08-23.
@@ -14,10 +20,17 @@ import com.sungbin.gitkakaobot.R
 
 object UiUtil {
 
-    fun error(context: Context, exception: Exception) {}
+    fun error(context: Context, exception: Exception) {
+        CrashReporter.logException(exception)
+        exception.printStackTrace()
+        val message = exception.localizedMessage
+        val line = exception.stackTrace[0].lineNumber
+        val content = "$message #$line"
+        context.startActivity(context.intentFor<ExceptionActivity>("message" to content).newTask())
+    }
 
-    fun toast(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    fun toast(context: Context, message: String, toastType: ToastType = ToastType.SUCCESS) {
+        ToastUtil.show(context, message, ToastLength.SHORT, toastType)
     }
 
     fun snackbar(view: View, message: String) {

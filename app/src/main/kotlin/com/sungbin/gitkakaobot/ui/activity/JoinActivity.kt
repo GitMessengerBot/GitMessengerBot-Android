@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.view.WindowManager
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -14,10 +12,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.sungbin.androidutils.extensions.doDelay
-import com.sungbin.androidutils.util.*
+import com.sungbin.androidutils.util.BatteryUtil
+import com.sungbin.androidutils.util.DataUtil
+import com.sungbin.androidutils.util.PermissionUtil
+import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.ActivityJoinBinding
+import com.sungbin.gitkakaobot.databinding.LayoutAccessKeyDialogBinding
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
+import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.jetbrains.anko.startActivity
 
@@ -144,25 +147,21 @@ class JoinActivity : AppCompatActivity() {
             binding.btnStartWithGithub.apply {
                 alpha = 1f
                 setOnClickListener {
-                    val view = View.inflate(context, R.layout.layout_access_key_dialog, null)
-                    val editText = view.findViewById<EditText>(R.id.et_access_key)
+                    val binding = LayoutAccessKeyDialogBinding.inflate(layoutInflater)
                     val dialog = AlertDialog.Builder(context)
-                    dialog.setView(view)
+                    dialog.setView(binding.root)
                     dialog.setPositiveButton(context.getString(R.string.save)) { _, _ ->
-                        val name = editText.text!!.toString()
+                        val name = binding.etAccessKey.text!!.toString()
                         if (name.isBlank()) {
-                            ToastUtil.show(
+                            UiUtil.toast(
                                 context,
                                 context.getString(R.string.join_personal_key_is_empty),
-                                ToastLength.SHORT,
                                 ToastType.WARNING
                             )
                         } else {
-                            ToastUtil.show(
+                            UiUtil.toast(
                                 context,
-                                context.getString(R.string.join_saved_personal_key),
-                                ToastLength.SHORT,
-                                ToastType.SUCCESS
+                                context.getString(R.string.join_saved_personal_key)
                             )
                             DataUtil.saveData(context, PathManager.TOKEN, name)
                             finish()

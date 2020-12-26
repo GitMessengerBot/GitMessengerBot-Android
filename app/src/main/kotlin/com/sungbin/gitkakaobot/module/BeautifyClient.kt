@@ -17,14 +17,14 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 class BeautifyClient {
 
-    @Named("pretty")
     @Provides
     @Singleton
+    @Named("pretty")
     fun pretty() = instance("https://amp.prettifyjs.net")
 
-    @Named("minify")
     @Provides
     @Singleton
+    @Named("minify")
     fun minify() = instance("https://javascript-minifier.com/raw")
 
     private fun instance(baseUrl: String) = Jsoup.connect(baseUrl)

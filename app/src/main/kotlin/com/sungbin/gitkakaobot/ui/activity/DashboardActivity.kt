@@ -49,32 +49,6 @@ class DashboardActivity : AppCompatActivity() {
         StorageUtil.createFolder(PathManager.LOG)
 
         supportActionBar?.hide()
-
-        /*client
-            .create(GithubInterface::class.java).run {
-                fun log(message: String) {
-                    Logger.w("github", message)
-                }
-                log("시작됨")
-
-                val json = JSONObject()
-                json.put("name", "YEEEEEEEEEEEEEEEEEE")
-
-                updateRepo(
-                    "sungbin5304",
-                    "test1",
-                    Repo("aaaaaaaaaaa")
-                )
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ json ->
-                        log(json.toString())
-                    }, { throwable ->
-                        log(throwable.toString())
-                    }, {
-                        log("끝")
-                    })
-            }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
