@@ -18,4 +18,5 @@
 
 # 7. 생성된 `token` 옆에 복사버튼 클릭 
 > 이 화면을 벗어나면 더 이상 `token` 값을 볼 수 없음!
+
 ![](https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/picture/7.png)
