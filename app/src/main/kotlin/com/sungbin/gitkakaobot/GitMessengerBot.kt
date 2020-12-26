@@ -1,6 +1,7 @@
 package com.sungbin.gitkakaobot
 
 import android.app.Application
+import android.content.Context
 import com.sungbin.androidutils.util.NotificationUtil
 import com.sungbin.gitkakaobot.bot.Bot
 import com.sungbin.gitkakaobot.bot.rhino.ApiClass
@@ -15,8 +16,14 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class GitMessengerBot : Application() {
 
+    companion object {
+        lateinit var context: Context
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        context = applicationContext
 
         Bot.init(applicationContext)
         ApiClass.init(applicationContext)

@@ -54,7 +54,7 @@
 
                 <data
                     android:host="authorization"
-                    android:scheme="gitkakaobot" />
+                    android:scheme="gitmessengerbot" />
             </intent-filter>
         </activity>
 

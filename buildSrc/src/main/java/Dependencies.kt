@@ -27,6 +27,7 @@ object Versions {
         const val Jsoup = "1.13.1"
         const val Retrofit = "2.9.0"
         const val OkHttp = "4.9.0"
+        const val LoggingInterceptor = "4.9.0"
     }
 
     object Jetpack {
@@ -98,6 +99,8 @@ object Dependencies {
         const val Jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
         const val Retrofit = "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}"
         const val OkHttp = "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
+        const val LoggingInterceptor =
+            "com.squareup.okhttp3:logging-interceptor:${Versions.Network.LoggingInterceptor}"
     }
 
     object Rx {

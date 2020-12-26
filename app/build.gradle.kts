@@ -69,6 +69,7 @@ dependencies {
         Dependencies.Network.Jsoup,
         Dependencies.Network.Retrofit,
         Dependencies.Network.OkHttp,
+        Dependencies.Network.LoggingInterceptor,
 
         Dependencies.Jetpack.DataStore,
 

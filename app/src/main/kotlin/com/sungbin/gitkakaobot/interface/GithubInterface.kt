@@ -16,7 +16,7 @@ interface GithubInterface {
 
     @FormUrlEncoded
     @POST("login/oauth/access_token")
-    @Headers("Accept: application/json")
+    @Headers("accept: application/vnd.github.v3+json")
     fun getAuthCode(
         @Field("client_id") clientId: String,
         @Field("client_secret") clientSecret: String,

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import com.sungbin.androidutils.extensions.doDelay
 import com.sungbin.androidutils.util.BatteryUtil
 import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.PermissionUtil
@@ -24,6 +25,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import org.jetbrains.anko.startActivity
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
@@ -38,6 +40,7 @@ class JoinActivity : AppCompatActivity() {
     private val codeRequestAccessStorage = 4000
 
     @Inject
+    @Named("Auth")
     lateinit var client: Retrofit
 
     private val loadingDialog by lazy { LoadingDialog(this) }
@@ -70,13 +73,15 @@ class JoinActivity : AppCompatActivity() {
 
         binding.btnRequestBatteryIgnoreOptimization.setOnClickListener {
             BatteryUtil.requestIgnoreBatteryOptimization(applicationContext)
-            isBatteryButtonClicked = true
-            checkAllPermissionsGrant()
+            doDelay(500) {
+                isBatteryButtonClicked = true
+                checkAllPermissionsGrant()
 
-            binding.btnRequestBatteryIgnoreOptimization.apply {
-                text = getString(R.string.join_permission_grant)
-                alpha = 0.5f
-                setOnClickListener { }
+                binding.btnRequestBatteryIgnoreOptimization.apply {
+                    text = getString(R.string.join_permission_grant)
+                    alpha = 0.5f
+                    setOnClickListener { }
+                }
             }
         }
 
