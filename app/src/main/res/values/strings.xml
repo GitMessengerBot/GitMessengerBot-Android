@@ -1,7 +1,7 @@
 <resources>
     <string name="github_client_id">3c273fbcbc9f47ebb67a</string>
     <string name="github_client_secret">b576aa46edf9cc8515b6e14e5dcce6041b3042fe</string>
-    <string name="app_name">GitKakaoBot</string>
+    <string name="app_name">GitMessengerBot</string>
 
     <string name="send">send</string>
     <string name="saved">저장되었습니다.</string>
@@ -37,16 +37,15 @@
     <string name="join_reason_for_battery_ignored_optimization">봇이 빠른 속도로 동작하기 위해 필요해요</string>
     <string name="join_start_with_github_login">깃허브 로그인으로 시작하기</string>
 
-    <string name="bot_v8_javascript">V8 JS</string>
-    <string name="bot_rhino_javascript">Rhino JS</string>
+    <string name="bot_javascript">자바스크립트</string>
     <string name="bot_simple_reply">간편 자동응답</string>
-    <string name="bot_copyright">GitKakaoBot © 2020 SungBin</string>
+    <string name="bot_copyright">© 2020 SungBin</string>
     <string name="bot_bot_name">봇 이름</string>
     <string name="bot_bot_add">봇 추가</string>
     <string name="bot_added_done">추가 완료</string>
     <string name="bot_added_new_bot">새로운 봇이 추가되었습니다.</string>
     <string name="bot_reload_done">리로드 성공\n걸린 시간 : %d ms</string>
-    <string name="bot_default_sourcecode">let response = (room, msg, sender, isGroupChat, replier, ImageDB, packageName) => {\n\n}</string>
+    <string name="bot_default_sourcecode">function onMessage(res) {\n\n}</string>
     <string name="bot_empty_bot">추가된 봇이 없어요 😢\n봇을 새로 추가해보세요!</string>
     <string name="bot_please_input_script_name">스크립트 이름을 입력해 주세요.</string>
     <string name="bot_cant_load_session">메세지를 전송할 방의 세션을 가져오지 못했습니다.</string>

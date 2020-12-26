@@ -8,24 +8,15 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
-import com.faendir.rhino_android.RhinoAndroidHelper
-import com.sungbin.androidutils.util.Logger
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.bot.rhino.ApiClass
-import com.sungbin.gitkakaobot.bot.rhino.ImageDB
-import com.sungbin.gitkakaobot.bot.rhino.Replier
 import com.sungbin.gitkakaobot.bot.v8.V8Log
 import com.sungbin.gitkakaobot.bot.v8.V8Replier
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotCompile
-import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.StackManager
 import com.sungbin.gitkakaobot.util.toBase64String
-import org.mozilla.javascript.Function
-import org.mozilla.javascript.ImporterTopLevel
-import org.mozilla.javascript.ScriptableObject
 
 
 /**
@@ -60,7 +51,7 @@ object Bot {
 
     fun compileJavaScript(bot: Bot): BotCompile {
         return try {
-            if (bot.type == BotType.RHINOJS) {
+            /*if (bot.type == BotType.RHINOJS) { // todo: 라이노 지원을 해야 할 까?
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                     optimizationLevel = bot.optimization
@@ -76,31 +67,30 @@ object Bot {
                 StackManager.functions[bot.uuid] = function
                 org.mozilla.javascript.Context.exit()
                 BotCompile(true, null)
-            } else { // v8 js
-                val v8 = V8.createV8Runtime()
-                val v8Replier = V8Object(v8)
-                v8.add("v8Replier", v8Replier)
-                v8Replier.registerJavaMethod(
-                    V8Replier(),
-                    "reply",
-                    "reply",
-                    arrayOf(String::class.java, String::class.java)
-                )
-                v8Replier.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
-                val v8Log = V8Object(v8)
-                v8.add("v8Log", v8Log)
-                v8Log.registerJavaMethod(
-                    V8Log(),
-                    "log",
-                    "log",
-                    arrayOf(String::class.java)
-                )
-                v8Log.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
-                v8.executeScript(BotUtil.getBotCode(bot))
-                StackManager.v8[bot.uuid] = v8
-                v8.locker.release()
-                BotCompile(true, null)
-            }
+            } else { // v8 js*/
+            val v8 = V8.createV8Runtime()
+            val v8Replier = V8Object(v8)
+            v8.add("v8Replier", v8Replier)
+            v8Replier.registerJavaMethod(
+                V8Replier(),
+                "reply",
+                "reply",
+                arrayOf(String::class.java, String::class.java)
+            )
+            v8Replier.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
+            val v8Log = V8Object(v8)
+            v8.add("v8Log", v8Log)
+            v8Log.registerJavaMethod(
+                V8Log(),
+                "log",
+                "log",
+                arrayOf(String::class.java)
+            )
+            v8Log.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
+            v8.executeScript(BotUtil.getBotCode(bot))
+            StackManager.v8[bot.uuid] = v8
+            v8.locker.release()
+            BotCompile(true, null)
         } catch (exception: Exception) {
             BotCompile(false, exception)
         }
@@ -118,7 +108,7 @@ object Bot {
         isDebugMode: Boolean
     ) {
         try {
-            if (bot.type == BotType.RHINOJS) {
+            /*if (bot.type == BotType.RHINOJS) {
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                     optimizationLevel = bot.optimization
@@ -140,26 +130,24 @@ object Bot {
                     // todo: 디버그 모드
                 }
                 org.mozilla.javascript.Context.exit()
-            } else { // V8 JS
-                val v8 = StackManager.v8[bot.uuid]!!
-                v8.locker.acquire()
-                Logger.w("AAAAAAAAA", bot.name)
-                val arguments = V8Object(v8).run {
-                    add("room", room)
-                    add("message", message)
-                    add("sender", sender)
-                    add("isGroupChat", isGroupChat)
-                    add("profileImage", profileImage.toBase64String())
-                    add("packageName", packageName)
-                }
-                v8.executeJSFunction(
-                    "response", room, message, sender, isGroupChat,
-                    Replier(session),
-                    ImageDB(profileImage), packageName
-                )
-                // v8.executeJSFunction("response", arguments)
-                v8.locker.release()
+            } else { // V8 JS*/
+            val v8 = StackManager.v8[bot.uuid]!!
+            v8.locker.acquire()
+            val arguments = V8Object(v8).run {
+                add("room", room)
+                add("message", message)
+                add("sender", sender)
+                add("isGroupChat", isGroupChat)
+                add("profileImage", profileImage.toBase64String())
+                add("packageName", packageName)
             }
+            /*v8.executeJSFunction( // todo: 안되는거 확인
+                "response", room, message, sender, isGroupChat,
+                Replier(session),
+                ImageDB(profileImage), packageName
+            )*/
+            v8.executeJSFunction("onMessage", arguments)
+            v8.locker.release()
         } catch (exception: Exception) {
             // todo: 오류처리
         }

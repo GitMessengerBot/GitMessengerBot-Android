@@ -53,7 +53,7 @@ class BotFragment : Fragment() {
         binding.efabAdd.setOnClickListener {
             binding.tslContainer.startTransform()
             onBackPressedAction = {
-                binding.mbtgContainer.check(R.id.btn_rhino_javascript)
+                binding.mbtgContainer.check(R.id.btn_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
                 binding.tietBotName.hideKeyboard()
@@ -77,8 +77,7 @@ class BotFragment : Fragment() {
                 UiUtil.snackbar(it, getString(R.string.bot_please_input_script_name))
             } else {
                 val botType = when (binding.mbtgContainer.checkedButtonId) {
-                    R.id.btn_v8_javascript -> BotType.V8JS
-                    R.id.btn_rhino_javascript -> BotType.RHINOJS
+                    R.id.btn_javascript -> BotType.JS
                     else -> BotType.SIMPLE
                 }
                 val bot = Bot(
@@ -96,7 +95,7 @@ class BotFragment : Fragment() {
                     postValue(value)
                 }
                 BotUtil.createNewBot(bot)
-                binding.mbtgContainer.check(R.id.btn_v8_javascript)
+                binding.mbtgContainer.check(R.id.btn_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
                 UiUtil.snackbar(it, getString(R.string.bot_added_new_bot))
@@ -138,15 +137,14 @@ class BotFragment : Fragment() {
     private val dragCallback = object : ItemTouchHelper.Callback() {
         var dragFrom = -1
         var dragTo = -1
+
         override fun getMovementFlags(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
-        ): Int {
-            return makeMovementFlags(
-                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
-                0
-            )
-        }
+        ) = makeMovementFlags(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+            0
+        )
 
         override fun onMove(
             recyclerView: RecyclerView,

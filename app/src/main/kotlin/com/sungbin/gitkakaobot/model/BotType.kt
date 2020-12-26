@@ -10,7 +10,6 @@ object BotType {
     // https://stackoverflow.com/a/61231735
 
     var SIMPLE = 0
-    var V8JS = 1
-    var RHINOJS = 2
+    var JS = 1
 
 }
