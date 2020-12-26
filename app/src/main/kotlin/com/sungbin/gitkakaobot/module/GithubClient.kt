@@ -1,6 +1,7 @@
 package com.sungbin.gitkakaobot.module
 
 import com.sungbin.androidutils.util.DataUtil
+import com.sungbin.androidutils.util.Logger
 import com.sungbin.gitkakaobot.GitMessengerBot
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.Module
@@ -33,8 +34,9 @@ class GithubClient {
                 PathManager.TOKEN,
                 ""
             )
+            Logger.w("github token", token)
             val builder = chain.request().newBuilder()
-                .addHeader("Authorization", "token $token")
+                .addHeader("Authorization", "token 1f08ab309166e6d6df8d785fb095eeed6c8a59e5")
             return chain.proceed(builder.build())
         }
     }
@@ -51,7 +53,6 @@ class GithubClient {
         for (interceptor in interceptors) builder.addInterceptor(interceptor)
         return builder.build()
     }
-
 
     @Provides
     @Singleton

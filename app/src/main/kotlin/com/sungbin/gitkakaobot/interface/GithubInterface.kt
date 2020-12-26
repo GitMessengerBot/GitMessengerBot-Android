@@ -2,10 +2,7 @@ package com.sungbin.gitkakaobot.`interface`
 
 import com.google.gson.JsonObject
 import io.reactivex.rxjava3.core.Flowable
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 /**
@@ -14,13 +11,25 @@ import retrofit2.http.POST
 
 interface GithubInterface {
 
+    // 헤더 고정 ::: 다른 해더 쓰면 오류
+
     @FormUrlEncoded
     @POST("login/oauth/access_token")
-    @Headers("accept: application/vnd.github.v3+json")
+    @Headers("Accept: application/json")
     fun getAuthCode(
         @Field("client_id") clientId: String,
         @Field("client_secret") clientSecret: String,
         @Field("code") code: String
     ): Flowable<JsonObject>
+
+    @FormUrlEncoded
+    @PATCH("repos/{owner}/{repo}")
+    @Headers("Accept: application/json")
+    fun updateRepo(
+        @Path("owner") owner: String,
+        @Path("repo") repo: String,
+        @Field("name") name: String
+    ): Flowable<JsonObject>
+
 
 }

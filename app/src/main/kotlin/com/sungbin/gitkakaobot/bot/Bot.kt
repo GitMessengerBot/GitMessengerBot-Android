@@ -141,7 +141,7 @@ object Bot {
                 add("profileImage", profileImage.toBase64String())
                 add("packageName", packageName)
             }
-            /*v8.executeJSFunction( // todo: 안되는거 확인
+            /*v8.executeJSFunction( // 안되는거 확인
                 "response", room, message, sender, isGroupChat,
                 Replier(session),
                 ImageDB(profileImage), packageName

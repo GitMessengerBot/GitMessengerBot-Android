@@ -6,18 +6,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.sungbin.androidutils.util.Logger
 import com.sungbin.androidutils.util.StorageUtil
 import com.sungbin.gitkakaobot.R
+import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.databinding.ActivityDashboardBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
+import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.Retrofit
+import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
  * Created by SungBin on 2020-08-23.
  */
 
+@AndroidEntryPoint
 class DashboardActivity : AppCompatActivity() {
 
     companion object {
@@ -33,6 +42,10 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private val binding by lazy { ActivityDashboardBinding.inflate(layoutInflater) }
 
+    @Inject
+    @Named("Api")
+    lateinit var client: Retrofit
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -47,6 +60,29 @@ class DashboardActivity : AppCompatActivity() {
         StorageUtil.createFolder(PathManager.LOG)
 
         supportActionBar?.hide()
+
+        client
+            .create(GithubInterface::class.java).run {
+                fun log(message: String) {
+                    Logger.w("github", message)
+                }
+                log("시작됨")
+
+                updateRepo(
+                    "sungbin5304",
+                    "test1",
+                    "test222"
+                )
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ json ->
+                        log(json.toString())
+                    }, { throwable ->
+                        log(throwable.toString())
+                    }, {
+                        log("끝")
+                    })
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

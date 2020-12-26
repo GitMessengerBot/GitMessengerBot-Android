@@ -47,7 +47,7 @@ class BotAdapter(
                 ivReload.setOnClickListener {
                     when (bot.type) {
                         BotType.SIMPLE -> {
-                            // todo
+                            // todo: 간편 자동응답 만들기
                         }
                         else -> {
                             CoroutineScope(Dispatchers.Default).launch {
