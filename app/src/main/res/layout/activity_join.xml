@@ -268,7 +268,7 @@
         android:layout_marginBottom="@dimen/margin_twice_and_half"
         android:alpha="0.5"
         android:background="@drawable/bg_all_round_30"
-        android:text="@string/join_start_with_github_login"
+        android:text="@string/join_start_with_personal_key"
         android:textColor="@color/colorWhite"
         app:cornerRadius="@dimen/margin_twice_and_half"
         app:layout_constraintBottom_toBottomOf="parent"

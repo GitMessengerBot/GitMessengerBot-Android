@@ -43,20 +43,7 @@
 
         <activity
             android:name=".ui.activity.JoinActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBarWithNoLimit">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="authorization"
-                    android:scheme="gitmessengerbot" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBarWithNoLimit" />
 
         <service
             android:name=".listener.MessageListener"

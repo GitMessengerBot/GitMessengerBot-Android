@@ -3,45 +3,34 @@ package com.sungbin.gitkakaobot.ui.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import com.sungbin.androidutils.extensions.doDelay
-import com.sungbin.androidutils.util.BatteryUtil
-import com.sungbin.androidutils.util.DataUtil
-import com.sungbin.androidutils.util.PermissionUtil
+import com.sungbin.androidutils.util.*
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.databinding.ActivityJoinBinding
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.manager.PathManager
-import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import org.jetbrains.anko.startActivity
-import retrofit2.Retrofit
-import javax.inject.Inject
-import javax.inject.Named
 
 
 /**
  * Created by SungBin on 2020-08-23.
  */
 
-@AndroidEntryPoint
 class JoinActivity : AppCompatActivity() {
 
     private var isBatteryButtonClicked = false
     private val codeRequestNotificationRead = 3000
     private val codeRequestAccessStorage = 4000
-
-    @Inject
-    @Named("Auth")
-    lateinit var client: Retrofit
 
     private val loadingDialog by lazy { LoadingDialog(this) }
     private val binding by lazy { ActivityJoinBinding.inflate(layoutInflater) }
@@ -73,7 +62,7 @@ class JoinActivity : AppCompatActivity() {
 
         binding.btnRequestBatteryIgnoreOptimization.setOnClickListener {
             BatteryUtil.requestIgnoreBatteryOptimization(applicationContext)
-            doDelay(500) {
+            doDelay(1000) {
                 isBatteryButtonClicked = true
                 checkAllPermissionsGrant()
 
@@ -155,45 +144,49 @@ class JoinActivity : AppCompatActivity() {
             binding.btnStartWithGithub.apply {
                 alpha = 1f
                 setOnClickListener {
-                    val builder = CustomTabsIntent.Builder()
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(
-                        context,
-                        Uri.parse("https://github.com/login/oauth/authorize?client_id=${getString(R.string.github_client_id)}")
-                    )
+                    val view = View.inflate(context, R.layout.layout_access_key_dialog, null)
+                    val editText = view.findViewById<EditText>(R.id.et_access_key)
+                    val dialog = AlertDialog.Builder(context)
+                    dialog.setView(view)
+                    dialog.setPositiveButton(context.getString(R.string.save)) { _, _ ->
+                        val name = editText.text!!.toString()
+                        if (name.isBlank()) {
+                            ToastUtil.show(
+                                context,
+                                context.getString(R.string.join_personal_key_is_empty),
+                                ToastLength.SHORT,
+                                ToastType.WARNING
+                            )
+                        } else {
+                            ToastUtil.show(
+                                context,
+                                context.getString(R.string.join_saved_personal_key),
+                                ToastLength.SHORT,
+                                ToastType.SUCCESS
+                            )
+                            DataUtil.saveData(context, PathManager.TOKEN, name)
+                            finish()
+                            startActivity<DashboardActivity>()
+                        }
+                    }
+                    dialog.setNegativeButton(context.getString(R.string.join_open_github)) { _, _ ->
+                        val builder = CustomTabsIntent.Builder().build()
+                        builder.launchUrl(
+                            context,
+                            "https://github.com/".toUri()
+                        )
+                    }
+                    dialog.setNeutralButton(context.getString(R.string.join_way_to_get_personal_key)) { _, _ ->
+                        val builder = CustomTabsIntent.Builder().build()
+                        builder.launchUrl(
+                            context,
+                            "https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md".toUri()
+                        )
+                    }
+                    dialog.show()
                 }
             }
+
         }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val code = intent?.data?.getQueryParameter("code").toString()
-        client
-            .create(GithubInterface::class.java).run {
-                loadingDialog.show()
-
-                getAuthCode(
-                    getString(R.string.github_client_id),
-                    getString(R.string.github_client_secret),
-                    code
-                )
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ json ->
-                        DataUtil.saveData(
-                            applicationContext,
-                            PathManager.TOKEN,
-                            json["access_token"].asString
-                        )
-                    }, { throwable ->
-                        loadingDialog.setError(Exception(throwable.message))
-                    }, {
-                        loadingDialog.close()
-                        finish()
-                        startActivity<DashboardActivity>()
-                    })
-            }
-
     }
 }

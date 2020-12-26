@@ -1,7 +1,6 @@
 package com.sungbin.gitkakaobot.module
 
 import com.sungbin.androidutils.util.DataUtil
-import com.sungbin.androidutils.util.Logger
 import com.sungbin.gitkakaobot.GitMessengerBot
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.Module
@@ -15,7 +14,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -27,6 +25,8 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 class GithubClient {
 
+    private val baseUrl = "https://api.github.com/"
+
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val token = DataUtil.readData(
@@ -34,11 +34,8 @@ class GithubClient {
                 PathManager.TOKEN,
                 ""
             )
-            Logger.w("github token", token)
             val builder = chain.request().newBuilder()
-                .addHeader("Authorization", "token 365b9c02f2394119578ce4b7c6af21a8060ebfa6")
-            /*val builder = chain.request().newBuilder()
-                .addHeader("Authorization", "token $token")*/
+                .addHeader("Authorization", "token $token")
             return chain.proceed(builder.build())
         }
     }
@@ -58,21 +55,10 @@ class GithubClient {
 
     @Provides
     @Singleton
-    @Named("Api")
     fun apiInstance() = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .client(getInterceptor(provideLoggingInterceptor, AuthInterceptor()))
-        .baseUrl("https://api.github.com/")
-        .build()
-
-    @Provides
-    @Singleton
-    @Named("Auth")
-    fun authInstance() = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .client(getInterceptor(provideLoggingInterceptor))
-        .baseUrl("https://github.com/")
+        .baseUrl(baseUrl)
         .build()
 }
