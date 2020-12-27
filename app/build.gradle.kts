@@ -1,10 +1,10 @@
 plugins {
     id("com.android.application")
-    id("dagger.hilt.android.plugin")
     id("name.remal.check-dependency-updates") version "1.1.6"
     kotlin("android")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -21,6 +21,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
     }
 
     buildTypes {
@@ -39,10 +40,10 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
 
-    packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/*.kotlin_module")
-    }
+//    packagingOptions {
+//        exclude("META-INF/DEPENDENCIES")
+//        exclude("META-INF/*.kotlin_module")
+//    }
 
     compileOptions {
         sourceCompatibility = Application.sourceCompat
@@ -51,6 +52,12 @@ android {
 
     kotlinOptions {
         jvmTarget = Application.jvmTarget
+        useIR = true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion = "1.4.21"
+        kotlinCompilerExtensionVersion = "1.0.0-alpha08"
     }
 }
 
@@ -61,6 +68,16 @@ dependencies {
     fun def(vararg strings: String) {
         for (string in strings) implementation(string)
     }
+
+    implementation("androidx.ui:ui-tooling:1.0.0-alpha07")
+    implementation("androidx.compose.ui:ui:1.0.0-alpha09")
+    implementation("androidx.compose.foundation:foundation:1.0.0-alpha09")
+    implementation("androidx.compose.material:material:1.0.0-alpha09")
+    implementation("androidx.compose.material:material-icons-core:1.0.0-alpha09")
+    implementation("androidx.compose.material:material-icons-extended:1.0.0-alpha09")
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-alpha09")
+    implementation("androidx.compose.runtime:runtime-rxjava2:1.0.0-alpha09")
+    // implementation("androidx.compose.compiler:compiler:1.0.0-alpha09")
 
     def(
         Dependencies.Rhino.Engine,
