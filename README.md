@@ -1,8 +1,6 @@
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
 a Messenger Auto-Reply Bot application with Git service.
 
-### 재개발 시작
-
 -----
 
 ### How to get `personal-access-key` ?
