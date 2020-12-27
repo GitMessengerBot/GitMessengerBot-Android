@@ -47,6 +47,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onBackPressed() {}
 }
 
+// todo: Jetpack-Compose로 레이아웃들 싹 다 바꾸기
 /*override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
