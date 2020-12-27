@@ -13,7 +13,7 @@ a Messenger Auto-Reply Bot application with Git service.
 1. [ ] Apply `EncryptedSharedPreferences`
 2. [ ] Migration all layout `Jetpack Compose` ~~(Is it possible?)~~
 3. [ ] 100% `Kotlin`
-4. [ ] Include SNS about KakaoTalk Bot
+4. [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
 5. [ ] Playstore upload
 
 ## License
