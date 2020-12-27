@@ -44,7 +44,7 @@ object Versions {
     object Essential {
         const val AppCompat = "1.2.0"
         const val Anko = "0.10.8"
-        const val Gradle = "7.0.0-alpha03"
+        const val Gradle = "4.1.1"
         const val Kotlin = "1.4.21"
         const val Google = "4.3.3"
     }
