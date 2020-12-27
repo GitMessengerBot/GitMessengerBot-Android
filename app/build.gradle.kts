@@ -22,7 +22,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
-        compose = true
+        // compose = true
     }
 
     buildTypes {
@@ -41,10 +41,11 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
 
-//    packagingOptions { 이게 필요 없네
-//        exclude("META-INF/DEPENDENCIES")
-//        exclude("META-INF/*.kotlin_module")
-//    }
+    packagingOptions {
+        이게 필요 없네
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/*.kotlin_module")
+    }
 
     compileOptions {
         sourceCompatibility = Application.sourceCompat
@@ -53,13 +54,13 @@ android {
 
     kotlinOptions {
         jvmTarget = Application.jvmTarget
-        useIR = true
+        // useIR = true
     }
 
-    composeOptions {
+    /*composeOptions {
         kotlinCompilerVersion = Versions.Essential.Kotlin
         kotlinCompilerExtensionVersion = Versions.Jetpack.Compose
-    }
+    }*/
 }
 
 dependencies {
@@ -81,13 +82,14 @@ dependencies {
 
         Dependencies.Jetpack.DataStore,
 
-        Dependencies.Jetpack.Compose.Ui,
+        /*Dependencies.Jetpack.Compose.Ui,
         Dependencies.Jetpack.Compose.Foundation,
         Dependencies.Jetpack.Compose.Material,
         Dependencies.Jetpack.Compose.MaterialIconsCore,
         Dependencies.Jetpack.Compose.MaterialIconExtended,
         Dependencies.Jetpack.Compose.RuntimeRxJava2,
         Dependencies.Jetpack.Compose.RuntimeLiveData,
+        Dependencies.Jetpack.Compose.UiTooling,*/
 
         Dependencies.Rx.Kotlin,
         Dependencies.Rx.Android,
@@ -105,7 +107,6 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
-        Dependencies.Ui.UiTooling,
         Dependencies.Ui.SpotLight,
         Dependencies.Ui.OverlappingPanels,
         Dependencies.Ui.TransformationLayout,

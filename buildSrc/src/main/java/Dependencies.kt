@@ -59,7 +59,6 @@ object Versions {
     }
 
     object Ui {
-        const val UiTooling = "1.0.0-alpha07"
         const val SpotLight = "2.0.3"
         const val OverlappingPanels = "0.1.1"
         const val TransformationLayout = "1.0.6"
@@ -108,6 +107,7 @@ object Dependencies {
                 "androidx.compose.runtime:runtime-livedata:${Versions.Jetpack.Compose}"
             const val RuntimeRxJava2 =
                 "androidx.compose.runtime:runtime-rxjava2:${Versions.Jetpack.Compose}"
+            const val UiTooling = "androidx.compose.ui:ui-tooling:${Versions.Jetpack.Compose}"
         }
     }
 
@@ -148,7 +148,6 @@ object Dependencies {
     }
 
     object Ui {
-        const val UiTooling = "androidx.ui:ui-tooling:${Versions.Ui.UiTooling}"
         const val Flexbox = "com.google.android:flexbox:${Versions.Ui.Flexbox}"
         const val SmoothBottomBar =
             "com.github.ibrahimsn98:SmoothBottomBar:${Versions.Ui.SmoothBottomBar}"
