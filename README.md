@@ -13,3 +13,4 @@ a Messenger Auto-Reply bot application with Git service.
 2. [ ] Migration all layout `Jetpack Compose`
 3. [ ] 100% `Kotlin`
 4. [ ] Include SNS about KakaoTalk Bot
+5. [ ] Playstore upload
