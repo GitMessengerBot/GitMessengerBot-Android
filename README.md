@@ -6,7 +6,7 @@ a Messenger Auto-Reply bot application with Git service.
 -----
 
 ### How to get `personal-access-key` ?
-[Click](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
+[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
 
 ## TODO
 1. [ ] Apply `EncryptedSharedPreferences`
