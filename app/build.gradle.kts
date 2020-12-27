@@ -42,7 +42,6 @@ android {
     }
 
     packagingOptions {
-        이게 필요 없네
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/*.kotlin_module")
     }
