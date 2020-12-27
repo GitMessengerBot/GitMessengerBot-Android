@@ -9,6 +9,7 @@ plugins {
 
 android {
     compileSdkVersion(Application.compileSdk)
+
     defaultConfig {
         minSdkVersion(Application.minSdk)
         targetSdkVersion(Application.targetSdk)
@@ -40,7 +41,7 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
 
-//    packagingOptions {
+//    packagingOptions { 이게 필요 없네
 //        exclude("META-INF/DEPENDENCIES")
 //        exclude("META-INF/*.kotlin_module")
 //    }
@@ -56,8 +57,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = "1.4.21"
-        kotlinCompilerExtensionVersion = "1.0.0-alpha08"
+        kotlinCompilerVersion = Versions.Essential.Kotlin
+        kotlinCompilerExtensionVersion = Versions.Jetpack.Compose
     }
 }
 
@@ -69,16 +70,6 @@ dependencies {
         for (string in strings) implementation(string)
     }
 
-    implementation("androidx.ui:ui-tooling:1.0.0-alpha07")
-    implementation("androidx.compose.ui:ui:1.0.0-alpha09")
-    implementation("androidx.compose.foundation:foundation:1.0.0-alpha09")
-    implementation("androidx.compose.material:material:1.0.0-alpha09")
-    implementation("androidx.compose.material:material-icons-core:1.0.0-alpha09")
-    implementation("androidx.compose.material:material-icons-extended:1.0.0-alpha09")
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-alpha09")
-    implementation("androidx.compose.runtime:runtime-rxjava2:1.0.0-alpha09")
-    // implementation("androidx.compose.compiler:compiler:1.0.0-alpha09")
-
     def(
         Dependencies.Rhino.Engine,
         Dependencies.Rhino.Helper,
@@ -89,6 +80,14 @@ dependencies {
         Dependencies.Network.LoggingInterceptor,
 
         Dependencies.Jetpack.DataStore,
+
+        Dependencies.Jetpack.Compose.Ui,
+        Dependencies.Jetpack.Compose.Foundation,
+        Dependencies.Jetpack.Compose.Material,
+        Dependencies.Jetpack.Compose.MaterialIconsCore,
+        Dependencies.Jetpack.Compose.MaterialIconExtended,
+        Dependencies.Jetpack.Compose.RuntimeRxJava2,
+        Dependencies.Jetpack.Compose.RuntimeLiveData,
 
         Dependencies.Rx.Kotlin,
         Dependencies.Rx.Android,
@@ -106,6 +105,7 @@ dependencies {
 
         Dependencies.Di.Hilt,
 
+        Dependencies.Ui.UiTooling,
         Dependencies.Ui.SpotLight,
         Dependencies.Ui.OverlappingPanels,
         Dependencies.Ui.TransformationLayout,

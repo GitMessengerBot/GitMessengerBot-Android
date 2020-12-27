@@ -4,11 +4,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.0-alpha03")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
+        classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Di.Hilt}")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.2")
         classpath("com.google.gms:google-services:${Versions.Essential.Google}")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.Jetpack.Navigation}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
     }
 }
 

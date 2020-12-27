@@ -22,7 +22,6 @@ object Versions {
         const val Helper = "1.5.2"
     }
 
-
     object Network {
         const val Jsoup = "1.13.1"
         const val Retrofit = "2.9.0"
@@ -33,6 +32,7 @@ object Versions {
     object Jetpack {
         const val Navigation = "2.3.2"
         const val DataStore = "1.0.0-alpha05"
+        const val Compose = "1.0.0-alpha09"
     }
 
     object Rx {
@@ -44,7 +44,7 @@ object Versions {
     object Essential {
         const val AppCompat = "1.2.0"
         const val Anko = "0.10.8"
-        const val Gradle = "4.1.1"
+        const val Gradle = "7.0.0-alpha03"
         const val Kotlin = "1.4.21"
         const val Google = "4.3.3"
     }
@@ -59,6 +59,7 @@ object Versions {
     }
 
     object Ui {
+        const val UiTooling = "1.0.0-alpha07"
         const val SpotLight = "2.0.3"
         const val OverlappingPanels = "0.1.1"
         const val TransformationLayout = "1.0.6"
@@ -76,7 +77,7 @@ object Versions {
     object Util {
         const val GsonConverter = "2.9.0"
         const val AndroidUtils = "4.2.3"
-        const val CarshReporter = "1.1.0"
+        const val CrashReporter = "1.1.0"
     }
 }
 
@@ -93,6 +94,21 @@ object Dependencies {
     object Jetpack {
         const val DataStore =
             "androidx.datastore:datastore-preferences:${Versions.Jetpack.DataStore}"
+
+        object Compose {
+            const val Ui = "androidx.compose.ui:ui:${Versions.Jetpack.Compose}"
+            const val Foundation =
+                "androidx.compose.foundation:foundation:${Versions.Jetpack.Compose}"
+            const val Material = "androidx.compose.material:material:${Versions.Jetpack.Compose}"
+            const val MaterialIconsCore =
+                "androidx.compose.material:material-icons-core:${Versions.Jetpack.Compose}"
+            const val MaterialIconExtended =
+                "androidx.compose.material:material-icons-extended:${Versions.Jetpack.Compose}"
+            const val RuntimeLiveData =
+                "androidx.compose.runtime:runtime-livedata:${Versions.Jetpack.Compose}"
+            const val RuntimeRxJava2 =
+                "androidx.compose.runtime:runtime-rxjava2:${Versions.Jetpack.Compose}"
+        }
     }
 
     object Network {
@@ -132,6 +148,7 @@ object Dependencies {
     }
 
     object Ui {
+        const val UiTooling = "androidx.ui:ui-tooling:${Versions.Ui.UiTooling}"
         const val Flexbox = "com.google.android:flexbox:${Versions.Ui.Flexbox}"
         const val SmoothBottomBar =
             "com.github.ibrahimsn98:SmoothBottomBar:${Versions.Ui.SmoothBottomBar}"
@@ -157,6 +174,6 @@ object Dependencies {
         const val GlideCompiler = "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
         const val AndroidUtils = "com.github.sungbin5304:SBT:${Versions.Util.AndroidUtils}"
         const val CrashReporter =
-            "com.balsikandar.android:crashreporter:${Versions.Util.CarshReporter}"
+            "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}"
     }
 }

@@ -2,6 +2,7 @@ package com.sungbin.gitkakaobot.ui.compose
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.ui.tooling.preview.Preview
 
 
@@ -11,7 +12,7 @@ import androidx.ui.tooling.preview.Preview
 
 @Composable
 fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+    Text(text = "Hello $name!", modifier = Modifier)
 }
 
 @Preview
