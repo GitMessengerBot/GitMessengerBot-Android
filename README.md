@@ -19,3 +19,4 @@ a Messenger Auto-Reply Bot application with Git service.
 ## License
 `GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
 
+# Happy Coding :)
