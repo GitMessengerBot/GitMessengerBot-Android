@@ -29,9 +29,7 @@ class SplashActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        if (DataUtil.readData(applicationContext, PathManager.TOKEN, "null") != "null") {
-            Thread { BotUtil.initBotList() }.start()
-        }
+        Thread { BotUtil.initBotList() }.start()
 
         doDelay(1500) {
             finish()

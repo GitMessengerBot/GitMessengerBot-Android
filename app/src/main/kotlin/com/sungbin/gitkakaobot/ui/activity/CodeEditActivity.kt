@@ -154,103 +154,41 @@ class CodeEditActivity : AppCompatActivity() {
             binding.etFilePath.text = githubFilePath.toEditable()
             binding.etBranch.text = githubBranch.toEditable()
 
-            binding.btnCreateRepo.setOnClickListener {
-                client
-                    .create(GithubInterface::class.java).run {
-
-                        val repoName = binding.etRepoName.text.toString()
-                        UiUtil.toast(
-                            it.context,
-                            getString(R.string.codeedit_github_wait_repo_created),
-                            ToastType.WARNING
-                        )
-
-                        createRepo(
-                            Repo(
-                                name = binding.etRepoName.text.toString(),
-                                description = "GitMessengerBot을 통해 만들어졌어요"
-                            )
-                        )
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ // return json
-                            }, { throwable ->
-                                UiUtil.error(applicationContext, Exception(throwable))
-                            }, {
-                                UiUtil.toast(
-                                    it.context,
-                                    getString(R.string.codeedit_github_created_repo, repoName),
-                                )
-                            })
-                    }
-            }
             dialog.setPositiveButton(R.string.push) { _, _ ->
-                client
-                    .create(GithubInterface::class.java).run {
+                val userName = binding.etUserName.text.toString()
+                val repoName = binding.etRepoName.text.toString()
+                val path = binding.etFilePath.text.toString()
+                val branch = binding.etBranch.text.toString()
+                val content = this@CodeEditActivity.binding.sceEditor.text.toString()
 
-                        val userName = binding.etUserName.text.toString()
-                        val repoName = binding.etRepoName.text.toString()
-                        val path = binding.etFilePath.text.toString()
-                        val branch = binding.etBranch.text.toString()
-                        val content = this@CodeEditActivity.binding.sceEditor.text.toString()
+                DataUtil.saveData(
+                    applicationContext,
+                    PathManager.GITHUB_USER,
+                    userName
+                )
+                DataUtil.saveData(
+                    applicationContext,
+                    PathManager.GITHUB_REPO,
+                    repoName
+                )
+                DataUtil.saveData(
+                    applicationContext,
+                    PathManager.GITHUB_PATH,
+                    path
+                )
+                DataUtil.saveData(
+                    applicationContext,
+                    PathManager.GITHUB_BRANCH,
+                    branch
+                )
 
-                        DataUtil.saveData(
-                            applicationContext,
-                            PathManager.GITHUB_USER,
-                            userName
-                        )
-                        DataUtil.saveData(
-                            applicationContext,
-                            PathManager.GITHUB_REPO,
-                            repoName
-                        )
-                        DataUtil.saveData(
-                            applicationContext,
-                            PathManager.GITHUB_PATH,
-                            path
-                        )
-                        DataUtil.saveData(
-                            applicationContext,
-                            PathManager.GITHUB_BRANCH,
-                            branch
-                        )
-
-                        updateFile(
-                            userName,
-                            repoName,
-                            path,
-                            File(
-                                message = "GitMessengerBot을 통해 커밋됬어요",
-                                content = content.toBase64(),
-                                sha = DataUtil.readData(
-                                    applicationContext,
-                                    "${repoName}-sha-key",
-                                    ""
-                                ).toString(),
-                                branch = branch
-                            )
-                        )
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ json ->
-                                DataUtil.saveData(
-                                    applicationContext,
-                                    "${repoName}-sha-key",
-                                    json.getAsJsonObject("content").get("sha").asString
-                                )
-                            }, { // return throwable
-                                UiUtil.toast(
-                                    applicationContext,
-                                    getString(R.string.codeedit_github_unknown_repo_name),
-                                    ToastType.ERROR
-                                )
-                            }, {
-                                UiUtil.toast(
-                                    it.context,
-                                    getString(R.string.codeedit_github_push_success)
-                                )
-                            })
+                if (binding.cbCreateRepo.isChecked) {
+                    createRepo(binding.etRepoName.text.toString()) {
+                        pushRepo(userName, repoName, path, branch, content)
                     }
+                } else {
+                    pushRepo(userName, repoName, path, branch, content)
+                }
             }
             dialog.show()
 
@@ -345,6 +283,84 @@ class CodeEditActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timer.cancel()
+    }
+
+    private fun createRepo(
+        repoName: String, doneAction: () -> Unit = {
+            UiUtil.toast(
+                applicationContext,
+                getString(R.string.codeedit_github_created_repo, repoName),
+            )
+        }
+    ) {
+        client
+            .create(GithubInterface::class.java).run {
+                createRepo(
+                    Repo(
+                        name = repoName,
+                        description = "GitMessengerBot을 통해 만들어졌어요"
+                    )
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ // return json
+                    }, { throwable ->
+                        UiUtil.error(applicationContext, Exception(throwable))
+                    }, {
+                        doneAction()
+                    })
+            }
+    }
+
+    private fun pushRepo(
+        userName: String,
+        repoName: String,
+        path: String,
+        branch: String,
+        content: String,
+        doneAction: () -> Unit = {
+            UiUtil.toast(
+                applicationContext,
+                getString(R.string.codeedit_github_push_success)
+            )
+        }
+    ) {
+        client
+            .create(GithubInterface::class.java).run {
+
+                updateFile(
+                    userName,
+                    repoName,
+                    path,
+                    File(
+                        message = "GitMessengerBot을 통해 커밋됬어요",
+                        content = content.toBase64(),
+                        sha = DataUtil.readData(
+                            applicationContext,
+                            "${repoName}-sha-key",
+                            ""
+                        ).toString(),
+                        branch = branch
+                    )
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ json ->
+                        DataUtil.saveData(
+                            applicationContext,
+                            "${repoName}-sha-key",
+                            json.getAsJsonObject("content").get("sha").asString
+                        )
+                    }, { // return throwable
+                        UiUtil.toast(
+                            applicationContext,
+                            getString(R.string.codeedit_github_error_at_push),
+                            ToastType.ERROR
+                        )
+                    }, {
+                        doneAction()
+                    })
+            }
     }
 
     private class AutoSaveTimer(

@@ -76,9 +76,8 @@
     <string name="codeedit_github_default_branch">master</string>
     <string name="codeedit_github_create_repo">새로 만드는 레포일 경우 클릭</string>
     <string name="codeedit_github_created_repo">%s 레포를 생성했어요.</string>
-    <string name="codeedit_github_unknown_repo_name">존재하지 않는 레포에요.</string>
+    <string name="codeedit_github_error_at_push">존재하지 않는 레포이거나, (레포 생성 체크로 해결)\n\n파일의 sha 값을 구할 수 없어요. (새로운 파일에 커밋으로 해결)</string>
     <string name="codeedit_github_push_success">Push 성공!</string>
-    <string name="codeedit_github_wait_repo_created">레포가 생성됬다는 멘트가 뜰 때까지 기다려 주세요!!</string>
 
     <string name="sandbox_experimental_function_description">샌드박스는 실험적인 기능이에요.\n때때로 의도한대로 작동하지 않을 수 있어요.</string>
 
