@@ -33,6 +33,7 @@ object Versions {
         const val Navigation = "2.3.2"
         const val DataStore = "1.0.0-alpha05"
         const val Compose = "1.0.0-alpha09"
+        const val SecurityCrypto = "1.1.0-alpha03"
     }
 
     object Rx {
@@ -93,6 +94,8 @@ object Dependencies {
     object Jetpack {
         const val DataStore =
             "androidx.datastore:datastore-preferences:${Versions.Jetpack.DataStore}"
+        const val SecurityCrypto =
+            "androidx.security:security-crypto:${Versions.Jetpack.SecurityCrypto}"
 
         object Compose {
             const val Ui = "androidx.compose.ui:ui:${Versions.Jetpack.Compose}"

@@ -1,7 +1,7 @@
 package com.sungbin.gitkakaobot.module
 
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.gitkakaobot.GitMessengerBot
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import dagger.Module
 import dagger.Provides

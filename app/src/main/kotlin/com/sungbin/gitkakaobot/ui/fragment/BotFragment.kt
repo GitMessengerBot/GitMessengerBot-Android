@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.androidutils.extensions.*
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.Util
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.adapter.BotAdapter
@@ -20,6 +19,7 @@ import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.botList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.initBotList
 import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.onBackPressedAction
 import com.sungbin.gitkakaobot.util.BotUtil
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 

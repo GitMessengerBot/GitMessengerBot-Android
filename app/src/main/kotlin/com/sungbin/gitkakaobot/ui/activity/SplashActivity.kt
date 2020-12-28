@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.sungbin.androidutils.extensions.doDelay
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.gitkakaobot.databinding.ActivitySplashBinding
 import com.sungbin.gitkakaobot.util.BotUtil
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.jetbrains.anko.startActivity
 

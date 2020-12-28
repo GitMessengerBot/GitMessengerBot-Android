@@ -10,9 +10,9 @@ import android.text.Spanned
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.sungbin.androidutils.extensions.toBitmap
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.util.BotUtil.botItems
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions

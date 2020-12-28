@@ -13,13 +13,12 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.sungbin.androidutils.extensions.doDelay
 import com.sungbin.androidutils.util.BatteryUtil
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.PermissionUtil
 import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.ActivityJoinBinding
 import com.sungbin.gitkakaobot.databinding.LayoutAccessKeyDialogBinding
-import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import org.jetbrains.anko.startActivity
@@ -35,7 +34,6 @@ class JoinActivity : AppCompatActivity() {
     private val codeRequestNotificationRead = 3000
     private val codeRequestAccessStorage = 4000
 
-    private val loadingDialog by lazy { LoadingDialog(this) }
     private val binding by lazy { ActivityJoinBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

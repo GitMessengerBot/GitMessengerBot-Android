@@ -80,6 +80,7 @@ dependencies {
         Dependencies.Network.LoggingInterceptor,
 
         Dependencies.Jetpack.DataStore,
+        Dependencies.Jetpack.SecurityCrypto,
 
         /*Dependencies.Jetpack.Compose.Ui,
         Dependencies.Jetpack.Compose.Foundation,

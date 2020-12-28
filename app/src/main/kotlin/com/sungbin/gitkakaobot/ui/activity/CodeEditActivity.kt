@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.sungbin.androidutils.extensions.hideKeyboard
 import com.sungbin.androidutils.extensions.toEditable
-import com.sungbin.androidutils.util.*
+import com.sungbin.androidutils.util.DialogUtil
+import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
 import com.sungbin.gitkakaobot.adapter.EditorFindAdapter
@@ -21,6 +22,7 @@ import com.sungbin.gitkakaobot.model.github.File
 import com.sungbin.gitkakaobot.model.github.Repo
 import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
 import com.sungbin.gitkakaobot.util.BotUtil
+import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 import com.sungbin.gitkakaobot.util.toBase64

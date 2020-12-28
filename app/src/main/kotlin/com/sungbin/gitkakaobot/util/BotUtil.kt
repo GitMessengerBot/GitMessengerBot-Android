@@ -1,7 +1,6 @@
 package com.sungbin.gitkakaobot.util
 
 import android.content.Context
-import com.sungbin.androidutils.util.DataUtil
 import com.sungbin.androidutils.util.StorageUtil
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.model.Bot
