@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.sungbin.androidutils.extensions.hideKeyboard
 import com.sungbin.androidutils.extensions.toEditable
 import com.sungbin.androidutils.util.DialogUtil
+import com.sungbin.androidutils.util.ToastLength
 import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.`interface`.GithubInterface
@@ -76,6 +77,14 @@ class CodeEditActivity : AppCompatActivity() {
 
         binding.ivBack.setOnClickListener { finish() }
         binding.tvTitle.text = bot.name
+        binding.sceEditor.highlighter.run {
+            addReservedWord("Api")
+            addReservedWord("Bot")
+            addReservedWord("File")
+            addReservedWord("Image")
+            addReservedWord("Log")
+            addReservedWord("UI")
+        }
 
         DialogUtil.showOnce(
             this,
@@ -203,7 +212,8 @@ class CodeEditActivity : AppCompatActivity() {
                 Observable.just(
                     minifyClient.data("input", binding.sceEditor.text.toString())
                         .post().wholeText()
-                ).subscribeOn(Schedulers.io())
+                )
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ minifyCode ->
                         if (minifyCode.contains("Error") &&
@@ -357,7 +367,8 @@ class CodeEditActivity : AppCompatActivity() {
                         UiUtil.toast(
                             applicationContext,
                             getString(R.string.codeedit_github_error_at_push),
-                            ToastType.ERROR
+                            ToastType.ERROR,
+                            ToastLength.LONG
                         )
                     }, {
                         doneAction()
@@ -387,5 +398,4 @@ class CodeEditActivity : AppCompatActivity() {
         for (n in 0..line) i += texts[n].length
         return i + index
     }
-
 }

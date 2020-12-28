@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.androidutils.extensions.setTint
+import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
 import com.sungbin.gitkakaobot.model.Bot
@@ -67,10 +68,16 @@ class BotAdapter(
                                                 )
                                             )
                                         } else {
-                                            loadingDialog.setError(
-                                                Exception("${it.exception}\n\n리로드 시간: $reloadTime ms")
+                                            UiUtil.toast(
+                                                activity,
+                                                "${it.exception}\n\n리로드 시간: $reloadTime ms",
+                                                ToastType.ERROR
                                             )
-                                            loadingDialog.show()
+                                            it.exception!!.printStackTrace()
+//                                            loadingDialog.setError(
+//                                                Exception("${it.exception}\n\n리로드 시간: $reloadTime ms")
+//                                            )
+//                                            loadingDialog.show()
                                         }
                                     }
                                 }

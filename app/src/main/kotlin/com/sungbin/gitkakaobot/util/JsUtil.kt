@@ -14,12 +14,9 @@ object JsUtil {
             rhino.optimizationLevel = -1
 
             val scope = rhino.initStandardObjects()
-            ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
-            ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
 
-            val result: Any = rhino.evaluateString(scope, source, "sandbox", 1, null)
+            val result: Any = rhino.evaluateString(scope, source, "rhino-runtime", 1, null)
             org.mozilla.javascript.Context.exit()
             result.toString()
         } catch (exception: Exception) {

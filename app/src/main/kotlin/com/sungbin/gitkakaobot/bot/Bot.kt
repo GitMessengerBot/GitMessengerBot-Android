@@ -4,19 +4,18 @@ import android.app.Notification
 import android.app.RemoteInput
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import com.sungbin.gitkakaobot.R
-import com.sungbin.gitkakaobot.bot.v8.V8Log
-import com.sungbin.gitkakaobot.bot.v8.V8Replier
+import com.sungbin.gitkakaobot.bot.v8.Log
+import com.sungbin.gitkakaobot.bot.v8.UI
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotCompile
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.StackManager
-import com.sungbin.gitkakaobot.util.toBase64String
 
 
 /**
@@ -51,7 +50,7 @@ object Bot {
 
     fun compileJavaScript(bot: Bot): BotCompile {
         return try {
-            /*if (bot.type == BotType.RHINOJS) { // todo: 라이노 지원을 해야 할 까?
+            /*if (bot.type == BotType.RHINOJS) { //  whgdm라이노 지원을 해야 할 까?
                 val rhino = RhinoAndroidHelper().enterContext().apply {
                     languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                     optimizationLevel = bot.optimization
@@ -69,24 +68,62 @@ object Bot {
                 BotCompile(true, null)
             } else { // v8 js*/
             val v8 = V8.createV8Runtime()
-            val v8Replier = V8Object(v8)
-            v8.add("v8Replier", v8Replier)
-            v8Replier.registerJavaMethod(
-                V8Replier(),
-                "reply",
-                "reply",
-                arrayOf(String::class.java, String::class.java)
+            /*v8.addApi(
+                "Api",
+                Api::class.java,
+                arrayOf("runRhino", "getContext"),
+                arrayOf(
+                    arrayOf(String::class.java),
+                    arrayOf()
+                )
+            )*/
+            v8.addApi(
+                "Bot",
+                com.sungbin.gitkakaobot.bot.v8.Bot::class.java,
+                arrayOf("reply", "replyShowAll"),
+                arrayOf(
+                    arrayOf(String::class.java, String::class.java),
+                    arrayOf(String::class.java, String::class.java, String::class.java)
+                )
             )
-            v8Replier.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
-            val v8Log = V8Object(v8)
-            v8.add("v8Log", v8Log)
-            v8Log.registerJavaMethod(
-                V8Log(),
-                "log",
-                "log",
-                arrayOf(String::class.java)
+            v8.addApi(
+                "File",
+                com.sungbin.gitkakaobot.bot.v8.Bot::class.java,
+                arrayOf("save", "read"),
+                arrayOf(
+                    arrayOf(String::class.java, String::class.java),
+                    arrayOf(String::class.java, String::class.java)
+                )
             )
-            v8Log.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
+            v8.addApi(
+                "Image",
+                com.sungbin.gitkakaobot.bot.v8.Bot::class.java,
+                arrayOf("getLastImage", "getProfileImage"),
+                arrayOf(
+                    arrayOf(),
+                    arrayOf(String::class.java)
+                )
+            )
+            v8.addApi(
+                "Log",
+                Log::class.java,
+                arrayOf("e", "d", "i"),
+                arrayOf(
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java)
+                )
+            )
+            v8.addApi(
+                "UI",
+                UI::class.java,
+                arrayOf("toast", "notification", "snackbar"),
+                arrayOf(
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java, String::class.java, Int::class.java),
+                    arrayOf(View::class.java, String::class.java)
+                )
+            )
             v8.executeScript(BotUtil.getBotCode(bot))
             StackManager.v8[bot.uuid] = v8
             v8.locker.release()
@@ -102,8 +139,6 @@ object Bot {
         message: String,
         sender: String,
         isGroupChat: Boolean,
-        session: Notification.Action?,
-        profileImage: Bitmap?,
         packageName: String,
         isDebugMode: Boolean
     ) {
@@ -138,7 +173,6 @@ object Bot {
                 add("message", message)
                 add("sender", sender)
                 add("isGroupChat", isGroupChat)
-                add("profileImage", profileImage.toBase64String())
                 add("packageName", packageName)
             }
             /*v8.executeJSFunction( // 안되는거 확인
@@ -151,6 +185,27 @@ object Bot {
         } catch (exception: Exception) {
             // todo: 오류처리
         }
+    }
+
+    private fun V8.addApi(
+        apiName: String,
+        apiClass: Class<*>,
+        methodNameArray: Array<String>,
+        argumentsListArray: Array<Array<Class<*>>>
+    ) {
+        val api = V8Object(this)
+        this.add(apiName, api)
+
+        for ((index, methodName) in methodNameArray.withIndex()) {
+            api.registerJavaMethod(
+                apiClass,
+                methodName,
+                methodName,
+                argumentsListArray[index]
+            )
+        }
+
+        api.release() // todo: deprecated? 그럼 다른거 뭐 써야하는데!!
     }
 
 }

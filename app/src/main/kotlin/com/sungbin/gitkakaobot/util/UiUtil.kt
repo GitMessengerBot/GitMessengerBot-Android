@@ -29,8 +29,13 @@ object UiUtil {
         context.startActivity(context.intentFor<ExceptionActivity>("message" to content).newTask())
     }
 
-    fun toast(context: Context, message: String, toastType: ToastType = ToastType.SUCCESS) {
-        ToastUtil.show(context, message, ToastLength.SHORT, toastType)
+    fun toast(
+        context: Context,
+        message: String,
+        toastType: ToastType = ToastType.SUCCESS,
+        toastLength: ToastLength = ToastLength.SHORT
+    ) {
+        ToastUtil.show(context, message, toastLength, toastType)
     }
 
     fun snackbar(view: View, message: String) {

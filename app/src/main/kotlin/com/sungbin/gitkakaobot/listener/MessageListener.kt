@@ -2,7 +2,6 @@ package com.sungbin.gitkakaobot.listener
 
 import android.app.Notification
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -15,6 +14,7 @@ import com.sungbin.gitkakaobot.util.BotUtil.botItems
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
+import com.sungbin.gitkakaobot.util.manager.PictureManager
 import com.sungbin.gitkakaobot.util.manager.StackManager.sessions
 import java.util.*
 
@@ -107,11 +107,11 @@ class MessageListener : NotificationListenerService() {
                     }
 
                     if (!sessions.containsKey(room)) sessions[room!!] = act
+                    if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
+                        sbn.notification.getLargeIcon().toBitmap(context)
 
                     chatHook(
-                        room!!, msg!!, sender!!, isGroupChat, act,
-                        sbn.notification.getLargeIcon().toBitmap(context),
-                        sbn.packageName
+                        room!!, msg!!, sender!!, isGroupChat, sbn.packageName
                     )
                 }
             }
@@ -123,8 +123,6 @@ class MessageListener : NotificationListenerService() {
         msg: String,
         sender: String,
         isGroupChat: Boolean,
-        session: Notification.Action?,
-        profileImage: Bitmap?,
         packageName: String,
     ) {
         try {
@@ -135,8 +133,6 @@ class MessageListener : NotificationListenerService() {
                     msg,
                     sender,
                     isGroupChat,
-                    session,
-                    profileImage,
                     packageName,
                     false
                 )
