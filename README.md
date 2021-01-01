@@ -10,12 +10,13 @@ a Messenger Auto-Reply Bot application with Git service.
 [Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
 
 ## TODO
-1. [x] Apply `EncryptedSharedPreferences`
-2. [ ] Migration all layout `Jetpack Compose` ~~(Is it possible?)~~
-3. [ ] 100% `Kotlin`
-4. [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
-5. [ ] Playstore upload
+1. - [x] Apply `EncryptedSharedPreferences`
+2. - [ ] Migration all layout `Jetpack Compose` ~~(Is it possible?)~~
+3. - [ ] 100% `Kotlin`
+4. - [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
+5. - [ ] Playstore upload
 
 ## License
 `GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
 
+# Happy Coding :)
