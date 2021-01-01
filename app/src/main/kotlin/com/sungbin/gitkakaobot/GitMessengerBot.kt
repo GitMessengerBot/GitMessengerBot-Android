@@ -5,7 +5,6 @@ import android.content.Context
 import com.sungbin.androidutils.util.NotificationUtil
 import com.sungbin.gitkakaobot.bot.Bot
 import com.sungbin.gitkakaobot.bot.api.UI
-import com.sungbin.gitkakaobot.bot.rhino.ApiClass
 import com.sungbin.gitkakaobot.util.BotUtil
 import dagger.hilt.android.HiltAndroidApp
 
@@ -27,7 +26,6 @@ class GitMessengerBot : Application() {
         context = applicationContext
 
         Bot.init(applicationContext)
-        ApiClass.init(applicationContext)
         BotUtil.init(applicationContext)
         UI.init(applicationContext)
 

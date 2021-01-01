@@ -2,8 +2,6 @@ package com.sungbin.gitkakaobot.util
 
 import com.eclipsesource.v8.V8
 import com.faendir.rhino_android.RhinoAndroidHelper
-import com.sungbin.gitkakaobot.bot.rhino.ApiClass
-import org.mozilla.javascript.ScriptableObject
 
 object JsUtil {
 
@@ -14,8 +12,6 @@ object JsUtil {
             rhino.optimizationLevel = -1
 
             val scope = rhino.initStandardObjects()
-            ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-
             val result: Any = rhino.evaluateString(scope, source, "rhino-runtime", 1, null)
             org.mozilla.javascript.Context.exit()
             result.toString()
