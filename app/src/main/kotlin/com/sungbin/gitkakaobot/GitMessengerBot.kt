@@ -4,9 +4,8 @@ import android.app.Application
 import android.content.Context
 import com.sungbin.androidutils.util.NotificationUtil
 import com.sungbin.gitkakaobot.bot.Bot
+import com.sungbin.gitkakaobot.bot.api.UI
 import com.sungbin.gitkakaobot.bot.rhino.ApiClass
-import com.sungbin.gitkakaobot.bot.v8.Api
-import com.sungbin.gitkakaobot.bot.v8.UI
 import com.sungbin.gitkakaobot.util.BotUtil
 import dagger.hilt.android.HiltAndroidApp
 
@@ -31,7 +30,6 @@ class GitMessengerBot : Application() {
         ApiClass.init(applicationContext)
         BotUtil.init(applicationContext)
         UI.init(applicationContext)
-        Api.init(applicationContext)
 
         NotificationUtil.createChannel(
             applicationContext,

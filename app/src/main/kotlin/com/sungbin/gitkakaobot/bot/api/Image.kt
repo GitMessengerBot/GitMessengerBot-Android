@@ -1,4 +1,4 @@
-package com.sungbin.gitkakaobot.bot.v8
+package com.sungbin.gitkakaobot.bot.api
 
 import com.sungbin.gitkakaobot.util.manager.PictureManager
 import com.sungbin.gitkakaobot.util.toBase64String

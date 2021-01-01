@@ -1,4 +1,4 @@
-package com.sungbin.gitkakaobot.bot.v8
+package com.sungbin.gitkakaobot.bot.api
 
 
 /**
