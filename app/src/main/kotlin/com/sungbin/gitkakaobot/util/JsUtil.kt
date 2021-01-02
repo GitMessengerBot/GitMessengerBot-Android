@@ -9,13 +9,14 @@ object JsUtil {
 
     fun runRhino(source: String): String {
         return try {
-            val rhino = RhinoAndroidHelper().enterContext()
-            rhino.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-            rhino.optimizationLevel = -1
+            val rhino = RhinoAndroidHelper().enterContext().apply {
+                languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+                optimizationLevel = -1
+            }
 
             val scope = rhino.initStandardObjects()
             ScriptableObject.defineClass(scope, ApiClass.App::class.java, false, true)
-            val result: Any = rhino.evaluateString(scope, source, "rhino-runtime", 1, null)
+            val result = rhino.evaluateString(scope, source, "rhino-runtime", 1, null)
             org.mozilla.javascript.Context.exit()
             result.toString()
         } catch (exception: Exception) {
