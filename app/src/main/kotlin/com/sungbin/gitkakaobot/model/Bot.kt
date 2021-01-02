@@ -8,21 +8,17 @@ import org.json.JSONObject
  */
 
 data class Bot(
-    val name: String,
-    val isCompiled: Boolean,
-    val power: Boolean,
-    val type: Int,
-    val optimization: Int,
-    val lastRunTime: String,
-    val index: Int,
-    val uuid: String
+    var name: String,
+    var power: Boolean,
+    var type: Int,
+    var lastRunTime: String,
+    var index: Int,
+    var uuid: String,
 ) {
-    override fun toString() = JSONObject().run {
+    override fun toString() = JSONObject().apply {
         put("name", name)
-        put("isCompiled", isCompiled)
         put("power", power)
         put("type", type)
-        put("optimization", optimization)
         put("lastRunTime", lastRunTime)
         put("index", index)
         put("uuid", uuid)

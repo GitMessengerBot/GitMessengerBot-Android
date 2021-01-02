@@ -126,21 +126,26 @@ object Bot {
         isDebugMode: Boolean
     ) {
         try {
-            val v8 = StackManager.v8[bot.uuid] ?: run {
-                Logger.w("${bot.name} - v8 instance is null")
-                return
+            if (!bot.power) return
+            if (!isDebugMode) {
+                val v8 = StackManager.v8[bot.uuid] ?: run {
+                    Logger.w("${bot.name} - v8 instance is null")
+                    return
+                }
+                v8.locker.acquire()
+                val arguments = V8Object(v8).run {
+                    add("room", room)
+                    add("message", message)
+                    add("sender", sender)
+                    add("isGroupChat", isGroupChat)
+                    add("packageName", packageName)
+                }
+                v8.executeJSFunction("onMessage", arguments)
+                v8.locker.release()
+                Logger.w("${bot.name}: 실행됨")
+            } else {
+                // todo: 디버그 만들기
             }
-            v8.locker.acquire()
-            val arguments = V8Object(v8).run {
-                add("room", room)
-                add("message", message)
-                add("sender", sender)
-                add("isGroupChat", isGroupChat)
-                add("packageName", packageName)
-            }
-            v8.executeJSFunction("onMessage", arguments)
-            v8.locker.release()
-            Logger.w("${bot.name}: 실행됨")
         } catch (exception: Exception) {
             UiUtil.error(context, exception)
         }

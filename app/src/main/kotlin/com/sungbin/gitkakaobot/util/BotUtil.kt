@@ -43,6 +43,11 @@ object BotUtil {
 
     private fun getBotSuffix(bot: Bot) = if (bot.type == BotType.SIMPLE) "srd" else "js"
 
+    fun updateBotPower(bot: Bot, power: Boolean) {
+        bot.power = power
+        updateBotData(bot)
+    }
+
     fun getBotCode(bot: Bot) = StorageUtil.read(
         "${getBotPath(bot)}/index.${getBotSuffix(bot)}", defaultCode
     ).toString()
@@ -80,10 +85,8 @@ object BotUtil {
 
     fun createBotItem(botJsonObject: JSONObject) = Bot(
         botJsonObject.getString("name"),
-        botJsonObject.getBoolean("isCompiled"),
         botJsonObject.getBoolean("power"),
         botJsonObject.getInt("type"),
-        botJsonObject.getInt("optimization"),
         botJsonObject.getString("lastRunTime"),
         botJsonObject.getInt("index"),
         botJsonObject.getString("uuid")

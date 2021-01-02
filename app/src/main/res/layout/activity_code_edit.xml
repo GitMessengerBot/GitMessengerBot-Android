@@ -217,21 +217,47 @@
                     <TextView
                         android:id="@+id/tv_title"
                         style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_default"
+                        android:layout_marginEnd="@dimen/margin_default"
                         android:text="@string/codeedit_script_name_preview"
                         android:textColor="@color/colorBlack"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_undo"
                         app:layout_constraintStart_toEndOf="@+id/iv_back"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_undo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:contentDescription="@string/undo"
+                        android:src="@drawable/ic_baseline_undo_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_save"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/colorBlack" />
 
                     <ImageView
                         android:id="@+id/iv_save"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_default"
                         android:contentDescription="@string/save"
                         android:src="@drawable/ic_baseline_save_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_menu"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/colorBlack" />
+
+                    <ImageView
+                        android:id="@+id/iv_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/menu"
+                        android:src="@drawable/ic_baseline_menu_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

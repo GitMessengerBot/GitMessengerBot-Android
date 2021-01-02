@@ -8,14 +8,16 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.androidutils.extensions.setTint
+import com.sungbin.androidutils.extensions.toColorStateList
 import com.sungbin.androidutils.util.ToastType
 import com.sungbin.gitkakaobot.R
 import com.sungbin.gitkakaobot.databinding.LayoutBotBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.ui.activity.CodeEditActivity
-import com.sungbin.gitkakaobot.ui.dialog.LoadingDialog
+import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.UiUtil
+import com.sungbin.gitkakaobot.util.manager.StackManager
 import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivity
 import java.util.*
@@ -27,7 +29,7 @@ import java.util.*
 
 class BotAdapter(
     private val items: ArrayList<Bot>,
-    private val activity: Activity
+    private val activity: Activity,
 ) : RecyclerView.Adapter<BotAdapter.ViewHolder>() {
 
     init {
@@ -39,12 +41,28 @@ class BotAdapter(
     class ViewHolder(private val itemBinding: LayoutBotBinding, private val activity: Activity) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        private val loadingDialog by lazy { LoadingDialog(activity) }
-
         fun bindViewHolder(bot: Bot) {
             with(itemBinding) {
                 item = bot
-                tvName.isSelected = true
+                vCompileStatue.backgroundTintList = (if (StackManager.v8.containsKey(bot.uuid)) {
+                    activity.getColor(R.color.colorGreen)
+                } else activity.getColor(R.color.colorLightRed)).toColorStateList()
+                swPower.setOnCheckedChangeListener { _, isChecked ->
+                    BotUtil.updateBotPower(bot, isChecked)
+                }
+                ivEdit.setOnClickListener {
+                    activity.startActivity<CodeEditActivity>("bot" to bot.toString())
+                }
+                if (bot.type == BotType.SIMPLE) {
+                    trivIcon.setTint(
+                        ContextCompat.getColor(
+                            trivIcon.context,
+                            R.color.colorPrimary
+                        )
+                    )
+                }
+                invalidateAll()
+
                 ivReload.setOnClickListener {
                     when (bot.type) {
                         BotType.SIMPLE -> {
@@ -85,18 +103,6 @@ class BotAdapter(
                         }
                     }
                 }
-                ivEdit.setOnClickListener {
-                    activity.startActivity<CodeEditActivity>("bot" to bot.toString())
-                }
-                if (bot.type == BotType.SIMPLE) {
-                    trivIcon.setTint(
-                        ContextCompat.getColor(
-                            trivIcon.context,
-                            R.color.colorPrimary
-                        )
-                    )
-                }
-                invalidateAll()
             }
         }
 

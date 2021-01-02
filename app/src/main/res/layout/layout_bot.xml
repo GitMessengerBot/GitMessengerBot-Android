@@ -45,7 +45,6 @@
                     android:layout_width="10dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_left_round_8"
-                    android:backgroundTint="@{Item.isCompiled ? @color/colorGreen : @color/colorLightRed}"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:backgroundTint="@color/colorGreen" />
 
@@ -66,6 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -73,7 +73,7 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/triv_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/sw_power"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_last_runtime"
                     app:layout_constraintStart_toEndOf="@+id/triv_icon"
                     app:layout_constraintTop_toTopOf="@+id/triv_icon"
                     tools:text="@string/codeedit_script_name_preview" />
@@ -88,6 +88,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/triv_icon"
                     tools:checked="true" />
+
+                <TextView
+                    android:id="@+id/tv_last_runtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_half"
+                    android:text="@{Item.lastRunTime}"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toTopOf="@+id/ll_menu_container"
+                    app:layout_constraintEnd_toStartOf="@+id/sw_power"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/bot_preview_last_runtime" />
 
                 <LinearLayout
                     android:id="@+id/ll_menu_container"

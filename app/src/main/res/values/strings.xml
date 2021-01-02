@@ -17,10 +17,13 @@
     <string name="tool">도구</string>
     <string name="back">back</string>
     <string name="show_all">전체보기</string>
+    <string name="undo">undo</string>
     <string name="log">로그</string>
     <string name="database">데이터베이스</string>
     <string name="reload">리로드</string>
     <string name="edit">수정</string>
+    <string name="menu">menu</string>
+    <string name="redo">redo</string>
 
     <string name="image_description_redo_done">앞으로 되돌리기</string>
     <string name="image_description_undo_done">전으로 되돌리기</string>
@@ -88,5 +91,6 @@
 
     <string name="debug_input">input…</string>
     <string name="debug_eval_mode">eval 모드</string>
+    <string name="bot_preview_last_runtime">17일 3시 31분</string>
 
 </resources>

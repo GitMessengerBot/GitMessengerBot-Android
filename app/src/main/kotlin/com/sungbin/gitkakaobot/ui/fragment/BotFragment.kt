@@ -82,10 +82,8 @@ class BotFragment : Fragment() {
                 }
                 val bot = Bot(
                     name = binding.tietBotName.text.toString(),
-                    isCompiled = false,
                     power = false,
                     type = botType,
-                    optimization = -1,
                     lastRunTime = "없음",
                     index = BotUtil.getLastIndex(botList.value) + 1,
                     uuid = Util.makeRandomUUID()

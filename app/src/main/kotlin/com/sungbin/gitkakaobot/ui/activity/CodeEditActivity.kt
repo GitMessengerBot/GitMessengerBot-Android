@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.sungbin.androidutils.extensions.hideKeyboard
@@ -63,6 +64,7 @@ class CodeEditActivity : AppCompatActivity() {
     @Named("Api")
     lateinit var client: Retrofit
 
+    private var lastSaveSource = ""
     private val loadingDialog by lazy { LoadingDialog(this) }
     private val binding by lazy { ActivityCodeEditBinding.inflate(layoutInflater) }
 
@@ -100,6 +102,7 @@ class CodeEditActivity : AppCompatActivity() {
         }
 
         binding.ivSave.setOnClickListener {
+            lastSaveSource = binding.sceEditor.text.toString()
             BotUtil.saveBotCode(bot, binding.sceEditor.text.toString())
             UiUtil.toast(
                 applicationContext,
@@ -129,6 +132,26 @@ class CodeEditActivity : AppCompatActivity() {
                     })
             }.start()
 
+        }
+
+        binding.ivMenu.setOnClickListener {
+            val menu = PopupMenu(this, it)
+            menu.menu.add(0, 1, 0, getString(R.string.redo))
+            // todo: 새로운 기능들 추가
+            menu.setOnMenuItemClickListener { menuItem ->
+                return@setOnMenuItemClickListener when (menuItem.itemId) {
+                    0 -> {
+                        binding.sceEditor.redo()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            menu.show()
+        }
+
+        binding.ivUndo.setOnClickListener {
+            binding.sceEditor.undo()
         }
 
         binding.ivPush.setOnClickListener {
@@ -298,12 +321,13 @@ class CodeEditActivity : AppCompatActivity() {
     }
 
     private fun createRepo(
-        repoName: String, doneAction: () -> Unit = {
+        repoName: String,
+        doneAction: () -> Unit = {
             UiUtil.toast(
                 applicationContext,
                 getString(R.string.codeedit_github_created_repo, repoName),
             )
-        }
+        },
     ) {
         client
             .create(GithubInterface::class.java).run {
@@ -335,7 +359,7 @@ class CodeEditActivity : AppCompatActivity() {
                 applicationContext,
                 getString(R.string.codeedit_github_push_success)
             )
-        }
+        },
     ) {
         client
             .create(GithubInterface::class.java).run {
@@ -379,7 +403,7 @@ class CodeEditActivity : AppCompatActivity() {
     private class AutoSaveTimer(
         private val activity: Activity,
         private val editText: EditText,
-        private val bot: Bot
+        private val bot: Bot,
     ) : TimerTask() {
         override fun run() {
             BotUtil.saveBotCode(bot, editText.text.toString())
@@ -397,5 +421,13 @@ class CodeEditActivity : AppCompatActivity() {
         val texts = this.text.split("\n")
         for (n in 0..line) i += texts[n].length
         return i + index
+    }
+
+    private fun closeActivity() {
+        if (binding.sceEditor.text.toString() == lastSaveSource) {
+            // todo: 닫기
+        } else {
+            // todo: 닫기 체크 /// anko 사용해서
+        }
     }
 }

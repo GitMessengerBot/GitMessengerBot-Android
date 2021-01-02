@@ -9,11 +9,11 @@
     android:clipToPadding="false">
 
     <TextView
-        android:id="@+id/tv_copyright"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_default"
-        android:text="@string/bot_copyright"
+        android:text="@string/app_name"
         android:textColor="@color/colorBlack"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/sw_power"
