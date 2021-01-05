@@ -31,7 +31,7 @@ class BotFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) = binding.root
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -103,6 +103,8 @@ class BotFragment : Fragment() {
         }
 
         botList.observe(viewLifecycleOwner) {
+            // 좀 많이 비효울적인데...
+            // todo: 추가된 아이템만 새로 그리기
             adapter = BotAdapter(it, requireActivity())
             binding.rvBot.adapter = adapter
             statusViewInit()
@@ -138,7 +140,7 @@ class BotFragment : Fragment() {
 
         override fun getMovementFlags(
             recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder
+            viewHolder: RecyclerView.ViewHolder,
         ) = makeMovementFlags(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
             0
@@ -147,7 +149,7 @@ class BotFragment : Fragment() {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
+            target: RecyclerView.ViewHolder,
         ): Boolean {
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
