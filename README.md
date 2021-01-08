@@ -15,6 +15,7 @@ a Messenger Auto-Reply Bot application with Git service.
 3. - [ ] 100% `Kotlin`
 4. - [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
 5. - [ ] Playstore upload
+6. - [ ] `BottomNavigationView` radius rounding
 
 ## License
 `GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
