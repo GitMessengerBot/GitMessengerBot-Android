@@ -6,8 +6,15 @@ a Messenger Auto-Reply Bot application with Git service.
 
 -----
 
-### How to get `personal-access-key` ?
-[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
+# Dev-Skill
+1. Clean Architecture
+2. MVVM Pattern
+3. All Kotlin
+4. Rest-API
+5. DI - Hilt
+6. Coroutines
+7. RxKotlin
+8. Network - Retrofit, OkHttp
 
 ## TODO
 1. - [x] Apply `EncryptedSharedPreferences`
@@ -16,6 +23,9 @@ a Messenger Auto-Reply Bot application with Git service.
 4. - [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
 5. - [ ] Playstore upload
 6. - [ ] `BottomNavigationView` radius rounding
+
+## How to get `personal-access-key` ?
+[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
 
 ## License
 `GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
