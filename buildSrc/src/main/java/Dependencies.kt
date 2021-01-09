@@ -17,9 +17,10 @@ object Versions {
         const val Bom = "26.2.0"
     }
 
-    object Rhino {
-        const val Engine = "1.7.13"
-        const val Helper = "1.6.0"
+    object Js {
+        const val RhinoEngine = "1.7.13"
+        const val RhinoHelper = "1.6.0"
+        const val J2V8 = "6.2.0@aar"
     }
 
     object Network {
@@ -86,9 +87,10 @@ object Dependencies {
         const val Bom = "com.google.firebase:firebase-bom:${Versions.Firebase.Bom}"
     }
 
-    object Rhino {
-        const val Engine = "org.mozilla:rhino:${Versions.Rhino.Engine}"
-        const val Helper = "com.faendir.rhino:rhino-android:${Versions.Rhino.Helper}"
+    object Js {
+        const val RhinoEngine = "org.mozilla:rhino:${Versions.Js.RhinoEngine}"
+        const val RhinoHelper = "com.faendir.rhino:rhino-android:${Versions.Js.RhinoHelper}"
+        const val J2V8 = "com.eclipsesource.j2v8:j2v8:${Versions.Js.J2V8}"
     }
 
     object Jetpack {

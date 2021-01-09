@@ -64,17 +64,15 @@ android {
 
 dependencies {
     "implementation"(platform(Dependencies.Firebase.Bom))
-    // implementation(files("./libs/j2v8-6.2.0.aar"))
-
-    implementation("com.eclipsesource.j2v8:j2v8:6.2.0@aar")
 
     fun def(vararg strings: String) {
         for (string in strings) implementation(string)
     }
 
     def(
-        Dependencies.Rhino.Engine,
-        Dependencies.Rhino.Helper,
+        Dependencies.Js.J2V8,
+        Dependencies.Js.RhinoEngine,
+        Dependencies.Js.RhinoHelper,
 
         Dependencies.Network.Jsoup,
         Dependencies.Network.Retrofit,

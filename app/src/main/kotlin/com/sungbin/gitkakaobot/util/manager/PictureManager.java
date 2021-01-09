@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-// 왜 코틀린으로하면 작동이 안될까?
+// todo: convert kotlin
 public class PictureManager {
 
     public static final HashMap<String, Bitmap> profileImage = new HashMap<>();

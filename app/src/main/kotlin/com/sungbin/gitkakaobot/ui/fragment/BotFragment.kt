@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.androidutils.extensions.*
@@ -15,15 +14,12 @@ import com.sungbin.gitkakaobot.databinding.FragmentBotBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.service.ForegroundService
-import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.botList
-import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.initBotList
-import com.sungbin.gitkakaobot.ui.activity.DashboardActivity.Companion.onBackPressedAction
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
 import com.sungbin.gitkakaobot.util.manager.PathManager
 
-class BotFragment : Fragment() {
+class BotFragment : BaseFragment() {
 
     private var onBackPressedTime = 0L
     private val binding by lazy { FragmentBotBinding.inflate(layoutInflater) }
@@ -37,11 +33,11 @@ class BotFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initBotList()
+        vm.initBotList()
         initOnBackPressedAction()
         statusViewInit()
 
-        adapter = BotAdapter(botList.value ?: arrayListOf(), requireActivity())
+        adapter = BotAdapter(vm.botList.value ?: arrayListOf(), requireActivity())
         binding.rvBot.adapter = adapter
         binding.rvBot.apply {
             setHasFixedSize(true)
@@ -52,7 +48,7 @@ class BotFragment : Fragment() {
 
         binding.efabAdd.setOnClickListener {
             binding.tslContainer.startTransform()
-            onBackPressedAction = {
+            vm.onBackPressedAction = {
                 binding.mbtgContainer.check(R.id.btn_javascript)
                 binding.tietBotName.clear()
                 binding.tslContainer.finishTransform()
@@ -85,10 +81,10 @@ class BotFragment : Fragment() {
                     power = false,
                     type = botType,
                     lastRunTime = "없음",
-                    index = BotUtil.getLastIndex(botList.value) + 1,
+                    index = BotUtil.getLastIndex(vm.botList.value) + 1,
                     uuid = Util.makeRandomUUID()
                 )
-                botList.run {
+                vm.botList.run {
                     value!!.add(bot)
                     postValue(value)
                 }
@@ -102,17 +98,15 @@ class BotFragment : Fragment() {
             }
         }
 
-        botList.observe(viewLifecycleOwner) {
-            // 좀 많이 비효울적인데...
-            // todo: 추가된 아이템만 새로 그리기
+        vm.botList.observe(viewLifecycleOwner) {
             adapter = BotAdapter(it, requireActivity())
-            binding.rvBot.adapter = adapter
+            // todo: 알지?
             statusViewInit()
         }
     }
 
     private fun statusViewInit() {
-        if (botList.value.isNullOrEmpty()) {
+        if (vm.botList.value.isNullOrEmpty()) {
             binding.fblEmptyFile.show()
             binding.lavEmpty.playAnimation()
             binding.rvBot.hide(true)
@@ -124,7 +118,7 @@ class BotFragment : Fragment() {
     }
 
     private fun initOnBackPressedAction() {
-        onBackPressedAction = {
+        vm.onBackPressedAction = {
             if (System.currentTimeMillis() - onBackPressedTime <= 3000) {
                 requireActivity().finish()
             } else {
@@ -173,11 +167,11 @@ class BotFragment : Fragment() {
         }
 
         private fun moveItem(oldPos: Int, newPos: Int) {
-            val oldItem = botList.value!![oldPos]
-            val newItem = botList.value!![newPos]
+            val oldItem = vm.botList.value!![oldPos]
+            val newItem = vm.botList.value!![newPos]
             BotUtil.changeBotIndex(oldItem, newPos)
             BotUtil.changeBotIndex(newItem, oldPos)
-            botList.value!!.run {
+            vm.botList.value!!.run {
                 removeAt(oldPos)
                 add(oldPos, newItem)
                 removeAt(newPos)
