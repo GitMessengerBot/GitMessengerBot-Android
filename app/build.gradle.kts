@@ -16,6 +16,8 @@ android {
         versionCode = Application.versionCode
         versionName = Application.versionName
         multiDexEnabled = true
+        ndk.debugSymbolLevel =
+            "FULL" // https://support.google.com/googleplay/android-developer/answer/9848633?hl=ko#zippy=%2C네이티브-디버그-기호-파일-생성
         setProperty("archivesBaseName", "v$versionName ($versionCode)")
     }
 
