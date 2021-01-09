@@ -27,10 +27,10 @@ a Messenger Auto-Reply Bot application with Git service.
 ## How to get `personal-access-key` ?
 [Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
 
-## License
-`GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
-
 ## Api-Guide
 [Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/api-guide.md)
+
+## License
+`GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
 
 # Happy Coding :)
