@@ -14,7 +14,6 @@ import com.sungbin.gitkakaobot.databinding.FragmentBotBinding
 import com.sungbin.gitkakaobot.model.Bot
 import com.sungbin.gitkakaobot.model.BotType
 import com.sungbin.gitkakaobot.service.ForegroundService
-import com.sungbin.gitkakaobot.ui.activity.DashboardActivity
 import com.sungbin.gitkakaobot.util.BotUtil
 import com.sungbin.gitkakaobot.util.DataUtil
 import com.sungbin.gitkakaobot.util.UiUtil
@@ -24,7 +23,7 @@ class BotFragment : BaseFragment() {
 
     private var onBackPressedTime = 0L
     private val binding by lazy { FragmentBotBinding.inflate(layoutInflater) }
-    private val vm by lazy { (requireContext() as DashboardActivity).vm }
+    // private val vm by lazy { (requireContext() as DashboardActivity).vm }
     private lateinit var adapter: BotAdapter
 
     override fun onCreateView(
