@@ -7,7 +7,7 @@ a Messenger Auto-Reply Bot application with Git service.
 -----
 
 # Dev-Skill
-1. Clean Architecture
+1. Clean Architecture (presentation layer)
 2. MVVM Pattern
 3. All Kotlin
 4. Rest-API
