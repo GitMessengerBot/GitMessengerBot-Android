@@ -1,6 +1,5 @@
 package com.sungbin.gitkakaobot.bot.api
 
-import com.sungbin.gitkakaobot.GitMessengerBot
 import com.sungbin.gitkakaobot.util.JsUtil
 
 
@@ -11,6 +10,5 @@ import com.sungbin.gitkakaobot.util.JsUtil
 class Api {
 
     fun runRhino(source: String) = JsUtil.runRhino(source)
-    fun getContext() = GitMessengerBot.context
 
 }

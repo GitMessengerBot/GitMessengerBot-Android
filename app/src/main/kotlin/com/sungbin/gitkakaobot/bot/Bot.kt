@@ -5,7 +5,6 @@ import android.app.RemoteInput
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import com.sungbin.androidutils.util.Logger
@@ -100,11 +99,10 @@ object Bot {
             v8.addApi(
                 "UI",
                 UI(),
-                arrayOf("toast", "notification", "snackbar"),
+                arrayOf("toast", "notification"),
                 arrayOf(
                     arrayOf(String::class.java),
                     arrayOf(String::class.java, String::class.java, Int::class.java),
-                    arrayOf(View::class.java, String::class.java)
                 )
             )
             v8.executeScript(BotUtil.getBotCode(bot))
