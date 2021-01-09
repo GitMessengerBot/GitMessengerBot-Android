@@ -99,8 +99,7 @@ class BotFragment : BaseFragment() {
         }
 
         vm.botList.observe(viewLifecycleOwner) {
-            adapter = BotAdapter(it, requireActivity())
-            // todo: 알지?
+            adapter.notifyDataSetChanged()
             statusViewInit()
         }
     }

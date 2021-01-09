@@ -19,7 +19,6 @@ object Versions {
 
     object Js {
         const val RhinoEngine = "1.7.13"
-        const val RhinoHelper = "1.6.0"
         const val J2V8 = "6.2.0@aar"
     }
 
@@ -89,7 +88,6 @@ object Dependencies {
 
     object Js {
         const val RhinoEngine = "org.mozilla:rhino:${Versions.Js.RhinoEngine}"
-        const val RhinoHelper = "com.faendir.rhino:rhino-android:${Versions.Js.RhinoHelper}"
         const val J2V8 = "com.eclipsesource.j2v8:j2v8:${Versions.Js.J2V8}"
     }
 

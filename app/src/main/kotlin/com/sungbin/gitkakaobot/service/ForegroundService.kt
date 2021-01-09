@@ -18,7 +18,7 @@ class ForegroundService : Service() {
 
     private val pm by lazy { getSystemService(Context.POWER_SERVICE) as PowerManager }
     private val wakeLock by lazy { pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, wakeLockLabel) }
-    private val wakeLockLabel = "WakeLock"
+    private val wakeLockLabel = getString(R.string.app_name)
     private val notificationId = 1000
     private val notification by lazy {
         NotificationUtil.getNormalNotification(

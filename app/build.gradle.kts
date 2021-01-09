@@ -72,7 +72,6 @@ dependencies {
     def(
         Dependencies.Js.J2V8,
         Dependencies.Js.RhinoEngine,
-        Dependencies.Js.RhinoHelper,
 
         Dependencies.Network.Jsoup,
         Dependencies.Network.Retrofit,

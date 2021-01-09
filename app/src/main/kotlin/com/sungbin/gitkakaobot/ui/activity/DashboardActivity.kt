@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DashboardActivity : AppCompatActivity() {
 
+    // github issue: https://github.com/ibrahimsn98/SmoothBottomBar/issues/51
     // 프레그맨트가 계속 재생성되서 한 번밖에 생성 안되는 엑티비티에 뷰모델 선언
     val vm: BotViewModel by viewModels()
 

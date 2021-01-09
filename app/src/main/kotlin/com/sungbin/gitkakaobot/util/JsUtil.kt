@@ -2,7 +2,6 @@ package com.sungbin.gitkakaobot.util
 
 import android.content.Context
 import com.eclipsesource.v8.V8
-import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.gitkakaobot.bot.rhino.ApiClass
 import org.mozilla.javascript.ScriptableObject
 
@@ -16,7 +15,7 @@ object JsUtil {
 
     fun runRhino(source: String): String {
         return try {
-            val rhino = RhinoAndroidHelper(context).enterContext().apply {
+            val rhino = org.mozilla.javascript.Context.enter().apply {
                 languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                 optimizationLevel = -1
             }
