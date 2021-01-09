@@ -4,6 +4,9 @@
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
 a Messenger Auto-Reply Bot application with Git service.
 
+> 개발 일시 중단 (슬럼프?) <br />
+> [SpakChat](https://github.com/sungbin5304/SpakChat) 개발하러 뿅!
+
 -----
 
 # Dev-Skill
@@ -26,6 +29,9 @@ a Messenger Auto-Reply Bot application with Git service.
 
 ## How to get `personal-access-key` ?
 [Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
+
+## Api-Guide
+[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/api-guide.md)
 
 ## License
 `GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
