@@ -64,7 +64,9 @@ android {
 
 dependencies {
     "implementation"(platform(Dependencies.Firebase.Bom))
-    implementation(files("./libs/j2v8-6.2.0.aar"))
+    // implementation(files("./libs/j2v8-6.2.0.aar"))
+
+    implementation("com.eclipsesource.j2v8:j2v8:6.2.0@aar")
 
     fun def(vararg strings: String) {
         for (string in strings) implementation(string)

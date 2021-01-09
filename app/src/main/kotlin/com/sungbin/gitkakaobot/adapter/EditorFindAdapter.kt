@@ -40,7 +40,7 @@ class EditorFindAdapter(private val list: ArrayList<EditorFound>) :
     }
 
     inner class EditorFindViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var textview: TextView = view.findViewById(R.id.textview)
+        val textview: TextView = view.findViewById(R.id.textview)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): EditorFindViewHolder {

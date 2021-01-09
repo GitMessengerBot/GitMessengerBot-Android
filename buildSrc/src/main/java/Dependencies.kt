@@ -19,7 +19,7 @@ object Versions {
 
     object Rhino {
         const val Engine = "1.7.13"
-        const val Helper = "1.5.2"
+        const val Helper = "1.6.0"
     }
 
     object Network {
@@ -46,7 +46,7 @@ object Versions {
         const val AppCompat = "1.2.0"
         const val Anko = "0.10.8"
         const val Gradle = "4.1.1"
-        const val Kotlin = "1.4.21"
+        const val Kotlin = "1.4.21-2"
         const val Google = "4.3.3"
     }
 
@@ -62,12 +62,12 @@ object Versions {
     object Ui {
         const val SpotLight = "2.0.3"
         const val OverlappingPanels = "0.1.1"
-        const val TransformationLayout = "1.0.6"
+        const val TransformationLayout = "1.0.7"
         const val Browser = "1.3.0"
         const val ShapeOfView = "1.4.7"
         const val Flexbox = "2.0.1"
         const val SmoothBottomBar = "1.7.6"
-        const val Lottie = "3.5.0"
+        const val Lottie = "3.6.0"
         const val SimpleCodeEditor = "2.0.4"
         const val Material = "1.2.0-alpha06"
         const val Glide = "4.11.0"
@@ -76,7 +76,7 @@ object Versions {
 
     object Util {
         const val GsonConverter = "2.9.0"
-        const val AndroidUtils = "4.2.3"
+        const val AndroidUtils = "4.2.4"
         const val CrashReporter = "1.1.0"
     }
 }

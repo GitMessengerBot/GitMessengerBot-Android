@@ -38,7 +38,10 @@ class BotAdapter(
         }
     }
 
-    class ViewHolder(private val itemBinding: LayoutBotBinding, private val activity: Activity) :
+    inner class ViewHolder(
+        private val itemBinding: LayoutBotBinding,
+        private val activity: Activity,
+    ) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bindViewHolder(bot: Bot) {
