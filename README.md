@@ -4,7 +4,7 @@
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
 a Messenger Auto-Reply Bot application with Git service.
 
-> 개발 일시 중단 (슬럼프?) <br />
+> 개발 일시 중단 (슬럼프?) **개발 30% 완료 상태**<br />
 > [SpakChat](https://github.com/sungbin5304/SpakChat) 개발하러 뿅!
 
 -----
