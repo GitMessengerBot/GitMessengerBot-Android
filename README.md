@@ -9,7 +9,7 @@ a Messenger Auto-Reply Bot application with Git service.
 -----
 
 # Download
-You can download at [Google Playstore](https://sungbin.me/gmb.html).
+You can download at [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko).
 
 # Dev-Skill
 1. Clean Architecture (presentation layer)
