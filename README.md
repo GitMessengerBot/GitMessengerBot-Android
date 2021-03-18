@@ -25,7 +25,7 @@ You can download at [Google Playstore](https://play.google.com/store/apps/detail
 1. - [x] Apply `EncryptedSharedPreferences`
 2. - [ ] Migration all layout `Jetpack Compose` (~~is it possible?~~, finally, I can do it!)
 3. - [ ] 100% `Kotlin`
-4. - [ ] Include SNS about KakaoTalk Bot (maybe [`SpakChat`](https://github.com/sungbin5304/SpakChat))
+4. - [ ] Include SNS about KakaoTalk Bot
 5. - [ ] Playstore upload
 6. - [ ] `BottomNavigationView` radius rounding
 
