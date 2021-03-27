@@ -5,7 +5,7 @@
 a Messenger Auto-Reply Bot application with Git service.
 
 > restart! <br/>
-> **Please see `Compose` branch. (korean)**
+> **Please see `compose` branch. (korean)**
 
 -----
 
