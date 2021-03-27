@@ -2,40 +2,30 @@
 
 
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
-a Messenger Auto-Reply Bot application with Git service.
-
-> restart!
+V8엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 최첨단 메신저 봇!
 
 -----
 
-# Download
-You can download at [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko).
+# 작동 사진
+> 준비중...
 
-# Dev-Skill
-1. Clean Architecture (presentation layer)
-2. MVVM Pattern
-3. All Kotlin
-4. Rest-API
-5. DI - Hilt
-6. Coroutines
-7. RxKotlin
-8. Network - Retrofit, OkHttp
+# 다운로드 (알파버전 업로드 상태)
+다운로드는 [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)에서 하실 수 있습니다.
 
-## TODO
-1. - [x] Apply `EncryptedSharedPreferences`
-2. - [ ] Migration all layout `Jetpack Compose` (~~is it possible?~~, finally, I can do it!)
-3. - [ ] 100% `Kotlin`
-4. - [ ] Include SNS about KakaoTalk Bot
-5. - [ ] Playstore upload
-6. - [ ] `BottomNavigationView` radius rounding
+# 개발 스킬
+1. Jetpack Compose 100%
+2. Dagger2
+3. Coroutines
+4. ReactiveX
+5. Retrofit, OkHttp
 
-## How to get `personal-access-key` ?
-[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/get-personal-access-key.md)
+## 개인 키 얻는법
+[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
 
-## Api-Guide
-[Click (korean)](https://github.com/sungbin5304/GitMessengerBot/blob/master/api-guide.md)
+## API 가이드
+[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
 
-## License
-`GitMessengerBot` license is under the [GPL-3.0](https://github.com/sungbin5304/GitMessengerBot/blob/master/LICENSE) license.
+## 라이선스
+`GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 # Happy Coding :)
