@@ -2,7 +2,7 @@
 
 
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
-V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 최첨단 메신저 봇!
+V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최첨단 메신저 봇!**
 
 -----
 
@@ -18,6 +18,9 @@ V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 최첨�
 3. Coroutines
 4. ReactiveX
 5. Retrofit, OkHttp
+
+# TODO
+1. - [ ] 코드 에디터 부분 퀄리티 개선
 
 ## 개인 키 얻는법
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
