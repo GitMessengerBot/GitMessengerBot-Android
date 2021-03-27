@@ -2,12 +2,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
+
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Di.Hilt}")
-        classpath("com.google.gms:google-services:${Versions.Essential.Google}")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.Jetpack.Navigation}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
     }
 }
@@ -16,11 +15,13 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
         maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://maven.google.com") }
+        maven { url = uri("https://oss.jfrog.org/libs-snapshot") }
     }
 }
 
-tasks.register("clean", Delete::class){
+tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

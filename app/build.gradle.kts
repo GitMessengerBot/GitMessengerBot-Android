@@ -1,10 +1,8 @@
 plugins {
     id("com.android.application")
-    id("name.remal.check-dependency-updates") version "1.1.6"
     kotlin("android")
     kotlin("kapt")
-    id("androidx.navigation.safeargs.kotlin")
-    id("dagger.hilt.android.plugin")
+    id("name.remal.check-dependency-updates") version "1.2.2"
 }
 
 android {
@@ -16,27 +14,24 @@ android {
         versionCode = Application.versionCode
         versionName = Application.versionName
         multiDexEnabled = true
-        ndk.debugSymbolLevel =
-            "FULL" // https://support.google.com/googleplay/android-developer/answer/9848633?hl=ko#zippy=%2C네이티브-디버그-기호-파일-생성
-        setProperty("archivesBaseName", "v$versionName ($versionCode)")
+        setProperty("archivesBaseName", "$versionName ($versionCode)")
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
-        // compose = true
+        compose = true
     }
 
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            isDebuggable = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+    kapt {
+        correctErrorTypes = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.Compose.Version
     }
 
     sourceSets {
@@ -44,8 +39,7 @@ android {
     }
 
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/*.kotlin_module")
+        exclude("META-INF/library_release.kotlin_module")
     }
 
     compileOptions {
@@ -55,77 +49,19 @@ android {
 
     kotlinOptions {
         jvmTarget = Application.jvmTarget
-        // useIR = true
+        useIR = true
     }
-
-    /*composeOptions {
-        kotlinCompilerVersion = Versions.Essential.Kotlin
-        kotlinCompilerExtensionVersion = Versions.Jetpack.Compose
-    }*/
 }
 
+// Ignored red-line. It's working well.
 dependencies {
-    "implementation"(platform(Dependencies.Firebase.Bom))
-
-    fun def(vararg strings: String) {
-        for (string in strings) implementation(string)
-    }
-
-    def(
-        Dependencies.Js.J2V8,
-        Dependencies.Js.RhinoEngine,
-
-        Dependencies.Network.Jsoup,
-        Dependencies.Network.Retrofit,
-        Dependencies.Network.OkHttp,
-        Dependencies.Network.LoggingInterceptor,
-
-        Dependencies.Jetpack.DataStore,
-        Dependencies.Jetpack.SecurityCrypto,
-
-        /*Dependencies.Jetpack.Compose.Ui,
-        Dependencies.Jetpack.Compose.Foundation,
-        Dependencies.Jetpack.Compose.Material,
-        Dependencies.Jetpack.Compose.MaterialIconsCore,
-        Dependencies.Jetpack.Compose.MaterialIconExtended,
-        Dependencies.Jetpack.Compose.RuntimeRxJava2,
-        Dependencies.Jetpack.Compose.RuntimeLiveData,
-        Dependencies.Jetpack.Compose.UiTooling,*/
-
-        Dependencies.Rx.Kotlin,
-        Dependencies.Rx.Android,
-        Dependencies.Rx.Retrofit,
-
-        Dependencies.Essential.AppCompat,
-        Dependencies.Essential.Anko,
-        Dependencies.Essential.Kotlin,
-
-        Dependencies.Ktx.Core,
-        Dependencies.Ktx.Config,
-        Dependencies.Ktx.NavigationUi,
-        Dependencies.Ktx.NavigationFragment,
-        Dependencies.Ktx.LifeCycleLiveData,
-
-        Dependencies.Di.Hilt,
-
-        Dependencies.Ui.SpotLight,
-        Dependencies.Ui.OverlappingPanels,
-        Dependencies.Ui.TransformationLayout,
-        Dependencies.Ui.Browser,
-        Dependencies.Ui.ShapeOfYou,
-        Dependencies.Ui.Lottie,
-        Dependencies.Ui.SimpleCodeEditor,
-        Dependencies.Ui.SmoothBottomBar,
-        Dependencies.Ui.Flexbox,
-        Dependencies.Ui.Material,
-        Dependencies.Ui.Glide,
-        Dependencies.Ui.ConstraintLayout,
-
-        Dependencies.Util.GsonConverter,
-        Dependencies.Util.AndroidUtils,
-        Dependencies.Util.CrashReporter
-    )
-
-    kapt(Dependencies.Di.HiltCompiler)
-    kapt(Dependencies.Util.GlideCompiler)
+    Dependencies.essential.forEach(::implementation)
+    Dependencies.network.forEach(::implementation)
+    Dependencies.rx.forEach(::implementation)
+    Dependencies.di.forEach(::implementation)
+    Dependencies.ui.forEach(::implementation)
+    Dependencies.util.forEach(::implementation)
+    Dependencies.compose.forEach(::implementation)
+    Dependencies.room.forEach(::implementation)
+    Dependencies.compiler.forEach(::kapt)
 }

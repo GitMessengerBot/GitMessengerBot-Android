@@ -4,8 +4,11 @@ import com.google.gson.JsonObject
 import com.sungbin.gitkakaobot.model.github.File
 import com.sungbin.gitkakaobot.model.github.Repo
 import io.reactivex.rxjava3.core.Flowable
-import retrofit2.http.*
-
+import retrofit2.http.Body
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 /**
  * Created by SungBin on 2020-08-23.
@@ -29,5 +32,4 @@ interface GithubInterface {
     fun createRepo(
         @Body body: Repo
     ): Flowable<JsonObject>
-
 }
