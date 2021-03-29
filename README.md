@@ -7,7 +7,7 @@ a Messenger Auto-Reply Bot application with Git service.
 > restart? <br/>
 > Please see `compose` branch. (korean) <br/><br/>
 > 다 아는 것만 계속 하면 뭐해 실력이 똑같은데... <br/>
-> 무슨 똑같은 연습만 몇년 째 하고있어;;
+> 무슨 똑같은 연습만 몇 년째 하고있어;;
 
 -----
 
