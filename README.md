@@ -27,7 +27,7 @@ You can download at [Google Playstore](https://play.google.com/store/apps/detail
 2. - [ ] Migration all layout `Jetpack Compose` (~~is it possible?~~, finally, I can do it!)
 3. - [ ] 100% `Kotlin`
 4. - [ ] Include SNS about KakaoTalk Bot
-5. - [ ] Playstore upload
+5. - [x] Playstore upload
 6. - [ ] `BottomNavigationView` radius rounding
 
 ## How to get `personal-access-key` ?
