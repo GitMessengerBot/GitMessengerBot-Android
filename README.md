@@ -4,10 +4,8 @@
 # GitMessengerBot [![time tracker](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot.svg)](https://wakatime.com/badge/github/sungbin5304/GitMessengerBot)
 a Messenger Auto-Reply Bot application with Git service.
 
-> ~~restart?~~ <br/>
+> restart! <br/>
 > Please see `compose` branch. (korean) <br/><br/>
-> 다 아는 것만 계속 하면 뭐해 실력이 안 느는데... <br/>
-> 무슨 똑같은 연습만 몇 년째 하고있어;;
 
 -----
 
