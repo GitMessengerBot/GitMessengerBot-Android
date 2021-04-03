@@ -14,13 +14,9 @@ V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최�
 
 # 개발 스킬
 1. Jetpack Compose 100%
-2. Dagger2
+2. Room
 3. Coroutines
-4. ReactiveX
-5. Retrofit, OkHttp
-
-# TODO
-1. - [ ] 코드 에디터 부분 퀄리티 개선
+4. Retrofit, OkHttp
 
 ## 개인 키 얻는법
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
