@@ -1,8 +1,9 @@
 plugins {
     id("com.android.application")
+    id("com.chaquo.python")
     kotlin("android")
     kotlin("kapt")
-    id("name.remal.check-dependency-updates") version "1.2.2"
+    id("name.remal.check-dependency-updates") version "1.3.0"
 }
 
 android {
@@ -15,10 +16,15 @@ android {
         versionName = Application.versionName
         multiDexEnabled = true
         setProperty("archivesBaseName", "$versionName ($versionCode)")
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
+        }
+
+        ndk {
+            abiFilters.addAll(mutableSetOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
         }
     }
 
@@ -57,8 +63,6 @@ android {
 dependencies {
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)
-    Dependencies.rx.forEach(::implementation)
-    Dependencies.di.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)

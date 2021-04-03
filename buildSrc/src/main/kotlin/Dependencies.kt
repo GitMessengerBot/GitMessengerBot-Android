@@ -14,38 +14,29 @@ object Application {
 
 object Versions {
     object Essential {
-        const val Kotlin = "1.4.31"
-        const val Gradle = "7.0.0-alpha10"
+        const val Python = "9.1.0"
+        const val Kotlin = "1.4.32"
+        const val Gradle = "7.0.0-alpha12"
         const val CoreKtx = "1.3.2"
     }
 
-    object Di {
-        const val Dagger = "2.28"
-    }
-
     object Ui {
-        const val DayNightSwitch = "1.4"
-        const val Lottie = "3.6.1"
+        const val DayNightSwitch = "1.5"
         const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
-        const val Glide = "0.6.2"
+        const val Glide = "0.7.0"
         const val ConstraintLayout = "1.0.0-alpha04"
     }
 
     object Util {
         const val AndroidUtil = "5.1.5"
         const val CrashReporter = "1.1.0"
-        const val JsonConverter = "2.9.0"
+        const val MoshiConverter = "2.9.0"
+        const val Moshi = "1.12.0"
     }
 
     object Network {
         const val OkHttp = "4.9.1"
         const val Retrofit = "2.9.0"
-    }
-
-    object Rx {
-        const val RxKotlin = "3.0.1"
-        const val RxAndroid = "3.0.0"
-        const val RxRetrofit = "2.9.0"
     }
 
     object Jetpack {
@@ -66,33 +57,23 @@ object Dependencies {
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
     )
 
-    val rx = listOf(
-        "io.reactivex.rxjava3:rxkotlin:${Versions.Rx.RxKotlin}",
-        "io.reactivex.rxjava3:rxandroid:${Versions.Rx.RxAndroid}",
-        "com.squareup.retrofit2:adapter-rxjava3:${Versions.Rx.RxRetrofit}"
-    )
-
     val essential = listOf(
         "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
         "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Essential.Kotlin}"
     )
 
-    val di = listOf(
-        "com.google.dagger:dagger:${Versions.Di.Dagger}"
-    )
-
     val ui = listOf(
         "com.github.Mahfa:DayNightSwitch:${Versions.Ui.DayNightSwitch}",
-        "com.airbnb.android:lottie:${Versions.Ui.Lottie}",
         "com.google.accompanist:accompanist-glide:${Versions.Ui.Glide}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
         // "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
     )
 
     val util = listOf(
-        "com.github.sungbin5304:AndroidUtils:${Versions.Util.AndroidUtil}",
+        "me.sungbin:androidutils:${Versions.Util.AndroidUtil}",
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
-        "com.squareup.retrofit2:converter-gson:${Versions.Util.JsonConverter}"
+        "com.squareup.retrofit2:converter-moshi:${Versions.Util.MoshiConverter}",
+        "com.squareup.moshi:moshi:${Versions.Util.Moshi}"
     )
 
     var room = listOf(
@@ -110,7 +91,6 @@ object Dependencies {
     )
 
     val compiler = listOf(
-        "com.google.dagger:dagger-compiler:${Versions.Di.Dagger}",
         "androidx.room:room-compiler:${Versions.Jetpack.Room}"
     )
 }
