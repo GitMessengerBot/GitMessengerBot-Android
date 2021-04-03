@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.sungbin.gitkakaobot">
+    package="me.sungbin.gitmessengerbot">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".GitMessengerBot"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:fullBackupOnly="true"
@@ -24,33 +23,15 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.activity.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBarWithNoLimit">
+            android:name=".ui.SplashActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.activity.DashboardActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.BackgroundWhiteStatusBar" />
-
-        <activity
-            android:name=".ui.activity.CodeEditActivity"
-            android:theme="@style/AppTheme.WhiteStatusBar"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".ui.activity.JoinActivity"
-            android:theme="@style/AppTheme.NoActionBarWithNoLimit" />
-
-        <activity
-            android:name=".ui.activity.ExceptionActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <service
+       <!-- <service
             android:name=".listener.MessageListener"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -59,7 +40,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.ForegroundService" />
+        <service android:name=".service.ForegroundService" />-->
 
     </application>
 
