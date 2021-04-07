@@ -7,6 +7,7 @@
 
 package me.sungbin.gitmessengerbot.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.sungbin.androidutils.extensions.doDelay
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -47,6 +49,10 @@ class SplashActivity : ComponentActivity() {
             BindView {
                 SplashView()
             }
+        }
+
+        doDelay(2000) {
+            startActivity(Intent(this, SetupActivity::class.java))
         }
     }
 

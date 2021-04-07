@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright"><![CDATA[© 2021 지성빈 & 구환. all rights reserved.]]></string>
+
+    <string name="setup_title">새로운 시작을 위해,\n아래의 권한을 허용해주세요.</string>
 </resources>

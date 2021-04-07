@@ -23,13 +23,17 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.SplashActivity"
-            android:theme="@style/AppTheme">
+            android:exported="true"
+            android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:exported="true"
+            android:name=".ui.SetupActivity" />
 
        <!-- <service
             android:name=".listener.MessageListener"
