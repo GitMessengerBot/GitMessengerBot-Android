@@ -25,7 +25,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -114,7 +113,8 @@ class SetupActivity : ComponentActivity() {
                             .padding(8.dp),
                         text = "개인 키 입력 후 시작하기",
                         color = Color.White,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -126,17 +126,13 @@ class SetupActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = padding[0].dp, bottom = padding[1].dp)
-                .clip(RoundedCornerShape(15.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(top = padding[0].dp, bottom = padding[1].dp),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = Color.White)
-                    .clip(RoundedCornerShape(30.dp))
-                    .padding(8.dp),
+                    .background(color = Color.White, RoundedCornerShape(15.dp))
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -153,11 +149,11 @@ class SetupActivity : ComponentActivity() {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp),
+                    .padding(top = 8.dp),
                 color = Color.White,
-                fontWeight = FontWeight.Bold,
                 text = description,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = 13.sp
             )
         }
     }
