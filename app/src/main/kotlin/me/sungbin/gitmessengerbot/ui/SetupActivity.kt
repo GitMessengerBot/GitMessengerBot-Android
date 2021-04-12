@@ -24,33 +24,49 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import me.sungbin.androidutils.extensions.doDelay
 import me.sungbin.androidutils.util.PermissionUtil
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.Web
 
 /**
  * Created by SungBin on 2021/04/08.
  */
 
+@ExperimentalComposeUiApi
 class SetupActivity : ComponentActivity() {
 
     data class Permission(
@@ -62,6 +78,7 @@ class SetupActivity : ComponentActivity() {
 
     val isStoragePermissionGranted = mutableStateOf(false)
     val isNotificationPermissionGranted = mutableStateOf(false)
+    val personalKeyInputDialogIsOpening = mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -78,11 +95,107 @@ class SetupActivity : ComponentActivity() {
         setContent {
             BindView {
                 SetupView()
+                BindPersonalKeyInputDialog()
             }
         }
     }
 
-    @Preview
+    @Composable
+    private fun BindPersonalKeyInputDialog() {
+        if (personalKeyInputDialogIsOpening.value) {
+            val personalKeyInput = remember { mutableStateOf(TextFieldValue()) }
+            val keyboardController = LocalSoftwareKeyboardController.current
+            MaterialTheme {
+                AlertDialog(
+                    shape = RoundedCornerShape(10.dp),
+                    properties = DialogProperties(
+                        dismissOnClickOutside = false
+                    ),
+                    onDismissRequest = {
+                        personalKeyInputDialogIsOpening.value = false
+                    },
+                    text = {
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_baseline_circle_24),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(Color.Black)
+                                    )
+                                    Image(
+                                        modifier = Modifier.size(15.dp),
+                                        painter = painterResource(R.drawable.ic_baseline_vpn_key_24),
+                                        contentDescription = null
+                                    )
+                                }
+                                Text(
+                                    text = stringResource(R.string.setup_input_personal_key),
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                            TextField(
+                                maxLines = 1,
+                                singleLine = true,
+                                modifier = Modifier.padding(top = 10.dp),
+                                value = personalKeyInput.value,
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = Color.White,
+                                    cursorColor = Color.Black,
+                                    textColor = Color.Black,
+                                    focusedIndicatorColor = Color.Black
+                                ),
+                                keyboardActions = KeyboardActions {
+                                    keyboardController?.hideSoftwareKeyboard() // todo: Do not working.
+                                },
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                onValueChange = { personalKeyInput.value = it }
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .padding(top = 20.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.setup_way_to_get_personal_key),
+                                    modifier = Modifier.clickable {
+                                        Web.open(this@SetupActivity, Web.Type.PersonalKeyGuide)
+                                    },
+                                    fontSize = 13.sp,
+                                    color = Color.Black
+                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.setup_open_github),
+                                        modifier = Modifier.clickable {
+                                            Web.open(this@SetupActivity, Web.Type.Github)
+                                        },
+                                        fontSize = 13.sp,
+                                        color = Color.Black
+                                    )
+                                    Text(
+                                        modifier = Modifier.padding(start = 8.dp),
+                                        text = stringResource(R.string.setup_start),
+                                        fontSize = 13.sp,
+                                        color = Color.Black
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    buttons = {}
+                )
+            }
+        }
+    }
+
     @Composable
     private fun SetupView() {
         Box(
@@ -102,7 +215,16 @@ class SetupActivity : ComponentActivity() {
                 )
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
-                    text = stringResource(R.string.setup_title),
+                    text = with(AnnotatedString.Builder(stringResource(R.string.setup_title))) {
+                        addStyle(
+                            SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = defaultFontFamily
+                            ),
+                            11, 18
+                        )
+                        toAnnotatedString()
+                    },
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
@@ -160,6 +282,9 @@ class SetupActivity : ComponentActivity() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable {
+                                personalKeyInputDialogIsOpening.value = true
+                            }
                             .padding(8.dp),
                         text = stringResource(R.string.setup_start_with_personal_key),
                         color = Color.White,

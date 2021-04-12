@@ -41,11 +41,10 @@ android {
     }
 
     sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
-    }
-
-    packagingOptions {
-        exclude("META-INF/library_release.kotlin_module")
+        getByName("main").run {
+            java.srcDirs("src/main/kotlin")
+            resources.excludes.add("META-INF/library_release.kotlin_module")
+        }
     }
 
     compileOptions {
@@ -59,7 +58,6 @@ android {
     }
 }
 
-// Ignored red-line. It's working well.
 dependencies {
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)

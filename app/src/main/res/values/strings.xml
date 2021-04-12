@@ -9,4 +9,8 @@
     <string name="setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
     <string name="setup_last_func">마지막으로,</string>
     <string name="setup_start_with_personal_key">개인 키 입력으로 시작하기</string>
+    <string name="setup_input_personal_key">개인 키 입력</string>
+    <string name="setup_way_to_get_personal_key">개인 키 얻는법</string>
+    <string name="setup_open_github">깃허브 열기</string>
+    <string name="setup_start">시작하기</string>
 </resources>

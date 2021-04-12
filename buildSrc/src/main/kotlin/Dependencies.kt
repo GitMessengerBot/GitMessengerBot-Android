@@ -24,6 +24,7 @@ object Versions {
         const val DayNightSwitch = "1.5"
         const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
         const val Glide = "0.7.0"
+        const val Browser = "1.3.0"
         const val ConstraintLayout = "1.0.0-alpha04"
     }
 
@@ -63,6 +64,7 @@ object Dependencies {
     )
 
     val ui = listOf(
+        "androidx.browser:browser:${Versions.Ui.Browser}",
         "com.github.Mahfa:DayNightSwitch:${Versions.Ui.DayNightSwitch}",
         "com.google.accompanist:accompanist-glide:${Versions.Ui.Glide}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
