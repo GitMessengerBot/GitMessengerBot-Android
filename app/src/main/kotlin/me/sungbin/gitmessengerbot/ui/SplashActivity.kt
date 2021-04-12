@@ -26,6 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +37,7 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 
 /**
  * Created by SungBin on 2021/04/08.
@@ -52,6 +56,7 @@ class SplashActivity : ComponentActivity() {
         }
 
         doDelay(2000) {
+            finish()
             startActivity(Intent(this, SetupActivity::class.java))
         }
     }
@@ -76,9 +81,18 @@ class SplashActivity : ComponentActivity() {
                     modifier = Modifier.size(150.dp, 150.dp)
                 )
                 Text(
-                    text = stringResource(R.string.app_name),
+                    text = with(AnnotatedString.Builder(stringResource(R.string.app_name))) {
+                        addStyle(
+                            SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = defaultFontFamily
+                            ),
+                            3, 12
+                        )
+                        toAnnotatedString()
+                    },
                     color = Color.White,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(top = 10.dp)
                 )
             }

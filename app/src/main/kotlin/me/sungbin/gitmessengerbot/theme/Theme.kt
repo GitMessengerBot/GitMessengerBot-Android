@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import me.sungbin.gitmessengerbot.R
 
-private val defaultFontFamily = FontFamily(Font(R.font.nanumgothic))
+val defaultFontFamily = FontFamily(Font(R.font.nanumgothic))
 
 val typography = Typography(
     defaultFontFamily = defaultFontFamily,

@@ -7,11 +7,14 @@
 
 package me.sungbin.gitmessengerbot.ui
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,8 +26,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -34,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.sungbin.androidutils.extensions.doDelay
+import me.sungbin.androidutils.util.PermissionUtil
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -44,6 +52,24 @@ import me.sungbin.gitmessengerbot.theme.colors
  */
 
 class SetupActivity : ComponentActivity() {
+
+    data class Permission(
+        val permissions: List<String>,
+        val name: String,
+        val description: String,
+        val painterResource: Int
+    )
+
+    val isStoragePermissionGranted = mutableStateOf(false)
+    val isNotificationPermissionGranted = mutableStateOf(false)
+
+    private val permissionsContracts =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
+            if (permissionRequest.values.first()) {
+                isStoragePermissionGranted.value = true
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,9 +113,33 @@ class SetupActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                PermissionView("저장소 접근 권한 (필수)", "소스코드 저장을 위해 해당 권한이 필요합니다.", listOf(0, 16))
-                PermissionView("알림 읽기 권한 (필수)", "카카오톡 알림을 감지하기 위해 필요합니다.", listOf(16, 16))
-                PermissionView("배터리 최적화 제외 (선택)", "봇이 빠른속도로 동작하기 위해 필요합니다.", listOf(16, 0))
+                PermissionView(
+                    Permission(
+                        listOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        stringResource(R.string.setup_permission_storage_label),
+                        stringResource(
+                            R.string.setup_permission_storage_description
+                        ),
+                        R.drawable.ic_baseline_folder_24
+                    ),
+                    isStoragePermissionGranted,
+                    listOf(0, 16)
+                )
+                PermissionView(
+                    Permission(
+                        listOf(PERMISSION_NOTIFICATION_READ),
+                        stringResource(R.string.setup_permission_notification_label),
+                        stringResource(
+                            R.string.setup_permission_notification_description
+                        ),
+                        R.drawable.ic_baseline_notifications_24
+                    ),
+                    isNotificationPermissionGranted,
+                    listOf(16, 16)
+                )
             }
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -97,7 +147,7 @@ class SetupActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Text(
-                    text = "마지막으로,",
+                    text = stringResource(R.string.setup_last_func),
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -111,7 +161,7 @@ class SetupActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
-                        text = "개인 키 입력 후 시작하기",
+                        text = stringResource(R.string.setup_start_with_personal_key),
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
@@ -122,26 +172,41 @@ class SetupActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun PermissionView(name: String, description: String, padding: List<Int>) {
+    private fun PermissionView(
+        permission: Permission,
+        isPermissionGrant: MutableState<Boolean>,
+        padding: List<Int>
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .alpha(if (isPermissionGrant.value) 0.5f else 1f)
                 .padding(top = padding[0].dp, bottom = padding[1].dp),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.White, RoundedCornerShape(15.dp))
+                    .clickable {
+                        permission.requestAllPermissions()
+                    }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_baseline_error_24),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.Black)
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_baseline_circle_24),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color.Black)
+                    )
+                    Image(
+                        modifier = Modifier.size(15.dp),
+                        painter = painterResource(permission.painterResource),
+                        contentDescription = null
+                    )
+                }
                 Text(
-                    text = name,
+                    text = permission.name,
                     color = Color.Black,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -151,10 +216,22 @@ class SetupActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .padding(top = 8.dp),
                 color = Color.White,
-                text = description,
+                text = permission.description,
                 textAlign = TextAlign.Center,
                 fontSize = 13.sp
             )
         }
+    }
+
+    private fun Permission.requestAllPermissions() =
+        if (this.permissions.first() == PERMISSION_NOTIFICATION_READ) {
+            PermissionUtil.requestReadNotification(this@SetupActivity)
+            doDelay(1000) {
+                isNotificationPermissionGranted.value = true
+            }
+        } else permissionsContracts.launch(this.permissions.toTypedArray())
+
+    companion object {
+        const val PERMISSION_NOTIFICATION_READ = "PERMISSION_FOR_NOTIFICATION_READ"
     }
 }
