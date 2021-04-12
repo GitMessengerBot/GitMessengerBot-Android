@@ -13,4 +13,5 @@
     <string name="setup_way_to_get_personal_key">개인 키 얻는법</string>
     <string name="setup_open_github">깃허브 열기</string>
     <string name="setup_start">시작하기</string>
+    <string name="setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
 </resources>

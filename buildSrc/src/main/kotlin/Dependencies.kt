@@ -31,8 +31,7 @@ object Versions {
     object Util {
         const val AndroidUtil = "5.1.5"
         const val CrashReporter = "1.1.0"
-        const val MoshiConverter = "2.9.0"
-        const val Moshi = "1.12.0"
+        const val Gson = "2.8.6"
     }
 
     object Network {
@@ -74,8 +73,8 @@ object Dependencies {
     val util = listOf(
         "me.sungbin:androidutils:${Versions.Util.AndroidUtil}",
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
-        "com.squareup.retrofit2:converter-moshi:${Versions.Util.MoshiConverter}",
-        "com.squareup.moshi:moshi:${Versions.Util.Moshi}"
+        "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
+        "com.google.code.gson:gson:${Versions.Util.Gson}"
     )
 
     var room = listOf(

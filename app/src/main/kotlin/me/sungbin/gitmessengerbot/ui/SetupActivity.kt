@@ -53,13 +53,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.google.gson.Gson
 import me.sungbin.androidutils.extensions.doDelay
+import me.sungbin.androidutils.extensions.toast
 import me.sungbin.androidutils.util.PermissionUtil
+import me.sungbin.androidutils.util.StorageUtil
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Web
 
 /**
@@ -105,6 +110,11 @@ class SetupActivity : ComponentActivity() {
         if (personalKeyInputDialogIsOpening.value) {
             val personalKeyInput = remember { mutableStateOf(TextFieldValue()) }
             val keyboardController = LocalSoftwareKeyboardController.current
+
+            StorageUtil.createFolder(PathManager.Bots)
+            StorageUtil.createFolder(PathManager.Npm)
+            StorageUtil.createFolder(PathManager.Setting)
+
             MaterialTheme {
                 AlertDialog(
                     shape = RoundedCornerShape(10.dp),
@@ -181,7 +191,16 @@ class SetupActivity : ComponentActivity() {
                                         color = Color.Black
                                     )
                                     Text(
-                                        modifier = Modifier.padding(start = 8.dp),
+                                        modifier = Modifier
+                                            .clickable {
+                                                val githubData =
+                                                    GithubData(personalKey = personalKeyInput.value.text)
+                                                StorageUtil.save(
+                                                    "${PathManager.Setting}/GithubData.json",
+                                                    Gson().toJson(githubData)
+                                                )
+                                            }
+                                            .padding(start = 8.dp),
                                         text = stringResource(R.string.setup_start),
                                         fontSize = 13.sp,
                                         color = Color.Black
@@ -283,7 +302,11 @@ class SetupActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                personalKeyInputDialogIsOpening.value = true
+                                if (isStoragePermissionGranted.value) {
+                                    personalKeyInputDialogIsOpening.value = true
+                                } else {
+                                    this@SetupActivity.toast(getString(R.string.setup_need_manage_permission))
+                                }
                             }
                             .padding(8.dp),
                         text = stringResource(R.string.setup_start_with_personal_key),
