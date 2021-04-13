@@ -9,6 +9,7 @@ package me.sungbin.gitmessengerbot.ui
 
 import android.Manifest
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -144,11 +145,12 @@ class SetupActivity : ComponentActivity() {
                                     Image(
                                         painter = painterResource(R.drawable.ic_baseline_circle_24),
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(Color.Black)
+                                        colorFilter = ColorFilter.tint(Color.Black),
+                                        modifier = Modifier.size(35.dp),
                                     )
                                     Image(
-                                        modifier = Modifier.size(15.dp),
-                                        painter = painterResource(R.drawable.ic_baseline_vpn_key_24),
+                                        modifier = Modifier.size(30.dp).padding(bottom = 2.dp),
+                                        painter = painterResource(R.drawable.ic_baseline_key_24),
                                         contentDescription = null
                                     )
                                 }
@@ -219,7 +221,8 @@ class SetupActivity : ComponentActivity() {
                                                                         getString(
                                                                             R.string.setup_github_connect_error,
                                                                             error.localizedMessage
-                                                                        )
+                                                                        ),
+                                                                        Toast.LENGTH_LONG
                                                                     )
                                                                 }
                                                             }
@@ -273,12 +276,12 @@ class SetupActivity : ComponentActivity() {
                 .padding(30.dp)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_round_warning_amber_24),
-                    modifier = Modifier.size(80.dp),
+                    painter = painterResource(R.drawable.ic_round_caution_24),
+                    modifier = Modifier.size(60.dp),
                     contentDescription = null,
                 )
                 Text(
@@ -390,7 +393,7 @@ class SetupActivity : ComponentActivity() {
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(contentAlignment = Alignment.Center) {
+                /*Box(contentAlignment = Alignment.Center) {
                     Image(
                         painter = painterResource(R.drawable.ic_baseline_circle_24),
                         contentDescription = null,
@@ -401,7 +404,12 @@ class SetupActivity : ComponentActivity() {
                         painter = painterResource(permission.painterResource),
                         contentDescription = null
                     )
-                }
+                }*/
+                Image(
+                    painter = painterResource(R.drawable.ic_baseline_error_24),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.Black)
+                )
                 Text(
                     text = permission.name,
                     color = Color.Black,

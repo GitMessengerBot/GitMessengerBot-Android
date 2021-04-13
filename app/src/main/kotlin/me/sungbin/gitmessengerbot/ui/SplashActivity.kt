@@ -84,7 +84,7 @@ class SplashActivity : ComponentActivity() {
                     painter = painterResource(R.drawable.ic_baseline_logo_512),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(Color.White),
-                    modifier = Modifier.size(150.dp, 150.dp)
+                    modifier = Modifier.size(150.dp)
                 )
                 Text(
                     text = with(AnnotatedString.Builder(stringResource(R.string.app_name))) {
@@ -99,7 +99,7 @@ class SplashActivity : ComponentActivity() {
                     },
                     color = Color.White,
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(top = 10.dp)
+                    modifier = Modifier.padding(top = 30.dp)
                 )
             }
             Column(
