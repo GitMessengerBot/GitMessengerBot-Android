@@ -54,23 +54,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import me.sungbin.androidutils.extensions.doDelay
 import me.sungbin.androidutils.extensions.toast
+import me.sungbin.androidutils.util.Logger
 import me.sungbin.androidutils.util.PermissionUtil
 import me.sungbin.androidutils.util.StorageUtil
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.model.GithubData
+import me.sungbin.gitmessengerbot.repo.GithubClient
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Web
+import me.sungbin.gitmessengerbot.util.asCallbackFlow
 
 /**
  * Created by SungBin on 2021/04/08.
  */
 
+@ExperimentalCoroutinesApi
 @ExperimentalComposeUiApi
 class SetupActivity : ComponentActivity() {
 
@@ -192,15 +202,57 @@ class SetupActivity : ComponentActivity() {
                                     )
                                     Text(
                                         modifier = Modifier
+                                            .padding(start = 8.dp)
                                             .clickable {
-                                                val githubData =
+                                                var githubData =
                                                     GithubData(personalKey = personalKeyInput.value.text)
-                                                StorageUtil.save(
-                                                    "${PathManager.Setting}/GithubData.json",
-                                                    Gson().toJson(githubData)
-                                                )
-                                            }
-                                            .padding(start = 8.dp),
+
+                                                Logger.i(githubData.personalKey)
+
+                                                CoroutineScope(Dispatchers.IO).launch {
+                                                    GithubClient
+                                                        .instance(githubData.personalKey)
+                                                        .getUserInfo()
+                                                        .asCallbackFlow()
+                                                        .catch { error ->
+                                                            this@SetupActivity.run {
+                                                                runOnUiThread {
+                                                                    toast(
+                                                                        getString(
+                                                                            R.string.setup_github_connect_error,
+                                                                            error.localizedMessage
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
+                                                            Logger.e(error)
+                                                        }
+                                                        .collect { user ->
+                                                            githubData = githubData.copy(
+                                                                userName = user.login,
+                                                                profileImageUrl = user.avatarUrl
+                                                            )
+
+                                                            StorageUtil.save(
+                                                                "${PathManager.Setting}/GithubData.json",
+                                                                Gson().toJson(githubData)
+                                                            )
+
+                                                            finish()
+
+                                                            this@SetupActivity.run {
+                                                                runOnUiThread {
+                                                                    toast(
+                                                                        getString(
+                                                                            R.string.setup_welcome_start,
+                                                                            user.login
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                }
+                                            },
                                         text = stringResource(R.string.setup_start),
                                         fontSize = 13.sp,
                                         color = Color.Black

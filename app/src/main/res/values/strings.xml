@@ -14,4 +14,6 @@
     <string name="setup_open_github">깃허브 열기</string>
     <string name="setup_start">시작하기</string>
     <string name="setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
+    <string name="setup_github_connect_error">깃허브 연결에 실패했어요.\n제대로된 키를 입력하셨나요?\n\n(%s)</string>
+    <string name="setup_welcome_start">%s님 환영합니다! 😁😁</string>
 </resources>
