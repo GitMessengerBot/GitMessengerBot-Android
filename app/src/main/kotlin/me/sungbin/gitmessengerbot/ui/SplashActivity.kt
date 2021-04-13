@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.sungbin.androidutils.extensions.doDelay
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.BindView
@@ -44,8 +46,9 @@ import me.sungbin.gitmessengerbot.theme.defaultFontFamily
  * Created by SungBin on 2021/04/08.
  */
 
+@ExperimentalComposeUiApi
+@ExperimentalCoroutinesApi
 class SplashActivity : ComponentActivity() {
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,8 +81,9 @@ class SplashActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painterResource(R.mipmap.ic_launcher),
+                    painter = painterResource(R.drawable.ic_baseline_logo_512),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White),
                     modifier = Modifier.size(150.dp, 150.dp)
                 )
                 Text(

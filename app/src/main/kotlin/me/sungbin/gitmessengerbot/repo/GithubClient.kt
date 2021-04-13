@@ -15,7 +15,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object GithubClient {
-    private lateinit var builder: GithubService
+    private var token = ""
+    private lateinit var builder: Retrofit
     private const val BaseUrl = "https://api.github.com"
 
     private class AuthInterceptor(private val token: String) : Interceptor {
@@ -40,15 +41,15 @@ object GithubClient {
         return builder.build()
     }
 
-    fun instance(token: String): GithubService {
-        if (!::builder.isInitialized) {
+    fun <T> instance(token: String, service: Class<T>): T {
+        if (!::builder.isInitialized || this.token != token) {
+            this.token = token
             builder = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getInterceptor(provideLoggingInterceptor, AuthInterceptor(token)))
                 .baseUrl(BaseUrl)
                 .build()
-                .create(GithubService::class.java)
         }
-        return builder
+        return builder.create(service)
     }
 }

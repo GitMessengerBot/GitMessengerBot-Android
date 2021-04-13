@@ -26,7 +26,7 @@ fun <T> Call<T>.asCallbackFlow() = callbackFlow<T> {
             if (response.isSuccessful) {
                 response.body()?.let { offer(it) } ?: close(Exception("Body is empty."))
             } else {
-                close(IOException("${response.code()} + ${response.errorBody()}"))
+                close(IOException("${response.code()}; ${response.errorBody()}"))
             }
         }
 

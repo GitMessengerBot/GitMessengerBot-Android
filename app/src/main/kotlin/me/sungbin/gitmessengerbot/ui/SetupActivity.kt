@@ -62,12 +62,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.androidutils.extensions.doDelay
 import me.sungbin.androidutils.extensions.toast
-import me.sungbin.androidutils.util.Logger
 import me.sungbin.androidutils.util.PermissionUtil
 import me.sungbin.androidutils.util.StorageUtil
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.model.GithubData
 import me.sungbin.gitmessengerbot.repo.GithubClient
+import me.sungbin.gitmessengerbot.repo.GithubService
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -207,11 +207,9 @@ class SetupActivity : ComponentActivity() {
                                                 var githubData =
                                                     GithubData(personalKey = personalKeyInput.value.text)
 
-                                                Logger.i(githubData.personalKey)
-
                                                 CoroutineScope(Dispatchers.IO).launch {
                                                     GithubClient
-                                                        .instance(githubData.personalKey)
+                                                        .instance(githubData.personalKey, GithubService::class.java)
                                                         .getUserInfo()
                                                         .asCallbackFlow()
                                                         .catch { error ->
@@ -225,7 +223,6 @@ class SetupActivity : ComponentActivity() {
                                                                     )
                                                                 }
                                                             }
-                                                            Logger.e(error)
                                                         }
                                                         .collect { user ->
                                                             githubData = githubData.copy(
@@ -292,7 +289,7 @@ class SetupActivity : ComponentActivity() {
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = defaultFontFamily
                             ),
-                            11, 18
+                            11, 19
                         )
                         toAnnotatedString()
                     },

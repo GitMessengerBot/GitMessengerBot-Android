@@ -2,7 +2,7 @@
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright"><![CDATA[© 2021 지성빈 & 구환. all rights reserved.]]></string>
 
-    <string name="setup_title">새로운 시작을 위해,\n아래의 권한을 허용해주세요.</string>
+    <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="setup_permission_storage_label">저장소 접근 권한</string>
     <string name="setup_permission_storage_description">소스코드 저장을 위해 해당 권한이 필요합니다.</string>
     <string name="setup_permission_notification_label">알림 읽기 권한</string>
