@@ -39,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -149,7 +148,9 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier.size(35.dp),
                                     )
                                     Image(
-                                        modifier = Modifier.size(30.dp).padding(bottom = 2.dp),
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .padding(bottom = 2.dp),
                                         painter = painterResource(R.drawable.ic_baseline_key_24),
                                         contentDescription = null
                                     )
@@ -211,7 +212,10 @@ class SetupActivity : ComponentActivity() {
 
                                                 CoroutineScope(Dispatchers.IO).launch {
                                                     GithubClient
-                                                        .instance(githubData.personalKey, GithubService::class.java)
+                                                        .instance(
+                                                            githubData.personalKey,
+                                                            GithubService::class.java
+                                                        )
                                                         .getUserInfo()
                                                         .asCallbackFlow()
                                                         .catch { error ->
@@ -276,7 +280,9 @@ class SetupActivity : ComponentActivity() {
                 .padding(30.dp)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -374,16 +380,15 @@ class SetupActivity : ComponentActivity() {
     @Composable
     private fun PermissionView(
         permission: Permission,
-        isPermissionGrant: MutableState<Boolean>,
+        isPermissionGranted: MutableState<Boolean>,
         padding: List<Int>
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .alpha(if (isPermissionGrant.value) 0.5f else 1f)
                 .padding(top = padding[0].dp, bottom = padding[1].dp),
         ) {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.White, RoundedCornerShape(15.dp))
@@ -391,30 +396,45 @@ class SetupActivity : ComponentActivity() {
                         permission.requestAllPermissions()
                     }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
             ) {
-                /*Box(contentAlignment = Alignment.Center) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    /*Box(contentAlignment = Alignment.Center) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_baseline_circle_24),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(Color.Black)
+                        )
+                        Image(
+                            modifier = Modifier.size(15.dp),
+                            painter = painterResource(permission.painterResource),
+                            contentDescription = null
+                        )
+                    }*/
                     Image(
-                        painter = painterResource(R.drawable.ic_baseline_circle_24),
+                        painter = painterResource(R.drawable.ic_baseline_error_24),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(Color.Black)
                     )
-                    Image(
-                        modifier = Modifier.size(15.dp),
-                        painter = painterResource(permission.painterResource),
-                        contentDescription = null
+                    Text(
+                        text = permission.name,
+                        color = Color.Black,
+                        modifier = Modifier.padding(start = 8.dp)
                     )
-                }*/
-                Image(
-                    painter = painterResource(R.drawable.ic_baseline_error_24),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.Black)
-                )
-                Text(
-                    text = permission.name,
-                    color = Color.Black,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_round_check_24),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(if (isPermissionGranted.value) colors.primaryVariant else Color.LightGray)
+                    )
+                }
             }
             Text(
                 modifier = Modifier
