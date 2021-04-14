@@ -18,9 +18,9 @@
 
 -----
 
-# 5. `Note` 에 아무거나 입력하고, `repo` 항목 모두 체크
+# 5. `Note` 에 아무거나 입력하고, `repo`와 사진엔 없지만 `user` 항목 모두 체크
 ![](https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/picture/5.png)
-
+> 사진엔 없지만 `user` 항목도 모두 체크 하셔야 해요.
 -----
 
 # 6. 페이지 하단에 `Generate token` 클릭
