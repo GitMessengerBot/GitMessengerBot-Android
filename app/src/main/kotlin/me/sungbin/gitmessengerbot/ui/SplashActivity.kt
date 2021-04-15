@@ -41,6 +41,7 @@ import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.App
 
 /**
  * Created by SungBin on 2021/04/08.
@@ -62,7 +63,12 @@ class SplashActivity : ComponentActivity() {
 
         doDelay(2000) {
             finish()
-            startActivity(Intent(this, SetupActivity::class.java))
+            startActivity(
+                Intent(
+                    this,
+                    if (App.isSetupDone()) MainActivity::class.java else SetupActivity::class.java
+                )
+            )
         }
     }
 

@@ -20,7 +20,7 @@ import java.io.IOException
  */
 
 @ExperimentalCoroutinesApi
-fun <T> Call<T>.asCallbackFlow() = callbackFlow<T> {
+fun <T> Call<T>.toCallbackFlow() = callbackFlow<T> {
     enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {

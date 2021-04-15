@@ -31,9 +31,8 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:exported="true"
-            android:name=".ui.SetupActivity" />
+        <activity android:name=".ui.SetupActivity" />
+        <activity android:name=".ui.MainActivity" />
 
        <!-- <service
             android:name=".listener.MessageListener"

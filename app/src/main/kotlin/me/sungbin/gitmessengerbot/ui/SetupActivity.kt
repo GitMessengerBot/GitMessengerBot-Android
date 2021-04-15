@@ -8,6 +8,7 @@
 package me.sungbin.gitmessengerbot.ui
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -74,7 +75,7 @@ import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Web
-import me.sungbin.gitmessengerbot.util.asCallbackFlow
+import me.sungbin.gitmessengerbot.util.toCallbackFlow
 
 /**
  * Created by SungBin on 2021/04/08.
@@ -217,7 +218,7 @@ class SetupActivity : ComponentActivity() {
                                                             GithubService::class.java
                                                         )
                                                         .getUserInfo()
-                                                        .asCallbackFlow()
+                                                        .toCallbackFlow()
                                                         .catch { error ->
                                                             this@SetupActivity.run {
                                                                 runOnUiThread {
@@ -243,6 +244,12 @@ class SetupActivity : ComponentActivity() {
                                                             )
 
                                                             finish()
+                                                            startActivity(
+                                                                Intent(
+                                                                    this@SetupActivity,
+                                                                    MainActivity::class.java
+                                                                )
+                                                            )
 
                                                             this@SetupActivity.run {
                                                                 runOnUiThread {
