@@ -14,6 +14,7 @@
 
 package me.sungbin.gitmessengerbot.ui.fancybottombar
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,23 +35,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 
 /**
  * Created by Ji Sungbin on 2021/04/15.
  */
 
-interface FancyItemListener {
+private interface FancyItemListener {
     fun onItemChanged(item: FancyItem)
 }
 
 private var listener: FancyItemListener? = null
 
 @Composable
-fun FancyBottomBar(primaryColor: Color, items: List<FancyItem>, action: FancyItem.() -> Unit) {
+fun FancyBottomBar(
+    fancyColors: FancyColors = FancyColors(),
+    fancyOptions: FancyOptions = FancyOptions(),
+    items: List<FancyItem>,
+    action: FancyItem.() -> Unit
+) {
     listener = object : FancyItemListener {
         override fun onItemChanged(item: FancyItem) {
             action(item)
@@ -62,7 +66,8 @@ fun FancyBottomBar(primaryColor: Color, items: List<FancyItem>, action: FancyIte
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp),
+            .height(fancyOptions.barHeight)
+            .background(color = fancyColors.background),
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEach { item ->
@@ -71,7 +76,7 @@ fun FancyBottomBar(primaryColor: Color, items: List<FancyItem>, action: FancyIte
                     fancyItemStatue == item.id
                 }*/ // todo: Why need import?????? What`s current import for `get` property????
 
-            fun isFocusedItem() = fancyItemState == item.id
+            val fancyItemColor by animateColorAsState(if (fancyItemState == item.id) fancyColors.primary else fancyColors.indicatorBackground)
 
             Box(
                 modifier = Modifier
@@ -84,24 +89,27 @@ fun FancyBottomBar(primaryColor: Color, items: List<FancyItem>, action: FancyIte
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(1.dp)
-                        .background(color = if (isFocusedItem()) primaryColor else Color.LightGray)
+                        .height(fancyOptions.indicatorHeight)
+                        .background(color = fancyItemColor)
                 )
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(id = item.icon),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(color = if (isFocusedItem()) primaryColor else Color.LightGray)
-                    )
-                    if (item.name.isNotBlank()) {
+                    if (item.icon != null) {
+                        Image(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = fancyItemColor)
+                        )
+                    }
+                    if (item.title.isNotBlank()) {
                         Text(
-                            text = item.name,
-                            color = if (isFocusedItem()) primaryColor else Color.LightGray,
-                            modifier = Modifier.padding(top = 4.dp)
+                            text = item.title,
+                            color = fancyItemColor,
+                            modifier = Modifier.padding(top = fancyOptions.titleTopPadding),
+                            fontFamily = fancyOptions.fontFamily
                         )
                     }
                 }

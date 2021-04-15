@@ -7,10 +7,14 @@
 
 package me.sungbin.gitmessengerbot.ui.fancybottombar
 
-import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
 
 /**
  * Created by Ji Sungbin on 2021/04/15.
  */
 
-data class FancyItem(val title: String = "", @DrawableRes val icon: Int? = null, val id: Int = 0)
+class FancyColors(
+    var background: Color = Color.White,
+    var indicatorBackground: Color = Color.LightGray,
+    var primary: Color = Color.Blue
+)
