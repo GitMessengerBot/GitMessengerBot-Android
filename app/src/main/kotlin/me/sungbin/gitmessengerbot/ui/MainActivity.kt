@@ -49,6 +49,7 @@ import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
             setStatusBarColor(colors.primary)
             setNavigationBarColor(Color.White)
         }
+
         val items = listOf(
             FancyItem("Folders", R.drawable.ic_baseline_folder_24, 0),
             FancyItem(icon = R.drawable.ic_baseline_error_24, id = 1),
@@ -88,7 +90,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(bottom = 60.dp)
                     ) { index ->
-                        BindFancyPage(index = index)
+                        // BindFancyPage(index = index)
                     }
                     MainViewBind()
                     Column(
@@ -104,9 +106,7 @@ class MainActivity : ComponentActivity() {
                                 fancyColors = FancyColors(primary = colors.primary),
                                 fancyOptions = FancyOptions(fontFamily = defaultFontFamily),
                                 items = items
-                            ) {
-                                fancyNavigationState.value = id
-                            }
+                            ) { fancyNavigationState.value = id }
                             Box(
                                 modifier = Modifier.padding(bottom = 30.dp),
                                 contentAlignment = Alignment.Center
@@ -134,91 +134,97 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainViewBind() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalAlignment = Alignment.End
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.AccountCircle,
-                    contentDescription = null,
-                    modifier = Modifier.size(70.dp)
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.AccountCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(70.dp)
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
+                    Text(
+                        text = "Hi, jisungbin",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
             }
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalAlignment = Alignment.Start
+                    .wrapContentHeight()
+                    .padding(top = 30.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
-                Text(
-                    text = "Hi, jisungbin",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+                StateItemBind(title = "메인 전원", modifier = Modifier.weight(1f)) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("On")
+                        Switch(
+                            checked = false,
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = colors.primary,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = colors.secondary
+                            ),
+                            onCheckedChange = {}
+                        )
+                    }
+                }
+                StateItemBind(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "2", fontSize = 35.sp)
+                        Text(text = "개", fontSize = 8.sp)
+                    }
+                }
+                StateItemBind(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "2", fontSize = 35.sp)
+                        Text(text = "개", fontSize = 8.sp)
+                    }
+                }
+                StateItemBind(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
+                    Column(verticalArrangement = Arrangement.Center) {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(45.dp),
+                            tint = Color.Black
+                        )
+                    }
+                }
             }
         }
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 30.dp),
-            horizontalArrangement = Arrangement.Center
+                .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
+                .background(twiceLightGray)
         ) {
-            StateItemBind(title = "메인 전원", modifier = Modifier.weight(1f)) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("On")
-                    Switch(
-                        checked = false,
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = colors.primary,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = colors.secondary
-                        ),
-                        onCheckedChange = {}
-                    )
-                }
-            }
-            StateItemBind(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "2", fontSize = 35.sp)
-                    Text(text = "개", fontSize = 8.sp)
-                }
-            }
-            StateItemBind(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "2", fontSize = 35.sp)
-                    Text(text = "개", fontSize = 8.sp)
-                }
-            }
-            StateItemBind(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
-                Column(verticalArrangement = Arrangement.Center) {
-                    Icon(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(45.dp),
-                        tint = Color.Black
-                    )
-                }
-            }
         }
     }
 }
@@ -250,24 +256,6 @@ private fun StateItemBind(title: String, modifier: Modifier, content: @Composabl
             fontSize = 10.sp,
             textAlign = TextAlign.Center,
             color = Color.White
-        )
-    }
-}
-
-@Composable
-private fun BindFancyPage(index: Int) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 80.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "\uD83C\uDF1F Awesome FancyBottomBar \uD83C\uDF1F\nPage index: $index",
-            fontSize = 20.sp,
-            fontFamily = defaultFontFamily,
-            textAlign = TextAlign.Center
         )
     }
 }
