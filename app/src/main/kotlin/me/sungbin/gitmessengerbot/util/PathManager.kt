@@ -7,6 +7,10 @@
 
 package me.sungbin.gitmessengerbot.util
 
+/**
+ * Created by Ji Sungbin on 2021/04/12.
+ */
+
 object PathManager {
     const val Npm = "GitMessengerBot/npm"
     const val Bots = "GitMessengerBot/bots"

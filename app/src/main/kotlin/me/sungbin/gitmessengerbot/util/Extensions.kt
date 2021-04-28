@@ -7,6 +7,10 @@
 
 package me.sungbin.gitmessengerbot.util
 
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,6 +22,10 @@ import java.io.IOException
 /**
  * Created by Ji Sungbin on 2021/04/13.
  */
+
+fun toast(context: Context, message: String, length: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(context, message, length).show()
+}
 
 @ExperimentalCoroutinesApi
 fun <T> Call<T>.toCallbackFlow() = callbackFlow<T> {
@@ -36,4 +44,13 @@ fun <T> Call<T>.toCallbackFlow() = callbackFlow<T> {
     })
 
     awaitClose()
+}
+
+fun doDelay(ms: Long, action: () -> Unit) {
+    Handler(Looper.getMainLooper()).postDelayed(
+        {
+            action()
+        },
+        ms
+    )
 }

@@ -5,9 +5,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repo
+package me.sungbin.gitmessengerbot.repo.github
 
-import me.sungbin.gitmessengerbot.model.GithubUser
+import me.sungbin.gitmessengerbot.repo.github.model.GithubUser
 import retrofit2.Call
 import retrofit2.http.GET
 

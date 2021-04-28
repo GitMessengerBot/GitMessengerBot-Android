@@ -7,7 +7,10 @@
 
 package me.sungbin.gitmessengerbot.util
 
-import me.sungbin.androidutils.util.StorageUtil
+/**
+ * Created by Ji Sungbin on 2021/04/12.
+ */
+
 import java.io.File
 
 object App {

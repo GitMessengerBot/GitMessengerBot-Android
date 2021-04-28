@@ -8,6 +8,7 @@
 package me.sungbin.gitmessengerbot.ui
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -37,11 +38,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -55,27 +58,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import me.sungbin.androidutils.extensions.doDelay
-import me.sungbin.androidutils.extensions.toast
-import me.sungbin.androidutils.util.PermissionUtil
-import me.sungbin.androidutils.util.StorageUtil
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.model.GithubData
-import me.sungbin.gitmessengerbot.repo.GithubClient
-import me.sungbin.gitmessengerbot.repo.GithubService
+import me.sungbin.gitmessengerbot.repo.Client
+import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.PathManager
+import me.sungbin.gitmessengerbot.util.StorageUtil
 import me.sungbin.gitmessengerbot.util.Web
+import me.sungbin.gitmessengerbot.util.doDelay
 import me.sungbin.gitmessengerbot.util.toCallbackFlow
+import me.sungbin.gitmessengerbot.util.toast
 
 /**
  * Created by SungBin on 2021/04/08.
@@ -84,8 +83,7 @@ import me.sungbin.gitmessengerbot.util.toCallbackFlow
 @ExperimentalCoroutinesApi
 @ExperimentalComposeUiApi
 class SetupActivity : ComponentActivity() {
-
-    data class Permission(
+    private data class Permission(
         val permissions: List<String>,
         val name: String,
         val description: String,
@@ -119,8 +117,10 @@ class SetupActivity : ComponentActivity() {
     @Composable
     private fun BindPersonalKeyInputDialog() {
         if (personalKeyInputDialogIsOpening.value) {
+            val context = LocalContext.current
             val personalKeyInput = remember { mutableStateOf(TextFieldValue()) }
             val keyboardController = LocalSoftwareKeyboardController.current
+            val coroutineScope = rememberCoroutineScope()
 
             StorageUtil.createFolder(PathManager.Bots)
             StorageUtil.createFolder(PathManager.Npm)
@@ -175,7 +175,7 @@ class SetupActivity : ComponentActivity() {
                                     focusedIndicatorColor = Color.Black
                                 ),
                                 keyboardActions = KeyboardActions {
-                                    keyboardController?.hideSoftwareKeyboard() // todo: Do not working.
+                                    keyboardController?.hide()
                                 },
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                                 onValueChange = { personalKeyInput.value = it }
@@ -211,18 +211,16 @@ class SetupActivity : ComponentActivity() {
                                                 var githubData =
                                                     GithubData(personalKey = personalKeyInput.value.text)
 
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    GithubClient
-                                                        .instance(
-                                                            githubData.personalKey,
-                                                            GithubService::class.java
-                                                        )
+                                                coroutineScope.launch {
+                                                    Client
+                                                        .github(githubData.personalKey)
                                                         .getUserInfo()
                                                         .toCallbackFlow()
                                                         .catch { error ->
                                                             this@SetupActivity.run {
                                                                 runOnUiThread {
                                                                     toast(
+                                                                        context,
                                                                         getString(
                                                                             R.string.setup_github_connect_error,
                                                                             error.localizedMessage
@@ -254,6 +252,7 @@ class SetupActivity : ComponentActivity() {
                                                             this@SetupActivity.run {
                                                                 runOnUiThread {
                                                                     toast(
+                                                                        context,
                                                                         getString(
                                                                             R.string.setup_welcome_start,
                                                                             user.login
@@ -280,6 +279,8 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun SetupView() {
+        val context = LocalContext.current
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -370,7 +371,7 @@ class SetupActivity : ComponentActivity() {
                                 if (isStoragePermissionGranted.value) {
                                     personalKeyInputDialogIsOpening.value = true
                                 } else {
-                                    this@SetupActivity.toast(getString(R.string.setup_need_manage_permission))
+                                    toast(context, getString(R.string.setup_need_manage_permission))
                                 }
                             }
                             .padding(8.dp),
@@ -457,11 +458,14 @@ class SetupActivity : ComponentActivity() {
 
     private fun Permission.requestAllPermissions() =
         if (this.permissions.first() == PERMISSION_NOTIFICATION_READ) {
-            PermissionUtil.requestReadNotification(this@SetupActivity)
-            doDelay(1000) {
-                isNotificationPermissionGranted.value = true
-            }
+            requestReadNotification(this@SetupActivity)
+            doDelay(1000) { isNotificationPermissionGranted.value = true }
         } else permissionsContracts.launch(this.permissions.toTypedArray())
+
+    private fun requestReadNotification(activity: Activity) {
+        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+        activity.startActivity(intent)
+    }
 
     companion object {
         const val PERMISSION_NOTIFICATION_READ = "PERMISSION_FOR_NOTIFICATION_READ"

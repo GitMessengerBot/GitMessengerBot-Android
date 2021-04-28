@@ -7,6 +7,7 @@
 
 package me.sungbin.gitmessengerbot.repo
 
+import me.sungbin.gitmessengerbot.repo.github.GithubService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -14,9 +15,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object GithubClient {
+object Client {
     private var token = ""
-    private lateinit var builder: Retrofit
+    private lateinit var githubClient: GithubService
     private const val BaseUrl = "https://api.github.com"
 
     private class AuthInterceptor(private val token: String) : Interceptor {
@@ -41,15 +42,16 @@ object GithubClient {
         return builder.build()
     }
 
-    fun <T> instance(token: String, service: Class<T>): T {
-        if (!::builder.isInitialized || this.token != token) {
+    fun github(token: String): GithubService {
+        if (!::githubClient.isInitialized || this.token != token) {
             this.token = token
-            builder = Retrofit.Builder()
+            githubClient = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getInterceptor(provideLoggingInterceptor, AuthInterceptor(token)))
                 .baseUrl(BaseUrl)
                 .build()
+                .create(GithubService::class.java)
         }
-        return builder.create(service)
+        return githubClient
     }
 }

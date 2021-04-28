@@ -15,21 +15,18 @@ object Application {
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.4.31"
-        const val Gradle = "7.0.0-alpha12"
+        const val Kotlin = "1.4.32"
+        const val Gradle = "7.0.0-alpha14"
         const val CoreKtx = "1.3.2"
     }
 
     object Ui {
-        const val DayNightSwitch = "1.5"
         const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
         const val Glide = "0.7.0"
         const val Browser = "1.3.0"
-        const val ConstraintLayout = "1.0.0-alpha04"
     }
 
     object Util {
-        const val AndroidUtil = "5.1.5"
         const val CrashReporter = "1.1.0"
         const val Gson = "2.8.6"
     }
@@ -40,17 +37,22 @@ object Versions {
     }
 
     object Jetpack {
-        const val Room = "2.3.0-beta03"
+        const val Room = "2.3.0"
     }
 
     object Compose {
-        const val Version = "1.0.0-beta02"
-        const val Navigation = "1.0.0-alpha09"
-        const val Activity = "1.3.0-alpha04"
+        const val Version = "1.0.0-beta04"
+        const val Activity = "1.3.0-alpha05"
     }
 }
 
 object Dependencies {
+    val classpath = listOf(
+        "com.chaquo.python:gradle:${Versions.Essential.Python}",
+        "com.android.tools.build:gradle:${Versions.Essential.Gradle}",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}"
+    )
+
     val network = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
@@ -64,14 +66,11 @@ object Dependencies {
 
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        "com.github.Mahfa:DayNightSwitch:${Versions.Ui.DayNightSwitch}",
         "com.google.accompanist:accompanist-glide:${Versions.Ui.Glide}",
-        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
-        // "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
+        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}"
     )
 
     val util = listOf(
-        "me.sungbin:androidutils:${Versions.Util.AndroidUtil}",
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
         "com.google.code.gson:gson:${Versions.Util.Gson}"
@@ -83,7 +82,7 @@ object Dependencies {
     )
 
     var compose = listOf(
-        "androidx.navigation:navigation-compose:${Versions.Compose.Navigation}",
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Version}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "androidx.compose.ui:ui:${Versions.Compose.Version}",
         "androidx.compose.material:material:${Versions.Compose.Version}",

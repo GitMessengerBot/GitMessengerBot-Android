@@ -5,13 +5,6 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
 package me.sungbin.gitmessengerbot.ui.fancybottombar
 
 import androidx.compose.animation.animateColorAsState
@@ -71,11 +64,6 @@ fun FancyBottomBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEach { item ->
-            /*val isFocusedItem: Boolean
-                get() {
-                    fancyItemStatue == item.id
-                }*/ // todo: Why need import?????? What`s current import for `get` property????
-
             val fancyItemColor by animateColorAsState(if (fancyItemState == item.id) fancyColors.primary else fancyColors.indicatorBackground)
 
             Box(
