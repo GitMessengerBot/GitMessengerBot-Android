@@ -13,6 +13,10 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.annotation.FontRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -52,3 +56,6 @@ fun doDelay(ms: Long, action: () -> Unit) {
         ms
     )
 }
+
+@Composable
+fun fontResource(@FontRes font: Int) = FontFamily(Font(font))
