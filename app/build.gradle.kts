@@ -1,3 +1,12 @@
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [build.gradle.kts] created by Ji Sungbin on 21. 5. 21. 오후 4:41.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
 plugins {
     id("com.android.application")
     id("com.chaquo.python")
@@ -7,11 +16,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Application.compileSdk)
+    compileSdk = Application.compileSdk
 
     defaultConfig {
-        minSdkVersion(Application.minSdk)
-        targetSdkVersion(Application.targetSdk)
+        minSdk = Application.minSdk
+        targetSdk = Application.targetSdk
         versionCode = Application.versionCode
         versionName = Application.versionName
         multiDexEnabled = true
@@ -24,7 +33,7 @@ android {
         }
 
         ndk {
-            abiFilters.addAll(mutableSetOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
         }
     }
 
@@ -54,7 +63,6 @@ android {
 
     kotlinOptions {
         jvmTarget = Application.jvmTarget
-        useIR = true
         freeCompilerArgs = listOf(
             "-P",
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"

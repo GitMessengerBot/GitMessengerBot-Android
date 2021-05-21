@@ -1,12 +1,21 @@
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [Dependencies.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:41.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
 import org.gradle.api.JavaVersion
 
 object Application {
     const val minSdk = 23
     const val targetSdk = 30
     const val compileSdk = 30
-    const val versionCode = 1
     const val jvmTarget = "1.8"
-    const val versionName = "제발코로나종식되게해주세요_1"
+    const val versionCode = 1
+    const val versionName = "제발코로나종식되게해주세요"
 
     val targetCompat = JavaVersion.VERSION_11
     val sourceCompat = JavaVersion.VERSION_11
@@ -15,7 +24,7 @@ object Application {
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.5.0"
+        const val Kotlin = "1.4.32" // todo: 난 1.5.0 버전을 쓰고싶다고!
         const val Gradle = "7.0.0-alpha15"
         const val CoreKtx = "1.3.2"
     }

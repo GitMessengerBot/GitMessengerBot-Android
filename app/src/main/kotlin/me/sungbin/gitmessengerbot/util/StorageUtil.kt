@@ -2,6 +2,8 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [StorageUtil.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:40.
+ *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
@@ -18,6 +20,7 @@ import kotlin.math.pow
 
 @Suppress("DEPRECATION")
 object StorageUtil {
+    @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
     val sdcard = Environment.getExternalStorageDirectory().absolutePath!!
 
     private fun String.parsePath() = if (contains(sdcard)) this else "$sdcard/$this"
