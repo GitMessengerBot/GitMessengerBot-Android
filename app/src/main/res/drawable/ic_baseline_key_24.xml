@@ -5,7 +5,12 @@
   ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
   -->
 
-<vector android:height="24dp" android:viewportHeight="841.9"
-    android:viewportWidth="595.3" android:width="16.970186dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@android:color/white" android:pathData="M360.2,484.1c10.7,10.7 28.1,10.7 38.8,0s10.7,-28.1 0,-38.8l-40,-40l26.9,-26.9l40,40c10.7,10.7 28.1,10.7 38.8,0c10.7,-10.7 10.7,-28.1 0,-38.8l-40,-40l15.5,-15.5c10.7,-10.7 10.7,-28.1 0,-38.8c-10.7,-10.7 -28.1,-10.7 -38.8,0L228.9,457.8c-33.2,-10.8 -71.2,-3.1 -97.6,23.2c-37.3,37.3 -37.3,98.1 0,135.4s98.1,37.3 135.4,0c34.5,-34.5 37.1,-89.1 7.8,-126.6l45.7,-45.7L360.2,484.1zM227.9,577.7c-15.9,15.9 -41.8,15.9 -57.8,0c-15.9,-15.9 -15.9,-41.8 0,-57.8s41.9,-15.9 57.8,0S243.8,561.7 227.9,577.7z"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16.970186dp"
+    android:height="24dp"
+    android:viewportWidth="595.3"
+    android:viewportHeight="841.9">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M360.2,484.1c10.7,10.7 28.1,10.7 38.8,0s10.7,-28.1 0,-38.8l-40,-40l26.9,-26.9l40,40c10.7,10.7 28.1,10.7 38.8,0c10.7,-10.7 10.7,-28.1 0,-38.8l-40,-40l15.5,-15.5c10.7,-10.7 10.7,-28.1 0,-38.8c-10.7,-10.7 -28.1,-10.7 -38.8,0L228.9,457.8c-33.2,-10.8 -71.2,-3.1 -97.6,23.2c-37.3,37.3 -37.3,98.1 0,135.4s98.1,37.3 135.4,0c34.5,-34.5 37.1,-89.1 7.8,-126.6l45.7,-45.7L360.2,484.1zM227.9,577.7c-15.9,15.9 -41.8,15.9 -57.8,0c-15.9,-15.9 -15.9,-41.8 0,-57.8s41.9,-15.9 57.8,0S243.8,561.7 227.9,577.7z" />
 </vector>
