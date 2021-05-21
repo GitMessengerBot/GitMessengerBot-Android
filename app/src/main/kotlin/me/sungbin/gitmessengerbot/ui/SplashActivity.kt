@@ -43,10 +43,6 @@ import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.App
 import me.sungbin.gitmessengerbot.util.doDelay
 
-/**
- * Created by SungBin on 2021/04/08.
- */
-
 @ExperimentalComposeUiApi
 @ExperimentalCoroutinesApi
 class SplashActivity : ComponentActivity() {

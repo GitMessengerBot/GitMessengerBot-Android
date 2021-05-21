@@ -8,15 +8,15 @@ object Application {
     const val jvmTarget = "1.8"
     const val versionName = "제발코로나종식되게해주세요_1"
 
-    val targetCompat = JavaVersion.VERSION_1_8
-    val sourceCompat = JavaVersion.VERSION_1_8
+    val targetCompat = JavaVersion.VERSION_11
+    val sourceCompat = JavaVersion.VERSION_11
 }
 
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.4.32"
-        const val Gradle = "7.0.0-alpha14"
+        const val Kotlin = "1.5.0"
+        const val Gradle = "7.0.0-alpha15"
         const val CoreKtx = "1.3.2"
     }
 
@@ -41,8 +41,8 @@ object Versions {
     }
 
     object Compose {
-        const val Version = "1.0.0-beta04"
-        const val Activity = "1.3.0-alpha05"
+        const val Version = "1.0.0-beta06"
+        const val Activity = "1.3.0-alpha07"
     }
 }
 

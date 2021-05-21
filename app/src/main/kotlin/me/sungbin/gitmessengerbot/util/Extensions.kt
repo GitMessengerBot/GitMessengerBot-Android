@@ -19,10 +19,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-/**
- * Created by Ji Sungbin on 2021/04/13.
- */
-
 fun toast(context: Context, message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, length).show()
 }

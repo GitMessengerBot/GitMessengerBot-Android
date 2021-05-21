@@ -55,10 +55,6 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyOptions
 
-/**
- * Created by Ji Sungbin on 2021/04/15.
- */
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,132 +126,133 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Composable
-private fun MainViewBind() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Box(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
+
+    @Composable
+    private fun MainViewBind() {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    horizontalAlignment = Alignment.End
+                        .wrapContentHeight()
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.AccountCircle,
-                        contentDescription = null,
-                        modifier = Modifier.size(70.dp)
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
-                    Text(
-                        text = "Hi, jisungbin",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                StateItemBind(title = "메인 전원", modifier = Modifier.weight(1f)) {
                     Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        horizontalAlignment = Alignment.End
                     ) {
-                        Text("On")
-                        Switch(
-                            checked = false,
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.White,
-                                checkedTrackColor = colors.primary,
-                                uncheckedThumbColor = Color.White,
-                                uncheckedTrackColor = colors.secondary
-                            ),
-                            onCheckedChange = {}
-                        )
-                    }
-                }
-                StateItemBind(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "2", fontSize = 35.sp)
-                        Text(text = "개", fontSize = 8.sp)
-                    }
-                }
-                StateItemBind(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "2", fontSize = 35.sp)
-                        Text(text = "개", fontSize = 8.sp)
-                    }
-                }
-                StateItemBind(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
-                    Column(verticalArrangement = Arrangement.Center) {
                         Icon(
-                            imageVector = Icons.Rounded.Search,
+                            imageVector = Icons.Rounded.AccountCircle,
                             contentDescription = null,
-                            modifier = Modifier.size(45.dp),
-                            tint = Color.Black
+                            modifier = Modifier.size(70.dp)
                         )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
+                        Text(
+                            text = "Hi, jisungbin",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(top = 30.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    StateItemBind(title = "메인 전원", modifier = Modifier.weight(1f)) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("On")
+                            Switch(
+                                checked = false,
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = Color.White,
+                                    checkedTrackColor = colors.primary,
+                                    uncheckedThumbColor = Color.White,
+                                    uncheckedTrackColor = colors.secondary
+                                ),
+                                onCheckedChange = {}
+                            )
+                        }
+                    }
+                    StateItemBind(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = "2", fontSize = 35.sp)
+                            Text(text = "개", fontSize = 8.sp)
+                        }
+                    }
+                    StateItemBind(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = "2", fontSize = 35.sp)
+                            Text(text = "개", fontSize = 8.sp)
+                        }
+                    }
+                    StateItemBind(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
+                        Column(verticalArrangement = Arrangement.Center) {
+                            Icon(
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = null,
+                                modifier = Modifier.size(45.dp),
+                                tint = Color.Black
+                            )
+                        }
                     }
                 }
             }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
-                .background(twiceLightGray)
-        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
+                    .background(twiceLightGray)
+            ) {
+            }
         }
     }
-}
 
-@Composable
-private fun StateItemBind(title: String, modifier: Modifier, content: @Composable () -> Unit) {
-    Column(
-        modifier = modifier
-            .width(75.dp)
-            .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
+    @Composable
+    private fun StateItemBind(title: String, modifier: Modifier, content: @Composable () -> Unit) {
         Column(
-            modifier = Modifier
-                .size(75.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White),
+            modifier = modifier
+                .width(75.dp)
+                .wrapContentHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            content()
+            Column(
+                modifier = Modifier
+                    .size(75.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                content()
+            }
+            Text(
+                text = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                fontSize = 10.sp,
+                textAlign = TextAlign.Center,
+                color = Color.White
+            )
         }
-        Text(
-            text = title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp),
-            fontSize = 10.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White
-        )
     }
 }

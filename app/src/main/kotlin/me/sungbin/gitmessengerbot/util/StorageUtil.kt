@@ -16,10 +16,6 @@ import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow
 
-/**
- * Created by Ji Sungbin on 2021/04/29.
- */
-
 @Suppress("DEPRECATION")
 object StorageUtil {
     val sdcard = Environment.getExternalStorageDirectory().absolutePath!!

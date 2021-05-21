@@ -11,10 +11,6 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubUser
 import retrofit2.Call
 import retrofit2.http.GET
 
-/**
- * Created by Ji Sungbin on 2021/04/13.
- */
-
 interface GithubService {
     @GET("/user")
     fun getUserInfo(): Call<GithubUser>

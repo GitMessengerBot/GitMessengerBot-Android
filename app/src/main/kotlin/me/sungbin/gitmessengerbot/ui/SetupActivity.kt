@@ -76,10 +76,6 @@ import me.sungbin.gitmessengerbot.util.doDelay
 import me.sungbin.gitmessengerbot.util.toCallbackFlow
 import me.sungbin.gitmessengerbot.util.toast
 
-/**
- * Created by SungBin on 2021/04/08.
- */
-
 @ExperimentalCoroutinesApi
 @ExperimentalComposeUiApi
 class SetupActivity : ComponentActivity() {

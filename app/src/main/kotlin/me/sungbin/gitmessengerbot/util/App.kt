@@ -7,10 +7,6 @@
 
 package me.sungbin.gitmessengerbot.util
 
-/**
- * Created by Ji Sungbin on 2021/04/12.
- */
-
 import java.io.File
 
 object App {

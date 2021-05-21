@@ -12,10 +12,6 @@ import android.app.PendingIntent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 
-/**
- * Created by Ji Sungbin on 2021/04/12.
- */
-
 object Web {
     sealed class Type {
         object Github : Type()

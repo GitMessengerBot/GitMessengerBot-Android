@@ -9,10 +9,6 @@ package me.sungbin.gitmessengerbot.repo.github.model
 
 import com.google.gson.annotations.SerializedName
 
-/**
- * Created by Ji Sungbin on 2021/04/13.
- */
-
 data class GithubData(
     @SerializedName("personal_key") val personalKey: String = "",
     @SerializedName("user_name") val userName: String = "",

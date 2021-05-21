@@ -31,10 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 
-/**
- * Created by Ji Sungbin on 2021/04/15.
- */
-
 private interface FancyItemListener {
     fun onItemChanged(item: FancyItem)
 }
