@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.ui
+package me.sungbin.gitmessengerbot.activity.splash
 
 import android.content.Intent
 import android.os.Bundle
@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.MainActivity
+import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors

@@ -31,7 +31,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".activity.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,8 +39,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.SetupActivity" />
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".activity.setup.SetupActivity" />
+        <activity android:name=".activity.main.MainActivity" />
 
         <!-- <service
              android:name=".listener.MessageListener"

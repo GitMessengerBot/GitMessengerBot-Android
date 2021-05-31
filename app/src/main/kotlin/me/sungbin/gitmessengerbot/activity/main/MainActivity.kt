@@ -2,12 +2,12 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [MainActivity.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:39.
+ * [MainActivity.kt] created by Ji Sungbin on 21. 5. 31. 오후 11:12.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.ui
+package me.sungbin.gitmessengerbot.activity.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,7 +31,6 @@ import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
@@ -128,7 +127,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 
     @Composable
     private fun MainViewBind() {

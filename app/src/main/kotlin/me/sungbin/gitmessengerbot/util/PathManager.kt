@@ -11,6 +11,6 @@ package me.sungbin.gitmessengerbot.util
 
 object PathManager {
     const val Npm = "GitMessengerBot/npm"
-    const val Bots = "GitMessengerBot/bots"
+    const val Bot = "GitMessengerBot/bots"
     const val Setting = "GitMessengerBot/setting"
 }

@@ -25,7 +25,7 @@ object Versions {
     object Essential {
         const val Python = "9.1.0"
         const val Kotlin = "1.4.32" // todo: 난 1.5.0 버전을 쓰고싶다고!
-        const val Gradle = "7.0.0-alpha15"
+        const val Gradle = "7.1.0-alpha01"
         const val CoreKtx = "1.3.2"
     }
 

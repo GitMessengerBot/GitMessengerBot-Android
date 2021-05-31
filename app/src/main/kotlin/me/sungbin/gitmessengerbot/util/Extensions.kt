@@ -45,10 +45,5 @@ fun <T> Call<T>.toCallbackFlow() = callbackFlow<T> {
 }
 
 fun doDelay(ms: Long, action: () -> Unit) {
-    Handler(Looper.getMainLooper()).postDelayed(
-        {
-            action()
-        },
-        ms
-    )
+    Handler(Looper.getMainLooper()).postDelayed({ action() }, ms)
 }

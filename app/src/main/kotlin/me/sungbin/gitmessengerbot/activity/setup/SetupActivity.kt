@@ -2,12 +2,12 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [SetupActivity.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:39.
+ * [SetupActivity.kt] created by Ji Sungbin on 21. 5. 31. 오후 11:10.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.ui
+package me.sungbin.gitmessengerbot.activity.setup
 
 import android.Manifest
 import android.app.Activity
@@ -65,6 +65,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.repo.Client
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
@@ -120,7 +121,7 @@ class SetupActivity : ComponentActivity() {
             val keyboardController = LocalSoftwareKeyboardController.current
             val coroutineScope = rememberCoroutineScope()
 
-            StorageUtil.createFolder(PathManager.Bots)
+            StorageUtil.createFolder(PathManager.Bot)
             StorageUtil.createFolder(PathManager.Npm)
             StorageUtil.createFolder(PathManager.Setting)
 
