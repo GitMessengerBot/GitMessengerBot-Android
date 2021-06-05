@@ -12,6 +12,7 @@ package me.sungbin.gitmessengerbot.activity.setup
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -44,6 +45,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +61,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -72,8 +73,6 @@ import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
-import me.sungbin.gitmessengerbot.util.PathManager
-import me.sungbin.gitmessengerbot.util.StorageUtil
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.doDelay
 import me.sungbin.gitmessengerbot.util.toCallbackFlow
@@ -89,9 +88,10 @@ class SetupActivity : ComponentActivity() {
         val painterResource: Int
     )
 
-    val isStoragePermissionGranted = mutableStateOf(false)
-    val isNotificationPermissionGranted = mutableStateOf(false)
-    val personalKeyInputDialogIsOpening = mutableStateOf(false)
+    private val isScopedStorage by lazy { Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q }
+    private val isStoragePermissionGranted = mutableStateOf(false)
+    private val isNotificationPermissionGranted = mutableStateOf(false)
+    private val isPersonalKeyInputDialogOpening = mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -108,22 +108,18 @@ class SetupActivity : ComponentActivity() {
         setContent {
             BindView {
                 SetupView()
-                BindPersonalKeyInputDialog()
+                PersonalKeyInputDialogBind()
             }
         }
     }
 
     @Composable
-    private fun BindPersonalKeyInputDialog() {
-        if (personalKeyInputDialogIsOpening.value) {
+    private fun PersonalKeyInputDialogBind() {
+        if (isPersonalKeyInputDialogOpening.value) {
             val context = LocalContext.current
-            val personalKeyInput = remember { mutableStateOf(TextFieldValue()) }
+            val personalKeyInputField = remember { mutableStateOf(TextFieldValue()) }
             val keyboardController = LocalSoftwareKeyboardController.current
             val coroutineScope = rememberCoroutineScope()
-
-            StorageUtil.createFolder(PathManager.Bot)
-            StorageUtil.createFolder(PathManager.Npm)
-            StorageUtil.createFolder(PathManager.Setting)
 
             MaterialTheme {
                 AlertDialog(
@@ -132,7 +128,7 @@ class SetupActivity : ComponentActivity() {
                         dismissOnClickOutside = false
                     ),
                     onDismissRequest = {
-                        personalKeyInputDialogIsOpening.value = false
+                        isPersonalKeyInputDialogOpening.value = false
                     },
                     text = {
                         Column {
@@ -166,7 +162,7 @@ class SetupActivity : ComponentActivity() {
                                 maxLines = 1,
                                 singleLine = true,
                                 modifier = Modifier.padding(top = 10.dp),
-                                value = personalKeyInput.value,
+                                value = personalKeyInputField.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = Color.White,
                                     cursorColor = Color.Black,
@@ -177,12 +173,9 @@ class SetupActivity : ComponentActivity() {
                                     keyboardController?.hide()
                                 },
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                onValueChange = { personalKeyInput.value = it }
+                                onValueChange = { personalKeyInputField.value = it }
                             )
-                            Row(
-                                modifier = Modifier
-                                    .padding(top = 20.dp)
-                            ) {
+                            Row(modifier = Modifier.padding(top = 20.dp)) {
                                 Text(
                                     text = stringResource(R.string.setup_way_to_get_personal_key),
                                     modifier = Modifier.clickable {
@@ -208,7 +201,7 @@ class SetupActivity : ComponentActivity() {
                                             .padding(start = 8.dp)
                                             .clickable {
                                                 var githubData =
-                                                    GithubData(personalKey = personalKeyInput.value.text)
+                                                    GithubData(personalKey = personalKeyInputField.value.text)
 
                                                 coroutineScope.launch {
                                                     Client
@@ -216,17 +209,15 @@ class SetupActivity : ComponentActivity() {
                                                         .getUserInfo()
                                                         .toCallbackFlow()
                                                         .catch { error ->
-                                                            this@SetupActivity.run {
-                                                                runOnUiThread {
-                                                                    toast(
-                                                                        context,
-                                                                        getString(
-                                                                            R.string.setup_github_connect_error,
-                                                                            error.localizedMessage
-                                                                        ),
-                                                                        Toast.LENGTH_LONG
-                                                                    )
-                                                                }
+                                                            this@SetupActivity.runOnUiThread {
+                                                                toast(
+                                                                    context,
+                                                                    getString(
+                                                                        R.string.setup_github_connect_error,
+                                                                        error.localizedMessage
+                                                                    ),
+                                                                    Toast.LENGTH_LONG
+                                                                )
                                                             }
                                                         }
                                                         .collect { user ->
@@ -235,10 +226,10 @@ class SetupActivity : ComponentActivity() {
                                                                 profileImageUrl = user.avatarUrl
                                                             )
 
-                                                            StorageUtil.save(
-                                                                "${PathManager.Setting}/GithubData.json",
-                                                                Gson().toJson(githubData)
-                                                            )
+//                                                            StorageUtil.save(
+//                                                                "${PathManager.Setting}/GithubData.json",
+//                                                                Gson().toJson(githubData)
+//                                                            )
 
                                                             finish()
                                                             startActivity(
@@ -248,16 +239,14 @@ class SetupActivity : ComponentActivity() {
                                                                 )
                                                             )
 
-                                                            this@SetupActivity.run {
-                                                                runOnUiThread {
-                                                                    toast(
-                                                                        context,
-                                                                        getString(
-                                                                            R.string.setup_welcome_start,
-                                                                            user.login
-                                                                        )
+                                                            this@SetupActivity.runOnUiThread {
+                                                                toast(
+                                                                    context,
+                                                                    getString(
+                                                                        R.string.setup_welcome_start,
+                                                                        user.login
                                                                     )
-                                                                }
+                                                                )
                                                             }
                                                         }
                                                 }
@@ -305,7 +294,7 @@ class SetupActivity : ComponentActivity() {
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = defaultFontFamily
                             ),
-                            11, 19
+                            11, 19 // 아래의 권한들
                         )
                         toAnnotatedString()
                     },
@@ -320,22 +309,23 @@ class SetupActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center
             ) {
                 PermissionView(
-                    Permission(
+                    modifier = if (isScopedStorage) Modifier.alpha(.5f) else Modifier,
+                    permission = Permission(
                         listOf(
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
                         ),
                         stringResource(R.string.setup_permission_storage_label),
                         stringResource(
-                            R.string.setup_permission_storage_description
+                            if (isScopedStorage) R.string.setup_scoped_storage else R.string.setup_permission_storage_description
                         ),
                         R.drawable.ic_baseline_folder_24
                     ),
-                    isStoragePermissionGranted,
-                    listOf(0, 16)
+                    isPermissionGranted = isStoragePermissionGranted,
+                    padding = listOf(0, 16)
                 )
                 PermissionView(
-                    Permission(
+                    permission = Permission(
                         listOf(PERMISSION_NOTIFICATION_READ),
                         stringResource(R.string.setup_permission_notification_label),
                         stringResource(
@@ -343,8 +333,8 @@ class SetupActivity : ComponentActivity() {
                         ),
                         R.drawable.ic_baseline_notifications_24
                     ),
-                    isNotificationPermissionGranted,
-                    listOf(16, 16)
+                    isPermissionGranted = isNotificationPermissionGranted,
+                    padding = listOf(16, 16)
                 )
             }
             Column(
@@ -367,10 +357,24 @@ class SetupActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                if (isStoragePermissionGranted.value) {
-                                    personalKeyInputDialogIsOpening.value = true
+                                if (isScopedStorage) {
+                                    if (isNotificationPermissionGranted.value) {
+                                        isPersonalKeyInputDialogOpening.value = true
+                                    } else {
+                                        toast(
+                                            context,
+                                            getString(R.string.setup_need_manage_permission)
+                                        )
+                                    }
                                 } else {
-                                    toast(context, getString(R.string.setup_need_manage_permission))
+                                    if (isNotificationPermissionGranted.value && isStoragePermissionGranted.value) {
+                                        isPersonalKeyInputDialogOpening.value = true
+                                    } else {
+                                        toast(
+                                            context,
+                                            getString(R.string.setup_need_manage_permission)
+                                        )
+                                    }
                                 }
                             }
                             .padding(8.dp),
@@ -386,12 +390,13 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun PermissionView(
+        modifier: Modifier = Modifier,
         permission: Permission,
         isPermissionGranted: MutableState<Boolean>,
         padding: List<Int>
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(top = padding[0].dp, bottom = padding[1].dp),
         ) {
@@ -400,7 +405,11 @@ class SetupActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .background(color = Color.White, RoundedCornerShape(15.dp))
                     .clickable {
-                        permission.requestAllPermissions()
+                        if (permission.permissions.first() == PERMISSION_NOTIFICATION_READ) {
+                            permission.requestAllPermissions()
+                        } else {
+                            if (!isScopedStorage) permission.requestAllPermissions()
+                        }
                     }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
             ) {

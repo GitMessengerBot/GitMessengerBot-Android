@@ -14,6 +14,7 @@
     <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="setup_permission_storage_label">저장소 접근 권한</string>
     <string name="setup_permission_storage_description">소스코드 저장을 위해 해당 권한이 필요합니다.</string>
+    <string name="setup_scoped_storage">안드로이드 보안정책상 사용이 제한됩니다.</string>
     <string name="setup_permission_notification_label">알림 읽기 권한</string>
     <string name="setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
     <string name="setup_last_func">마지막으로,</string>

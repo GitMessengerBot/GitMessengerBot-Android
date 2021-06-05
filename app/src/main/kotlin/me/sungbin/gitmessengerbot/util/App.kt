@@ -12,5 +12,5 @@ package me.sungbin.gitmessengerbot.util
 import java.io.File
 
 object App {
-    fun isSetupDone() = File("${StorageUtil.sdcard}/${PathManager.Setting}/GithubData.json").exists()
+    fun isSetupDone() = /*File("${StorageUtil.sdcard}/${PathManager.Setting}/GithubData.json").exists()*/ false
 }
