@@ -14,7 +14,11 @@ buildscript {
         maven { url = uri("https://chaquo.com/maven") }
     }
 
-    dependencies { Dependencies.classpath.forEach { def -> classpath(def) } }
+    dependencies {
+        classpath("com.chaquo.python:gradle:${Versions.Essential.Python}")
+        classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
+    }
 }
 
 allprojects {

@@ -56,12 +56,6 @@ object Versions {
 }
 
 object Dependencies {
-    val classpath = listOf(
-        "com.chaquo.python:gradle:${Versions.Essential.Python}",
-        "com.android.tools.build:gradle:${Versions.Essential.Gradle}",
-        "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}"
-    )
-
     val network = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
