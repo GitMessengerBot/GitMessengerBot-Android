@@ -27,11 +27,12 @@ object Versions {
         const val Kotlin = "1.5.10"
         const val Gradle = "7.1.0-alpha02"
         const val CoreKtx = "1.3.2"
+        const val Coroutines = "1.5.0"
     }
 
     object Ui {
         const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
-        const val Glide = "0.11.1"
+        const val Glide = "4.12.0"
         const val Browser = "1.3.0"
     }
 
@@ -65,12 +66,13 @@ object Dependencies {
 
     val essential = listOf(
         "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
-        "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Essential.Kotlin}"
+        "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Essential.Kotlin}",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Essential.Coroutines}"
     )
 
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        "com.google.accompanist:accompanist-glide:${Versions.Ui.Glide}",
+        "com.github.bumptech.glide:glide:${Versions.Ui.Glide}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}"
     )
 
@@ -96,6 +98,7 @@ object Dependencies {
     )
 
     val compiler = listOf(
-        "androidx.room:room-compiler:${Versions.Jetpack.Room}"
+        "androidx.room:room-compiler:${Versions.Jetpack.Room}",
+        "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
     )
 }

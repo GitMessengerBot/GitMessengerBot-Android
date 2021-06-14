@@ -60,6 +60,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -72,11 +73,12 @@ import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
-import me.sungbin.gitmessengerbot.util.doDelay
-import me.sungbin.gitmessengerbot.util.toCallbackFlow
-import me.sungbin.gitmessengerbot.util.toast
+import me.sungbin.gitmessengerbot.util.extension.doDelay
+import me.sungbin.gitmessengerbot.util.extension.toCallbackFlow
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 @ExperimentalCoroutinesApi
 @ExperimentalComposeUiApi
@@ -225,10 +227,11 @@ class SetupActivity : ComponentActivity() {
                                                                 profileImageUrl = user.avatarUrl
                                                             )
 
-//                                                            StorageUtil.save(
-//                                                                "${PathManager.Setting}/GithubData.json",
-//                                                                Gson().toJson(githubData)
-//                                                            )
+                                                            Storage.write(
+                                                                context,
+                                                                PathManager.Storage.GithubData,
+                                                                Gson().toJson(githubData)
+                                                            )
 
                                                             finish()
                                                             startActivity(

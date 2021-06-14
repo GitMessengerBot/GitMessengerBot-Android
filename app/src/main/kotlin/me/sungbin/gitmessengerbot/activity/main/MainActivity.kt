@@ -24,14 +24,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
@@ -55,8 +55,13 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyOptions
+import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
+import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val vm = DataViewModel.instance
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -104,21 +109,21 @@ class MainActivity : ComponentActivity() {
                                 fancyOptions = FancyOptions(fontFamily = defaultFontFamily),
                                 items = items
                             ) { fancyNavigationState.value = id }
-                            Box(
-                                modifier = Modifier.padding(bottom = 30.dp),
-                                contentAlignment = Alignment.Center
+                            Surface(
+                                modifier = Modifier
+                                    .padding(bottom = 35.dp)
+                                    .size(50.dp),
+                                shape = CircleShape,
+                                color = colors.primary,
+                                elevation = 2.dp
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Circle,
-                                    contentDescription = null,
-                                    tint = colors.primary,
-                                    modifier = Modifier.size(60.dp)
-                                )
                                 Icon(
                                     imageVector = Icons.Rounded.Add,
                                     contentDescription = null,
                                     tint = Color.White,
-                                    modifier = Modifier.size(40.dp)
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .align(Alignment.Center)
                                 )
                             }
                         }
@@ -144,10 +149,11 @@ class MainActivity : ComponentActivity() {
                             .wrapContentHeight(),
                         horizontalAlignment = Alignment.End
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.AccountCircle,
-                            contentDescription = null,
-                            modifier = Modifier.size(70.dp)
+                        GlideImage(
+                            src = vm.githubData.profileImageUrl,
+                            modifier = Modifier
+                                .size(70.dp)
+                                .clip(CircleShape)
                         )
                     }
                     Column(
@@ -158,7 +164,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
                         Text(
-                            text = "Hi, jisungbin",
+                            text = "Hi, ${vm.githubData.userName}",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,

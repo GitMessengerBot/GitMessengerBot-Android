@@ -10,9 +10,12 @@
 package me.sungbin.gitmessengerbot.util
 
 import android.content.Context
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object App {
-    const val Version = 10241
+    val Build = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date()).toString()
 
     fun isSetupDone(context: Context) =
         Storage.read(context, PathManager.Storage.GithubData, null) != null

@@ -41,12 +41,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
+import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.App
-import me.sungbin.gitmessengerbot.util.doDelay
+import me.sungbin.gitmessengerbot.util.PathManager
+import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.extension.doDelay
+import me.sungbin.gitmessengerbot.util.extension.toModel
+import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
 
 @ExperimentalComposeUiApi
 @ExperimentalCoroutinesApi
@@ -55,12 +60,18 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-        Toast.makeText(applicationContext, "Build: ${App.Version}", Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, "Build: ${App.Build}", Toast.LENGTH_LONG).show()
 
         setContent {
             BindView {
                 SplashView()
             }
+        }
+
+        if (App.isSetupDone(applicationContext)) {
+            DataViewModel.instance.githubData =
+                Storage.read(applicationContext, PathManager.Storage.GithubData, "")!!
+                    .toModel(GithubData::class.java)
         }
 
         doDelay(2000) {
