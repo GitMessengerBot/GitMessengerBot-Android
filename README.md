@@ -12,7 +12,13 @@
 다운로드는 [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)에서 하실 수 있습니다.
 
 # 기능
-+ 다중 스크립트
++ **다중 스크립트 및 기능**
+  + 디버그
+  + 수정
+  + 전원
+  + 로그켓
+  + 전원
++ **다중 스크립트 및 기능**
 + **다양한 언어**
   + 타입스크립트
   + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
