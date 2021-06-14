@@ -17,17 +17,22 @@ V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최�
 3. Coroutines
 4. Retrofit, OkHttp
 5. Hilt
+6. ktlint
 
-## 개인 키 얻는법
-[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
-
-## API 가이드
-[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
-
-## ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+# ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 - `import ordering` 프로젝트 단위 비활성화
 
-## 라이선스
+-----
+
+# 개인 키 얻는법
+[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
+
+# API 가이드
+[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
+
+# 라이선스
 `GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
+
+-----
 
 # Happy Coding :)
