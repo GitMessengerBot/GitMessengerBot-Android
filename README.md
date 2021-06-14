@@ -9,7 +9,7 @@
 > 준비중...
 
 # 다운로드 (알파버전 업로드 상태)
-정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)
+정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)<br/>
 개발중 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
 
 # 기능
