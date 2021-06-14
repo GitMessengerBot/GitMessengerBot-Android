@@ -53,6 +53,7 @@
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
 
 # 라이선스
+GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.<br/>
 `GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 -----
