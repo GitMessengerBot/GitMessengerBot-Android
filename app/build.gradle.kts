@@ -12,7 +12,7 @@ plugins {
     id("com.chaquo.python")
     kotlin("android")
     kotlin("kapt")
-    id("name.remal.check-dependency-updates") version "1.3.0"
+    id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
 }
 
 android {

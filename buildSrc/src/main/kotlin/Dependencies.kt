@@ -24,20 +24,21 @@ object Application {
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.4.32" // todo: 난 1.5.0 버전을 쓰고싶다고!
+        const val Kotlin = "1.5.10"
         const val Gradle = "7.1.0-alpha01"
         const val CoreKtx = "1.3.2"
     }
 
     object Ui {
         const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
-        const val Glide = "0.7.0"
+        const val Glide = "0.11.1"
         const val Browser = "1.3.0"
     }
 
     object Util {
         const val CrashReporter = "1.1.0"
-        const val Gson = "2.8.6"
+        const val Gson = "2.8.7"
+        const val CheckDependencyUpdates = "1.3.1"
     }
 
     object Network {
@@ -50,8 +51,8 @@ object Versions {
     }
 
     object Compose {
-        const val Version = "1.0.0-beta06"
-        const val Activity = "1.3.0-alpha07"
+        const val Version = "1.0.0-beta07"
+        const val Activity = "1.3.0-beta01"
     }
 }
 
