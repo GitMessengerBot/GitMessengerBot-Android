@@ -15,6 +15,7 @@
 + **다양한 언어**
   + 타입스크립트
   + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
+  + 파이썬
   + 간편 자동응답 (블럭코딩)
 + **`Git` 지원**
   + `Push` and `Commit`
