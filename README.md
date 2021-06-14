@@ -1,5 +1,5 @@
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
-// 87
+// 92
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
 V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최첨단 메신저 봇!**
