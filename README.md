@@ -12,10 +12,11 @@ V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최�
 다운로드는 [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)에서 하실 수 있습니다.
 
 # 개발 스킬
-1. Jetpack Compose 100%
+1. Jetpack Compose
 2. Room
 3. Coroutines
 4. Retrofit, OkHttp
+5. Hilt
 
 ## 개인 키 얻는법
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
