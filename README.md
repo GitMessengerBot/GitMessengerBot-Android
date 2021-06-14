@@ -17,7 +17,7 @@
   + 수정
   + 전원
   + 로그켓
-  + 전원
+  + 터미널
 + **다중 스크립트 및 기능**
 + **다양한 언어**
   + 타입스크립트
@@ -44,6 +44,9 @@
 
 # 개인 키 얻는법
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
+
+# 스크립트 터미널 가이드
+> 준비중...
 
 # API 가이드
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
