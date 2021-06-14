@@ -51,7 +51,7 @@ object Versions {
     }
 
     object Compose {
-        const val Version = "1.0.0-beta07"
+        const val Version = "1.0.0-beta08"
         const val Activity = "1.3.0-beta01"
     }
 }
@@ -86,12 +86,13 @@ object Dependencies {
     )
 
     var compose = listOf(
-        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Version}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
-        "androidx.compose.ui:ui:${Versions.Compose.Version}",
+        "androidx.compose.compiler:compiler:${Versions.Compose.Version}",
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Version}",
         "androidx.compose.material:material:${Versions.Compose.Version}",
         "androidx.compose.material:material-icons-extended:${Versions.Compose.Version}",
-        "androidx.compose.ui:ui-tooling:${Versions.Compose.Version}"
+        "androidx.compose.ui:ui-tooling:${Versions.Compose.Version}",
+        "androidx.compose.ui:ui:${Versions.Compose.Version}"
     )
 
     val compiler = listOf(

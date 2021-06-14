@@ -17,13 +17,13 @@ import androidx.annotation.FontRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 fun toast(context: Context, message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, length).show()
@@ -34,7 +34,7 @@ fun <T> Call<T>.toCallbackFlow() = callbackFlow<T> {
     enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
-                response.body()?.let { offer(it) } ?: close(Exception("Body is empty."))
+                response.body()?.let { trySend(it) } ?: close(Exception("Body is empty."))
             } else {
                 close(IOException("${response.code()}; ${response.errorBody()}"))
             }

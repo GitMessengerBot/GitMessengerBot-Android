@@ -11,6 +11,7 @@ package me.sungbin.gitmessengerbot.activity.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -54,6 +55,7 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
+        Toast.makeText(applicationContext, "Build: ${App.Version}", Toast.LENGTH_LONG).show()
 
         setContent {
             BindView {
@@ -66,7 +68,7 @@ class SplashActivity : ComponentActivity() {
             startActivity(
                 Intent(
                     this,
-                    if (App.isSetupDone()) MainActivity::class.java else SetupActivity::class.java
+                    if (App.isSetupDone(applicationContext)) MainActivity::class.java else SetupActivity::class.java
                 )
             )
         }

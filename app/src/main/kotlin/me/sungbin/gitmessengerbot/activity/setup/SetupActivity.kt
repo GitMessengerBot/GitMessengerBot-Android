@@ -12,7 +12,6 @@ package me.sungbin.gitmessengerbot.activity.setup
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -73,6 +72,7 @@ import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.doDelay
 import me.sungbin.gitmessengerbot.util.toCallbackFlow
@@ -88,7 +88,6 @@ class SetupActivity : ComponentActivity() {
         val painterResource: Int
     )
 
-    private val isScopedStorage by lazy { Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q }
     private val isStoragePermissionGranted = mutableStateOf(false)
     private val isNotificationPermissionGranted = mutableStateOf(false)
     private val isPersonalKeyInputDialogOpening = mutableStateOf(false)
@@ -309,7 +308,7 @@ class SetupActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center
             ) {
                 PermissionView(
-                    modifier = if (isScopedStorage) Modifier.alpha(.5f) else Modifier,
+                    modifier = if (Storage.isScoped) Modifier.alpha(.5f) else Modifier,
                     permission = Permission(
                         listOf(
                             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -317,7 +316,7 @@ class SetupActivity : ComponentActivity() {
                         ),
                         stringResource(R.string.setup_permission_storage_label),
                         stringResource(
-                            if (isScopedStorage) R.string.setup_scoped_storage else R.string.setup_permission_storage_description
+                            if (Storage.isScoped) R.string.setup_scoped_storage else R.string.setup_permission_storage_description
                         ),
                         R.drawable.ic_baseline_folder_24
                     ),
@@ -357,7 +356,7 @@ class SetupActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                if (isScopedStorage) {
+                                if (Storage.isScoped) {
                                     if (isNotificationPermissionGranted.value) {
                                         isPersonalKeyInputDialogOpening.value = true
                                     } else {
@@ -408,7 +407,7 @@ class SetupActivity : ComponentActivity() {
                         if (permission.permissions.first() == PERMISSION_NOTIFICATION_READ) {
                             permission.requestAllPermissions()
                         } else {
-                            if (!isScopedStorage) permission.requestAllPermissions()
+                            if (!Storage.isScoped) permission.requestAllPermissions()
                         }
                     }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
