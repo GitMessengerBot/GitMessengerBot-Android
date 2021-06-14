@@ -11,9 +11,19 @@
 # 다운로드 (알파버전 업로드 상태)
 다운로드는 [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)에서 하실 수 있습니다.
 
+# 기능
++ **다양한 언어**
+  + 타입스크립트
+  + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
+  + 간편 자동응답 (블럭코딩)
++ **`Git` 지원**
+  + `Push` and `Commit`
+  + `Merge`
++ **스크립트 저장소** (`npm`, `maven` 같은 개념)
++ **카카오톡 봇 전용 유사 깃허브**
+
 # 개발 스킬
 1. Jetpack Compose
-2. Room
 3. Coroutines
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
