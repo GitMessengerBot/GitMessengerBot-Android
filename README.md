@@ -24,6 +24,9 @@ V8 엔진의 자바스크립트, 파이썬 그리고 Git을 지원하는 **최�
 ## API 가이드
 [[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
 
+## ktlint
+`import ordering` 프로젝트 단위 비활성화
+
 ## 라이선스
 `GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
