@@ -24,7 +24,7 @@
   + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
   + 파이썬
   + 간편 자동응답 (블럭코딩)
-+ **`Git` 지원**
++ **`Git`**
   + `Push` and `Commit`
   + `Merge`
 + **스크립트 저장소** (`npm`, `maven` 같은 개념)
