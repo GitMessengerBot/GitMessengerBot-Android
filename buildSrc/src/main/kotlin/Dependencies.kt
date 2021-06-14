@@ -25,7 +25,7 @@ object Versions {
     object Essential {
         const val Python = "9.1.0"
         const val Kotlin = "1.5.10"
-        const val Gradle = "7.1.0-alpha01"
+        const val Gradle = "7.1.0-alpha02"
         const val CoreKtx = "1.3.2"
     }
 
