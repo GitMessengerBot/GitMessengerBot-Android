@@ -15,5 +15,5 @@ import retrofit2.http.GET
 
 interface GithubService {
     @GET("/user")
-    fun getUserInfo(): Call<GithubUser>
+    fun getUserInfo(): Call<GithubUser> // suspend
 }
