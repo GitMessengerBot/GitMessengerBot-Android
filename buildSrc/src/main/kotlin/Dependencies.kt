@@ -55,9 +55,17 @@ object Versions {
         const val Version = "1.0.0-beta08"
         const val Activity = "1.3.0-beta01"
     }
+
+    object Debug {
+        const val LeakCanary = "2.7"
+    }
 }
 
 object Dependencies {
+    val debug = listOf(
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Debug.LeakCanary}"
+    )
+
     val network = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",

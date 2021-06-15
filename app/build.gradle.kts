@@ -67,6 +67,7 @@ android {
 }
 
 dependencies {
+    Dependencies.debug.forEach(::debugImplementation)
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
