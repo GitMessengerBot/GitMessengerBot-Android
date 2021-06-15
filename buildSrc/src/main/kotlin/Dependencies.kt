@@ -26,7 +26,7 @@ object Versions {
         const val Python = "9.1.0"
         const val Kotlin = "1.5.10"
         const val Gradle = "7.1.0-alpha02"
-        const val CoreKtx = "1.3.2"
+        const val CoreKtx = "1.5.0"
         const val Coroutines = "1.5.0"
     }
 
@@ -51,8 +51,14 @@ object Versions {
         const val Room = "2.3.0"
     }
 
+    object Hilt {
+        const val Master = "2.37"
+        const val ViewModel = "1.0.0-alpha03"
+        const val ViewModelCompiler = "1.0.0"
+    }
+
     object Compose {
-        const val Version = "1.0.0-beta08"
+        const val Master = "1.0.0-beta08"
         const val Activity = "1.3.0-beta01"
     }
 
@@ -90,23 +96,30 @@ object Dependencies {
         "com.google.code.gson:gson:${Versions.Util.Gson}"
     )
 
-    var room = listOf(
+    val room = listOf(
         "androidx.room:room-runtime:${Versions.Jetpack.Room}",
         "androidx.room:room-ktx:${Versions.Jetpack.Room}"
     )
 
-    var compose = listOf(
+    val hilt = listOf(
+        "com.google.dagger:hilt-android:${Versions.Hilt.Master}",
+        "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.Hilt.ViewModel}"
+    )
+
+    val compose = listOf(
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
-        "androidx.compose.compiler:compiler:${Versions.Compose.Version}",
-        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Version}",
-        "androidx.compose.material:material:${Versions.Compose.Version}",
-        "androidx.compose.material:material-icons-extended:${Versions.Compose.Version}",
-        "androidx.compose.ui:ui-tooling:${Versions.Compose.Version}",
-        "androidx.compose.ui:ui:${Versions.Compose.Version}"
+        "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
+        "androidx.compose.material:material:${Versions.Compose.Master}",
+        "androidx.compose.material:material-icons-extended:${Versions.Compose.Master}",
+        "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
+        "androidx.compose.ui:ui:${Versions.Compose.Master}"
     )
 
     val compiler = listOf(
         "androidx.room:room-compiler:${Versions.Jetpack.Room}",
-        "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}"
+        "com.github.bumptech.glide:compiler:${Versions.Ui.Glide}",
+        "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}",
+        "androidx.hilt:hilt-compiler:${Versions.Hilt.ViewModelCompiler}"
     )
 }

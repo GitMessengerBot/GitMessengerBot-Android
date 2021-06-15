@@ -12,6 +12,7 @@ plugins {
     id("com.chaquo.python")
     kotlin("android")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
     id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
 }
 
@@ -46,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.Compose.Version
+        kotlinCompilerExtensionVersion = Versions.Compose.Master
     }
 
     sourceSets {
@@ -73,6 +74,7 @@ dependencies {
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
+    Dependencies.hilt.forEach(::implementation)
     Dependencies.room.forEach(::implementation)
     Dependencies.compiler.forEach(::kapt)
 }

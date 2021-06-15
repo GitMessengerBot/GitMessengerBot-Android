@@ -18,6 +18,7 @@ buildscript {
         classpath("com.chaquo.python:gradle:${Versions.Essential.Python}")
         classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.Master}")
     }
 }
 
