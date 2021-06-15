@@ -39,7 +39,9 @@ object Versions {
     object Util {
         const val CrashReporter = "1.1.0"
         const val Gson = "2.8.7"
+        const val SerializationJson = "1.1.0"
         const val CheckDependencyUpdates = "1.3.1"
+        const val SerializationConverter = "0.8.0"
     }
 
     object Network {
@@ -92,7 +94,9 @@ object Dependencies {
 
     val util = listOf(
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Util.SerializationJson}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
+        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.Util.SerializationConverter}",
         "com.google.code.gson:gson:${Versions.Util.Gson}"
     )
 

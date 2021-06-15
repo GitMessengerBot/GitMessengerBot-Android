@@ -12,6 +12,7 @@ plugins {
     id("com.chaquo.python")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
     id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
 }

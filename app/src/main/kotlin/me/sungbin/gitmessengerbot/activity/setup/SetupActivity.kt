@@ -13,6 +13,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,7 +41,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -60,14 +60,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.repository.github.GithubViewModel
 import me.sungbin.gitmessengerbot.repository.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
+import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay
@@ -120,7 +123,7 @@ class SetupActivity : ComponentActivity() {
             val context = LocalContext.current
             val personalKeyInputField = remember { mutableStateOf(TextFieldValue()) }
             val keyboardController = LocalSoftwareKeyboardController.current
-            val coroutineScope = rememberCoroutineScope()
+            val activity = this@SetupActivity
 
             MaterialTheme {
                 AlertDialog(
@@ -201,9 +204,53 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(start = 8.dp)
                                             .clickable {
-                                                val githubData =
+                                                var githubData =
                                                     GithubData(personalKey = personalKeyInputField.value.text)
-                                                githubViewModel.login(githubData)
+                                                githubViewModel.login(
+                                                    githubData = githubData,
+                                                    onResponse = {
+                                                        githubData = githubData.copy(
+                                                            userName = login,
+                                                            profileImageUrl = avatarUrl
+                                                        )
+
+                                                        Storage.write(
+                                                            context,
+                                                            PathManager.Storage.GithubData,
+                                                            Gson().toJson(githubData)
+                                                        )
+
+                                                        finish()
+                                                        startActivity(
+                                                            Intent(
+                                                                activity,
+                                                                MainActivity::class.java
+                                                            )
+                                                        )
+
+                                                        activity.runOnUiThread {
+                                                            toast(
+                                                                context,
+                                                                getString(
+                                                                    R.string.setup_welcome_start,
+                                                                    login
+                                                                )
+                                                            )
+                                                        }
+                                                    },
+                                                    onFailure = {
+                                                        activity.runOnUiThread {
+                                                            toast(
+                                                                context,
+                                                                getString(
+                                                                    R.string.setup_github_connect_error,
+                                                                    localizedMessage
+                                                                ),
+                                                                Toast.LENGTH_LONG
+                                                            )
+                                                        }
+                                                    }
+                                                )
                                             },
                                         text = stringResource(R.string.setup_start),
                                         fontSize = 13.sp,

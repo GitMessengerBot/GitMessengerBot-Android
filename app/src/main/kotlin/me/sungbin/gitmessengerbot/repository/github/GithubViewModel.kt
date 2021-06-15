@@ -15,15 +15,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.repository.github.model.GithubData
-import me.sungbin.gitmessengerbot.util.LoggingInterceptor
+import me.sungbin.gitmessengerbot.repository.github.model.GithubUser
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.HttpException
 import retrofit2.Retrofit
+import retrofit2.await
 
 @HiltViewModel
 class GithubViewModel @Inject constructor(
-    private val loggingInterceptor: LoggingInterceptor,
+    private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val retrofit: Retrofit.Builder
 ) : ViewModel() {
 
@@ -43,10 +46,25 @@ class GithubViewModel @Inject constructor(
     }
 
     private fun buildRetrofit(token: String) = retrofit
-        .client(getInterceptor(loggingInterceptor.instance, AuthInterceptor(token)))
+        .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(token)))
         .build()
         .create(GithubService::class.java)
 
-    fun login(githubData: GithubData) = viewModelScope.launch {
+    fun login(
+        githubData: GithubData,
+        onResponse: GithubUser.() -> Unit,
+        onFailure: HttpException.() -> Unit
+    ) = viewModelScope.launch {
+        try {
+            onResponse(buildRetrofit(githubData.personalKey).getUserInfo().await())
+        } catch (exception: HttpException) {
+            onFailure(exception)
+        }
     }
+
+    // todo
+    fun commit() = viewModelScope.launch {}
+
+    // todo
+    fun merge() = viewModelScope.launch {}
 }

@@ -9,123 +9,125 @@
 
 package me.sungbin.gitmessengerbot.repository.github.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GithubUser(
-    @field:SerializedName("gists_url")
+    @SerialName("gists_url")
     val gistsUrl: String,
 
-    @field:SerializedName("repos_url")
+    @SerialName("repos_url")
     val reposUrl: String,
 
-    @field:SerializedName("two_factor_authentication")
+    @SerialName("two_factor_authentication")
     val twoFactorAuthentication: Boolean,
 
-    @field:SerializedName("following_url")
+    @SerialName("following_url")
     val followingUrl: String,
 
-    @field:SerializedName("twitter_username")
+    @SerialName("twitter_username")
     val twitterUsername: String,
 
-    @field:SerializedName("bio")
+    @SerialName("bio")
     val bio: String,
 
-    @field:SerializedName("created_at")
+    @SerialName("created_at")
     val createdAt: String,
 
-    @field:SerializedName("login")
+    @SerialName("login")
     val login: String,
 
-    @field:SerializedName("type")
+    @SerialName("type")
     val type: String,
 
-    @field:SerializedName("blog")
+    @SerialName("blog")
     val blog: String,
 
-    @field:SerializedName("private_gists")
+    @SerialName("private_gists")
     val privateGists: Int,
 
-    @field:SerializedName("total_private_repos")
+    @SerialName("total_private_repos")
     val totalPrivateRepos: Int,
 
-    @field:SerializedName("subscriptions_url")
+    @SerialName("subscriptions_url")
     val subscriptionsUrl: String,
 
-    @field:SerializedName("updated_at")
+    @SerialName("updated_at")
     val updatedAt: String,
 
-    @field:SerializedName("site_admin")
+    @SerialName("site_admin")
     val siteAdmin: Boolean,
 
-    @field:SerializedName("disk_usage")
+    @SerialName("disk_usage")
     val diskUsage: Int,
 
-    @field:SerializedName("collaborators")
+    @SerialName("collaborators")
     val collaborators: Int,
 
-    @field:SerializedName("company")
+    @SerialName("company")
     val company: String,
 
-    @field:SerializedName("owned_private_repos")
+    @SerialName("owned_private_repos")
     val ownedPrivateRepos: Int,
 
-    @field:SerializedName("id")
+    @SerialName("id")
     val id: Int,
 
-    @field:SerializedName("public_repos")
+    @SerialName("public_repos")
     val publicRepos: Int,
 
-    @field:SerializedName("gravatar_id")
+    @SerialName("gravatar_id")
     val gravatarId: String,
 
-    @field:SerializedName("plan")
+    @SerialName("plan")
     val plan: Plan,
 
-    @field:SerializedName("email")
+    @SerialName("email")
     val email: String,
 
-    @field:SerializedName("organizations_url")
+    @SerialName("organizations_url")
     val organizationsUrl: String,
 
-    @field:SerializedName("hireable")
+    @SerialName("hireable")
     val hireable: Boolean,
 
-    @field:SerializedName("starred_url")
+    @SerialName("starred_url")
     val starredUrl: String,
 
-    @field:SerializedName("followers_url")
+    @SerialName("followers_url")
     val followersUrl: String,
 
-    @field:SerializedName("public_gists")
+    @SerialName("public_gists")
     val publicGists: Int,
 
-    @field:SerializedName("url")
+    @SerialName("url")
     val url: String,
 
-    @field:SerializedName("received_events_url")
+    @SerialName("received_events_url")
     val receivedEventsUrl: String,
 
-    @field:SerializedName("followers")
+    @SerialName("followers")
     val followers: Int,
 
-    @field:SerializedName("avatar_url")
+    @SerialName("avatar_url")
     val avatarUrl: String,
 
-    @field:SerializedName("events_url")
+    @SerialName("events_url")
     val eventsUrl: String,
 
-    @field:SerializedName("html_url")
+    @SerialName("html_url")
     val htmlUrl: String,
 
-    @field:SerializedName("following")
+    @SerialName("following")
     val following: Int,
 
-    @field:SerializedName("name")
+    @SerialName("name")
     val name: String,
 
-    @field:SerializedName("location")
+    @SerialName("location")
     val location: String,
 
-    @field:SerializedName("node_id")
+    @SerialName("node_id")
     val nodeId: String
 )

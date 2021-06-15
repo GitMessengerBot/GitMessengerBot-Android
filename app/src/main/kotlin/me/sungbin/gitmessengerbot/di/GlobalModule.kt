@@ -13,16 +13,24 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
 import javax.inject.Singleton
-import me.sungbin.gitmessengerbot.util.LoggingInterceptor
+import kotlinx.serialization.json.Json
+import okhttp3.logging.HttpLoggingInterceptor
 
 @Module
 @InstallIn(SingletonComponent::class)
 object GlobalModule {
 
     @Provides
-    @IntoSet
     @Singleton
-    fun providesLoggingInterceptor() = LoggingInterceptor()
+    fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    @Provides
+    @Singleton
+    fun provideJson() = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
 }

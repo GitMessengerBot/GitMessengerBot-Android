@@ -9,18 +9,20 @@
 
 package me.sungbin.gitmessengerbot.repository.github.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Plan(
-    @field:SerializedName("private_repos")
+    @SerialName("private_repos")
     val privateRepos: Int,
 
-    @field:SerializedName("name")
+    @SerialName("name")
     val name: String,
 
-    @field:SerializedName("collaborators")
+    @SerialName("collaborators")
     val collaborators: Int,
 
-    @field:SerializedName("space")
+    @SerialName("space")
     val space: Int
 )
