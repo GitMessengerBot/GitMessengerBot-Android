@@ -13,10 +13,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,35 +60,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.google.gson.Gson
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.MainActivity
-import me.sungbin.gitmessengerbot.repo.Client
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
+import me.sungbin.gitmessengerbot.repository.github.GithubViewModel
+import me.sungbin.gitmessengerbot.repository.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
-import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay
-import me.sungbin.gitmessengerbot.util.extension.toCallbackFlow
 import me.sungbin.gitmessengerbot.util.extension.toast
 
-@ExperimentalCoroutinesApi
-@ExperimentalComposeUiApi
+private object PermissionType {
+    const val NotificationRead = "PERMISSION_FOR_NOTIFICATION_READ"
+}
+
+private data class Permission(
+    val permissions: List<String>,
+    val name: String,
+    val description: String,
+    val painterResource: Int
+)
+
+@AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
-    private data class Permission(
-        val permissions: List<String>,
-        val name: String,
-        val description: String,
-        val painterResource: Int
-    )
+
+    private val githubViewModel: GithubViewModel by viewModels()
 
     private val isStoragePermissionGranted = mutableStateOf(false)
     private val isNotificationPermissionGranted = mutableStateOf(false)
@@ -114,6 +113,7 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     private fun PersonalKeyInputDialogBind() {
         if (isPersonalKeyInputDialogOpening.value) {
@@ -201,57 +201,9 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(start = 8.dp)
                                             .clickable {
-                                                var githubData =
+                                                val githubData =
                                                     GithubData(personalKey = personalKeyInputField.value.text)
-
-                                                coroutineScope.launch {
-                                                    Client
-                                                        .github(githubData.personalKey)
-                                                        .getUserInfo()
-                                                        .toCallbackFlow()
-                                                        .catch { error ->
-                                                            this@SetupActivity.runOnUiThread {
-                                                                toast(
-                                                                    context,
-                                                                    getString(
-                                                                        R.string.setup_github_connect_error,
-                                                                        error.localizedMessage
-                                                                    ),
-                                                                    Toast.LENGTH_LONG
-                                                                )
-                                                            }
-                                                        }
-                                                        .collect { user ->
-                                                            githubData = githubData.copy(
-                                                                userName = user.login,
-                                                                profileImageUrl = user.avatarUrl
-                                                            )
-
-                                                            Storage.write(
-                                                                context,
-                                                                PathManager.Storage.GithubData,
-                                                                Gson().toJson(githubData)
-                                                            )
-
-                                                            finish()
-                                                            startActivity(
-                                                                Intent(
-                                                                    this@SetupActivity,
-                                                                    MainActivity::class.java
-                                                                )
-                                                            )
-
-                                                            this@SetupActivity.runOnUiThread {
-                                                                toast(
-                                                                    context,
-                                                                    getString(
-                                                                        R.string.setup_welcome_start,
-                                                                        user.login
-                                                                    )
-                                                                )
-                                                            }
-                                                        }
-                                                }
+                                                githubViewModel.login(githubData)
                                             },
                                         text = stringResource(R.string.setup_start),
                                         fontSize = 13.sp,
@@ -328,7 +280,7 @@ class SetupActivity : ComponentActivity() {
                 )
                 PermissionView(
                     permission = Permission(
-                        listOf(PERMISSION_NOTIFICATION_READ),
+                        listOf(PermissionType.NotificationRead),
                         stringResource(R.string.setup_permission_notification_label),
                         stringResource(
                             R.string.setup_permission_notification_description
@@ -407,7 +359,7 @@ class SetupActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .background(color = Color.White, RoundedCornerShape(15.dp))
                     .clickable {
-                        if (permission.permissions.first() == PERMISSION_NOTIFICATION_READ) {
+                        if (permission.permissions.first() == PermissionType.NotificationRead) {
                             permission.requestAllPermissions()
                         } else {
                             if (!Storage.isScoped) permission.requestAllPermissions()
@@ -467,7 +419,7 @@ class SetupActivity : ComponentActivity() {
     }
 
     private fun Permission.requestAllPermissions() =
-        if (this.permissions.first() == PERMISSION_NOTIFICATION_READ) {
+        if (this.permissions.first() == PermissionType.NotificationRead) {
             requestReadNotification(this@SetupActivity)
             doDelay(1000) { isNotificationPermissionGranted.value = true }
         } else permissionsContracts.launch(this.permissions.toTypedArray())
@@ -475,9 +427,5 @@ class SetupActivity : ComponentActivity() {
     private fun requestReadNotification(activity: Activity) {
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
         activity.startActivity(intent)
-    }
-
-    companion object {
-        const val PERMISSION_NOTIFICATION_READ = "PERMISSION_FOR_NOTIFICATION_READ"
     }
 }

@@ -37,11 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
+import me.sungbin.gitmessengerbot.repository.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -53,9 +52,8 @@ import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toModel
 import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
 
-@ExperimentalComposeUiApi
-@ExperimentalCoroutinesApi
 class SplashActivity : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

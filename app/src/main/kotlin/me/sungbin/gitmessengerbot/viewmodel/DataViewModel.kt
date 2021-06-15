@@ -9,7 +9,7 @@
 
 package me.sungbin.gitmessengerbot.viewmodel
 
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
+import me.sungbin.gitmessengerbot.repository.github.model.GithubData
 
 class DataViewModel private constructor() {
     lateinit var githubData: GithubData

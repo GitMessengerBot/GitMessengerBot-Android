@@ -10,8 +10,8 @@
 plugins {
     id("com.android.application")
     id("com.chaquo.python")
-    kotlin("android")
-    kotlin("kapt")
+    id("kotlin-android")
+    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
 }
