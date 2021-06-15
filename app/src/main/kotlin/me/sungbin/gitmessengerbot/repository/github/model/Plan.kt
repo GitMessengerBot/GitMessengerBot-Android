@@ -2,6 +2,24 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [Plan.kt] created by Ji Sungbin on 21. 6. 16. 오전 3:23.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [Plan.kt] created by Ji Sungbin on 21. 6. 16. 오전 3:22.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
  * [Plan.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:37.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
@@ -9,20 +27,18 @@
 
 package me.sungbin.gitmessengerbot.repository.github.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Plan(
-    @SerialName("private_repos")
+    @field:SerializedName("private_repos")
     val privateRepos: Int,
 
-    @SerialName("name")
+    @field:SerializedName("name")
     val name: String,
 
-    @SerialName("collaborators")
+    @field:SerializedName("collaborators")
     val collaborators: Int,
 
-    @SerialName("space")
+    @field:SerializedName("space")
     val space: Int
 )

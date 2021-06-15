@@ -2,6 +2,24 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [GithubUser.kt] created by Ji Sungbin on 21. 6. 16. 오전 3:22.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [GithubUser.kt] created by Ji Sungbin on 21. 6. 16. 오전 3:22.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
  * [GithubUser.kt] created by Ji Sungbin on 21. 5. 21. 오후 4:37.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
@@ -9,125 +27,123 @@
 
 package me.sungbin.gitmessengerbot.repository.github.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class GithubUser(
-    @SerialName("gists_url")
+    @SerializedName("gists_url")
     val gistsUrl: String,
 
-    @SerialName("repos_url")
+    @SerializedName("repos_url")
     val reposUrl: String,
 
-    @SerialName("two_factor_authentication")
+    @SerializedName("two_factor_authentication")
     val twoFactorAuthentication: Boolean,
 
-    @SerialName("following_url")
+    @SerializedName("following_url")
     val followingUrl: String,
 
-    @SerialName("twitter_username")
+    @SerializedName("twitter_username")
     val twitterUsername: String,
 
-    @SerialName("bio")
+    @SerializedName("bio")
     val bio: String,
 
-    @SerialName("created_at")
+    @SerializedName("created_at")
     val createdAt: String,
 
-    @SerialName("login")
+    @SerializedName("login")
     val login: String,
 
-    @SerialName("type")
+    @SerializedName("type")
     val type: String,
 
-    @SerialName("blog")
+    @SerializedName("blog")
     val blog: String,
 
-    @SerialName("private_gists")
+    @SerializedName("private_gists")
     val privateGists: Int,
 
-    @SerialName("total_private_repos")
+    @SerializedName("total_private_repos")
     val totalPrivateRepos: Int,
 
-    @SerialName("subscriptions_url")
+    @SerializedName("subscriptions_url")
     val subscriptionsUrl: String,
 
-    @SerialName("updated_at")
+    @SerializedName("updated_at")
     val updatedAt: String,
 
-    @SerialName("site_admin")
+    @SerializedName("site_admin")
     val siteAdmin: Boolean,
 
-    @SerialName("disk_usage")
+    @SerializedName("disk_usage")
     val diskUsage: Int,
 
-    @SerialName("collaborators")
+    @SerializedName("collaborators")
     val collaborators: Int,
 
-    @SerialName("company")
+    @SerializedName("company")
     val company: String,
 
-    @SerialName("owned_private_repos")
+    @SerializedName("owned_private_repos")
     val ownedPrivateRepos: Int,
 
-    @SerialName("id")
+    @SerializedName("id")
     val id: Int,
 
-    @SerialName("public_repos")
+    @SerializedName("public_repos")
     val publicRepos: Int,
 
-    @SerialName("gravatar_id")
+    @SerializedName("gravatar_id")
     val gravatarId: String,
 
-    @SerialName("plan")
+    @SerializedName("plan")
     val plan: Plan,
 
-    @SerialName("email")
+    @SerializedName("email")
     val email: String,
 
-    @SerialName("organizations_url")
+    @SerializedName("organizations_url")
     val organizationsUrl: String,
 
-    @SerialName("hireable")
+    @SerializedName("hireable")
     val hireable: Boolean,
 
-    @SerialName("starred_url")
+    @SerializedName("starred_url")
     val starredUrl: String,
 
-    @SerialName("followers_url")
+    @SerializedName("followers_url")
     val followersUrl: String,
 
-    @SerialName("public_gists")
+    @SerializedName("public_gists")
     val publicGists: Int,
 
-    @SerialName("url")
+    @SerializedName("url")
     val url: String,
 
-    @SerialName("received_events_url")
+    @SerializedName("received_events_url")
     val receivedEventsUrl: String,
 
-    @SerialName("followers")
+    @SerializedName("followers")
     val followers: Int,
 
-    @SerialName("avatar_url")
+    @SerializedName("avatar_url")
     val avatarUrl: String,
 
-    @SerialName("events_url")
+    @SerializedName("events_url")
     val eventsUrl: String,
 
-    @SerialName("html_url")
+    @SerializedName("html_url")
     val htmlUrl: String,
 
-    @SerialName("following")
+    @SerializedName("following")
     val following: Int,
 
-    @SerialName("name")
+    @SerializedName("name")
     val name: String,
 
-    @SerialName("location")
+    @SerializedName("location")
     val location: String,
 
-    @SerialName("node_id")
+    @SerializedName("node_id")
     val nodeId: String
 )
