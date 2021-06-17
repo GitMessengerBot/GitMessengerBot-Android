@@ -23,7 +23,7 @@ object GlobalModule {
 
     @Provides
     @Singleton
-    fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
+    fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 

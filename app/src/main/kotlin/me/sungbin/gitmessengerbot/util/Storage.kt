@@ -26,8 +26,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 object Storage {
-    @Suppress("DEPRECATION")
-    private val sdcard = Environment.getExternalStorageDirectory().absolutePath.toString()
     val isScoped = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
     private fun String.toFile(context: Context) =
