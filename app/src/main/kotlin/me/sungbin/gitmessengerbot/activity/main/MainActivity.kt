@@ -33,7 +33,6 @@ import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,10 +71,10 @@ class MainActivity : ComponentActivity() {
         }
 
         val items = listOf(
-            FancyItem("Folders", R.drawable.ic_baseline_folder_24, 0),
-            FancyItem(icon = R.drawable.ic_baseline_error_24, id = 1),
-            FancyItem(title = "Keys", icon = R.drawable.ic_baseline_key_24, id = 2),
-            FancyItem("More?", id = 3)
+            FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
+            FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
+            FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
+            FancyItem(title = "Setting", id = 3)
         )
 
         setContent {
@@ -92,7 +92,8 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(bottom = 60.dp)
                     ) { index ->
-                        // BindFancyPage(index = index)
+                        index
+                        // todo: BindFancyPage(index = index)
                     }
                     MainViewBind()
                     Column(
@@ -179,7 +180,7 @@ class MainActivity : ComponentActivity() {
                         .padding(top = 30.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    StateItemBind(title = "메인 전원", modifier = Modifier.weight(1f)) {
+                    StateItem(title = "메인 전원", modifier = Modifier.weight(1f)) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -197,24 +198,27 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                    StateItemBind(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
+                    StateItem(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = "2", fontSize = 35.sp)
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    StateItemBind(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
+                    StateItem(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = "2", fontSize = 35.sp)
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    StateItemBind(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
-                        Column(verticalArrangement = Arrangement.Center) {
+                    StateItem(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Icon(
-                                imageVector = Icons.Rounded.Search,
+                                painter = painterResource(R.drawable.ic_round_search_24),
                                 contentDescription = null,
-                                modifier = Modifier.size(45.dp),
+                                modifier = Modifier.size(150.dp),
                                 tint = Color.Black
                             )
                         }
@@ -232,7 +236,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun StateItemBind(title: String, modifier: Modifier, content: @Composable () -> Unit) {
+    private fun StateItem(title: String, modifier: Modifier, content: @Composable () -> Unit) {
         Column(
             modifier = modifier
                 .width(75.dp)

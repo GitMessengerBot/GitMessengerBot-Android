@@ -153,7 +153,7 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .size(30.dp)
                                             .padding(bottom = 2.dp),
-                                        painter = painterResource(R.drawable.ic_baseline_key_24),
+                                        painter = painterResource(R.drawable.ic_round_key_24),
                                         contentDescription = null
                                     )
                                 }
