@@ -36,7 +36,7 @@
 3. Coroutines
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
-6. ktlint
+6. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
 
 # ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 - `import ordering` 프로젝트 단위 비활성화
