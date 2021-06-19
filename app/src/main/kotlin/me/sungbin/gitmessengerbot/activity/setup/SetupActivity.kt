@@ -75,7 +75,7 @@ import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toast
-import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
+import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 private object PermissionType {
     const val NotificationRead = "PERMISSION_FOR_NOTIFICATION_READ"
@@ -91,7 +91,7 @@ private data class Permission(
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
 
-    private val dataViewModel = DataViewModel.instance
+    private val dataViewModel = MainViewModel.instance
     private val githubViewModel: GithubViewModel by viewModels()
 
     private val isStoragePermissionGranted = mutableStateOf(false)

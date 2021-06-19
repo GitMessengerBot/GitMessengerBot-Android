@@ -46,6 +46,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
+import me.sungbin.gitmessengerbot.activity.main.kaven.KavenViewModel
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
+import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.theme.BindView
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -56,11 +60,12 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyOptions
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
+import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val vm = DataViewModel.instance
+    private val tab = mutableStateOf(Tab.Script)
+    private val vm = MainViewModel.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,7 +185,7 @@ class MainActivity : ComponentActivity() {
                         .padding(top = 30.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    StateItem(title = "메인 전원", modifier = Modifier.weight(1f)) {
+                    MenuBox(title = "메인 전원", modifier = Modifier.weight(1f)) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -198,19 +203,19 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                    StateItem(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
+                    MenuBox(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = "2", fontSize = 35.sp)
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    StateItem(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
+                    MenuBox(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = "2", fontSize = 35.sp)
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    StateItem(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
+                    MenuBox(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -236,7 +241,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun StateItem(title: String, modifier: Modifier, content: @Composable () -> Unit) {
+    private fun MenuBox(title: String, modifier: Modifier, content: @Composable () -> Unit) {
         Column(
             modifier = modifier
                 .width(75.dp)
@@ -264,5 +269,13 @@ class MainActivity : ComponentActivity() {
                 color = Color.White
             )
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        DebugViewModel.instance.saveInstance()
+        KavenViewModel.instance.saveInstance()
+        ScriptViewModel.instance.saveInstance()
+        SettingViewModel.instance.saveInstance()
     }
 }

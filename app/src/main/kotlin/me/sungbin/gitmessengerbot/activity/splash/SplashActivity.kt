@@ -50,7 +50,7 @@ import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toModel
-import me.sungbin.gitmessengerbot.viewmodel.DataViewModel
+import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 class SplashActivity : ComponentActivity() {
     @OptIn(ExperimentalComposeUiApi::class)
@@ -67,7 +67,7 @@ class SplashActivity : ComponentActivity() {
         }
 
         if (App.isSetupDone(applicationContext)) {
-            DataViewModel.instance.githubData =
+            MainViewModel.instance.githubData =
                 Storage.read(applicationContext, PathManager.Storage.GithubData, "")!!
                     .toModel(GithubData::class.java)
         }
