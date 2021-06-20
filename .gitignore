@@ -1,6 +1,5 @@
 /.idea
 /.gradle
 /app/release
-/buildSrc/build
-/buildSrc/.gradle
+/buildSrc
 local.properties
