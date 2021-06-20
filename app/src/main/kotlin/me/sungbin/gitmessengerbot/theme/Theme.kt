@@ -114,7 +114,7 @@ val colors = lightColors().copy(
 )
 
 @Composable
-fun BindView(content: @Composable () -> Unit) {
+fun MaterialTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         typography = typography,
         colors = colors

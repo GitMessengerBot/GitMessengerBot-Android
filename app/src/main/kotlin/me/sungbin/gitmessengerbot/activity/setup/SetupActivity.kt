@@ -33,7 +33,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -66,7 +65,7 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.repository.github.GithubViewModel
 import me.sungbin.gitmessengerbot.repository.github.model.GithubData
-import me.sungbin.gitmessengerbot.theme.BindView
+import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
@@ -91,12 +90,12 @@ private data class Permission(
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
 
-    private val dataViewModel = MainViewModel.instance
+    private val mainViewModel = MainViewModel.instance
     private val githubViewModel: GithubViewModel by viewModels()
 
     private val isStoragePermissionGranted = mutableStateOf(false)
     private val isNotificationPermissionGranted = mutableStateOf(false)
-    private val isPersonalKeyInputDialogOpening = mutableStateOf(false)
+    private val isPersonalKeyInputDialogOpen = mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -111,7 +110,7 @@ class SetupActivity : ComponentActivity() {
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
         setContent {
-            BindView {
+            MaterialTheme {
                 SetupView()
                 PersonalKeyInputDialogBind()
             }
@@ -121,20 +120,20 @@ class SetupActivity : ComponentActivity() {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     private fun PersonalKeyInputDialogBind() {
-        if (isPersonalKeyInputDialogOpening.value) {
+        if (isPersonalKeyInputDialogOpen.value) {
             val context = LocalContext.current
             val personalKeyInputField = remember { mutableStateOf(TextFieldValue()) }
             val keyboardController = LocalSoftwareKeyboardController.current
             val activity = this@SetupActivity
 
-            MaterialTheme {
+            androidx.compose.material.MaterialTheme {
                 AlertDialog(
                     shape = RoundedCornerShape(10.dp),
                     properties = DialogProperties(
                         dismissOnClickOutside = false
                     ),
                     onDismissRequest = {
-                        isPersonalKeyInputDialogOpening.value = false
+                        isPersonalKeyInputDialogOpen.value = false
                     },
                     text = {
                         Column {
@@ -216,7 +215,7 @@ class SetupActivity : ComponentActivity() {
                                                             profileImageUrl = avatarUrl
                                                         )
 
-                                                        dataViewModel.githubData = githubData
+                                                        mainViewModel.githubData = githubData
                                                         Storage.write(
                                                             context,
                                                             PathManager.Storage.GithubData,
@@ -363,7 +362,7 @@ class SetupActivity : ComponentActivity() {
                             .clickable {
                                 if (Storage.isScoped) {
                                     if (isNotificationPermissionGranted.value) {
-                                        isPersonalKeyInputDialogOpening.value = true
+                                        isPersonalKeyInputDialogOpen.value = true
                                     } else {
                                         toast(
                                             context,
@@ -372,7 +371,7 @@ class SetupActivity : ComponentActivity() {
                                     }
                                 } else {
                                     if (isNotificationPermissionGranted.value && isStoragePermissionGranted.value) {
-                                        isPersonalKeyInputDialogOpening.value = true
+                                        isPersonalKeyInputDialogOpen.value = true
                                     } else {
                                         toast(
                                             context,

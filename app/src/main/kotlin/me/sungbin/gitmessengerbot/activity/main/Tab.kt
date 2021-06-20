@@ -9,6 +9,9 @@
 
 package me.sungbin.gitmessengerbot.activity.main
 
-enum class Tab {
-    Script, Debug, Github, Setting
+object Tab {
+    const val Script = 0
+    const val Debug = 1
+    const val Github = 2
+    const val Setting = 3
 }

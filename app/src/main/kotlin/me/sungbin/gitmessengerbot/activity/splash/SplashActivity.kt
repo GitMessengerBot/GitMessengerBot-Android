@@ -11,7 +11,6 @@ package me.sungbin.gitmessengerbot.activity.splash
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -41,7 +40,7 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
 import me.sungbin.gitmessengerbot.repository.github.model.GithubData
-import me.sungbin.gitmessengerbot.theme.BindView
+import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
@@ -50,18 +49,20 @@ import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toModel
+import me.sungbin.gitmessengerbot.util.extension.toast
 import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 class SplashActivity : ComponentActivity() {
+
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-        Toast.makeText(applicationContext, "Build: ${App.Build}", Toast.LENGTH_LONG).show()
+        toast(applicationContext, "Build: ${App.Build}")
 
         setContent {
-            BindView {
+            MaterialTheme {
                 SplashView()
             }
         }

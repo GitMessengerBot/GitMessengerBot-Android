@@ -35,7 +35,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +49,7 @@ import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.kaven.KavenViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
-import me.sungbin.gitmessengerbot.theme.BindView
+import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.defaultFontFamily
@@ -64,7 +63,7 @@ import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val tab = mutableStateOf(Tab.Script)
+    private val fancyTabState = mutableStateOf(Tab.Script)
     private val vm = MainViewModel.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,24 +82,21 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            val fancyNavigationState = rememberSaveable { mutableStateOf(0) }
-
-            BindView {
+            MaterialTheme {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(colors.primary)
                 ) {
                     Crossfade(
-                        targetState = fancyNavigationState.value,
+                        targetState = fancyTabState.value,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(bottom = 60.dp)
-                    ) { index ->
-                        index
-                        // todo: BindFancyPage(index = index)
+                    ) { tab ->
+                        // todo: FancyPage(index = tab)
                     }
-                    MainViewBind()
+                    MainView()
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom,
@@ -114,7 +110,7 @@ class MainActivity : ComponentActivity() {
                                 fancyColors = FancyColors(primary = colors.primary),
                                 fancyOptions = FancyOptions(fontFamily = defaultFontFamily),
                                 items = items
-                            ) { fancyNavigationState.value = id }
+                            ) { fancyTabState.value = id }
                             Surface(
                                 modifier = Modifier
                                     .padding(bottom = 35.dp)
@@ -140,7 +136,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MainViewBind() {
+    private fun MainView() {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Box(
@@ -236,6 +232,7 @@ class MainActivity : ComponentActivity() {
                     .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
                     .background(twiceLightGray)
             ) {
+                // todo: LazyScript()
             }
         }
     }
