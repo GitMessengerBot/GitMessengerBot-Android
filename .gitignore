@@ -3,3 +3,4 @@
 /app/release
 /buildSrc
 local.properties
+/app/build/
