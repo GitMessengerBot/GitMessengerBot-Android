@@ -39,8 +39,8 @@ object Versions {
     object Util {
         const val CrashReporter = "1.1.0"
         const val Gson = "2.8.7"
-        const val SerializationJson = "1.1.0"
-        const val CheckDependencyUpdates = "1.3.1"
+        const val SerializationJson = "1.2.1"
+        const val CheckDependencyUpdates = "1.3.4"
         const val SerializationConverter = "0.8.0"
     }
 
