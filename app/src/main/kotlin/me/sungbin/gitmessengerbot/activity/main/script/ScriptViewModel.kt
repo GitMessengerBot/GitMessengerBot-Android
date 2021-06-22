@@ -30,7 +30,7 @@ class ScriptViewModel private constructor() : ViewModel() {
         compileStates[id] = mutableStateOf(state)
     }
 
-    fun saveInstance() {
+    fun save() {
         // todo
     }
 

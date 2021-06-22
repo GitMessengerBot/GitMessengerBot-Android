@@ -270,9 +270,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        DebugViewModel.instance.saveInstance()
-        KavenViewModel.instance.saveInstance()
-        ScriptViewModel.instance.saveInstance()
-        SettingViewModel.instance.saveInstance()
+        DebugViewModel.instance.save()
+        KavenViewModel.instance.save()
+        ScriptViewModel.instance.save()
+        SettingViewModel.instance.save()
     }
 }

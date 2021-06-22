@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 
 class DebugViewModel private constructor() : ViewModel() {
 
-    fun saveInstance() {
+    fun save() {
     }
 
     companion object {
