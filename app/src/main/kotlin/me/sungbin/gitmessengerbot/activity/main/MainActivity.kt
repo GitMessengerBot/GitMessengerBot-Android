@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,7 +65,8 @@ import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 class MainActivity : ComponentActivity() {
 
     private val fancyTabState = mutableStateOf(Tab.Script)
-    private val vm = MainViewModel.instance
+    private val mainVm = MainViewModel.instance
+    private val scriptVm = ScriptViewModel.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +80,7 @@ class MainActivity : ComponentActivity() {
             FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
             FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
             FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
-            FancyItem(title = "Setting", id = 3)
+            FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
         )
 
         setContent {
@@ -96,7 +98,7 @@ class MainActivity : ComponentActivity() {
                     ) { tab ->
                         // todo: FancyPage(index = tab)
                     }
-                    MainView()
+                    Main()
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom,
@@ -136,7 +138,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MainView() {
+    private fun Main() {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Box(
@@ -152,7 +154,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.End
                     ) {
                         GlideImage(
-                            src = vm.githubData.profileImageUrl,
+                            src = mainVm.githubData.profileImageUrl,
                             modifier = Modifier
                                 .size(70.dp)
                                 .clip(CircleShape)
@@ -164,9 +166,16 @@ class MainActivity : ComponentActivity() {
                             .wrapContentHeight(),
                         horizontalAlignment = Alignment.Start
                     ) {
-                        Text(text = "GitMessengerBot", color = Color.LightGray, fontSize = 13.sp)
                         Text(
-                            text = "Hi, ${vm.githubData.userName}",
+                            text = stringResource(R.string.app_name),
+                            color = Color.LightGray,
+                            fontSize = 13.sp
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.main_welcome,
+                                mainVm.githubData.userName
+                            ),
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
@@ -181,12 +190,15 @@ class MainActivity : ComponentActivity() {
                         .padding(top = 30.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    MenuBox(title = "메인 전원", modifier = Modifier.weight(1f)) {
+                    MenuBox(
+                        title = stringResource(R.string.main_power),
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("On")
+                            Text(stringResource(R.string.main_menu_on))
                             Switch(
                                 checked = false,
                                 colors = SwitchDefaults.colors(
@@ -199,19 +211,31 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                    MenuBox(title = "총 스크립트 수", modifier = Modifier.weight(1f)) {
+                    MenuBox(
+                        title = stringResource(R.string.main_menu_all_script_count),
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "2", fontSize = 35.sp)
+                            Text(text = scriptVm.scripts.size.toString(), fontSize = 35.sp)
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    MenuBox(title = "실행중인\n스크립트 수", modifier = Modifier.weight(1f)) {
+                    MenuBox(
+                        title = stringResource(R.string.main_menu_running_script_count),
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "2", fontSize = 35.sp)
+                            Text(
+                                text = scriptVm.scripts.filter { it.power }.size.toString(),
+                                fontSize = 35.sp
+                            )
                             Text(text = "개", fontSize = 8.sp)
                         }
                     }
-                    MenuBox(title = "스크립트 검색", modifier = Modifier.weight(1f)) {
+                    MenuBox(
+                        title = stringResource(R.string.main_menu_script_search),
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -273,6 +297,6 @@ class MainActivity : ComponentActivity() {
         DebugViewModel.instance.save()
         KavenViewModel.instance.save()
         ScriptViewModel.instance.save()
-        SettingViewModel.instance.save()
+        scriptVm.save()
     }
 }

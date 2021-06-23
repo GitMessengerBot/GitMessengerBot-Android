@@ -18,7 +18,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -44,10 +44,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -111,22 +112,22 @@ class SetupActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                SetupView()
-                PersonalKeyInputDialogBind()
+                Setup()
+                PersonalKeyInputDialog()
             }
         }
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
-    private fun PersonalKeyInputDialogBind() {
+    private fun PersonalKeyInputDialog() {
         if (isPersonalKeyInputDialogOpen.value) {
             val context = LocalContext.current
             val personalKeyInputField = remember { mutableStateOf(TextFieldValue()) }
-            val keyboardController = LocalSoftwareKeyboardController.current
+            val focusManager = LocalFocusManager.current
             val activity = this@SetupActivity
 
-            androidx.compose.material.MaterialTheme {
+            MaterialTheme {
                 AlertDialog(
                     shape = RoundedCornerShape(10.dp),
                     properties = DialogProperties(
@@ -142,13 +143,13 @@ class SetupActivity : ComponentActivity() {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Image(
-                                        painter = painterResource(R.drawable.ic_baseline_circle_24),
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_round_circle_24),
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(Color.Black),
+                                        tint = Color.Black,
                                         modifier = Modifier.size(35.dp),
                                     )
-                                    Image(
+                                    Icon(
                                         modifier = Modifier
                                             .size(30.dp)
                                             .padding(bottom = 2.dp),
@@ -157,7 +158,7 @@ class SetupActivity : ComponentActivity() {
                                     )
                                 }
                                 Text(
-                                    text = stringResource(R.string.setup_input_personal_key),
+                                    text = stringResource(R.string.setup_dialog_input_personal_key),
                                     color = Color.Black,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(start = 8.dp)
@@ -166,7 +167,9 @@ class SetupActivity : ComponentActivity() {
                             TextField(
                                 maxLines = 1,
                                 singleLine = true,
-                                modifier = Modifier.padding(top = 10.dp),
+                                modifier = Modifier
+                                    .padding(top = 10.dp)
+                                    .focusRequester(FocusRequester()),
                                 value = personalKeyInputField.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = Color.White,
@@ -174,15 +177,15 @@ class SetupActivity : ComponentActivity() {
                                     textColor = Color.Black,
                                     focusedIndicatorColor = Color.Black
                                 ),
-                                keyboardActions = KeyboardActions {
-                                    keyboardController?.hide()
-                                },
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                keyboardActions = KeyboardActions(
+                                    onDone = { focusManager.clearFocus() }
+                                ),
                                 onValueChange = { personalKeyInputField.value = it }
                             )
                             Row(modifier = Modifier.padding(top = 20.dp)) {
                                 Text(
-                                    text = stringResource(R.string.setup_way_to_get_personal_key),
+                                    text = stringResource(R.string.setup_dialog_way_to_get_personal_key),
                                     modifier = Modifier.clickable {
                                         Web.open(this@SetupActivity, Web.Type.PersonalKeyGuide)
                                     },
@@ -194,7 +197,7 @@ class SetupActivity : ComponentActivity() {
                                     horizontalArrangement = Arrangement.End
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.setup_open_github),
+                                        text = stringResource(R.string.setup_dialog_open_github),
                                         modifier = Modifier.clickable {
                                             Web.open(this@SetupActivity, Web.Type.Github)
                                         },
@@ -234,7 +237,7 @@ class SetupActivity : ComponentActivity() {
                                                             toast(
                                                                 context,
                                                                 getString(
-                                                                    R.string.setup_welcome_start,
+                                                                    R.string.setup_toast_welcome_start,
                                                                     login
                                                                 )
                                                             )
@@ -245,7 +248,7 @@ class SetupActivity : ComponentActivity() {
                                                             toast(
                                                                 context,
                                                                 getString(
-                                                                    R.string.setup_github_connect_error,
+                                                                    R.string.setup_toast_github_connect_error,
                                                                     localizedMessage
                                                                 ),
                                                                 Toast.LENGTH_LONG
@@ -254,7 +257,7 @@ class SetupActivity : ComponentActivity() {
                                                     }
                                                 )
                                             },
-                                        text = stringResource(R.string.setup_start),
+                                        text = stringResource(R.string.setup_dialog_start),
                                         fontSize = 13.sp,
                                         color = Color.Black
                                     )
@@ -269,7 +272,7 @@ class SetupActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun SetupView() {
+    private fun Setup() {
         val context = LocalContext.current
 
         Box(
@@ -284,7 +287,7 @@ class SetupActivity : ComponentActivity() {
                     .padding(top = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.ic_round_caution_24),
                     modifier = Modifier.size(60.dp),
                     contentDescription = null,
@@ -320,9 +323,9 @@ class SetupActivity : ComponentActivity() {
                         ),
                         stringResource(R.string.setup_permission_storage_label),
                         stringResource(
-                            if (Storage.isScoped) R.string.setup_scoped_storage else R.string.setup_permission_storage_description
+                            if (Storage.isScoped) R.string.setup_permission_scoped_storage else R.string.setup_permission_storage_description
                         ),
-                        R.drawable.ic_baseline_folder_24
+                        R.drawable.ic_round_folder_24
                     ),
                     isPermissionGranted = isStoragePermissionGranted,
                     padding = listOf(0, 16)
@@ -334,7 +337,7 @@ class SetupActivity : ComponentActivity() {
                         stringResource(
                             R.string.setup_permission_notification_description
                         ),
-                        R.drawable.ic_baseline_notifications_24
+                        R.drawable.ic_round_notifications_24
                     ),
                     isPermissionGranted = isNotificationPermissionGranted,
                     padding = listOf(16, 16)
@@ -421,21 +424,21 @@ class SetupActivity : ComponentActivity() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     /*Box(contentAlignment = Alignment.Center) {
-                        Image(
+                        Icon(
                             painter = painterResource(R.drawable.ic_baseline_circle_24),
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(Color.Black)
+                            tint = Color.Black
                         )
-                        Image(
+                        Icon(
                             modifier = Modifier.size(15.dp),
                             painter = painterResource(permission.painterResource),
                             contentDescription = null
                         )
                     }*/
-                    Image(
-                        painter = painterResource(R.drawable.ic_baseline_error_24),
+                    Icon(
+                        painter = painterResource(R.drawable.ic_round_error_24),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(Color.Black)
+                        tint = Color.Black
                     )
                     Text(
                         text = permission.name,
@@ -448,10 +451,10 @@ class SetupActivity : ComponentActivity() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(R.drawable.ic_round_check_24),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(if (isPermissionGranted.value) colors.primaryVariant else Color.LightGray)
+                        tint = if (isPermissionGranted.value) colors.primaryVariant else Color.LightGray
                     )
                 }
             }

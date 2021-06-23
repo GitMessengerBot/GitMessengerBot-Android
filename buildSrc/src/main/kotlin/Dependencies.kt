@@ -115,7 +115,6 @@ object Dependencies {
         "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
-        "androidx.compose.material:material-icons-extended:${Versions.Compose.Master}",
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
         "androidx.compose.ui:ui:${Versions.Compose.Master}"
     )
