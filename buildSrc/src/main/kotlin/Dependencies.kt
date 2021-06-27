@@ -24,14 +24,14 @@ object Application {
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.5.10"
+        const val Kotlin = "1.5.10" // todo: 1.5.20
         const val Gradle = "7.1.0-alpha02"
         const val CoreKtx = "1.5.0"
         const val Coroutines = "1.5.0"
     }
 
     object Ui {
-        const val LottieCompose = "1.0.0-alpha07-SNAPSHOT"
+        const val LottieCompose = "1.0.0-beta07-2-SNAPSHOT"
         const val Glide = "4.12.0"
         const val Browser = "1.3.0"
     }
@@ -60,7 +60,7 @@ object Versions {
     }
 
     object Compose {
-        const val Master = "1.0.0-beta08"
+        const val Master = "1.0.0-beta09"
         const val Activity = "1.3.0-beta01"
     }
 

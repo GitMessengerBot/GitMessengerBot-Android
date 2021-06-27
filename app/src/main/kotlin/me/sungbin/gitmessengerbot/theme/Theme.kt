@@ -19,8 +19,8 @@ import androidx.compose.ui.text.font.FontFamily
 import me.sungbin.gitmessengerbot.R
 
 val twiceLightGray = Color(236, 236, 236)
-val defaultFontFamily = FontFamily(Font(R.font.nanumbarungothic))
 
+val defaultFontFamily = FontFamily(Font(R.font.nanumbarungothic))
 val typography = Typography(defaultFontFamily = defaultFontFamily)
 
 val colors = lightColors().copy(

@@ -32,6 +32,8 @@ android {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
+
+            correctErrorTypes = true
         }
 
         vectorDrawables {
@@ -47,8 +49,11 @@ android {
         compose = true
     }
 
-    kapt {
-        correctErrorTypes = true
+    buildTypes {
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+        }
     }
 
     composeOptions {
