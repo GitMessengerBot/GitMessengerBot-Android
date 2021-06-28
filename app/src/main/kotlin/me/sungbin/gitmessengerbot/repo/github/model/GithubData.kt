@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repository.github.model
+package me.sungbin.gitmessengerbot.repo.github.model
 
 import com.google.gson.annotations.SerializedName
 

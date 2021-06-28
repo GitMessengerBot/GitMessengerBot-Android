@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repository.github
+package me.sungbin.gitmessengerbot.repo.github
 
 import dagger.Module
 import dagger.Provides

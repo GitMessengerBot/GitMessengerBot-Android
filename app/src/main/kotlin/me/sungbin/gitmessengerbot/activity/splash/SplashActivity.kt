@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
-import me.sungbin.gitmessengerbot.repository.github.model.GithubData
+import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors

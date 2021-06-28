@@ -7,15 +7,15 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repository.github
+package me.sungbin.gitmessengerbot.repo.github
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
-import me.sungbin.gitmessengerbot.repository.github.model.GithubData
-import me.sungbin.gitmessengerbot.repository.github.model.GithubUser
+import me.sungbin.gitmessengerbot.repo.github.model.GithubData
+import me.sungbin.gitmessengerbot.repo.github.model.GithubUser
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
