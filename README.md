@@ -33,7 +33,7 @@
 
 # 개발 스킬
 1. Jetpack Compose
-2. MVVM Pattern
+2. MVVM/Repository Pattern
 3. Coroutines
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
