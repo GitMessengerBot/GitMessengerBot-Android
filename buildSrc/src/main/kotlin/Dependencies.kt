@@ -26,12 +26,11 @@ object Versions {
         const val Python = "9.1.0"
         const val Kotlin = "1.5.10" // todo: 1.5.20
         const val Gradle = "7.1.0-alpha02"
-        const val CoreKtx = "1.5.0"
+        const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.0"
     }
 
     object Ui {
-        const val LottieCompose = "1.0.0-beta07-2-SNAPSHOT"
         const val Glide = "4.12.0"
         const val Browser = "1.3.0"
     }
@@ -39,9 +38,7 @@ object Versions {
     object Util {
         const val CrashReporter = "1.1.0"
         const val Gson = "2.8.7"
-        const val SerializationJson = "1.2.1"
-        const val CheckDependencyUpdates = "1.3.4"
-        const val SerializationConverter = "0.8.0"
+        const val CheckDependencyUpdates = "1.4.0"
     }
 
     object Network {
@@ -60,8 +57,8 @@ object Versions {
     }
 
     object Compose {
-        const val Master = "1.0.0-beta09"
-        const val Activity = "1.3.0-beta01"
+        const val Master = "1.0.0-rc01"
+        const val Activity = "1.3.0-rc01"
     }
 
     object Debug {
@@ -88,15 +85,12 @@ object Dependencies {
 
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        "com.github.bumptech.glide:glide:${Versions.Ui.Glide}",
-        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}"
+        "com.github.bumptech.glide:glide:${Versions.Ui.Glide}"
     )
 
     val util = listOf(
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
-        "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Util.SerializationJson}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
-        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.Util.SerializationConverter}",
         "com.google.code.gson:gson:${Versions.Util.Gson}"
     )
 

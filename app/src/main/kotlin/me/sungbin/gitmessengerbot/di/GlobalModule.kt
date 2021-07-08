@@ -14,7 +14,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
 
 @Module
@@ -25,12 +24,5 @@ object GlobalModule {
     @Singleton
     fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    @Provides
-    @Singleton
-    fun provideJson() = Json {
-        isLenient = true
-        ignoreUnknownKeys = true
     }
 }
