@@ -13,6 +13,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +38,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
@@ -93,60 +98,85 @@ class MainActivity : ComponentActivity() {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (content, footer) = createRefs()
 
+            Crossfade(targetState = tab) { index ->
+                when (index) {
+                    Tab.Script -> Content(
+                        modifier = Modifier.constrainAs(content) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(footer.top)
+                            width = Dimension.fillToConstraints
+                            height = Dimension.fillToConstraints
+                        }
+                    )
+                    else -> Text(text = "TODO")
+                }
+            }
+            Footer(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                }
+            )
         }
     }
 
     @Composable
-    private fun Content() {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Box(
+    private fun Content(modifier: Modifier) {
+        var botPower by remember { mutableStateOf(false) }
+
+        Column(modifier = modifier) {
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .padding(16.dp)
+            ) {
+                val (appName, profileName, profileImage, menuBoxes) = createRefs()
+
+                GlideImage(
+                    src = githubData.profileImageUrl,
                     modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        GlideImage(
-                            src = githubData.profileImageUrl,
-                            modifier = Modifier
-                                .size(70.dp)
-                                .clip(CircleShape)
-                        )
+                        .size(70.dp)
+                        .clip(CircleShape)
+                        .constrainAs(profileImage) {
+                            end.linkTo(parent.end)
+                            top.linkTo(appName.top)
+                            bottom.linkTo(profileName.bottom)
+                        }
+                )
+                Text(
+                    text = stringResource(R.string.app_name),
+                    color = Color.LightGray,
+                    fontSize = 13.sp,
+                    modifier = Modifier.constrainAs(appName) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
                     }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = stringResource(R.string.app_name),
-                            color = Color.LightGray,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = stringResource(
-                                R.string.main_welcome,
-                                githubData.userName
-                            ),
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                )
+                Text(
+                    text = stringResource(
+                        R.string.main_welcome,
+                        githubData.userName
+                    ),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.constrainAs(appName) {
+                        start.linkTo(parent.start)
+                        top.linkTo(appName.bottom, 8.dp)
                     }
-                }
+                )
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(top = 30.dp),
+                    modifier = Modifier.constrainAs(menuBoxes) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(profileName.bottom, 30.dp)
+                        width = Dimension.fillToConstraints
+                    },
                     horizontalArrangement = Arrangement.Center
                 ) {
                     MenuBox(
@@ -159,14 +189,14 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Text(stringResource(R.string.main_menu_on))
                             Switch(
-                                checked = false,
+                                checked = botPower,
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = Color.White,
                                     checkedTrackColor = colors.primary,
                                     uncheckedThumbColor = Color.White,
                                     uncheckedTrackColor = colors.secondary
                                 ),
-                                onCheckedChange = {}
+                                onCheckedChange = { botPower = it }
                             )
                         }
                     }
@@ -209,14 +239,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
-                .background(twiceLightGray)
-        ) {
-            // todo: LazyScript()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
+                    .background(twiceLightGray)
+            ) {
+                // todo: LazyScript()
+            }
         }
     }
 
@@ -255,7 +285,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -> Unit) {
+    private fun MenuBox(
+        modifier: Modifier,
+        title: String,
+        content: @Composable () -> Unit
+    ) {
         Column(
             modifier = modifier
                 .width(75.dp)
