@@ -15,8 +15,8 @@ import java.util.Date
 import java.util.Locale
 
 object App {
-    val Build = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date()).toString()
+    val BuildTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date()).toString()
 
     fun isSetupDone(context: Context) =
-        Storage.read(context, PathManager.Storage.GithubData, null) != null
+        Storage.read(context, PathConfig.Storage.GithubData, null) != null
 }

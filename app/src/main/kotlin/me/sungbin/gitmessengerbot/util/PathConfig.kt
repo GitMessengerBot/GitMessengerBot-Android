@@ -9,7 +9,7 @@
 
 package me.sungbin.gitmessengerbot.util
 
-object PathManager {
+object PathConfig {
     object Storage {
         const val GithubData = "GithubData.json"
     }

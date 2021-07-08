@@ -69,7 +69,7 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.util.PathManager
+import me.sungbin.gitmessengerbot.util.PathConfig
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay
@@ -185,7 +185,7 @@ class SetupActivity : ComponentActivity() {
                                 Text(
                                     text = stringResource(R.string.setup_dialog_way_to_get_personal_key),
                                     modifier = Modifier.clickable {
-                                        Web.open(this@SetupActivity, Web.Type.PersonalKeyGuide)
+                                        Web.open(this@SetupActivity, Web.Link.PersonalKeyGuide)
                                     },
                                     fontSize = 13.sp,
                                     color = Color.Black
@@ -197,7 +197,7 @@ class SetupActivity : ComponentActivity() {
                                     Text(
                                         text = stringResource(R.string.setup_dialog_open_github),
                                         modifier = Modifier.clickable {
-                                            Web.open(this@SetupActivity, Web.Type.Github)
+                                            Web.open(this@SetupActivity, Web.Link.Github)
                                         },
                                         fontSize = 13.sp,
                                         color = Color.Black
@@ -219,7 +219,7 @@ class SetupActivity : ComponentActivity() {
                                                         mainViewModel.githubData = githubData
                                                         Storage.write(
                                                             context,
-                                                            PathManager.Storage.GithubData,
+                                                            PathConfig.Storage.GithubData,
                                                             Gson().toJson(githubData)
                                                         )
 

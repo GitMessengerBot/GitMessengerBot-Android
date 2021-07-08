@@ -40,4 +40,7 @@ object Storage {
         val newContent = "$preContent$prefix$appendContent"
         write(context, name, newContent)
     }
+
+    fun requestStorageManagePermission(context: Context) {
+    }
 }

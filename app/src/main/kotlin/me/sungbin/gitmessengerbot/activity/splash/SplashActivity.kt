@@ -43,7 +43,7 @@ import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.App
-import me.sungbin.gitmessengerbot.util.PathManager
+import me.sungbin.gitmessengerbot.util.PathConfig
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toModel
@@ -57,7 +57,7 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-        toast(applicationContext, "Build: ${App.Build}")
+        toast(applicationContext, "Build: ${App.BuildTime}")
 
         setContent {
             MaterialTheme {
@@ -67,7 +67,7 @@ class SplashActivity : ComponentActivity() {
 
         if (App.isSetupDone(applicationContext)) {
             MainViewModel.instance.githubData =
-                Storage.read(applicationContext, PathManager.Storage.GithubData, "")!!
+                Storage.read(applicationContext, PathConfig.Storage.GithubData, "")!!
                     .toModel(GithubData::class.java)
         }
 
