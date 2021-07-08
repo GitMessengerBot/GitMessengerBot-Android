@@ -29,12 +29,4 @@ package me.sungbin.gitmessengerbot.activity.main.setting
 
 import androidx.lifecycle.ViewModel
 
-class SettingViewModel private constructor() : ViewModel() {
-
-    fun save() {
-    }
-
-    companion object {
-        val instance by lazy { SettingViewModel() }
-    }
-}
+class SettingViewModel : ViewModel()

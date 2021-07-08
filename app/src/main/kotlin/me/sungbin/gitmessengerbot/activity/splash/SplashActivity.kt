@@ -15,16 +15,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,27 +31,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.App
-import me.sungbin.gitmessengerbot.util.PathConfig
-import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.extension.doDelay
-import me.sungbin.gitmessengerbot.util.extension.toModel
 import me.sungbin.gitmessengerbot.util.extension.toast
-import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 class SplashActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,32 +58,27 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        if (App.isSetupDone(applicationContext)) {
-            MainViewModel.instance.githubData =
-                Storage.read(applicationContext, PathConfig.Storage.GithubData, "")!!
-                    .toModel(GithubData::class.java)
-        }
-
         doDelay(2000) {
             finish()
             startActivity(
                 Intent(
                     this,
-                    if (App.isSetupDone(applicationContext)) MainActivity::class.java else SetupActivity::class.java
+                    if (App.isSetupDone()) MainActivity::class.java else SetupActivity::class.java
                 )
             )
         }
     }
 
-    @Preview
     @Composable
     private fun Splash() {
-        Box(
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colors.primary)
-                .padding(30.dp),
+                .padding(30.dp)
         ) {
+            val copyright = createRef()
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -113,8 +101,11 @@ class SplashActivity : ComponentActivity() {
                 )
             }
             Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(copyright) {
+                        bottom.linkTo(parent.bottom)
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(

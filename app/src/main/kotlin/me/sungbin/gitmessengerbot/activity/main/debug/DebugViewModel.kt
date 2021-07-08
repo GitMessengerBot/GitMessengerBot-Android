@@ -11,12 +11,4 @@ package me.sungbin.gitmessengerbot.activity.main.debug
 
 import androidx.lifecycle.ViewModel
 
-class DebugViewModel private constructor() : ViewModel() {
-
-    fun save() {
-    }
-
-    companion object {
-        val instance by lazy { DebugViewModel() }
-    }
-}
+class DebugViewModel : ViewModel()

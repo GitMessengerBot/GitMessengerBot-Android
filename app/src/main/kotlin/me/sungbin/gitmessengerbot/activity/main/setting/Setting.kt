@@ -12,7 +12,5 @@ package me.sungbin.gitmessengerbot.activity.main.setting
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-private val vm = SettingViewModel.instance
-
 @Composable
 fun Setting(modifier: Modifier) {}

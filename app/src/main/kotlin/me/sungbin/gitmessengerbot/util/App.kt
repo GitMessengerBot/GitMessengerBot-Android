@@ -9,7 +9,6 @@
 
 package me.sungbin.gitmessengerbot.util
 
-import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,6 +16,5 @@ import java.util.Locale
 object App {
     val BuildTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date()).toString()
 
-    fun isSetupDone(context: Context) =
-        Storage.read(context, PathConfig.Storage.GithubData, null) != null
+    fun isSetupDone() = Storage.read(PathConfig.GithubData, null) != null
 }

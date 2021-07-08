@@ -17,17 +17,19 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 object Storage {
+    @Suppress("DEPRECATION")
+    private val sdcard = Environment.getExternalStorageDirectory().absolutePath
+
     val isScoped = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-    private fun String.toFile(context: Context) =
-        File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), this)
+    private fun String.parsePath() = if (contains(sdcard)) this else "$sdcard/$this"
 
-    fun write(context: Context, name: String, content: String) {
-        FileOutputStream(name.toFile(context)).use { it.write(content.toByteArray()) }
+    fun write(path: String, content: String) {
+        FileOutputStream(path.parsePath()).use { it.write(content.toByteArray()) }
     }
 
-    fun read(context: Context, name: String, default: String?): String? {
-        val file = name.toFile(context)
+    fun read(path: String, default: String?): String? {
+        val file = File(path.parsePath())
         return if (file.exists()) {
             FileInputStream(file).bufferedReader().use { it.readText() }
         } else {
@@ -35,10 +37,10 @@ object Storage {
         }
     }
 
-    fun append(context: Context, name: String, prefix: String, appendContent: String) {
-        val preContent = read(context, name, "")
+    fun append(path: String, prefix: String, appendContent: String) {
+        val preContent = read(path, "")
         val newContent = "$preContent$prefix$appendContent"
-        write(context, name, newContent)
+        write(path, newContent)
     }
 
     fun requestStorageManagePermission(context: Context) {

@@ -12,6 +12,7 @@ package me.sungbin.gitmessengerbot.activity.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.sp
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
+import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
+import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -56,13 +59,18 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
+import me.sungbin.gitmessengerbot.util.PathConfig
+import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.extension.toModel
 
 class MainActivity : ComponentActivity() {
 
+    private val scriptVm: ScriptViewModel by viewModels()
+    private val settingVm: SettingViewModel by viewModels()
+    private val debugVm: DebugViewModel by viewModels()
+
     private val fancyTabState = mutableStateOf(Tab.Script)
-    private val mainVm = MainViewModel.instance
-    private val scriptVm = ScriptViewModel.instance
+    private val githubData = Storage.read(PathConfig.GithubData, "")!!.toModel(GithubData::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +157,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.End
                     ) {
                         GlideImage(
-                            src = mainVm.githubData.profileImageUrl,
+                            src = githubData.profileImageUrl,
                             modifier = Modifier
                                 .size(70.dp)
                                 .clip(CircleShape)
@@ -169,7 +177,7 @@ class MainActivity : ComponentActivity() {
                         Text(
                             text = stringResource(
                                 R.string.main_welcome,
-                                mainVm.githubData.userName
+                                githubData.userName
                             ),
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
@@ -285,12 +293,5 @@ class MainActivity : ComponentActivity() {
                 color = Color.White
             )
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        DebugViewModel.instance.save()
-        ScriptViewModel.instance.save()
-        scriptVm.save()
     }
 }

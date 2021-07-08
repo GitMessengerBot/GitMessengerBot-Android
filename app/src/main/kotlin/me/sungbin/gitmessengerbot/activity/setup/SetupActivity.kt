@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,8 +37,11 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -62,9 +64,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
-import me.sungbin.gitmessengerbot.repo.github.GithubViewModel
+import me.sungbin.gitmessengerbot.repo.github.GithubRepo
+import me.sungbin.gitmessengerbot.repo.github.GithubRepoResult
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -74,7 +81,6 @@ import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toast
-import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
 private object PermissionType {
     const val NotificationRead = "PERMISSION_FOR_NOTIFICATION_READ"
@@ -90,17 +96,17 @@ private data class Permission(
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
 
-    private val mainViewModel = MainViewModel.instance
-    private val githubViewModel: GithubViewModel by viewModels()
+    @Inject
+    lateinit var githubRepo: GithubRepo
 
-    private val isStoragePermissionGranted = mutableStateOf(false)
-    private val isNotificationPermissionGranted = mutableStateOf(false)
-    private val isPersonalKeyInputDialogOpen = mutableStateOf(false)
+    private val storagePermissionGranted = mutableStateOf(false)
+    private val notificationPermissionGranted = mutableStateOf(false)
+    private val personalKeyDialogVisible = mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
             if (permissionRequest.values.first()) {
-                isStoragePermissionGranted.value = true
+                storagePermissionGranted.value = true
             }
         }
 
@@ -120,11 +126,11 @@ class SetupActivity : ComponentActivity() {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     private fun PersonalKeyInputDialog() {
-        if (isPersonalKeyInputDialogOpen.value) {
+        if (personalKeyDialogVisible.value) {
             val context = LocalContext.current
-            val personalKeyInputField = remember { mutableStateOf(TextFieldValue()) }
+            var personalKeyField by remember { mutableStateOf(TextFieldValue()) }
             val focusManager = LocalFocusManager.current
-            val activity = this@SetupActivity
+            val coroutineScope = rememberCoroutineScope()
 
             MaterialTheme {
                 AlertDialog(
@@ -133,7 +139,7 @@ class SetupActivity : ComponentActivity() {
                         dismissOnClickOutside = false
                     ),
                     onDismissRequest = {
-                        isPersonalKeyInputDialogOpen.value = false
+                        personalKeyDialogVisible.value = false
                     },
                     text = {
                         Column {
@@ -168,7 +174,7 @@ class SetupActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .padding(top = 10.dp)
                                     .focusRequester(FocusRequester()),
-                                value = personalKeyInputField.value,
+                                value = personalKeyField,
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = Color.White,
                                     cursorColor = Color.Black,
@@ -179,7 +185,7 @@ class SetupActivity : ComponentActivity() {
                                 keyboardActions = KeyboardActions(
                                     onDone = { focusManager.clearFocus() }
                                 ),
-                                onValueChange = { personalKeyInputField.value = it }
+                                onValueChange = { personalKeyField = it }
                             )
                             Row(modifier = Modifier.padding(top = 20.dp)) {
                                 Text(
@@ -206,54 +212,54 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(start = 8.dp)
                                             .clickable {
-                                                var githubData =
-                                                    GithubData(personalKey = personalKeyInputField.value.text)
-                                                githubViewModel.login(
-                                                    githubData = githubData,
-                                                    onResponse = {
-                                                        githubData = githubData.copy(
-                                                            userName = login,
-                                                            profileImageUrl = avatarUrl
-                                                        )
+                                                coroutineScope.launch(Dispatchers.IO) {
+                                                    var githubData =
+                                                        GithubData(personalKey = personalKeyField.text)
 
-                                                        mainViewModel.githubData = githubData
-                                                        Storage.write(
-                                                            context,
-                                                            PathConfig.Storage.GithubData,
-                                                            Gson().toJson(githubData)
-                                                        )
+                                                    githubRepo
+                                                        .login(githubData.personalKey)
+                                                        .collect { result ->
+                                                            when (result) {
+                                                                is GithubRepoResult.Success -> {
+                                                                    githubData = githubData.copy(
+                                                                        userName = result.user.login,
+                                                                        profileImageUrl = result.user.avatarUrl
+                                                                    )
 
-                                                        finish()
-                                                        startActivity(
-                                                            Intent(
-                                                                activity,
-                                                                MainActivity::class.java
-                                                            )
-                                                        )
+                                                                    Storage.write(
+                                                                        PathConfig.GithubData,
+                                                                        Gson().toJson(githubData)
+                                                                    )
 
-                                                        activity.runOnUiThread {
-                                                            toast(
-                                                                context,
-                                                                getString(
-                                                                    R.string.setup_toast_welcome_start,
-                                                                    login
-                                                                )
-                                                            )
+                                                                    finish()
+                                                                    startActivity(
+                                                                        Intent(
+                                                                            context,
+                                                                            MainActivity::class.java
+                                                                        )
+                                                                    )
+
+                                                                    toast(
+                                                                        context,
+                                                                        getString(
+                                                                            R.string.setup_toast_welcome_start,
+                                                                            result.user.login
+                                                                        )
+                                                                    )
+                                                                }
+                                                                is GithubRepoResult.Error -> {
+                                                                    toast(
+                                                                        context,
+                                                                        getString(
+                                                                            R.string.setup_toast_github_connect_error,
+                                                                            result.exception.localizedMessage
+                                                                        ),
+                                                                        Toast.LENGTH_LONG
+                                                                    )
+                                                                }
+                                                            }
                                                         }
-                                                    },
-                                                    onFailure = {
-                                                        activity.runOnUiThread {
-                                                            toast(
-                                                                context,
-                                                                getString(
-                                                                    R.string.setup_toast_github_connect_error,
-                                                                    localizedMessage
-                                                                ),
-                                                                Toast.LENGTH_LONG
-                                                            )
-                                                        }
-                                                    }
-                                                )
+                                                }
                                             },
                                         text = stringResource(R.string.setup_dialog_start),
                                         fontSize = 13.sp,
@@ -319,7 +325,7 @@ class SetupActivity : ComponentActivity() {
                         ),
                         R.drawable.ic_round_folder_24
                     ),
-                    isPermissionGranted = isStoragePermissionGranted,
+                    isPermissionGranted = storagePermissionGranted,
                     padding = listOf(0, 16)
                 )
                 PermissionView(
@@ -331,7 +337,7 @@ class SetupActivity : ComponentActivity() {
                         ),
                         R.drawable.ic_round_notifications_24
                     ),
-                    isPermissionGranted = isNotificationPermissionGranted,
+                    isPermissionGranted = notificationPermissionGranted,
                     padding = listOf(16, 16)
                 )
             }
@@ -356,8 +362,8 @@ class SetupActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .clickable {
                                 if (Storage.isScoped) {
-                                    if (isNotificationPermissionGranted.value) {
-                                        isPersonalKeyInputDialogOpen.value = true
+                                    if (notificationPermissionGranted.value) {
+                                        personalKeyDialogVisible.value = true
                                     } else {
                                         toast(
                                             context,
@@ -365,8 +371,8 @@ class SetupActivity : ComponentActivity() {
                                         )
                                     }
                                 } else {
-                                    if (isNotificationPermissionGranted.value && isStoragePermissionGranted.value) {
-                                        isPersonalKeyInputDialogOpen.value = true
+                                    if (notificationPermissionGranted.value && storagePermissionGranted.value) {
+                                        personalKeyDialogVisible.value = true
                                     } else {
                                         toast(
                                             context,
@@ -465,7 +471,7 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() =
         if (this.permissions.first() == PermissionType.NotificationRead) {
             requestReadNotification(this@SetupActivity)
-            doDelay(1000) { isNotificationPermissionGranted.value = true }
+            doDelay(1000) { notificationPermissionGranted.value = true }
         } else permissionsContracts.launch(this.permissions.toTypedArray())
 
     private fun requestReadNotification(activity: Activity) {

@@ -33,7 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 
-class ScriptViewModel private constructor() : ViewModel() {
+class ScriptViewModel : ViewModel() {
     private val _scripts = SnapshotStateList<ScriptItem>()
     private val compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
 
@@ -51,7 +51,6 @@ class ScriptViewModel private constructor() : ViewModel() {
     }
 
     fun loadScripts() {
-
     }
 
     fun addScript(scriptItem: ScriptItem) {
@@ -60,13 +59,5 @@ class ScriptViewModel private constructor() : ViewModel() {
 
     fun removeScript(scriptItem: ScriptItem) {
         _scripts.remove(scriptItem)
-    }
-
-    fun save() {
-        // todo
-    }
-
-    companion object {
-        val instance by lazy { ScriptViewModel() }
     }
 }

@@ -10,7 +10,5 @@
 package me.sungbin.gitmessengerbot.util
 
 object PathConfig {
-    object Storage {
-        const val GithubData = "GithubData.json"
-    }
+    const val GithubData = "github-data-json"
 }

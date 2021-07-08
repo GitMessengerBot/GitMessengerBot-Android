@@ -12,7 +12,5 @@ package me.sungbin.gitmessengerbot.activity.main.debug
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-private val vm = DebugViewModel.instance
-
 @Composable
 fun Debug(modifier: Modifier) {}

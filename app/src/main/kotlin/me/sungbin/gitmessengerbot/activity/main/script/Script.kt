@@ -22,8 +22,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import me.sungbin.gitmessengerbot.theme.colors
 
-private val vm = ScriptViewModel.instance
-
 data class ScriptItem(
     val id: Int,
     val name: String,
@@ -38,7 +36,7 @@ fun LazyScript(modifier: Modifier) {
 }
 
 @Composable
-fun Script(modifier: Modifier, scriptItem: ScriptItem) {
+private fun Script(modifier: Modifier, scriptItem: ScriptItem) {
     val shape = RoundedCornerShape(30.dp)
     Row(
         modifier = modifier
