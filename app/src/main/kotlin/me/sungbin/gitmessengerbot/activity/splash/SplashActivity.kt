@@ -17,7 +17,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
@@ -77,10 +77,17 @@ class SplashActivity : ComponentActivity() {
                 .background(colors.primary)
                 .padding(30.dp)
         ) {
-            val copyright = createRef()
+            val (content, footer) = createRefs()
 
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.constrainAs(content) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -101,11 +108,12 @@ class SplashActivity : ComponentActivity() {
                 )
             }
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(copyright) {
-                        bottom.linkTo(parent.bottom)
-                    },
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                },
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(

@@ -11,7 +11,6 @@ package me.sungbin.gitmessengerbot.activity.setup
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -63,6 +63,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -272,16 +274,22 @@ class SetupActivity : ComponentActivity() {
     private fun Setup() {
         val context = LocalContext.current
 
-        Box(
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = colors.primary)
                 .padding(30.dp)
         ) {
+            val (header, content, footer) = createRefs()
+
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
+                modifier = Modifier.constrainAs(header) {
+                    top.linkTo(parent.top, 20.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    height = Dimension.wrapContent
+                    width = Dimension.fillToConstraints
+                },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
@@ -301,7 +309,14 @@ class SetupActivity : ComponentActivity() {
                 )
             }
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.constrainAs(content) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(header.bottom)
+                    bottom.linkTo(footer.top)
+                    height = Dimension.fillToConstraints
+                    width = Dimension.fillToConstraints
+                },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -344,9 +359,13 @@ class SetupActivity : ComponentActivity() {
                 )
             }
             Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                modifier = Modifier.constrainAs(footer) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                },
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = stringResource(R.string.setup_last_func),
@@ -396,50 +415,53 @@ class SetupActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .padding(top = padding.top, bottom = padding.bottom),
         ) {
-            Box(
+            ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = Color.White, RoundedCornerShape(15.dp))
-                    .clickable {
-                        if (permission.permissions.first() == PermissionType.NotificationRead) {
-                            permission.requestAllPermissions()
-                        } else {
-                            if (!Storage.isScoped) permission.requestAllPermissions()
-                        }
-                    }
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                    .height(40.dp)
+                    .background(color = Color.White, shape = RoundedCornerShape(15.dp))
+                    .clickable { permission.requestAllPermissions() }
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(permission.icon),
-                        contentDescription = null,
-                        tint = Color.Black
-                    )
-                    Text(
-                        text = permission.name,
-                        color = Color.Black,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_round_check_24),
-                        contentDescription = null,
-                        tint = if (permissionGranted) colors.primaryVariant else Color.LightGray
-                    )
-                }
+                val (icon, name, granted) = createRefs()
+
+                Icon(
+                    painter = painterResource(permission.icon),
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier.constrainAs(icon) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    }
+                )
+                Text(
+                    text = permission.name,
+                    color = Color.Black,
+                    modifier = Modifier.constrainAs(name) {
+                        start.linkTo(icon.end, 8.dp)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    }
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_round_check_24),
+                    contentDescription = null,
+                    tint = if (permissionGranted) colors.primaryVariant else Color.LightGray,
+                    modifier = Modifier.constrainAs(granted) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    }
+                )
             }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
+                    .padding(top = 4.dp),
                 color = Color.White,
                 text = permission.description,
                 textAlign = TextAlign.Center,
@@ -450,20 +472,19 @@ class SetupActivity : ComponentActivity() {
 
     @SuppressLint("NewApi")
     private fun Permission.requestAllPermissions() {
+        val activity = this@SetupActivity
+
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                requestReadNotification(this@SetupActivity)
+                requestReadNotification()
                 doDelay(1000) { notificationPermissionGranted = true }
             }
             PermissionType.Battery -> {
-                BatteryUtil.requestIgnoreBatteryOptimization(applicationContext)
-                doDelay(1000) {
-                    val granted = BatteryUtil.isIgnoringBatteryOptimization(applicationContext)
-                    batteryPermissionGranted = granted
-                }
+                BatteryUtil.requestIgnoreBatteryOptimization(activity)
+                doDelay(1000) { batteryPermissionGranted = true }
             }
             PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(applicationContext)
+                Storage.requestStorageManagePermission(activity)
                 doDelay(1000) { storagePermissionGranted = true }
             }
             else -> {
@@ -472,8 +493,8 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
-    private fun requestReadNotification(context: Context) {
+    private fun requestReadNotification() {
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-        context.startActivity(intent)
+        startActivity(intent)
     }
 }
