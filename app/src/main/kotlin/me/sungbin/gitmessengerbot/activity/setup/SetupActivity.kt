@@ -69,7 +69,6 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
@@ -295,13 +294,7 @@ class SetupActivity : ComponentActivity() {
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
                     text = with(AnnotatedString.Builder(stringResource(R.string.setup_title))) {
-                        addStyle(
-                            SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = defaultFontFamily
-                            ),
-                            11, 19 // 아래의 권한들
-                        )
+                        addStyle(SpanStyle(fontWeight = FontWeight.Bold), 11, 19) // 아래의 권한들
                         toAnnotatedString()
                     },
                     color = Color.White,

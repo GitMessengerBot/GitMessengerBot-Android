@@ -10,18 +10,11 @@
 package me.sungbin.gitmessengerbot.theme
 
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import me.sungbin.gitmessengerbot.R
 
 val twiceLightGray = Color(236, 236, 236)
-
-val defaultFontFamily = FontFamily(Font(R.font.nanumbarungothic))
-val typography = Typography(defaultFontFamily = defaultFontFamily)
 
 val colors = lightColors().copy(
     primary = Color(0xFF942ccc),
@@ -33,7 +26,6 @@ val colors = lightColors().copy(
 @Composable
 fun MaterialTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        typography = typography,
         colors = colors
     ) {
         content()

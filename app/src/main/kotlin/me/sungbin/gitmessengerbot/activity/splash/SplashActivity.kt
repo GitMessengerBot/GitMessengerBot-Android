@@ -42,7 +42,6 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.util.App
 import me.sungbin.gitmessengerbot.util.PathManager
 import me.sungbin.gitmessengerbot.util.Storage
@@ -105,13 +104,7 @@ class SplashActivity : ComponentActivity() {
                 )
                 Text(
                     text = with(AnnotatedString.Builder(stringResource(R.string.app_name))) {
-                        addStyle(
-                            SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = defaultFontFamily
-                            ),
-                            3, 12
-                        )
+                        addStyle(SpanStyle(fontWeight = FontWeight.Bold), 3, 12)
                         toAnnotatedString()
                     },
                     color = Color.White,

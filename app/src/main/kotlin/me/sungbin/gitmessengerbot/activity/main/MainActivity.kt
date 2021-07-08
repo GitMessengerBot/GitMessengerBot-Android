@@ -49,11 +49,9 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.kaven.KavenViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
-import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.theme.defaultFontFamily
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
@@ -110,7 +108,6 @@ class MainActivity : ComponentActivity() {
                         ) {
                             FancyBottomBar(
                                 fancyColors = FancyColors(primary = colors.primary),
-                                fancyOptions = FancyOptions(fontFamily = defaultFontFamily),
                                 items = items
                             ) { fancyTabState.value = id }
                             Surface(
