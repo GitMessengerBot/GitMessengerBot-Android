@@ -11,6 +11,7 @@ package me.sungbin.gitmessengerbot.activity.main.script
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +29,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
@@ -266,11 +266,11 @@ private fun LazyScript(scriptVm: ScriptViewModel) {
 
 @Composable
 private fun Script(script: ScriptItem) {
-    val shape = RoundedCornerShape(30.dp)
+    val shape = RoundedCornerShape(20.dp)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(120.dp)
             .clip(shape)
             .background(
                 brush = Brush.horizontalGradient(
@@ -281,7 +281,7 @@ private fun Script(script: ScriptItem) {
                 ),
                 shape = shape
             )
-            .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 30.dp)
+            .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 15.dp)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (
@@ -290,72 +290,86 @@ private fun Script(script: ScriptItem) {
                 scriptLangDeco, scriptLang, scriptLastRunTime, scriptPower
             ) = createRefs()
 
+            val compileStateShape = RoundedCornerShape(15.dp)
             val compileStateBackgroundColor by animateColorAsState(if (script.compiled) Color.White else Color.Transparent)
             val compileStateTextColor by animateColorAsState(if (script.compiled) colors.primary else Color.White)
 
-            Surface(
-                modifier = Modifier.constrainAs(compileState) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                },
-                color = compileStateBackgroundColor
-            ) {
-                Text(
-                    text = stringResource(R.string.script_item_label_compile),
-                    color = compileStateTextColor
-                )
-            }
+            Text(
+                text = stringResource(R.string.script_item_label_compile),
+                color = compileStateTextColor,
+                fontSize = 13.sp,
+                modifier = Modifier
+                    .clip(compileStateShape)
+                    .background(compileStateBackgroundColor, compileStateShape)
+                    .border(1.dp, Color.White, compileStateShape)
+                    .padding(top = 2.dp, bottom = 2.dp, start = 4.dp, end = 4.dp)
+                    .constrainAs(compileState) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                    },
+            )
             Icon(
                 painter = painterResource(R.drawable.ic_round_cancel_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(delete) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(delete) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_settings_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(setting) {
-                    end.linkTo(delete.start, 8.dp)
-                    top.linkTo(parent.top)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(setting) {
+                        end.linkTo(delete.start, 8.dp)
+                        top.linkTo(parent.top)
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_logcat_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(logcat) {
-                    end.linkTo(setting.start, 8.dp)
-                    top.linkTo(parent.top)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(logcat) {
+                        end.linkTo(setting.start, 8.dp)
+                        top.linkTo(parent.top)
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_debug_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(debug) {
-                    end.linkTo(logcat.start, 8.dp)
-                    top.linkTo(parent.top)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(debug) {
+                        end.linkTo(logcat.start, 8.dp)
+                        top.linkTo(parent.top)
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_pen_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(edit) {
-                    end.linkTo(debug.start, 8.dp)
-                    top.linkTo(parent.top)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(edit) {
+                        end.linkTo(debug.start, 8.dp)
+                        top.linkTo(parent.top)
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_refresh_24),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
-                    .rotate(90f)
+                    .size(25.dp)
+                    .rotate(-90f)
                     .constrainAs(reload) {
                         end.linkTo(edit.start, 8.dp)
                         top.linkTo(parent.top)
@@ -365,18 +379,22 @@ private fun Script(script: ScriptItem) {
                 painter = painterResource(R.drawable.ic_outline_circle_24),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.constrainAs(scriptLangDeco) {
-                    start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom)
-                }
+                modifier = Modifier
+                    .size(20.dp)
+                    .constrainAs(scriptLangDeco) {
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                    }
             )
             Text(
                 text = script.type.toScriptType(),
                 color = Color.White,
                 modifier = Modifier.constrainAs(scriptLang) {
                     start.linkTo(scriptLangDeco.end, 4.dp)
-                    bottom.linkTo(parent.bottom)
-                }
+                    top.linkTo(scriptLangDeco.top)
+                    bottom.linkTo(scriptLangDeco.bottom)
+                },
+                fontSize = 13.sp
             )
             Switch(
                 checked = script.power,
@@ -397,8 +415,10 @@ private fun Script(script: ScriptItem) {
                 color = Color.White,
                 modifier = Modifier.constrainAs(scriptLastRunTime) {
                     end.linkTo(scriptPower.start, 4.dp)
-                    bottom.linkTo(parent.bottom)
-                }
+                    top.linkTo(scriptPower.top)
+                    bottom.linkTo(scriptPower.bottom)
+                },
+                fontSize = 13.sp
             )
             Spacer(
                 modifier = Modifier
@@ -407,7 +427,7 @@ private fun Script(script: ScriptItem) {
                     .constrainAs(scriptNameUnderline) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                        bottom.linkTo(scriptLangDeco.top, 4.dp)
+                        bottom.linkTo(scriptPower.top, 4.dp)
                         width = Dimension.fillToConstraints
                     }
             )
