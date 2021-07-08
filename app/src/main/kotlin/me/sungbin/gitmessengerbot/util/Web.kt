@@ -9,8 +9,8 @@
 
 package me.sungbin.gitmessengerbot.util
 
+import android.app.Activity
 import android.app.PendingIntent
-import android.content.Context
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import me.sungbin.gitmessengerbot.R
@@ -27,7 +27,7 @@ object Web {
             Link("https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/api-guide.md")
     }
 
-    fun open(context: Context, link: Link) {
+    fun open(activity: Activity, link: Link) {
         try {
             val builder = CustomTabsIntent.Builder()
 
@@ -35,20 +35,20 @@ object Web {
             projectGithubIntent.data = Link.ProjectGithub.url.toUri()
 
             val projectGithubPendingIntent = PendingIntent.getActivity(
-                context,
+                activity,
                 1000,
                 projectGithubIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
             builder.addMenuItem(
-                context.getString(R.string.web_menu_project_github),
+                activity.getString(R.string.web_menu_project_github),
                 projectGithubPendingIntent
             )
 
             val customTabIntent = builder.build()
-            customTabIntent.launchUrl(context, link.url.toUri())
+            customTabIntent.launchUrl(activity, link.url.toUri())
         } catch (ignored: Exception) {
-            toast(context, context.getString(R.string.web_toast_non_install_browser))
+            toast(activity, activity.getString(R.string.web_toast_non_install_browser))
         }
     }
 }

@@ -125,6 +125,7 @@ class SetupActivity : ComponentActivity() {
             var personalKeyField by remember { mutableStateOf(TextFieldValue()) }
             val focusManager = LocalFocusManager.current
             val coroutineScope = rememberCoroutineScope()
+            val activity = this@SetupActivity
 
             MaterialTheme {
                 AlertDialog(
@@ -235,7 +236,7 @@ class SetupActivity : ComponentActivity() {
                                                                     )
 
                                                                     toast(
-                                                                        context,
+                                                                        activity,
                                                                         getString(
                                                                             R.string.setup_toast_welcome_start,
                                                                             result.user.login
@@ -244,7 +245,7 @@ class SetupActivity : ComponentActivity() {
                                                                 }
                                                                 is GithubRepoResult.Error -> {
                                                                     toast(
-                                                                        context,
+                                                                        activity,
                                                                         getString(
                                                                             R.string.setup_toast_github_connect_error,
                                                                             result.exception.localizedMessage
@@ -272,7 +273,7 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun Setup() {
-        val context = LocalContext.current
+        val activity = this@SetupActivity
 
         ConstraintLayout(
             modifier = Modifier
@@ -386,7 +387,7 @@ class SetupActivity : ComponentActivity() {
                                     personalKeyDialogVisible = true
                                 } else {
                                     toast(
-                                        context,
+                                        activity,
                                         getString(R.string.setup_need_manage_permission)
                                     )
                                 }

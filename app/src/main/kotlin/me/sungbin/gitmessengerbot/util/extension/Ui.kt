@@ -9,9 +9,11 @@
 
 package me.sungbin.gitmessengerbot.util.extension
 
-import android.content.Context
+import android.app.Activity
 import android.widget.Toast
 
-fun toast(context: Context, message: String, length: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(context, message, length).show()
+fun toast(activity: Activity, message: String, length: Int = Toast.LENGTH_SHORT) {
+    activity.runOnUiThread {
+        Toast.makeText(activity, message, length).show()
+    }
 }

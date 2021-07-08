@@ -50,7 +50,7 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-        toast(applicationContext, "Build: ${App.BuildTime}")
+        toast(this, "Build: ${App.BuildTime}")
 
         setContent {
             MaterialTheme {

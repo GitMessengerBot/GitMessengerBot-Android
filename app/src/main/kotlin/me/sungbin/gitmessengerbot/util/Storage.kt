@@ -29,7 +29,12 @@ object Storage {
     private fun String.parsePath() = if (contains(sdcard)) this else "$sdcard/$this"
 
     fun write(path: String, content: String) {
-        FileOutputStream(path.parsePath()).use { it.write(content.toByteArray()) }
+        val file = File(path.parsePath())
+        if (!file.exists()) {
+            File(file.path.substringBeforeLast("/")).mkdirs()
+            file.createNewFile()
+        }
+        FileOutputStream(file).use { it.write(content.toByteArray()) }
     }
 
     fun read(path: String, default: String?): String? {
