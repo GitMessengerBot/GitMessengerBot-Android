@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -95,7 +94,11 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Main() {
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.primary)
+        ) {
             val (content, footer) = createRefs()
 
             Crossfade(targetState = tab) { index ->
@@ -132,7 +135,7 @@ class MainActivity : ComponentActivity() {
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp)
+                    .wrapContentHeight()
                     .padding(16.dp)
             ) {
                 val (appName, profileName, profileImage, menuBoxes) = createRefs()
@@ -165,7 +168,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    modifier = Modifier.constrainAs(appName) {
+                    modifier = Modifier.constrainAs(profileName) {
                         start.linkTo(parent.start)
                         top.linkTo(appName.bottom, 8.dp)
                     }
@@ -259,7 +262,7 @@ class MainActivity : ComponentActivity() {
             FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
         )
 
-        Box(modifier = modifier) {
+        Box(modifier = modifier, contentAlignment = Alignment.BottomCenter) {
             FancyBottomBar(
                 fancyColors = FancyColors(primary = colors.primary),
                 items = items
