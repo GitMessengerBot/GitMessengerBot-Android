@@ -26,11 +26,12 @@
     <string name="setup_dialog_open_github">깃허브 열기</string>
     <string name="setup_dialog_start">시작하기</string>
     <string name="setup_toast_github_connect_error">깃허브 연결에 실패했어요.\n제대로된 키를 입력하셨나요?\n\n(%s)</string>
-    <string name="setup_toast_welcome_start">%s님 환영합니다! 😁😁</string>
+    <string name="setup_toast_welcome_start">%s님 환영합니다! 🎉🎈</string>
 
     <string name="main_welcome">Hi, %s</string>
     <string name="main_power">메인 전원</string>
     <string name="main_menu_on">On</string>
+    <string name="main_menu_off">Off</string>
     <string name="main_menu_all_script_count">총 스크립트 수</string>
     <string name="main_menu_running_script_count">실행중인\n스크립트 수</string>
     <string name="main_menu_script_search">스크립트 검색</string>

@@ -13,7 +13,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +34,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
@@ -59,8 +60,8 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.toModel
 
 class MainActivity : ComponentActivity() {
@@ -69,7 +70,7 @@ class MainActivity : ComponentActivity() {
     private val settingVm: SettingViewModel by viewModels()
     private val debugVm: DebugViewModel by viewModels()
 
-    private val fancyTabState = mutableStateOf(Tab.Script)
+    private var tab by mutableStateOf(Tab.Script)
     private val githubData = Storage.read(PathConfig.GithubData, "")!!.toModel(GithubData::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,68 +81,23 @@ class MainActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val items = listOf(
-            FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
-            FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
-            FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
-            FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
-        )
-
         setContent {
             MaterialTheme {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(colors.primary)
-                ) {
-                    Crossfade(
-                        targetState = fancyTabState.value,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 60.dp)
-                    ) { tab ->
-                        // todo: FancyPage(index = tab)
-                    }
-                    Main()
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Bottom,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.BottomCenter
-                        ) {
-                            FancyBottomBar(
-                                fancyColors = FancyColors(primary = colors.primary),
-                                items = items
-                            ) { fancyTabState.value = id }
-                            Surface(
-                                modifier = Modifier
-                                    .padding(bottom = 35.dp)
-                                    .size(50.dp),
-                                shape = CircleShape,
-                                color = colors.primary,
-                                elevation = 2.dp
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Add,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier
-                                        .padding(10.dp)
-                                        .align(Alignment.Center)
-                                )
-                            }
-                        }
-                    }
-                }
+                Main()
             }
         }
     }
 
     @Composable
     private fun Main() {
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            val (content, footer) = createRefs()
+
+        }
+    }
+
+    @Composable
+    private fun Content() {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Box(
@@ -253,19 +209,53 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            Column(
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
+                .background(twiceLightGray)
+        ) {
+            // todo: LazyScript()
+        }
+    }
+
+    @Composable
+    private fun Footer(modifier: Modifier) {
+        val items = listOf(
+            FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
+            FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
+            FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
+            FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
+        )
+
+        Box(modifier = modifier) {
+            FancyBottomBar(
+                fancyColors = FancyColors(primary = colors.primary),
+                items = items
+            ) { tab = id }
+            Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
-                    .background(twiceLightGray)
+                    .padding(bottom = 35.dp)
+                    .size(50.dp),
+                shape = CircleShape,
+                color = colors.primary,
+                elevation = 2.dp
             ) {
-                // todo: LazyScript()
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .align(Alignment.Center)
+                )
             }
         }
     }
 
     @Composable
-    private fun MenuBox(title: String, modifier: Modifier, content: @Composable () -> Unit) {
+    private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -> Unit) {
         Column(
             modifier = modifier
                 .width(75.dp)
