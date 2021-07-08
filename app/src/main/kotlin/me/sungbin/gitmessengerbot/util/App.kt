@@ -12,6 +12,7 @@ package me.sungbin.gitmessengerbot.util
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 object App {
     val BuildTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date()).toString()

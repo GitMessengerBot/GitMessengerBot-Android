@@ -76,7 +76,7 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.util.PathConfig
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.extension.doDelay

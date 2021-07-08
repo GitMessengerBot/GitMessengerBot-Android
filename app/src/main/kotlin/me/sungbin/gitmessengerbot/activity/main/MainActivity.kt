@@ -59,7 +59,7 @@ import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.util.PathConfig
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.extension.toModel
 
