@@ -15,3 +15,11 @@ object ScriptType {
     const val Python = 2
     const val Simple = 3 // 단자응
 }
+
+fun Int.toScriptType() = when (this) {
+    0 -> "TypeScript"
+    1 -> "JavaScript"
+    2 -> "Python"
+    3 -> "Simple"
+    else -> throw Error("Unknown script type.")
+}
