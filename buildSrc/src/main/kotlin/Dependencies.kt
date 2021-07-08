@@ -33,6 +33,7 @@ object Versions {
     object Ui {
         const val Glide = "4.12.0"
         const val Browser = "1.3.0"
+        const val ConstraintLayout = "1.0.0-alpha08"
     }
 
     object Util {
@@ -85,7 +86,8 @@ object Dependencies {
 
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        "com.github.bumptech.glide:glide:${Versions.Ui.Glide}"
+        "com.github.bumptech.glide:glide:${Versions.Ui.Glide}",
+        "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 
     val util = listOf(

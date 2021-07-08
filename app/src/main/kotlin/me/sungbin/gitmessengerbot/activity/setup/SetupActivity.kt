@@ -149,11 +149,10 @@ class SetupActivity : ComponentActivity() {
                                         modifier = Modifier.size(35.dp),
                                     )
                                     Icon(
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(bottom = 2.dp),
+                                        modifier = Modifier.size(15.dp),
                                         painter = painterResource(R.drawable.ic_round_key_24),
-                                        contentDescription = null
+                                        contentDescription = null,
+                                        tint = Color.White
                                     )
                                 }
                                 Text(

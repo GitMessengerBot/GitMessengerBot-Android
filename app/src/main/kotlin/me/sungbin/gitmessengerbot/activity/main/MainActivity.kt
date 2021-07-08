@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
-import me.sungbin.gitmessengerbot.activity.main.kaven.KavenViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -56,7 +55,6 @@ import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
-import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyOptions
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.viewmodel.MainViewModel
 
@@ -240,7 +238,7 @@ class MainActivity : ComponentActivity() {
                             Icon(
                                 painter = painterResource(R.drawable.ic_round_search_24),
                                 contentDescription = null,
-                                modifier = Modifier.size(150.dp),
+                                modifier = Modifier.size(25.dp),
                                 tint = Color.Black
                             )
                         }
@@ -292,7 +290,6 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         DebugViewModel.instance.save()
-        KavenViewModel.instance.save()
         ScriptViewModel.instance.save()
         scriptVm.save()
     }
