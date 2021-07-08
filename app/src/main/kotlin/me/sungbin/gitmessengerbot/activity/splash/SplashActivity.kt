@@ -92,7 +92,7 @@ class SplashActivity : ComponentActivity() {
                 )
                 Text(
                     text = with(AnnotatedString.Builder(stringResource(R.string.app_name))) {
-                        addStyle(SpanStyle(fontWeight = FontWeight.Bold), 3, 12)
+                        addStyle(SpanStyle(fontWeight = FontWeight.Bold), 3, 12) // Messenger
                         toAnnotatedString()
                     },
                     color = Color.White,

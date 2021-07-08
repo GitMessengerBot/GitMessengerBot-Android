@@ -10,7 +10,8 @@
 package me.sungbin.gitmessengerbot.activity.setup
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -27,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,7 +38,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +46,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -59,6 +59,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -76,22 +77,12 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.BatteryUtil
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toast
-
-private object PermissionType {
-    const val NotificationRead = "PERMISSION_FOR_NOTIFICATION_READ"
-}
-
-private data class Permission(
-    val permissions: List<String>,
-    val name: String,
-    val description: String,
-    val painterResource: Int
-)
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
@@ -99,14 +90,15 @@ class SetupActivity : ComponentActivity() {
     @Inject
     lateinit var githubRepo: GithubRepo
 
-    private val storagePermissionGranted = mutableStateOf(false)
-    private val notificationPermissionGranted = mutableStateOf(false)
-    private val personalKeyDialogVisible = mutableStateOf(false)
+    private var storagePermissionGranted by mutableStateOf(false)
+    private var notificationPermissionGranted by mutableStateOf(false)
+    private var batteryPermissionGranted by mutableStateOf(false)
+    private var personalKeyDialogVisible by mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
             if (permissionRequest.values.first()) {
-                storagePermissionGranted.value = true
+                storagePermissionGranted = true
             }
         }
 
@@ -118,15 +110,15 @@ class SetupActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Setup()
-                PersonalKeyInputDialog()
+                PersonalKeyDialog()
             }
         }
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
-    private fun PersonalKeyInputDialog() {
-        if (personalKeyDialogVisible.value) {
+    private fun PersonalKeyDialog() {
+        if (personalKeyDialogVisible) {
             val context = LocalContext.current
             var personalKeyField by remember { mutableStateOf(TextFieldValue()) }
             val focusManager = LocalFocusManager.current
@@ -135,11 +127,12 @@ class SetupActivity : ComponentActivity() {
             MaterialTheme {
                 AlertDialog(
                     shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.width(300.dp),
                     properties = DialogProperties(
                         dismissOnClickOutside = false
                     ),
                     onDismissRequest = {
-                        personalKeyDialogVisible.value = false
+                        personalKeyDialogVisible = false
                     },
                     text = {
                         Column {
@@ -313,32 +306,41 @@ class SetupActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center
             ) {
                 PermissionView(
-                    modifier = if (Storage.isScoped) Modifier.alpha(.5f) else Modifier,
                     permission = Permission(
-                        listOf(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        stringResource(R.string.setup_permission_storage_label),
-                        stringResource(
-                            if (Storage.isScoped) R.string.setup_permission_scoped_storage else R.string.setup_permission_storage_description
-                        ),
-                        R.drawable.ic_round_folder_24
+                        permissions = if (Storage.isScoped) {
+                            listOf(PermissionType.ScopedStorage)
+                        } else {
+                            listOf(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            )
+                        },
+                        name = stringResource(R.string.setup_permission_storage_label),
+                        description = stringResource(R.string.setup_permission_storage_description),
+                        icon = R.drawable.ic_round_folder_24
                     ),
-                    isPermissionGranted = storagePermissionGranted,
-                    padding = listOf(0, 16)
+                    permissionGranted = storagePermissionGranted,
+                    padding = PermissionViewPadding(0.dp, 16.dp)
                 )
                 PermissionView(
                     permission = Permission(
-                        listOf(PermissionType.NotificationRead),
-                        stringResource(R.string.setup_permission_notification_label),
-                        stringResource(
-                            R.string.setup_permission_notification_description
-                        ),
-                        R.drawable.ic_round_notifications_24
+                        permissions = listOf(PermissionType.NotificationRead),
+                        name = stringResource(R.string.setup_permission_notification_label),
+                        description = stringResource(R.string.setup_permission_notification_description),
+                        icon = R.drawable.ic_round_notifications_24
                     ),
-                    isPermissionGranted = notificationPermissionGranted,
-                    padding = listOf(16, 16)
+                    permissionGranted = notificationPermissionGranted,
+                    padding = PermissionViewPadding(16.dp, 16.dp)
+                )
+                PermissionView(
+                    permission = Permission(
+                        permissions = listOf(PermissionType.Battery),
+                        name = stringResource(R.string.setup_permission_battery_label),
+                        description = stringResource(R.string.setup_permission_battery_description),
+                        icon = R.drawable.ic_round_battery_alert_24
+                    ),
+                    permissionGranted = batteryPermissionGranted,
+                    padding = PermissionViewPadding(16.dp, 0.dp)
                 )
             }
             Column(
@@ -361,24 +363,13 @@ class SetupActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                if (Storage.isScoped) {
-                                    if (notificationPermissionGranted.value) {
-                                        personalKeyDialogVisible.value = true
-                                    } else {
-                                        toast(
-                                            context,
-                                            getString(R.string.setup_need_manage_permission)
-                                        )
-                                    }
+                                if (notificationPermissionGranted && storagePermissionGranted) {
+                                    personalKeyDialogVisible = true
                                 } else {
-                                    if (notificationPermissionGranted.value && storagePermissionGranted.value) {
-                                        personalKeyDialogVisible.value = true
-                                    } else {
-                                        toast(
-                                            context,
-                                            getString(R.string.setup_need_manage_permission)
-                                        )
-                                    }
+                                    toast(
+                                        context,
+                                        getString(R.string.setup_need_manage_permission)
+                                    )
                                 }
                             }
                             .padding(8.dp),
@@ -392,17 +383,18 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
+    private data class PermissionViewPadding(val top: Dp, val bottom: Dp)
+
     @Composable
     private fun PermissionView(
-        modifier: Modifier = Modifier,
         permission: Permission,
-        isPermissionGranted: MutableState<Boolean>,
-        padding: List<Int>
+        permissionGranted: Boolean,
+        padding: PermissionViewPadding
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = padding[0].dp, bottom = padding[1].dp),
+                .padding(top = padding.top, bottom = padding.bottom),
         ) {
             Box(
                 modifier = Modifier
@@ -421,20 +413,8 @@ class SetupActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    /*Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_baseline_circle_24),
-                            contentDescription = null,
-                            tint = Color.Black
-                        )
-                        Icon(
-                            modifier = Modifier.size(15.dp),
-                            painter = painterResource(permission.painterResource),
-                            contentDescription = null
-                        )
-                    }*/
                     Icon(
-                        painter = painterResource(R.drawable.ic_round_error_24),
+                        painter = painterResource(permission.icon),
                         contentDescription = null,
                         tint = Color.Black
                     )
@@ -452,7 +432,7 @@ class SetupActivity : ComponentActivity() {
                     Icon(
                         painter = painterResource(R.drawable.ic_round_check_24),
                         contentDescription = null,
-                        tint = if (isPermissionGranted.value) colors.primaryVariant else Color.LightGray
+                        tint = if (permissionGranted) colors.primaryVariant else Color.LightGray
                     )
                 }
             }
@@ -468,14 +448,32 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
-    private fun Permission.requestAllPermissions() =
-        if (this.permissions.first() == PermissionType.NotificationRead) {
-            requestReadNotification(this@SetupActivity)
-            doDelay(1000) { notificationPermissionGranted.value = true }
-        } else permissionsContracts.launch(this.permissions.toTypedArray())
+    @SuppressLint("NewApi")
+    private fun Permission.requestAllPermissions() {
+        when (permissions.first()) {
+            PermissionType.NotificationRead -> {
+                requestReadNotification(this@SetupActivity)
+                doDelay(1000) { notificationPermissionGranted = true }
+            }
+            PermissionType.Battery -> {
+                BatteryUtil.requestIgnoreBatteryOptimization(applicationContext)
+                doDelay(1000) {
+                    val granted = BatteryUtil.isIgnoringBatteryOptimization(applicationContext)
+                    batteryPermissionGranted = granted
+                }
+            }
+            PermissionType.ScopedStorage -> {
+                Storage.requestStorageManagePermission(applicationContext)
+                doDelay(1000) { storagePermissionGranted = true }
+            }
+            else -> {
+                permissionsContracts.launch(this.permissions.toTypedArray())
+            }
+        }
+    }
 
-    private fun requestReadNotification(activity: Activity) {
+    private fun requestReadNotification(context: Context) {
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-        activity.startActivity(intent)
+        context.startActivity(intent)
     }
 }

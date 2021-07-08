@@ -10,8 +10,12 @@
 package me.sungbin.gitmessengerbot.util
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.Settings
+import androidx.annotation.RequiresApi
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -43,6 +47,14 @@ object Storage {
         write(path, newContent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     fun requestStorageManagePermission(context: Context) {
+        val uri = Uri.parse("package:" + context.packageName)
+        context.startActivity(
+            Intent(
+                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                uri
+            )
+        )
     }
 }
