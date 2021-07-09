@@ -9,6 +9,7 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script
 
+import android.app.Activity
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -56,6 +57,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,6 +78,7 @@ import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.util.Script
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 private fun MenuBox(
@@ -463,6 +466,7 @@ fun ScriptAddContent(
     scriptVm: ScriptViewModel,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
+    val context = LocalContext.current
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
     var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
     val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
@@ -485,7 +489,7 @@ fun ScriptAddContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(R.string.main_scriptadd_script_name))
+            Text(text = stringResource(R.string.script_add_name))
             TextField(
                 value = scriptNameField,
                 onValueChange = { scriptNameField = it },
@@ -499,7 +503,7 @@ fun ScriptAddContent(
             )
         }
         Text(
-            text = stringResource(R.string.main_scriptadd_script_lang),
+            text = stringResource(R.string.script_add_lang),
             modifier = Modifier.padding(top = 15.dp)
         )
         Row(
@@ -531,20 +535,24 @@ fun ScriptAddContent(
         Button(
             onClick = {
                 val scriptName = scriptNameField.text
-                val scriptItem = ScriptItem(
-                    id = Random.nextInt(),
-                    name = scriptName,
-                    power = false,
-                    lang = selectedScriptLang,
-                    compiled = false,
-                    lastRun = ""
-                )
-                Script.create(scriptItem)
-                scriptVm.addScript(scriptItem)
-                coroutineScope.launch {
-                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                if (scriptName.isNotBlank()) {
+                    val scriptItem = ScriptItem(
+                        id = Random.nextInt(),
+                        name = scriptName,
+                        power = false,
+                        lang = selectedScriptLang,
+                        compiled = false,
+                        lastRun = ""
+                    )
+                    Script.create(scriptItem)
+                    scriptVm.addScript(scriptItem)
+                    coroutineScope.launch {
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                    }
+                    scriptNameField = TextFieldValue()
+                } else {
+                    toast(context as Activity, context.getString(R.string.script_add_input_name))
                 }
-                scriptNameField = TextFieldValue()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -552,7 +560,7 @@ fun ScriptAddContent(
             colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary)
         ) {
             Text(
-                text = stringResource(R.string.main_scriptadd_add_script),
+                text = stringResource(R.string.script_add_create_new),
                 color = Color.White
             )
         }

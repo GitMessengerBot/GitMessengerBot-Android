@@ -35,13 +35,14 @@
     <string name="main_menu_all_script_count">총 스크립트 수</string>
     <string name="main_menu_running_script_count">실행중인\n스크립트 수</string>
     <string name="main_menu_script_search">스크립트 검색</string>
-    <string name="main_scriptadd_script_name">스크립트 이름</string>
-    <string name="main_scriptadd_script_lang">스크립트 언어</string>
 
     <string name="web_menu_project_github">프로젝트 깃허브</string>
     <string name="web_toast_non_install_browser">설치돼 있는 브라우저 앱이 없어요 😢</string>
 
     <string name="script_label">SCRIPT</string>
     <string name="script_item_label_compile">컴파일</string>
-    <string name="main_scriptadd_add_script">스크립트 추가</string>
+    <string name="script_add_create_new">스크립트 추가</string>
+    <string name="script_add_input_name">스크립트 이름을 입력해 주세요.</string>
+    <string name="script_add_name">스크립트 이름</string>
+    <string name="script_add_lang">스크립트 언어</string>
 </resources>
