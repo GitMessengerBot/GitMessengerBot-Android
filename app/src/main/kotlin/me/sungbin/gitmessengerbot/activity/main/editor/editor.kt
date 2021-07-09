@@ -37,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -77,9 +76,9 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(90.dp)
             .background(color = colors.primary)
-            .padding(top = 16.dp, bottom = 10.dp)
+            .padding(top = 8.dp, bottom = 8.dp)
     ) {
         val (menu, title, setting, save, classList) = createRefs()
 
