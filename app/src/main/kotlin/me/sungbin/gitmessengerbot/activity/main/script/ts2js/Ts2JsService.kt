@@ -15,5 +15,5 @@ import retrofit2.http.POST
 
 interface Ts2JsService {
     @POST("/convert/typescript/javascript")
-    fun convert(@Body js: String): Call<String>
+    fun convert(@Body js: String): Call<Ts2Js>
 }
