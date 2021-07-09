@@ -152,7 +152,11 @@ class MainActivity : ComponentActivity() {
                 fancyColors = FancyColors(primary = colors.primary),
                 items = items
             ) { tab = id }
-            AnimatedVisibility(tab == Tab.Script, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(
+                visible = listOf(Tab.Script, Tab.Script).contains(tab),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 Surface(
                     modifier = Modifier
                         .padding(bottom = 35.dp)

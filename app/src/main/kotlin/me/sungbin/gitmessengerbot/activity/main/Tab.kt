@@ -14,4 +14,5 @@ object Tab {
     const val Debug = 1
     const val Github = 2
     const val Setting = 3
+    const val Editor = 4
 }
