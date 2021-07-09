@@ -268,18 +268,7 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(
-            items = List(20) {
-                ScriptItem(
-                    id = Random.nextInt(),
-                    name = "테스트 $it",
-                    lang = Random.nextInt(0, 4),
-                    power = Random.nextBoolean(),
-                    compiled = Random.nextBoolean(),
-                    lastRun = "마지막 작동 시간"
-                )
-            }
-        ) { script ->
+        items(items = scriptVm.scripts) { script ->
             ScriptView(script = script)
         }
     }
@@ -465,7 +454,7 @@ private fun ScriptView(script: ScriptItem) {
 }
 
 @Composable
-fun ScriptAddContent() {
+fun ScriptAddContent(scriptVm: ScriptViewModel) {
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
     var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
     val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
@@ -541,6 +530,7 @@ fun ScriptAddContent() {
                     lastRun = ""
                 )
                 Script.create(scriptItem)
+                scriptVm.addScript(scriptItem)
                 scriptNameField = TextFieldValue()
             },
             modifier = Modifier

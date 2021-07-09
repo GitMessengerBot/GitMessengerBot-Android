@@ -32,6 +32,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import me.sungbin.gitmessengerbot.util.Script
 
 class ScriptViewModel : ViewModel() {
     private val _scripts = SnapshotStateList<ScriptItem>()
@@ -50,14 +51,15 @@ class ScriptViewModel : ViewModel() {
         compileStates[id] = mutableStateOf(state)
     }
 
-    fun loadScripts() {
-    }
-
     fun addScript(scriptItem: ScriptItem) {
         _scripts.add(scriptItem)
     }
 
     fun removeScript(scriptItem: ScriptItem) {
         _scripts.remove(scriptItem)
+    }
+
+    init {
+        _scripts.addAll(Script.getList())
     }
 }

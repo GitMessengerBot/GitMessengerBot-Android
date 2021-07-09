@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            sheetContent = { ScriptAddContent() },
+            sheetContent = { ScriptAddContent(scriptVm) },
             sheetElevation = 0.dp,
             sheetPeekHeight = 0.dp,
             modifier = Modifier.fillMaxSize()
