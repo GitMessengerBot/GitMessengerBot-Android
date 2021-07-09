@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,8 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
@@ -76,24 +75,19 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Main() {
-        ConstraintLayout(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colors.primary)
         ) {
-            val content = createRef()
-
-            Crossfade(targetState = tab, modifier = Modifier.padding(bottom = 60.dp)) { index ->
+            Crossfade(
+                targetState = tab,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 60.dp)
+            ) { index ->
                 when (index) {
                     Tab.Script -> ScriptContent(
-                        modifier = Modifier.constrainAs(content) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            width = Dimension.fillToConstraints
-                            height = Dimension.fillToConstraints
-                        },
                         githubData = githubData,
                         scriptVm = scriptVm
                     )

@@ -95,8 +95,8 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(modifier: Modifier, githubData: GithubData, scriptVm: ScriptViewModel) {
-    Column(modifier = modifier) {
+fun ScriptContent(githubData: GithubData, scriptVm: ScriptViewModel) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Header(githubData, scriptVm)
         Column(
             modifier = Modifier
