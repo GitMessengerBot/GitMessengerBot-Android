@@ -17,10 +17,9 @@ import androidx.compose.ui.graphics.Color
 val twiceLightGray = Color(236, 236, 236)
 
 val colors = lightColors().copy(
-    primary = Color(0xFF942ccc),
-    primaryVariant = Color(0xFF60009a),
-    secondary = Color(0xFFc960ff),
-    secondaryVariant = Color(0xFF942ccb)
+    primary = Color(0xFF6b1aa5),
+    primaryVariant = Color(0xFF380075),
+    secondary = Color(0xFF9e4dd7)
 )
 
 @Composable

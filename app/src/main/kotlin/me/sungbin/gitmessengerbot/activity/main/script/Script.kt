@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -102,7 +103,7 @@ fun ScriptContent(modifier: Modifier, githubData: GithubData, scriptVm: ScriptVi
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 50f, topEnd = 50f))
                 .background(twiceLightGray)
-                .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)
+                .padding(15.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -117,7 +118,10 @@ fun ScriptContent(modifier: Modifier, githubData: GithubData, scriptVm: ScriptVi
                     fontSize = 18.sp
                 )
             }
-            LazyScript(scriptVm = scriptVm)
+            LazyScript(
+                modifier = Modifier.padding(top = 15.dp),
+                scriptVm = scriptVm
+            )
         }
     }
 }
@@ -239,12 +243,12 @@ private fun Header(githubData: GithubData, scriptVm: ScriptViewModel) {
 }
 
 @Composable
-private fun LazyScript(scriptVm: ScriptViewModel) {
+private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(top = 10.dp),
-        contentPadding = PaddingValues(top = 10.dp, bottom = 70.dp),
+            .background(Color.White, RoundedCornerShape(20.dp)),
+        contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         items(
@@ -271,12 +275,13 @@ private fun Script(script: ScriptItem) {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
+            .shadow(1.dp, shape)
             .clip(shape)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        colors.primary,
-                        colors.secondary
+                        Color(0xFF7d27bb),
+                        Color(0xFFb66aed)
                     )
                 ),
                 shape = shape
