@@ -30,9 +30,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
@@ -43,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,6 +68,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlin.random.Random
+import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.colors
@@ -453,12 +457,18 @@ private fun ScriptView(script: ScriptItem) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ScriptAddContent(scriptVm: ScriptViewModel) {
+fun ScriptAddContent(
+    scriptVm: ScriptViewModel,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
+) {
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
     var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
     val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
     val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+
     val scriptLangSpinnerBackgroundColor =
         { lang: Int -> if (selectedScriptLang == lang) colors.secondary else Color.White }
     val scriptLangSpinnerTextColor =
@@ -531,6 +541,9 @@ fun ScriptAddContent(scriptVm: ScriptViewModel) {
                 )
                 Script.create(scriptItem)
                 scriptVm.addScript(scriptItem)
+                coroutineScope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                }
                 scriptNameField = TextFieldValue()
             },
             modifier = Modifier
