@@ -12,7 +12,7 @@ package me.sungbin.gitmessengerbot.activity.main.script
 data class ScriptItem(
     val id: Int,
     val name: String,
-    val type: Int, // ScriptType
+    val lang: Int, // ScriptType
     val power: Boolean,
     val compiled: Boolean,
     val lastRun: String

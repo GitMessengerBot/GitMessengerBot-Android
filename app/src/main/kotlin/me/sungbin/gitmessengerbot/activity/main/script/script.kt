@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Script.kt] created by Ji Sungbin on 21. 6. 19. 오후 10:56.
+ * [script.kt] created by Ji Sungbin on 21. 6. 19. 오후 10:56.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,11 +28,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,11 +49,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +70,8 @@ import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
+import me.sungbin.gitmessengerbot.util.Script
+import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 
 @Composable
 private fun MenuBox(
@@ -259,20 +273,20 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
                 ScriptItem(
                     id = Random.nextInt(),
                     name = "테스트 $it",
-                    type = Random.nextInt(0, 4),
+                    lang = Random.nextInt(0, 4),
                     power = Random.nextBoolean(),
                     compiled = Random.nextBoolean(),
                     lastRun = "마지막 작동 시간"
                 )
             }
         ) { script ->
-            Script(script = script)
+            ScriptView(script = script)
         }
     }
 }
 
 @Composable
-private fun Script(script: ScriptItem) {
+private fun ScriptView(script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     Row(
         modifier = Modifier
@@ -395,7 +409,7 @@ private fun Script(script: ScriptItem) {
                     }
             )
             Text(
-                text = script.type.toScriptLangName(),
+                text = script.lang.toScriptLangName(),
                 color = Color.White,
                 modifier = Modifier.constrainAs(scriptLang) {
                     start.linkTo(scriptLangDeco.end, 4.dp)
@@ -445,6 +459,98 @@ private fun Script(script: ScriptItem) {
                     bottom.linkTo(scriptNameUnderline.bottom, 4.dp)
                     start.linkTo(parent.start)
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun ScriptAddContent() {
+    var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
+    var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
+    val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
+    val focusManager = LocalFocusManager.current
+    val scriptLangSpinnerBackgroundColor =
+        { lang: Int -> if (selectedScriptLang == lang) colors.secondary else Color.White }
+    val scriptLangSpinnerTextColor =
+        { lang: Int -> if (selectedScriptLang == lang) Color.White else colors.secondary }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(start = 30.dp, end = 30.dp, bottom = 30.dp, top = 10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(R.string.main_scriptadd_script_name))
+            TextField(
+                value = scriptNameField,
+                onValueChange = { scriptNameField = it },
+                singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                modifier = Modifier
+                    .width(200.dp)
+                    .focusRequester(FocusRequester()),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+            )
+        }
+        Text(
+            text = stringResource(R.string.main_scriptadd_script_lang),
+            modifier = Modifier.padding(top = 15.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(top = 5.dp)
+                .clip(scriptLangSpinnerShape)
+                .border(1.dp, colors.secondary, scriptLangSpinnerShape)
+        ) {
+            repeat(4) { scriptLang ->
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(scriptLangSpinnerBackgroundColor(scriptLang))
+                        .noRippleClickable { selectedScriptLang = scriptLang },
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = scriptLang.toScriptLangName(),
+                        color = scriptLangSpinnerTextColor(scriptLang),
+                        fontSize = 10.sp
+                    )
+                }
+            }
+        }
+        Button(
+            onClick = {
+                val scriptName = scriptNameField.text
+                val scriptItem = ScriptItem(
+                    id = Random.nextInt(),
+                    name = scriptName,
+                    power = false,
+                    lang = selectedScriptLang,
+                    compiled = false,
+                    lastRun = ""
+                )
+                Script.create(scriptItem)
+                scriptNameField = TextFieldValue()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary)
+        ) {
+            Text(
+                text = stringResource(R.string.main_scriptadd_add_script),
+                color = Color.White
             )
         }
     }

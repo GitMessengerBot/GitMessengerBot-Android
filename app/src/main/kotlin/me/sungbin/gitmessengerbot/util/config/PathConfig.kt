@@ -18,4 +18,7 @@ object PathConfig {
 
     val Script =
         { name: String, lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}" }
+    val ScriptPath = { lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}" }
+    val ScriptData =
+        { name: String, lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json" }
 }

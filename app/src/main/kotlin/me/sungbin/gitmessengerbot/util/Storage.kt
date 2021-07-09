@@ -56,6 +56,8 @@ object Storage {
         File(path.parsePath()).delete()
     }
 
+    fun fileList(path: String) = File(path.parsePath()).listFiles()!!.toList()
+
     @RequiresApi(Build.VERSION_CODES.R)
     fun requestStorageManagePermission(context: Context) {
         val uri = Uri.parse("package:" + context.packageName)
