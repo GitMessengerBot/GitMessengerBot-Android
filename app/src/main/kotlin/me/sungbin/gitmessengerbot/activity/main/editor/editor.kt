@@ -160,7 +160,7 @@ private fun ToolBar(
                             .collect { result ->
                                 println(
                                     when (result) {
-                                        is Ts2JsResult.Success -> result.result.tsCode
+                                        is Ts2JsResult.Success -> result.ts2js.tsCode
                                         is Ts2JsResult.Error -> result.exception
                                     }
                                 )

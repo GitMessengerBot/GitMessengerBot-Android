@@ -10,6 +10,6 @@
 package me.sungbin.gitmessengerbot.activity.main.script.ts2js
 
 sealed class Ts2JsResult {
-    data class Success(val result: Ts2Js) : Ts2JsResult()
+    data class Success(val ts2js: Ts2Js) : Ts2JsResult()
     data class Error(val exception: Exception) : Ts2JsResult()
 }
