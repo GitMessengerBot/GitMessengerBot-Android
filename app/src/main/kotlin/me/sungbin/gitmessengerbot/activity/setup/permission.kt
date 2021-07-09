@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Permission.kt] created by Ji Sungbin on 21. 7. 8. 오후 11:37.
+ * [permission.kt] created by Ji Sungbin on 21. 7. 8. 오후 11:37.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */

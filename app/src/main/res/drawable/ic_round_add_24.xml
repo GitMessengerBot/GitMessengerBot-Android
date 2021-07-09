@@ -1,10 +1,19 @@
+<!--
+  ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+  ~ GitMessengerBot license is under the GPL-3.0.
+  ~
+  ~ [ic_round_add_24.xml] created by Ji Sungbin on 21. 7. 10. 오전 1:27.
+  ~
+  ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
+    android:tint="?attr/colorControlNormal"
     android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="?attr/colorControlNormal">
-  <path
-      android:fillColor="@android:color/white"
-      android:pathData="M18,13h-5v5c0,0.55 -0.45,1 -1,1l0,0c-0.55,0 -1,-0.45 -1,-1v-5H6c-0.55,0 -1,-0.45 -1,-1l0,0c0,-0.55 0.45,-1 1,-1h5V6c0,-0.55 0.45,-1 1,-1l0,0c0.55,0 1,0.45 1,1v5h5c0.55,0 1,0.45 1,1l0,0C19,12.55 18.55,13 18,13z"/>
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M18,13h-5v5c0,0.55 -0.45,1 -1,1l0,0c-0.55,0 -1,-0.45 -1,-1v-5H6c-0.55,0 -1,-0.45 -1,-1l0,0c0,-0.55 0.45,-1 1,-1h5V6c0,-0.55 0.45,-1 1,-1l0,0c0.55,0 1,0.45 1,1v5h5c0.55,0 1,0.45 1,1l0,0C19,12.55 18.55,13 18,13z" />
 </vector>

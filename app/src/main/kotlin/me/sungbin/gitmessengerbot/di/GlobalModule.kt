@@ -25,6 +25,4 @@ object GlobalModule {
     fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
-
-
 }
