@@ -34,10 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -80,7 +82,7 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
             .background(color = colors.primary)
             .padding(top = 8.dp, bottom = 8.dp)
     ) {
-        val (menu, title, setting, save, classList) = createRefs()
+        val (menu, title, setting, save, reload, classList) = createRefs()
 
         Icon(
             painter = painterResource(R.drawable.ic_round_menu_24),
@@ -94,10 +96,13 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
         Text(
             text = script.name,
             color = Color.White,
+            textAlign = TextAlign.Start,
             modifier = Modifier.constrainAs(title) {
                 start.linkTo(menu.end, 10.dp)
+                end.linkTo(reload.start, 10.dp)
                 top.linkTo(menu.top)
                 bottom.linkTo(menu.bottom)
+                width = Dimension.fillToConstraints
             }
         )
         Icon(
@@ -120,6 +125,20 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
+                    top.linkTo(parent.top)
+                }
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_round_refresh_24),
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier
+                .rotate(-90f)
+                .clickable {
+                    val code = codeField.text
+                }
+                .constrainAs(reload) {
+                    end.linkTo(save.start, 10.dp)
                     top.linkTo(parent.top)
                 }
         )
