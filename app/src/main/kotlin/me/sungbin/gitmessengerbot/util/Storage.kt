@@ -52,6 +52,10 @@ object Storage {
         write(path, newContent)
     }
 
+    fun remove(path: String) {
+        File(path.parsePath()).delete()
+    }
+
     @RequiresApi(Build.VERSION_CODES.R)
     fun requestStorageManagePermission(context: Context) {
         val uri = Uri.parse("package:" + context.packageName)

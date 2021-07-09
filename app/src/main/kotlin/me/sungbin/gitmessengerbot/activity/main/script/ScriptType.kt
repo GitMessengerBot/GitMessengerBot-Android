@@ -23,3 +23,19 @@ fun Int.toScriptLangName() = when (this) {
     3 -> "Simple"
     else -> throw Error("Unknown script type.")
 }
+
+fun Int.toScriptSuffix() = when (this) {
+    0 -> "ts"
+    1 -> "js"
+    2 -> "py"
+    3 -> "sim"
+    else -> throw Error("Unknown script type.")
+}
+
+fun Int.toScriptDefaultSource() = when (this) {
+    0 -> "const onMessage = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string) => {\n}"
+    1 -> "const onMessage = (room, message, sender, isGroupChat, profileImageBase64) => {\n}"
+    2 -> "def onMessage(self, room, message, sender, isGroupChat, profileImageBase64):\n    "
+    3 -> "sim"
+    else -> throw Error("Unknown script type.")
+}

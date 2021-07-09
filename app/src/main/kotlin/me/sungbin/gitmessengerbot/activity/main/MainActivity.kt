@@ -226,7 +226,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val scriptName = scriptNameField.text
+
+                    scriptNameField = TextFieldValue()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp),
