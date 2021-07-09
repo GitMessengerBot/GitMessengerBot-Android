@@ -275,7 +275,7 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(items = scriptVm.scripts) { script ->
+        items(scriptVm.scripts) { script ->
             ScriptView(script = script)
         }
     }

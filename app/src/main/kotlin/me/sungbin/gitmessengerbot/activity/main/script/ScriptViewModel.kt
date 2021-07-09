@@ -41,6 +41,22 @@ class ScriptViewModel : ViewModel() {
         _scripts.remove(scriptItem)
     }
 
+    fun loadClassList(scriptItem: ScriptItem): List<Class> {
+        // todo
+        return listOf(
+            Class(name = "test00", code = ""),
+            Class(name = "test01", code = ""),
+            Class(name = "test02", code = ""),
+            Class(name = "test03", code = ""),
+            Class(name = "test04", code = ""),
+            Class(name = "test05", code = ""),
+            Class(name = "test06", code = ""),
+            Class(name = "test07", code = ""),
+            Class(name = "test08", code = ""),
+            Class(name = "test09", code = ""),
+        )
+    }
+
     init {
         _scripts.addAll(Script.getList())
     }

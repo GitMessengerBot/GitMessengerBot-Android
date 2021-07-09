@@ -9,25 +9,116 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
+import me.sungbin.gitmessengerbot.theme.colors
 
 @Composable
-fun Editor() {
+fun Editor(script: ScriptItem, scriptVm: ScriptViewModel) {
+    var codeField by remember { mutableStateOf(TextFieldValue()) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { ToolBar() }
+        topBar = { ToolBar(script, scriptVm) }
     ) {
-        LineNumberTextField()
+        TextField(value = codeField, onValueChange = { codeField = it })
     }
 }
 
 @Composable
-private fun LineNumberTextField() {
-}
+private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(color = colors.primary)
+            .padding(PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp))
+    ) {
+        val (menu, title, setting, addClass, classList) = createRefs()
 
-@Composable
-private fun ToolBar() {
+        Icon(
+            painter = painterResource(R.drawable.ic_round_menu_24),
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.constrainAs(menu) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+            }
+        )
+        Text(
+            text = script.name,
+            color = Color.White,
+            modifier = Modifier.constrainAs(title) {
+                start.linkTo(menu.start, 8.dp)
+                top.linkTo(menu.top)
+                bottom.linkTo(menu.bottom)
+            }
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_round_settings_24),
+            contentDescription = null,
+            modifier = Modifier.constrainAs(setting) {
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+            }
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_round_add_24),
+            contentDescription = null,
+            modifier = Modifier.constrainAs(addClass) {
+                end.linkTo(setting.end, 8.dp)
+                top.linkTo(parent.top)
+            }
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(classList) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                }
+        ) {
+            items(scriptVm.loadClassList(script)) { scriptClass ->
+                val shape = RoundedCornerShape(10.dp)
+                Text(
+                    text = scriptClass.name,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                        .clip(shape)
+                        .background(color = Color.White, shape = shape)
+                )
+            }
+        }
+    }
 }
