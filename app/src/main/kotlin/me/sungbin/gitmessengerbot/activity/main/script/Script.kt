@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
@@ -395,7 +395,7 @@ private fun Script(script: ScriptItem) {
                     }
             )
             Text(
-                text = script.type.toScriptType(),
+                text = script.type.toScriptLangName(),
                 color = Color.White,
                 modifier = Modifier.constrainAs(scriptLang) {
                     start.linkTo(scriptLangDeco.end, 4.dp)
@@ -428,16 +428,15 @@ private fun Script(script: ScriptItem) {
                 },
                 fontSize = 13.sp
             )
-            Spacer(
-                modifier = Modifier
-                    .height(0.5.dp)
-                    .background(Color.White)
-                    .constrainAs(scriptNameUnderline) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(scriptPower.top, 4.dp)
-                        width = Dimension.fillToConstraints
-                    }
+            Divider(
+                modifier = Modifier.constrainAs(scriptNameUnderline) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(scriptPower.top, 4.dp)
+                    width = Dimension.fillToConstraints
+                },
+                color = Color.White,
+                thickness = 0.5.dp
             )
             Text(
                 text = script.name,

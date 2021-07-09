@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -107,21 +108,18 @@ class SplashActivity : ComponentActivity() {
                     modifier = Modifier.padding(top = 30.dp)
                 )
             }
-            Column(
+            Text(
+                text = stringResource(R.string.copyright),
+                color = Color.White,
+                fontSize = 10.sp,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.constrainAs(footer) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
-                },
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(R.string.copyright),
-                    color = Color.White,
-                    fontSize = 10.sp
-                )
-            }
+                }
+            )
         }
     }
 }
