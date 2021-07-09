@@ -29,7 +29,6 @@
 + **Git**
   + Commit and Push
   + Merge
-+ **스크립트 저장소** (kaven; npm, maven 같은 개념)
 + **카카오톡 봇 전용 유사 깃허브**
 
 # 개발 스킬
