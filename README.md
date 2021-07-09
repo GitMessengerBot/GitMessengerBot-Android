@@ -1,4 +1,4 @@
-// 142
+// 148
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
@@ -29,16 +29,16 @@
 + **Git**
   + Commit and Push
   + Merge
-+ **스크립트 저장소** (kaven; npm, maven 같은 개념)
 + **카카오톡 봇 전용 유사 깃허브**
 
 # 개발 스킬
 1. Jetpack Compose
 2. MVVM/Repository Pattern
-3. Coroutines
+3. Coroutines(flow)
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
 6. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
+7. Room
 
 # ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 - `import ordering` 프로젝트 단위 비활성화
