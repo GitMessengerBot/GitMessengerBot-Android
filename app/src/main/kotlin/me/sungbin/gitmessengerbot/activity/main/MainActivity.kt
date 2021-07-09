@@ -23,8 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -82,16 +81,16 @@ class MainActivity : ComponentActivity() {
                 .fillMaxSize()
                 .background(colors.primary)
         ) {
-            val (content, footer) = createRefs()
+            val content = createRef()
 
-            Crossfade(targetState = tab) { index ->
+            Crossfade(targetState = tab, modifier = Modifier.padding(bottom = 60.dp)) { index ->
                 when (index) {
                     Tab.Script -> ScriptContent(
                         modifier = Modifier.constrainAs(content) {
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             top.linkTo(parent.top)
-                            bottom.linkTo(footer.top)
+                            bottom.linkTo(parent.bottom)
                             width = Dimension.fillToConstraints
                             height = Dimension.fillToConstraints
                         },
@@ -101,19 +100,12 @@ class MainActivity : ComponentActivity() {
                     else -> Text(text = "TODO")
                 }
             }
-            Footer(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                }
-            )
+            Footer()
         }
     }
 
     @Composable
-    private fun Footer(modifier: Modifier) {
+    private fun Footer() {
         val items = listOf(
             FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
             FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
@@ -121,7 +113,7 @@ class MainActivity : ComponentActivity() {
             FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
         )
 
-        Box(modifier = modifier, contentAlignment = Alignment.BottomCenter) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             FancyBottomBar(
                 fancyColors = FancyColors(primary = colors.primary),
                 items = items
@@ -135,7 +127,7 @@ class MainActivity : ComponentActivity() {
                 elevation = 2.dp
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Add,
+                    painter = painterResource(R.drawable.ic_round_add_24),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier

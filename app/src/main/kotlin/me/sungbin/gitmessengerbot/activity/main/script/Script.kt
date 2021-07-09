@@ -105,7 +105,10 @@ fun ScriptContent(modifier: Modifier, githubData: GithubData, scriptVm: ScriptVi
                 .background(twiceLightGray)
                 .padding(15.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 15.dp)
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_round_script_24),
                     contentDescription = null
@@ -252,7 +255,7 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         items(
-            items = List(100) {
+            items = List(20) {
                 ScriptItem(
                     id = Random.nextInt(),
                     name = "테스트 $it",
@@ -275,7 +278,7 @@ private fun Script(script: ScriptItem) {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .shadow(1.dp, shape)
+            .shadow(3.dp, shape)
             .clip(shape)
             .background(
                 brush = Brush.horizontalGradient(
