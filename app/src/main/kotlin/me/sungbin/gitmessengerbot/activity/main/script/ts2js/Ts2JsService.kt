@@ -9,12 +9,11 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script.ts2js
 
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface Ts2JsService {
     @POST("/convert/typescript/javascript")
-    fun convert(@Body js: RequestBody): Call<String>
+    fun convert(@Body js: String): Call<String>
 }

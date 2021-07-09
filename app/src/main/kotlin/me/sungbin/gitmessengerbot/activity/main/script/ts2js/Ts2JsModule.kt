@@ -18,6 +18,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,6 +36,7 @@ object Ts2JsModule {
     fun provideRetrofit(httpLoggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .baseUrl(BaseUrl)
         .client(getInterceptor(httpLoggingInterceptor))
+        .addConverterFactory(ScalarsConverterFactory.create())
         .build()
 
     @Provides

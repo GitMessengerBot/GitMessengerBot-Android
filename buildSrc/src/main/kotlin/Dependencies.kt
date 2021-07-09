@@ -45,6 +45,7 @@ object Versions {
     object Network {
         const val OkHttp = "4.9.1"
         const val Retrofit = "2.9.0"
+        const val Scalars = "2.4.0"
     }
 
     object Jetpack {
@@ -75,7 +76,9 @@ object Dependencies {
     val network = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
-        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
+        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}",
+        "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
+        "com.squareup.retrofit2:converter-scalars:${Versions.Network.Scalars}"
     )
 
     val essential = listOf(
@@ -92,7 +95,6 @@ object Dependencies {
 
     val util = listOf(
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
-        "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
         "com.google.code.gson:gson:${Versions.Util.Gson}"
     )
 
