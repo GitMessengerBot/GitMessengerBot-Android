@@ -10,6 +10,7 @@
 package me.sungbin.gitmessengerbot.activity.main.script
 
 import android.app.Activity
+import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -72,11 +73,13 @@ import androidx.constraintlayout.compose.Dimension
 import kotlin.random.Random
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.editor.EditorActivity
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.util.Script
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
 
@@ -284,12 +287,20 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
 @Composable
 private fun ScriptView(script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
             .shadow(3.dp, shape)
             .clip(shape)
+            .noRippleClickable {
+                val intent = Intent(context, EditorActivity::class.java).apply {
+                    putExtra(PathConfig.IntentScriptId, script.id)
+                }
+                context.startActivity(intent)
+            }
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(

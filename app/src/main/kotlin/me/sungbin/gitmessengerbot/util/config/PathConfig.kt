@@ -15,6 +15,7 @@ import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 object PathConfig {
     private const val AppStorage = "GitMessengerBot/data"
     const val GithubData = "$AppStorage/github-data.json"
+    const val IntentScriptId = "intent-script-id"
 
     val Script =
         { name: String, lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}" }

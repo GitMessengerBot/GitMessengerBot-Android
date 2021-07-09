@@ -10,6 +10,7 @@
 package me.sungbin.gitmessengerbot.activity.main.editor
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,14 +48,14 @@ fun Editor(script: ScriptItem, scriptVm: ScriptViewModel) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { ToolBar(script, scriptVm) }
+        topBar = { ToolBar(script, scriptVm, codeField) }
     ) {
         TextField(value = codeField, onValueChange = { codeField = it })
     }
 }
 
 @Composable
-private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel) {
+private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: TextFieldValue) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +63,7 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel) {
             .background(color = colors.primary)
             .padding(PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp))
     ) {
-        val (menu, title, setting, addClass, classList) = createRefs()
+        val (menu, title, setting, save, classList) = createRefs()
 
         Icon(
             painter = painterResource(R.drawable.ic_round_menu_24),
@@ -91,12 +92,14 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel) {
             }
         )
         Icon(
-            painter = painterResource(R.drawable.ic_round_add_24),
+            painter = painterResource(R.drawable.ic_round_save_24),
             contentDescription = null,
-            modifier = Modifier.constrainAs(addClass) {
-                end.linkTo(setting.end, 8.dp)
-                top.linkTo(parent.top)
-            }
+            modifier = Modifier
+                .clickable { scriptVm.save(script, codeField.text) }
+                .constrainAs(save) {
+                    end.linkTo(setting.end, 8.dp)
+                    top.linkTo(parent.top)
+                }
         )
         LazyRow(
             modifier = Modifier

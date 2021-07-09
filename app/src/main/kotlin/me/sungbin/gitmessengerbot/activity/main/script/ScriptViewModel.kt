@@ -15,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import me.sungbin.gitmessengerbot.util.Script
+import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 class ScriptViewModel : ViewModel() {
     private val _scripts = SnapshotStateList<ScriptItem>()
@@ -29,8 +31,14 @@ class ScriptViewModel : ViewModel() {
         return compileStates[id]!!
     }
 
+    fun getScriptById(id: Int) = scripts.first { it.id == id }
+
     fun setCompileState(id: Int, state: Boolean) {
         compileStates[id] = mutableStateOf(state)
+    }
+
+    fun save(script: ScriptItem, code: String) {
+        Storage.write(PathConfig.Script(script.name, script.lang), code)
     }
 
     fun addScript(scriptItem: ScriptItem) {

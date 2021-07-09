@@ -153,7 +153,7 @@ class MainActivity : ComponentActivity() {
                 items = items
             ) { tab = id }
             AnimatedVisibility(
-                visible = listOf(Tab.Script, Tab.Script).contains(tab),
+                visible = tab == Tab.Script,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {

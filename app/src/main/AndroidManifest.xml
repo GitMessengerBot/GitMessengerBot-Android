@@ -42,6 +42,7 @@
 
         <activity android:name=".activity.setup.SetupActivity" />
         <activity android:name=".activity.main.MainActivity" />
+        <activity android:name=".activity.main.editor.EditorActivity" />
 
         <!-- <service
              android:name=".listener.MessageListener"
