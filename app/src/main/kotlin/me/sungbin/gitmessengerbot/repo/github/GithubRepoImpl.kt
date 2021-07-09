@@ -17,7 +17,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.await
 
@@ -50,7 +49,7 @@ class GithubRepoImpl @Inject constructor(
     override fun login(githubKey: String) = callbackFlow {
         try {
             trySend(GithubRepoResult.Success(buildRetrofit(githubKey).getUserInfo().await()))
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             trySend(GithubRepoResult.Error(exception))
         }
         awaitClose { close() }
