@@ -41,6 +41,9 @@ class ScriptViewModel : ViewModel() {
         Storage.write(PathConfig.Script(script.name, script.lang), code)
     }
 
+    fun loadCode(script: ScriptItem) =
+        Storage.read(PathConfig.Script(script.name, script.lang), "")!!
+
     fun addScript(scriptItem: ScriptItem) {
         _scripts.add(scriptItem)
     }

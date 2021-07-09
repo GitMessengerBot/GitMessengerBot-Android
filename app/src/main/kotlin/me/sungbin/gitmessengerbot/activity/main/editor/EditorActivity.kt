@@ -13,8 +13,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.ui.graphics.Color
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
+import me.sungbin.gitmessengerbot.theme.SystemUiController
+import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 class EditorActivity : ComponentActivity() {
@@ -24,7 +27,12 @@ class EditorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val scriptId = intent.getStringExtra(PathConfig.IntentScriptId)!!.toInt()
+        SystemUiController(window).run {
+            setStatusBarColor(colors.primary)
+            setNavigationBarColor(Color.White)
+        }
+
+        val scriptId = intent.getIntExtra(PathConfig.IntentScriptId, -1)
 
         setContent {
             MaterialTheme {

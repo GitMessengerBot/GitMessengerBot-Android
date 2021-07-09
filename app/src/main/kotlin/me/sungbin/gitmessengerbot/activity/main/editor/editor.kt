@@ -9,8 +9,10 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -41,27 +46,40 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun Editor(script: ScriptItem, scriptVm: ScriptViewModel) {
-    var codeField by remember { mutableStateOf(TextFieldValue()) }
+    var codeField by remember { mutableStateOf(TextFieldValue(scriptVm.loadCode(script))) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { ToolBar(script, scriptVm, codeField) }
     ) {
-        TextField(value = codeField, onValueChange = { codeField = it })
+        TextField(
+            value = codeField,
+            onValueChange = { codeField = it },
+            modifier = Modifier.fillMaxSize(),
+            colors = TextFieldDefaults.textFieldColors(
+                disabledIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                backgroundColor = Color.White
+            )
+        )
     }
 }
 
 @Composable
 private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: TextFieldValue) {
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .height(100.dp)
             .background(color = colors.primary)
-            .padding(PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp))
+            .padding(top = 16.dp, bottom = 10.dp)
     ) {
         val (menu, title, setting, save, classList) = createRefs()
 
@@ -70,7 +88,7 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
             contentDescription = null,
             tint = Color.White,
             modifier = Modifier.constrainAs(menu) {
-                start.linkTo(parent.start)
+                start.linkTo(parent.start, 16.dp)
                 top.linkTo(parent.top)
             }
         )
@@ -78,7 +96,7 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
             text = script.name,
             color = Color.White,
             modifier = Modifier.constrainAs(title) {
-                start.linkTo(menu.start, 8.dp)
+                start.linkTo(menu.end, 10.dp)
                 top.linkTo(menu.top)
                 bottom.linkTo(menu.bottom)
             }
@@ -86,18 +104,23 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
         Icon(
             painter = painterResource(R.drawable.ic_round_settings_24),
             contentDescription = null,
+            tint = Color.White,
             modifier = Modifier.constrainAs(setting) {
-                end.linkTo(parent.end)
+                end.linkTo(parent.end, 16.dp)
                 top.linkTo(parent.top)
             }
         )
         Icon(
             painter = painterResource(R.drawable.ic_round_save_24),
             contentDescription = null,
+            tint = Color.White,
             modifier = Modifier
-                .clickable { scriptVm.save(script, codeField.text) }
+                .clickable {
+                    toast(context as Activity, context.getString(R.string.editor_toast_saved))
+                    scriptVm.save(script, codeField.text)
+                }
                 .constrainAs(save) {
-                    end.linkTo(setting.end, 8.dp)
+                    end.linkTo(setting.start, 10.dp)
                     top.linkTo(parent.top)
                 }
         )
@@ -109,17 +132,19 @@ private fun ToolBar(script: ScriptItem, scriptVm: ScriptViewModel, codeField: Te
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
-                }
+                },
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(scriptVm.loadClassList(script)) { scriptClass ->
-                val shape = RoundedCornerShape(10.dp)
+                val shape = RoundedCornerShape(15.dp)
                 Text(
                     text = scriptClass.name,
                     modifier = Modifier
                         .wrapContentSize()
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                         .clip(shape)
                         .background(color = Color.White, shape = shape)
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                 )
             }
         }

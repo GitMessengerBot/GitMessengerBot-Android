@@ -45,4 +45,6 @@
     <string name="script_add_input_name">스크립트 이름을 입력해 주세요.</string>
     <string name="script_add_name">스크립트 이름</string>
     <string name="script_add_lang">스크립트 언어</string>
+
+    <string name="editor_toast_saved">저장되었습니다.</string>
 </resources>
