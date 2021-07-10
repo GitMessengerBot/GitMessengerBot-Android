@@ -10,11 +10,11 @@
 package me.sungbin.gitmessengerbot.bot.api
 
 class Log {
-    /*fun test(value: Any) {
-        Logger.w("Log.test", value)
+    fun print(value: Any) {
+        println(value)
     }
 
-    fun e(message: String) {
+    /*fun e(message: String) {
         // todo: error 로그 만들기
     }
 

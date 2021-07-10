@@ -24,6 +24,7 @@ import me.sungbin.gitmessengerbot.App
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptClass
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.bot.api.BotApi
+import me.sungbin.gitmessengerbot.bot.api.Log
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Script
 import me.sungbin.gitmessengerbot.util.Storage
@@ -125,6 +126,12 @@ object Bot {
                 listOf(String::class.java, String::class.java, String::class.java)
             )
         )
+        v8.addApi(
+            apiName = "Log",
+            apiClass = Log(),
+            methodNameArray = listOf("print"),
+            argumentsListArray = listOf(listOf(Any::class.java))
+        )
         /*v8.addApi(
             "Api",
             Api(),
@@ -174,10 +181,11 @@ object Bot {
         v8.executeScript(code)
         StackManager.v8[script.id] = v8
         println("script compiled: ${script.id}")
-        println("hash: " + StackManager.v8[script.id])
+        println("code: $code")
         v8.locker.release()
         CompileResult.Success
     } catch (exception: Exception) {
+        exception.printStackTrace()
         CompileResult.Error(exception)
     }
 
@@ -197,11 +205,12 @@ object Bot {
                     return
                 }
                 v8.locker.acquire()
-                val arguments = V8Object(v8).run {
+                val arguments = V8Object(v8).apply {
                     add("room", room)
                     add("message", message)
                     add("sender", sender)
                     add("isGroupChat", isGroupChat)
+                    add("profileImageBase64", "null") // todo
                 }
                 v8.executeJSFunction("onMessage", arguments)
                 v8.locker.release()

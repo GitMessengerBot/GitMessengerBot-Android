@@ -13,7 +13,7 @@ import android.content.Context
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.StackManager
 
-class BotApi(private val context: Context){
+class BotApi(private val context: Context) {
     private val showAll = "\u200b".repeat(500)
 
     fun reply(room: String, message: String) {
