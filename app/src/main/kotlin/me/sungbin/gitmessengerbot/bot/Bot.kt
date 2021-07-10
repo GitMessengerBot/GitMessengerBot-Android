@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.eclipsesource.v8.V8
@@ -37,8 +38,11 @@ object Bot {
     private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
 
     val scripts
-        get() = _scripts.sortedByDescending { it.lang }.sortedByDescending { it.name }.asReversed()
-    val app get() = _app.value
+        get() = _scripts
+            .sortedByDescending { it.name }
+            .sortedByDescending { it.lang }
+            .asReversed()
+    val app: State<App> get() = _app // flow; unnecessary gatter
 
     init {
         _scripts.addAll(Script.getList())
@@ -49,15 +53,26 @@ object Bot {
 
     fun getPowerOnScripts() = scripts.filter { it.power }
 
+    /**
+     * 앱 정보 json 파일 저장
+     */
     fun save(app: App) {
         _app.value = app
+        Storage.write(PathConfig.AppData, Json.toString(app))
     }
 
+    /**
+     * 스크립트 추가 및 json 정보 파일 저장
+     */
     fun save(script: ScriptItem) {
         _scripts.removeIf { it.id == script.id }
         _scripts.add(script)
+        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
+    /**
+     * 스크립트 소스코드 저장
+     */
     fun save(script: ScriptItem, code: String) {
         Storage.write(
             PathConfig.Script(script.name, script.lang),

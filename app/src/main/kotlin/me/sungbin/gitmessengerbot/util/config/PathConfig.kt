@@ -20,11 +20,26 @@ object PathConfig {
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"
 
+    /**
+     * 스크립트 코드 파일
+     *
+     * "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"
+     */
     fun Script(name: String, lang: Int) =
         "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"
 
+    /**
+     * 스크립트 리스트 경로
+     *
+     * "$AppStorage/scripts/${lang.toScriptLangName()}"
+     */
     fun ScriptPath(lang: Int) = "$AppStorage/scripts/${lang.toScriptLangName()}"
 
+    /**
+     * 스크립트 json 데이터 파일
+     *
+     *  "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json"
+     */
     fun ScriptData(name: String, lang: Int) =
         "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json"
 }

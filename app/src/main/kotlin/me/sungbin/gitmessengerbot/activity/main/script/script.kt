@@ -162,6 +162,7 @@ private fun Header() {
     val context = LocalContext.current
     val githubJson = Storage.read(PathConfig.GithubData, "")!!
     val githubData = Json.toModel(githubJson, GithubData::class)
+    var power by remember { mutableStateOf(Bot.app.value.power) }
 
     ConstraintLayout(
         modifier = Modifier
@@ -221,9 +222,12 @@ private fun Header() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(stringResource(R.string.main_menu_on))
+                    Text(
+                        if (power) stringResource(R.string.main_menu_on)
+                        else stringResource(R.string.main_menu_off)
+                    )
                     Switch(
-                        checked = Bot.app.power,
+                        checked = power,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = colors.primaryVariant,
                             checkedTrackColor = colors.primary,
@@ -236,8 +240,8 @@ private fun Header() {
                             } else {
                                 context.stopService(Intent(context, BackgroundService::class.java))
                             }
-                            Bot.app.power = it
-                            Bot.save(Bot.app)
+                            power = it
+                            Bot.save(Bot.app.value.copy(power = power))
                         }
                     )
                 }
