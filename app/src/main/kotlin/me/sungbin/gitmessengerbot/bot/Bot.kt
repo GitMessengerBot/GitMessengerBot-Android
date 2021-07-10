@@ -173,6 +173,8 @@ object Bot {
         )*/
         v8.executeScript(code)
         StackManager.v8[script.id] = v8
+        println("script compiled: ${script.id}")
+        println("hash: " + StackManager.v8[script.id])
         v8.locker.release()
         CompileResult.Success
     } catch (exception: Exception) {
