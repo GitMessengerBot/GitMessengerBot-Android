@@ -44,26 +44,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
-import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResult
+import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
-fun Editor(script: ScriptItem, scriptVm: ScriptViewModel, ts2JsRepo: Ts2JsRepo) {
-    var codeField by remember { mutableStateOf(TextFieldValue(scriptVm.loadCode(script))) }
+fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
+    var codeField by remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ToolBar(
                 script = script,
-                scriptVm = scriptVm,
                 codeField = codeField,
                 ts2JsRepo = ts2JsRepo
             )
@@ -84,12 +80,7 @@ fun Editor(script: ScriptItem, scriptVm: ScriptViewModel, ts2JsRepo: Ts2JsRepo) 
 }
 
 @Composable
-private fun ToolBar(
-    script: ScriptItem,
-    scriptVm: ScriptViewModel,
-    codeField: TextFieldValue,
-    ts2JsRepo: Ts2JsRepo
-) {
+private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts2JsRepo) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -139,7 +130,7 @@ private fun ToolBar(
             modifier = Modifier
                 .clickable {
                     toast(context as Activity, context.getString(R.string.editor_toast_saved))
-                    scriptVm.save(script, codeField.text)
+                    Bot.write(script, codeField.text)
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
@@ -153,10 +144,10 @@ private fun ToolBar(
             modifier = Modifier
                 .rotate(-90f)
                 .clickable {
-                    coroutineScope.launch {
-                        val code = codeField.text
+                    // todo: ts2js preview dialog
+                    /*coroutineScope.launch {
                         ts2JsRepo
-                            .convert(code)
+                            .convert(codeField.text)
                             .collect { result ->
                                 println(
                                     when (result) {
@@ -165,7 +156,7 @@ private fun ToolBar(
                                     }
                                 )
                             }
-                    }
+                    }*/
                 }
                 .constrainAs(reload) {
                     end.linkTo(save.start, 10.dp)
@@ -184,7 +175,7 @@ private fun ToolBar(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(scriptVm.loadClassList(script)) { scriptClass ->
+            items(Bot.loadClassList(script)) { scriptClass ->
                 val shape = RoundedCornerShape(15.dp)
                 Text(
                     text = scriptClass.name,

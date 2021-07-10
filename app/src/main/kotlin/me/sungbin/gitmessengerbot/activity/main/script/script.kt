@@ -14,6 +14,7 @@ import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -71,15 +72,19 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlin.random.Random
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.EditorActivity
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResult
 import me.sungbin.gitmessengerbot.bot.Bot
+import me.sungbin.gitmessengerbot.bot.CompileResult
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.util.Script
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
@@ -120,7 +125,7 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(githubData: GithubData) {
+fun ScriptContent(githubData: GithubData, ts2JsRepo: Ts2JsRepo) {
     Column(modifier = Modifier.fillMaxSize()) {
         Header(githubData)
         Column(
@@ -146,7 +151,7 @@ fun ScriptContent(githubData: GithubData) {
                     fontSize = 18.sp
                 )
             }
-            LazyScript(modifier = Modifier.padding(top = 15.dp))
+            LazyScript(modifier = Modifier.padding(top = 15.dp), ts2JsRepo = ts2JsRepo)
         }
     }
 }
@@ -268,7 +273,7 @@ private fun Header(githubData: GithubData) {
 }
 
 @Composable
-private fun LazyScript(modifier: Modifier) {
+private fun LazyScript(modifier: Modifier, ts2JsRepo: Ts2JsRepo) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -276,16 +281,21 @@ private fun LazyScript(modifier: Modifier) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(Bot.scripts) { script ->
-            ScriptView(script = script)
+        items(Bot.scripts) { _script ->
+            val script = _script.copy(
+                power = Bot.getPower(_script.id, _script.power).value,
+                compiled = Bot.getCompileState(_script.id, _script.compiled).value
+            )
+            ScriptView(script = script, ts2JsRepo = ts2JsRepo)
         }
     }
 }
 
 @Composable
-private fun ScriptView(script: ScriptItem) {
+private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Row(
         modifier = Modifier
@@ -397,6 +407,32 @@ private fun ScriptView(script: ScriptItem) {
                 modifier = Modifier
                     .size(25.dp)
                     .rotate(-90f)
+                    .clickable {
+                        coroutineScope.launch {
+                            ts2JsRepo
+                                .convert(Bot.getCode(script))
+                                .collect { result ->
+                                    when (result) {
+                                        is Ts2JsResult.Success -> {
+                                            val tsCode = result.ts2js.tsCode
+                                            println(tsCode)
+                                            val compileResult =
+                                                Bot.compileJavaScript(context, script, tsCode)
+                                            toast(
+                                                context,
+                                                when (compileResult) {
+                                                    is CompileResult.Success -> "컴파일 성공"
+                                                    is CompileResult.Error -> "컴파일 에러: ${compileResult.exception}"
+                                                }
+                                            )
+                                        }
+                                        is Ts2JsResult.Error -> {
+                                            Util.error(context, result.exception)
+                                        }
+                                    }
+                                }
+                        }
+                    }
                     .constrainAs(reload) {
                         end.linkTo(edit.start, 8.dp)
                         top.linkTo(parent.top)
@@ -550,7 +586,6 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                         compiled = false,
                         lastRun = ""
                     )
-                    Script.create(scriptItem)
                     Bot.addScript(scriptItem)
                     coroutineScope.launch {
                         bottomSheetScaffoldState.bottomSheetState.collapse()

@@ -22,8 +22,8 @@ object Script {
         Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
-    fun remove(name: String, lang: Int) {
-        Storage.remove(PathConfig.Script(name, lang))
+    fun remove(script: ScriptItem) {
+        Storage.remove(PathConfig.Script(script.name, script.lang))
     }
 
     fun getList(): List<ScriptItem> {

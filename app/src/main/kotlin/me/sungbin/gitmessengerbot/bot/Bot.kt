@@ -23,14 +23,17 @@ import com.eclipsesource.v8.V8Object
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptClass
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.bot.api.BotApi
+import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Script
 import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.PathConfig
-import me.sungbin.gitmessengerbot.util.extension.toast
 
+@Suppress("ObjectPropertyName")
 object Bot {
-    @Suppress("ObjectPropertyName")
     private val _scripts = SnapshotStateList<ScriptItem>()
+    private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
+    private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
     val scripts: List<ScriptItem> get() = _scripts
 
     init {
@@ -39,34 +42,53 @@ object Bot {
 
     fun getPowerOnScripts() = scripts.filter { it.power }
 
-    fun addScript(scriptItem: ScriptItem) {
-        _scripts.add(scriptItem)
+    fun save(script: ScriptItem) {
+        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
-    fun removeScript(scriptItem: ScriptItem) {
-        _scripts.remove(scriptItem)
+    fun addScript(script: ScriptItem) {
+        _scripts.add(script)
+        Script.create(script)
     }
 
-    private val compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
+    fun removeScript(script: ScriptItem) {
+        _scripts.remove(script)
+        Script.remove(script)
+    }
 
-    fun getCompileState(id: Int): State<Boolean> {
-        if (compileStates[id] == null) {
-            compileStates[id] = mutableStateOf(false)
+    fun write(script: ScriptItem, code: String) {
+        Storage.write(PathConfig.Script(script.name, script.lang), code)
+    }
+
+    fun updateCompileState(id: Int, state: Boolean) {
+        _compileStates[id] = mutableStateOf(state)
+    }
+
+    fun getCompileState(id: Int, default: Boolean): State<Boolean> {
+        if (_compileStates[id] == null) {
+            _compileStates[id] = mutableStateOf(default)
         }
-        return compileStates[id]!!
+        return _compileStates[id]!!
+    }
+
+    fun updatePower(id: Int, power: Boolean) {
+        _scriptPowers[id] = mutableStateOf(power)
+    }
+
+    fun getPower(id: Int, default: Boolean): State<Boolean> {
+        if (_scriptPowers[id] == null) {
+            _scriptPowers[id] = mutableStateOf(default)
+        }
+        return _scriptPowers[id]!!
     }
 
     fun getScriptById(id: Int) = scripts.first { it.id == id }
 
     fun setCompileState(id: Int, state: Boolean) {
-        compileStates[id] = mutableStateOf(state)
+        _compileStates[id] = mutableStateOf(state)
     }
 
-    fun save(script: ScriptItem, code: String) {
-        Storage.write(PathConfig.Script(script.name, script.lang), code)
-    }
-
-    fun loadCode(script: ScriptItem) =
+    fun getCode(script: ScriptItem) =
         Storage.read(PathConfig.Script(script.name, script.lang), "")!!
 
     fun loadClassList(scriptItem: ScriptItem): List<ScriptClass> { // todo
@@ -84,12 +106,11 @@ object Bot {
             RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
             session.actionIntent.send(context, 0, sendIntent)
         } catch (exception: Exception) {
-            toast(context, "Error: replyToSession (${exception.message})")
-            println(exception.message)
+            Util.error(context, exception)
         }
     }
 
-    fun compileJavaScript(context: Context, script: ScriptItem) = try {
+    fun compileJavaScript(context: Context, script: ScriptItem, code: String) = try {
         val v8 = V8.createV8Runtime()
         v8.addApi(
             apiName = "Bot",
@@ -146,7 +167,7 @@ object Bot {
                 arrayOf(String::class.java, String::class.java, Int::class.java),
             )
         )*/
-        v8.executeScript(loadCode(script))
+        v8.executeScript(code)
         StackManager.v8[script.id] = v8
         v8.locker.release()
         CompileResult.Success
@@ -183,7 +204,7 @@ object Bot {
                 // todo: 디버그 만들기
             }
         } catch (exception: Exception) {
-            toast(context, exception.message!!)
+            Util.error(context, exception)
         }
     }
 

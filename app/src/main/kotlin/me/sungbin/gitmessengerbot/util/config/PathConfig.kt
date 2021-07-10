@@ -12,14 +12,17 @@ package me.sungbin.gitmessengerbot.util.config
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptLangName
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 
+@Suppress("FunctionName")
 object PathConfig {
     private const val AppStorage = "GitMessengerBot/data"
     const val GithubData = "$AppStorage/github-data.json"
     const val IntentScriptId = "intent-script-id"
 
-    val Script =
-        { name: String, lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}" }
-    val ScriptPath = { lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}" }
-    val ScriptData =
-        { name: String, lang: Int -> "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json" }
+    fun Script(name: String, lang: Int) =
+        "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"
+
+    fun ScriptPath(lang: Int) = "$AppStorage/scripts/${lang.toScriptLangName()}"
+
+    fun ScriptData(name: String, lang: Int) =
+        "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json"
 }
