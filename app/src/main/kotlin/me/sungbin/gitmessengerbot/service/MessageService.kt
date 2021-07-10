@@ -10,7 +10,6 @@
 package me.sungbin.gitmessengerbot.service
 
 import android.app.Notification
-import android.content.Context
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -18,22 +17,21 @@ import android.text.Spanned
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.StackManager.sessions
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 class MessageService : NotificationListenerService() {
 
-    private lateinit var context: Context
-
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
         toast(applicationContext, getString(R.string.service_message_bot_start))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        toast(context, getString(R.string.service_message_bot_stop))
+        toast(applicationContext, getString(R.string.service_message_bot_stop))
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
@@ -116,24 +114,24 @@ class MessageService : NotificationListenerService() {
 
     private fun chatHook(
         room: String,
-        msg: String,
+        message: String,
         sender: String,
         isGroupChat: Boolean
     ) {
         try {
-            /*for (bot in botItems) {
-                me.sungbin.gitmessengerbot.bot.Bot.callJsResponder(
-                    bot,
-                    room,
-                    msg,
-                    sender,
-                    isGroupChat,
-                    packageName,
-                    false
+            for (script in Bot.scripts) {
+                Bot.callJsResponder(
+                    context = applicationContext,
+                    script = script,
+                    room = room,
+                    message = message,
+                    sender = sender,
+                    isGroupChat = isGroupChat,
+                    isDebugMode = false
                 )
-            }*/
+            }
         } catch (exception: Exception) {
-            //  UiUtil.error(context, exception)
+            Util.error(applicationContext, exception)
         }
     }
 }
