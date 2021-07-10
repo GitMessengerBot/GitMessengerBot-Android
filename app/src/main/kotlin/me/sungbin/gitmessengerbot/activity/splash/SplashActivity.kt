@@ -38,10 +38,11 @@ import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
-import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 
 class SplashActivity : ComponentActivity() {
@@ -50,19 +51,19 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-
         setContent {
             MaterialTheme {
                 Splash()
             }
         }
 
+        val isSetupDone = Storage.read(PathConfig.GithubData, null) != null
         doDelay(2000) {
             finish()
             startActivity(
                 Intent(
                     this,
-                    if (Bot.app.setup) MainActivity::class.java else SetupActivity::class.java
+                    if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
                 )
             )
         }

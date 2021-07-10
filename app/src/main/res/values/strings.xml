@@ -51,6 +51,6 @@
     <string name="notification_channel_name">GitMessengerBot - BackgroundService</string>
 
     <string name="service_notification_bot_running">봇이 작동중 입니다…</string>
-    <string name="service_message_bot_start">봇이 작동되기 시작합니다.</string>
-    <string name="service_message_bot_stop">봇이 꺼졌습니다.</string>
+    <string name="service_message_bot_start">알림 읽기 서비스가 시작되었습니다.</string>
+    <string name="service_message_bot_stop">알림 읽기 서비스가 중지되었습니다.</string>
 </resources>

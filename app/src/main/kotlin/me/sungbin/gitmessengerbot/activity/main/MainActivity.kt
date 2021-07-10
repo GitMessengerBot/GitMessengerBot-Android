@@ -53,7 +53,7 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -100,6 +100,8 @@ class MainActivity : ComponentActivity() {
             coroutineScope.launch {
                 if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
                     bottomSheetScaffoldState.bottomSheetState.collapse()
+                } else {
+                    finish()
                 }
             }
         }

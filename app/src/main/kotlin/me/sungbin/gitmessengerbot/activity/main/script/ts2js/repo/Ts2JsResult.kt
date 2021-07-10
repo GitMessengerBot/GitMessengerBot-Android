@@ -7,7 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.script.ts2js
+package me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo
+
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2Js
 
 sealed class Ts2JsResult {
     data class Success(val ts2js: Ts2Js) : Ts2JsResult()

@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repo.github
+package me.sungbin.gitmessengerbot.activity.setup.github.repo
 
-import me.sungbin.gitmessengerbot.repo.github.model.GithubUser
+import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubUser
 
 sealed class GithubRepoResult {
     data class Error(val exception: Exception) : GithubRepoResult()

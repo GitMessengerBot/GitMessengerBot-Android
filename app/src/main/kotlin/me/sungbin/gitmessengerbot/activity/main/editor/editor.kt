@@ -45,7 +45,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.extension.toast

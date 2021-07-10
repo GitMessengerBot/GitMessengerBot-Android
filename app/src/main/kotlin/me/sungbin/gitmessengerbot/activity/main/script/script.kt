@@ -75,11 +75,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.EditorActivity
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResult
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsResult
+import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.CompileResult
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray

@@ -11,6 +11,5 @@ package me.sungbin.gitmessengerbot
 
 data class App(
     var power: Boolean = false,
-    var defaultLang: Int = 0,
-    var setup: Boolean = false
+    var defaultLang: Int = 0
 )

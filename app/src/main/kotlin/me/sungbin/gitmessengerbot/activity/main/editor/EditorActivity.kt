@@ -15,7 +15,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController

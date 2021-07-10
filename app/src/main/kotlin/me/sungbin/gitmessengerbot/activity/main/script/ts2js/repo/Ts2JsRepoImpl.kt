@@ -7,12 +7,13 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.script.ts2js
+package me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo
 
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2Js
 import me.sungbin.gitmessengerbot.util.Json
 import org.jsoup.Connection
 

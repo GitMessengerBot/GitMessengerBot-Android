@@ -14,6 +14,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepoImpl
 import org.jsoup.Jsoup
 
 @Module

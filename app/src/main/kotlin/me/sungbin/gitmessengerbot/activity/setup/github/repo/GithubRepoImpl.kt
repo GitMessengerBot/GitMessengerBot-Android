@@ -7,12 +7,13 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.repo.github
+package me.sungbin.gitmessengerbot.activity.setup.github.repo
 
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import me.sungbin.gitmessengerbot.activity.setup.github.GithubService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -27,10 +28,15 @@ class GithubRepoImpl @Inject constructor(
 
     private class AuthInterceptor(private val token: String) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
-            val builder = chain.request().newBuilder()
-                .addHeader("Authorization", "token $token")
-                .addHeader("Accept", "application/json")
-            return chain.proceed(builder.build())
+            var builder = chain.request().newBuilder()
+            return try {
+                builder = builder
+                    .addHeader("Authorization", "token $token")
+                    .addHeader("Accept", "application/json")
+                chain.proceed(builder.build())
+            } catch (ignored: Exception) {
+                chain.proceed(builder.build())
+            }
         }
     }
 
