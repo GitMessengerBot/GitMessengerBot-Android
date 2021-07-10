@@ -237,6 +237,7 @@ private fun Header() {
                                 context.stopService(Intent(context, BackgroundService::class.java))
                             }
                             Bot.app.power = it
+                            Bot.save(Bot.app)
                         }
                     )
                 }

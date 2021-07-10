@@ -9,7 +9,6 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -130,7 +129,7 @@ private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts
             modifier = Modifier
                 .clickable {
                     toast(context, context.getString(R.string.editor_toast_saved))
-                    Bot.write(script, codeField.text)
+                    Bot.save(script, codeField.text)
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
@@ -175,7 +174,7 @@ private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(Bot.loadClassList(script)) { scriptClass ->
+            items(Bot.getClassList(script)) { scriptClass ->
                 val shape = RoundedCornerShape(15.dp)
                 Text(
                     text = scriptClass.name,

@@ -58,6 +58,13 @@ object Bot {
         _scripts.add(script)
     }
 
+    fun save(script: ScriptItem, code: String) {
+        Storage.write(
+            PathConfig.Script(script.name, script.lang),
+            code
+        )
+    }
+
     fun addScript(script: ScriptItem) {
         _scripts.add(script)
         Script.create(script)
