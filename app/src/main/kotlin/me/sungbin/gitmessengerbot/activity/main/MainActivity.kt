@@ -51,7 +51,6 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
-import me.sungbin.gitmessengerbot.activity.main.script.ScriptViewModel
 import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
@@ -66,7 +65,6 @@ import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 class MainActivity : ComponentActivity() {
 
-    private val scriptVm: ScriptViewModel by viewModels()
     private val settingVm: SettingViewModel by viewModels()
     private val debugVm: DebugViewModel by viewModels()
 
@@ -107,7 +105,7 @@ class MainActivity : ComponentActivity() {
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            sheetContent = { ScriptAddContent(scriptVm, bottomSheetScaffoldState) },
+            sheetContent = { ScriptAddContent(bottomSheetScaffoldState) },
             sheetElevation = 0.dp,
             sheetPeekHeight = 0.dp,
             modifier = Modifier.fillMaxSize()
@@ -124,10 +122,7 @@ class MainActivity : ComponentActivity() {
                         .padding(bottom = 60.dp)
                 ) { index ->
                     when (index) {
-                        Tab.Script -> ScriptContent(
-                            githubData = githubData,
-                            scriptVm = scriptVm
-                        )
+                        Tab.Script -> ScriptContent(githubData = githubData)
                         else -> Text(text = "TODO")
                     }
                 }

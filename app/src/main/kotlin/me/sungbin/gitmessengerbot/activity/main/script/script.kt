@@ -74,6 +74,7 @@ import kotlin.random.Random
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.EditorActivity
+import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
@@ -119,9 +120,9 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(githubData: GithubData, scriptVm: ScriptViewModel) {
+fun ScriptContent(githubData: GithubData) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Header(githubData, scriptVm)
+        Header(githubData)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -145,16 +146,13 @@ fun ScriptContent(githubData: GithubData, scriptVm: ScriptViewModel) {
                     fontSize = 18.sp
                 )
             }
-            LazyScript(
-                modifier = Modifier.padding(top = 15.dp),
-                scriptVm = scriptVm
-            )
+            LazyScript(modifier = Modifier.padding(top = 15.dp))
         }
     }
 }
 
 @Composable
-private fun Header(githubData: GithubData, scriptVm: ScriptViewModel) {
+private fun Header(githubData: GithubData) {
     var botPower by remember { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -233,7 +231,7 @@ private fun Header(githubData: GithubData, scriptVm: ScriptViewModel) {
                 modifier = Modifier.weight(1f)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = scriptVm.scripts.size.toString(), fontSize = 35.sp)
+                    Text(text = Bot.scripts.size.toString(), fontSize = 35.sp)
                     Text(text = "개", fontSize = 8.sp)
                 }
             }
@@ -243,7 +241,7 @@ private fun Header(githubData: GithubData, scriptVm: ScriptViewModel) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = scriptVm.scripts.filter { it.power }.size.toString(),
+                        text = Bot.getPowerOnScripts().size.toString(),
                         fontSize = 35.sp
                     )
                     Text(text = "개", fontSize = 8.sp)
@@ -270,7 +268,7 @@ private fun Header(githubData: GithubData, scriptVm: ScriptViewModel) {
 }
 
 @Composable
-private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
+private fun LazyScript(modifier: Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -278,7 +276,7 @@ private fun LazyScript(modifier: Modifier, scriptVm: ScriptViewModel) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(scriptVm.scripts) { script ->
+        items(Bot.scripts) { script ->
             ScriptView(script = script)
         }
     }
@@ -473,10 +471,7 @@ private fun ScriptView(script: ScriptItem) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ScriptAddContent(
-    scriptVm: ScriptViewModel,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
-) {
+fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
     val context = LocalContext.current
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
     var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
@@ -556,7 +551,7 @@ fun ScriptAddContent(
                         lastRun = ""
                     )
                     Script.create(scriptItem)
-                    scriptVm.addScript(scriptItem)
+                    Bot.addScript(scriptItem)
                     coroutineScope.launch {
                         bottomSheetScaffoldState.bottomSheetState.collapse()
                     }

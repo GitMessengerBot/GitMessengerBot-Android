@@ -9,4 +9,4 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script
 
-data class Class(val name: String, val code: String)
+data class ScriptClass(val name: String, val code: String)

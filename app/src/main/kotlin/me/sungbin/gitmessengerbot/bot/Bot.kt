@@ -14,15 +14,65 @@ import android.app.RemoteInput
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptClass
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
-import me.sungbin.gitmessengerbot.bot.api.Bot
+import me.sungbin.gitmessengerbot.bot.api.BotApi
+import me.sungbin.gitmessengerbot.util.Script
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 
-object BotUtil {
+object Bot {
+    @Suppress("ObjectPropertyName")
+    private val _scripts = SnapshotStateList<ScriptItem>()
+    val scripts: List<ScriptItem> get() = _scripts
+
+    init {
+        _scripts.addAll(Script.getList())
+    }
+
+    fun getPowerOnScripts() = scripts.filter { it.power }
+
+    fun addScript(scriptItem: ScriptItem) {
+        _scripts.add(scriptItem)
+    }
+
+    fun removeScript(scriptItem: ScriptItem) {
+        _scripts.remove(scriptItem)
+    }
+
+    private val compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
+
+    fun getCompileState(id: Int): State<Boolean> {
+        if (compileStates[id] == null) {
+            compileStates[id] = mutableStateOf(false)
+        }
+        return compileStates[id]!!
+    }
+
+    fun getScriptById(id: Int) = scripts.first { it.id == id }
+
+    fun setCompileState(id: Int, state: Boolean) {
+        compileStates[id] = mutableStateOf(state)
+    }
+
+    fun save(script: ScriptItem, code: String) {
+        Storage.write(PathConfig.Script(script.name, script.lang), code)
+    }
+
+    fun loadCode(script: ScriptItem) =
+        Storage.read(PathConfig.Script(script.name, script.lang), "")!!
+
+    fun loadClassList(scriptItem: ScriptItem): List<ScriptClass> { // todo
+        return List(100) { ScriptClass(name = "test{$it}", code = "") }
+    }
+
     fun replyToSession(context: Context, session: Notification.Action, message: String) {
         try {
             val sendIntent = Intent()
@@ -43,7 +93,7 @@ object BotUtil {
         val v8 = V8.createV8Runtime()
         v8.addApi(
             apiName = "Bot",
-            apiClass = Bot(context),
+            apiClass = BotApi(context),
             methodNameArray = listOf("reply", "replyShowAll"),
             argumentsListArray = listOf(
                 listOf(String::class.java, String::class.java),
@@ -158,7 +208,4 @@ object BotUtil {
 
         api.release()
     }
-
-    private fun loadCode(script: ScriptItem) =
-        Storage.read(PathConfig.Script(script.name, script.lang), "")!!
 }
