@@ -205,14 +205,8 @@ object Bot {
                     return
                 }
                 v8.locker.acquire()
-                val arguments = V8Object(v8).apply {
-                    add("room", room)
-                    add("message", message)
-                    add("sender", sender)
-                    add("isGroupChat", isGroupChat)
-                    add("profileImageBase64", "null") // todo
-                }
-                v8.executeJSFunction("onMessage", arguments)
+                val arguments = listOf(room, message, sender, isGroupChat, "null") // todo
+                v8.executeJSFunction("onMessage", *arguments.toTypedArray())
                 v8.locker.release()
                 println("${script.name}: 실행됨")
             } else {

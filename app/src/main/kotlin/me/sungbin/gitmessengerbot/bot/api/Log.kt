@@ -12,6 +12,7 @@ package me.sungbin.gitmessengerbot.bot.api
 class Log {
     fun print(value: Any) {
         println(value)
+        println("called: Log.print($value)")
     }
 
     /*fun e(message: String) {
