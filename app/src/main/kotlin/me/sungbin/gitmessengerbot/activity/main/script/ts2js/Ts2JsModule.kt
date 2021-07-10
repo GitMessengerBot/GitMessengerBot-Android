@@ -14,34 +14,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import org.jsoup.Jsoup
 
 @Module
 @InstallIn(SingletonComponent::class)
 object Ts2JsModule {
-    private const val BaseUrl = "https://api.extendsclass.com"
-
-    private fun getInterceptor(vararg interceptors: Interceptor): OkHttpClient {
-        val builder = OkHttpClient.Builder()
-        for (interceptor in interceptors) builder.addInterceptor(interceptor)
-        return builder.build()
-    }
+    private const val BaseUrl = "https://api.extendsclass.com/convert/typescript/javascript"
+    private val jsoup = Jsoup.connect(BaseUrl)
 
     @Provides
     @Singleton
-    fun provideRetrofit(httpLoggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
-        .baseUrl(BaseUrl)
-        .client(getInterceptor(httpLoggingInterceptor))
-        .addConverterFactory(GsonConverterFactory.create())
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .build()
-
-    @Provides
-    @Singleton
-    fun provideRepo(retrofit: Retrofit): Ts2JsRepo = Ts2JsRepoImpl(retrofit)
+    fun provideRepo(): Ts2JsRepo = Ts2JsRepoImpl(jsoup)
 }

@@ -77,6 +77,7 @@ android {
 }
 
 dependencies {
+    implementation("org.jsoup:jsoup:1.13.1")
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)

@@ -13,22 +13,29 @@ import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import retrofit2.Retrofit
-import retrofit2.await
+import me.sungbin.gitmessengerbot.util.Json
+import org.jsoup.Connection
 
 class Ts2JsRepoImpl @Inject constructor(
-    private val retrofit: Retrofit
+    private val jsoup: Connection
 ) : Ts2JsRepo {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun convert(js: String) = callbackFlow {
-        try {
-            trySend(
-                Ts2JsResult.Success(
-                    retrofit.create(Ts2JsService::class.java).convert(js).await()
-                )
-            )
-        } catch (exception: Exception) {
-            trySend(Ts2JsResult.Error(exception))
+        runCatching {
+            try {
+                Thread {
+                    trySend(
+                        Ts2JsResult.Success(
+                            Json.toModel(
+                                jsoup.requestBody(js).post().text(),
+                                Ts2Js::class
+                            )
+                        )
+                    )
+                }.start()
+            } catch (exception: Exception) {
+                trySend(Ts2JsResult.Error(exception))
+            }
         }
         awaitClose { close() }
     }
