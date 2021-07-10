@@ -22,6 +22,11 @@ object Ts2JsModule {
     private const val BaseUrl = "https://api.extendsclass.com/convert/typescript/javascript"
     private val jsoup = Jsoup.connect(BaseUrl)
 
+    /* note */
+    // 아마... retrofit하고 jsoup하고 호출 방식이 다름 (나 중딩때 스택오버플에서 봤음! 기억 남 이건!!)
+    // retrofit이 server-side, client-side 둘 중 하나고, jsoup은 retrofit의 반대 방식
+    // retrofit의 방식으로 요청하면 응답이 비정상적으로 옴 -> 반대 방식인 jsoup으로 요청
+
     @Provides
     @Singleton
     fun provideRepo(): Ts2JsRepo = Ts2JsRepoImpl(jsoup)
