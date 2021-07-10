@@ -281,11 +281,7 @@ private fun LazyScript(modifier: Modifier, ts2JsRepo: Ts2JsRepo) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(Bot.scripts) { _script ->
-            val script = _script.copy(
-                power = Bot.getPower(_script.id, _script.power).value,
-                compiled = Bot.getCompileState(_script.id, _script.compiled).value
-            )
+        items(Bot.scripts) { script ->
             ScriptView(script = script, ts2JsRepo = ts2JsRepo)
         }
     }
@@ -296,6 +292,8 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val isCompiled by remember { Bot.getCompileState(script.id, script.power) }
+    val power by remember { Bot.getPower(script.id, script.power) }
 
     Row(
         modifier = Modifier
@@ -328,8 +326,8 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
             ) = createRefs()
 
             val compileStateShape = RoundedCornerShape(15.dp)
-            val compileStateBackgroundColor by animateColorAsState(if (script.compiled) Color.White else Color.Transparent)
-            val compileStateTextColor by animateColorAsState(if (script.compiled) colors.primary else Color.White)
+            val compileStateBackgroundColor by animateColorAsState(if (isCompiled) Color.White else Color.Transparent)
+            val compileStateTextColor by animateColorAsState(if (isCompiled) colors.primary else Color.White)
 
             Text(
                 text = stringResource(R.string.script_item_label_compile),
@@ -421,8 +419,14 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                                             toast(
                                                 context,
                                                 when (compileResult) {
-                                                    is CompileResult.Success -> "컴파일 성공"
-                                                    is CompileResult.Error -> "컴파일 에러: ${compileResult.exception}"
+                                                    is CompileResult.Success -> {
+                                                        Bot.updateCompileState(script.id, true)
+                                                        "컴파일 성공"
+                                                    }
+                                                    is CompileResult.Error -> {
+                                                        Bot.updateCompileState(script.id, false)
+                                                        "컴파일 에러: ${compileResult.exception}"
+                                                    }
                                                 }
                                             )
                                         }
@@ -460,14 +464,14 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                 fontSize = 13.sp
             )
             Switch(
-                checked = script.power,
+                checked = power,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = colors.primaryVariant,
                     uncheckedThumbColor = Color.White,
                     uncheckedTrackColor = Color.Black
                 ),
-                onCheckedChange = {},
+                onCheckedChange = { Bot.updatePower(script.id, !power) },
                 modifier = Modifier.constrainAs(scriptPower) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)

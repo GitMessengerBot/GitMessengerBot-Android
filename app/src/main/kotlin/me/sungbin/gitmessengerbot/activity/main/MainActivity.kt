@@ -46,11 +46,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
+import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
 import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
@@ -63,7 +66,11 @@ import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var ts2JsRepo: Ts2JsRepo
 
     private val settingVm: SettingViewModel by viewModels()
     private val debugVm: DebugViewModel by viewModels()
@@ -122,7 +129,7 @@ class MainActivity : ComponentActivity() {
                         .padding(bottom = 60.dp)
                 ) { index ->
                     when (index) {
-                        Tab.Script -> ScriptContent(githubData = githubData)
+                        Tab.Script -> ScriptContent(githubData = githubData, ts2JsRepo = ts2JsRepo)
                         else -> Text(text = "TODO")
                     }
                 }
