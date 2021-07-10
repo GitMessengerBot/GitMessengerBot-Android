@@ -9,7 +9,6 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -596,7 +595,7 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                     }
                     scriptNameField = TextFieldValue()
                 } else {
-                    toast(context as Activity, context.getString(R.string.script_add_input_name))
+                    toast(context, context.getString(R.string.script_add_input_name))
                 }
             },
             modifier = Modifier

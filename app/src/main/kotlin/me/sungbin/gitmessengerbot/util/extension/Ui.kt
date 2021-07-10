@@ -20,5 +20,5 @@ fun toast(activity: Activity, message: String, length: Int = Toast.LENGTH_SHORT)
 }
 
 fun toast(context: Context, message: String, length: Int = Toast.LENGTH_SHORT) {
-    toast(context as Activity, message, length)
+    Toast.makeText(context, message, length).show()
 }

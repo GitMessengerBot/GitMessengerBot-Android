@@ -47,14 +47,14 @@ class MessageService : NotificationListenerService() {
                     val extras = sbn.notification.extras
                     var room: String?
                     var sender: String?
-                    var msg: String?
+                    var message: String?
                     var isGroupChat = false
                     val packageName = sbn.packageName
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         room = extras.getString("android.summaryText")
                         sender = extras.get("android.title")?.toString()
-                        msg = extras.get("android.text")?.toString()
+                        message = extras.get("android.text")?.toString()
                         if (room == null) {
                             room = sender
                             isGroupChat = false
@@ -84,19 +84,19 @@ class MessageService : NotificationListenerService() {
                                     html.split("<b>")[1].split("</b>")[0],
                                     HtmlCompat.FROM_HTML_MODE_COMPACT
                                 ).toString()
-                                msg = HtmlCompat.fromHtml(
+                                message = HtmlCompat.fromHtml(
                                     html.split("</b>")[1].split("</p>")[0]
                                         .substring(1),
                                     HtmlCompat.FROM_HTML_MODE_COMPACT
                                 ).toString()
                             } else {
                                 sender = room
-                                msg = extras.get("android.text")?.toString()
+                                message = extras.get("android.text")?.toString()
                             }
                         } else {
                             room = extras.getString("android.subText")
                             sender = extras.getString("android.title")
-                            msg = extras.getString("android.text")
+                            message = extras.getString("android.text")
                             isGroupChat = room != null
                             if (room == null) room = sender
                         }
@@ -106,7 +106,8 @@ class MessageService : NotificationListenerService() {
                     /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
                          sbn.notification.getLargeIcon().toBitmap(context)*/ // todo
 
-                    chatHook(room!!, msg!!, sender!!, isGroupChat)
+                    println(listOf(room, message, sender, isGroupChat))
+                    chatHook(room!!, message!!, sender!!, isGroupChat)
                 }
             }
         }

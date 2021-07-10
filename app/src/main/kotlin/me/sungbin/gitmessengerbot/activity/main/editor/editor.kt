@@ -129,7 +129,7 @@ private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    toast(context as Activity, context.getString(R.string.editor_toast_saved))
+                    toast(context, context.getString(R.string.editor_toast_saved))
                     Bot.write(script, codeField.text)
                 }
                 .constrainAs(save) {
