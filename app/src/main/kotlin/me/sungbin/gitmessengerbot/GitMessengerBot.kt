@@ -11,6 +11,16 @@ package me.sungbin.gitmessengerbot
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import me.sungbin.gitmessengerbot.util.NotificationUtil
 
 @HiltAndroidApp
-class GitMessengerBot : Application()
+class GitMessengerBot : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        NotificationUtil.createChannel(
+            context = applicationContext,
+            name = getString(R.string.notification_channel_name),
+            description = getString(R.string.notification_channel_name)
+        )
+    }
+}

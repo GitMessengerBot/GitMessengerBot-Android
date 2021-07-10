@@ -27,7 +27,7 @@ object Versions {
         const val Kotlin = "1.5.10" // todo: 1.5.20
         const val Gradle = "7.1.0-alpha02"
         const val CoreKtx = "1.6.0"
-        const val Coroutines = "1.5.0"
+        const val Coroutines = "1.5.1"
     }
 
     object Ui {
@@ -45,7 +45,7 @@ object Versions {
     object Network {
         const val OkHttp = "4.9.1"
         const val Retrofit = "2.9.0"
-        const val Scalars = "2.4.0"
+        const val Jsoup = "1.13.1"
     }
 
     object Jetpack {
@@ -66,9 +66,19 @@ object Versions {
     object Debug {
         const val LeakCanary = "2.7"
     }
+
+    object Bot {
+        const val RhinoEngine = "1.7.13"
+        const val J2V8 = "6.2.0@aar"
+    }
 }
 
 object Dependencies {
+    val bot = listOf(
+        "org.mozilla:rhino:${Versions.Bot.RhinoEngine}",
+        "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
+    )
+
     val debug = listOf(
         "com.squareup.leakcanary:leakcanary-android:${Versions.Debug.LeakCanary}"
     )
@@ -78,7 +88,7 @@ object Dependencies {
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
-        "com.squareup.retrofit2:converter-scalars:${Versions.Network.Scalars}"
+        "org.jsoup:jsoup:${Versions.Network.Jsoup}",
     )
 
     val essential = listOf(
