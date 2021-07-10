@@ -10,9 +10,7 @@
 package me.sungbin.gitmessengerbot
 
 import android.app.Application
-import android.content.Intent
 import dagger.hilt.android.HiltAndroidApp
-import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.util.NotificationUtil
 
 @HiltAndroidApp
@@ -24,6 +22,5 @@ class GitMessengerBot : Application() {
             name = getString(R.string.notification_channel_name),
             description = getString(R.string.notification_channel_name)
         )
-        startService(Intent(applicationContext, BackgroundService::class.java)) // todo
     }
 }

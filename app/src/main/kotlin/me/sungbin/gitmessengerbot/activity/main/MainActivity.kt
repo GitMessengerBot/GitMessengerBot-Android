@@ -55,16 +55,12 @@ import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsRepo
 import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
-import me.sungbin.gitmessengerbot.repo.github.model.GithubData
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
-import me.sungbin.gitmessengerbot.util.Json
-import me.sungbin.gitmessengerbot.util.Storage
-import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -76,8 +72,6 @@ class MainActivity : ComponentActivity() {
     private val debugVm: DebugViewModel by viewModels()
 
     private var tab by mutableStateOf(Tab.Script)
-    private val githubData =
-        Json.toModel(Storage.read(PathConfig.GithubData, "")!!, GithubData::class)
     private lateinit var onBackPressedAction: () -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +123,7 @@ class MainActivity : ComponentActivity() {
                         .padding(bottom = 60.dp)
                 ) { index ->
                     when (index) {
-                        Tab.Script -> ScriptContent(githubData = githubData, ts2JsRepo = ts2JsRepo)
+                        Tab.Script -> ScriptContent(ts2JsRepo = ts2JsRepo)
                         else -> Text(text = "TODO")
                     }
                 }

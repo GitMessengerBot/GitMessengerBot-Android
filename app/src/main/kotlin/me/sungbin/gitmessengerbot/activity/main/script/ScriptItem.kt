@@ -13,7 +13,7 @@ data class ScriptItem(
     val id: Int,
     val name: String,
     val lang: Int, // ScriptType
-    val power: Boolean,
-    val compiled: Boolean,
-    val lastRun: String
+    var power: Boolean,
+    var compiled: Boolean,
+    var lastRun: String
 )

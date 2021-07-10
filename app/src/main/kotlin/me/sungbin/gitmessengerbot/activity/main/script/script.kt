@@ -80,10 +80,12 @@ import me.sungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResult
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.CompileResult
 import me.sungbin.gitmessengerbot.repo.github.model.GithubData
+import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
-import me.sungbin.gitmessengerbot.util.Util
+import me.sungbin.gitmessengerbot.util.Json
+import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
@@ -124,9 +126,9 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(githubData: GithubData, ts2JsRepo: Ts2JsRepo) {
+fun ScriptContent(ts2JsRepo: Ts2JsRepo) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Header(githubData)
+        Header()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -156,8 +158,10 @@ fun ScriptContent(githubData: GithubData, ts2JsRepo: Ts2JsRepo) {
 }
 
 @Composable
-private fun Header(githubData: GithubData) {
-    var botPower by remember { mutableStateOf(false) }
+private fun Header() {
+    val context = LocalContext.current
+    val githubJson = Storage.read(PathConfig.GithubData, "")!!
+    val githubData = Json.toModel(githubJson, GithubData::class)
 
     ConstraintLayout(
         modifier = Modifier
@@ -219,14 +223,21 @@ private fun Header(githubData: GithubData) {
                 ) {
                     Text(stringResource(R.string.main_menu_on))
                     Switch(
-                        checked = botPower,
+                        checked = Bot.app.power,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = colors.primaryVariant,
                             checkedTrackColor = colors.primary,
                             uncheckedThumbColor = Color.White,
                             uncheckedTrackColor = colors.secondary
                         ),
-                        onCheckedChange = { botPower = it }
+                        onCheckedChange = {
+                            if (it) {
+                                context.startService(Intent(context, BackgroundService::class.java))
+                            } else {
+                                context.stopService(Intent(context, BackgroundService::class.java))
+                            }
+                            Bot.app.power = it
+                        }
                     )
                 }
             }
@@ -291,8 +302,6 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val isCompiled by remember { Bot.getCompileState(script.id, script.power) }
-    val power by remember { Bot.getPower(script.id, script.power) }
 
     Row(
         modifier = Modifier
@@ -325,8 +334,8 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
             ) = createRefs()
 
             val compileStateShape = RoundedCornerShape(15.dp)
-            val compileStateBackgroundColor by animateColorAsState(if (isCompiled) Color.White else Color.Transparent)
-            val compileStateTextColor by animateColorAsState(if (isCompiled) colors.primary else Color.White)
+            val compileStateBackgroundColor by animateColorAsState(if (script.compiled) Color.White else Color.Transparent)
+            val compileStateTextColor by animateColorAsState(if (script.compiled) colors.primary else Color.White)
 
             Text(
                 text = stringResource(R.string.script_item_label_compile),
@@ -340,7 +349,7 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
-                    },
+                    }
             )
             Icon(
                 painter = painterResource(R.drawable.ic_round_cancel_24),
@@ -405,36 +414,42 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                     .size(25.dp)
                     .rotate(-90f)
                     .clickable {
-                        coroutineScope.launch {
-                            ts2JsRepo
-                                .convert(Bot.getCode(script))
-                                .collect { result ->
-                                    when (result) {
-                                        is Ts2JsResult.Success -> {
-                                            val tsCode = result.ts2js.tsCode
-                                            println(tsCode)
-                                            val compileResult =
-                                                Bot.compileJavaScript(context, script, tsCode)
-                                            toast(
-                                                context,
+                        coroutineScope
+                            .launch {
+                                ts2JsRepo
+                                    .convert(Bot.getCode(script))
+                                    .collect { ts2JsResult ->
+                                        val message: String
+                                        when (ts2JsResult) {
+                                            is Ts2JsResult.Success -> {
+                                                val tsCode = ts2JsResult.ts2js.tsCode
+                                                println(tsCode)
+                                                val compileResult =
+                                                    Bot.compileJavaScript(context, script, tsCode)
                                                 when (compileResult) {
                                                     is CompileResult.Success -> {
-                                                        Bot.updateCompileState(script.id, true)
-                                                        "컴파일 성공"
+                                                        script.compiled = true
+                                                        message = "컴파일 성공"
                                                     }
                                                     is CompileResult.Error -> {
-                                                        Bot.updateCompileState(script.id, false)
-                                                        "컴파일 에러: ${compileResult.exception}"
+                                                        script.compiled = false
+                                                        println(compileResult.exception.message)
+                                                        message =
+                                                            "컴파일 에러: ${compileResult.exception.message}"
                                                     }
                                                 }
-                                            )
+                                            }
+                                            is Ts2JsResult.Error -> {
+                                                println(ts2JsResult.exception.message)
+                                                script.compiled = false
+                                                message =
+                                                    "ts2js 에러: ${ts2JsResult.exception.message}"
+                                            }
                                         }
-                                        is Ts2JsResult.Error -> {
-                                            Util.error(context, result.exception)
-                                        }
+                                        Bot.save(script)
+                                        toast(context, message)
                                     }
-                                }
-                        }
+                            }
                     }
                     .constrainAs(reload) {
                         end.linkTo(edit.start, 8.dp)
@@ -463,14 +478,17 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                 fontSize = 13.sp
             )
             Switch(
-                checked = power,
+                checked = script.power,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = colors.primaryVariant,
                     uncheckedThumbColor = Color.White,
                     uncheckedTrackColor = Color.Black
                 ),
-                onCheckedChange = { Bot.updatePower(script.id, !power) },
+                onCheckedChange = {
+                    script.power = it
+                    Bot.save(script)
+                },
                 modifier = Modifier.constrainAs(scriptPower) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)

@@ -15,11 +15,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
+import me.sungbin.gitmessengerbot.App
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptClass
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.bot.api.BotApi
@@ -31,19 +31,31 @@ import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 @Suppress("ObjectPropertyName")
 object Bot {
+    private val _app = mutableStateOf(App())
     private val _scripts = SnapshotStateList<ScriptItem>()
     private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
     private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
-    val scripts: List<ScriptItem> get() = _scripts
+
+    val scripts
+        get() = _scripts.sortedByDescending { it.lang }.sortedByDescending { it.name }.asReversed()
+    val app get() = _app.value
 
     init {
         _scripts.addAll(Script.getList())
+        Storage.read(PathConfig.AppData, null)?.let { appDataJson ->
+            _app.value = Json.toModel(appDataJson, App::class)
+        }
     }
 
     fun getPowerOnScripts() = scripts.filter { it.power }
 
+    fun save(app: App) {
+        _app.value = app
+    }
+
     fun save(script: ScriptItem) {
-        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
+        _scripts.removeIf { it.id == script.id }
+        _scripts.add(script)
     }
 
     fun addScript(script: ScriptItem) {
@@ -56,42 +68,12 @@ object Bot {
         Script.remove(script)
     }
 
-    fun write(script: ScriptItem, code: String) {
-        Storage.write(PathConfig.Script(script.name, script.lang), code)
-    }
-
-    fun updateCompileState(id: Int, state: Boolean) {
-        _compileStates[id] = mutableStateOf(state)
-    }
-
-    fun getCompileState(id: Int, default: Boolean): State<Boolean> {
-        if (_compileStates[id] == null) {
-            _compileStates[id] = mutableStateOf(default)
-        }
-        return _compileStates[id]!!
-    }
-
-    fun updatePower(id: Int, power: Boolean) {
-        _scriptPowers[id] = mutableStateOf(power)
-    }
-
-    fun getPower(id: Int, default: Boolean): State<Boolean> {
-        if (_scriptPowers[id] == null) {
-            _scriptPowers[id] = mutableStateOf(default)
-        }
-        return _scriptPowers[id]!!
-    }
-
     fun getScriptById(id: Int) = scripts.first { it.id == id }
-
-    fun setCompileState(id: Int, state: Boolean) {
-        _compileStates[id] = mutableStateOf(state)
-    }
 
     fun getCode(script: ScriptItem) =
         Storage.read(PathConfig.Script(script.name, script.lang), "")!!
 
-    fun loadClassList(scriptItem: ScriptItem): List<ScriptClass> { // todo
+    fun getClassList(scriptItem: ScriptItem): List<ScriptClass> { // todo
         return List(100) { ScriptClass(name = "test{$it}", code = "") }
     }
 
