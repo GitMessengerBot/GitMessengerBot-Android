@@ -9,7 +9,9 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +29,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,19 +51,31 @@ import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
-    var codeField by remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
+    val selectedScriptClass = remember { mutableStateOf(PathConfig.ScriptDefaultClass) }
+    var codeField by remember {
+        mutableStateOf(
+            TextFieldValue(
+                Bot.getCode(
+                    script,
+                    selectedScriptClass.value
+                )
+            )
+        )
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ToolBar(
                 script = script,
+                ts2JsRepo = ts2JsRepo,
                 codeField = codeField,
-                ts2JsRepo = ts2JsRepo
+                selectedScriptClass = selectedScriptClass
             )
         }
     ) {
@@ -79,7 +94,12 @@ fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
 }
 
 @Composable
-private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts2JsRepo) {
+private fun ToolBar(
+    script: ScriptItem,
+    ts2JsRepo: Ts2JsRepo,
+    codeField: TextFieldValue,
+    selectedScriptClass: MutableState<String>
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -174,15 +194,23 @@ private fun ToolBar(script: ScriptItem, codeField: TextFieldValue, ts2JsRepo: Ts
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(Bot.getClassList(script)) { scriptClass ->
+            items(Bot.getClassList(script)) { className ->
                 val shape = RoundedCornerShape(15.dp)
+                val backgroundColor by animateColorAsState(if (selectedScriptClass.value == className) Color.White else Color.Transparent)
+                val textColor by animateColorAsState(if (selectedScriptClass.value == className) colors.primary else Color.White)
+
                 Text(
-                    text = scriptClass.name,
+                    text = className,
+                    color = textColor,
                     modifier = Modifier
                         .wrapContentSize()
                         .clip(shape)
-                        .background(color = Color.White, shape = shape)
+                        .background(color = backgroundColor, shape = shape)
+                        .border(width = 1.dp, color = Color.White)
                         .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                        .clickable {
+                            selectedScriptClass.value = className
+                        }
                 )
             }
         }

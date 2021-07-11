@@ -21,12 +21,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import me.sungbin.gitmessengerbot.App
-import me.sungbin.gitmessengerbot.activity.main.script.ScriptClass
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
+import me.sungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
 import me.sungbin.gitmessengerbot.bot.api.BotApi
 import me.sungbin.gitmessengerbot.bot.api.Log
 import me.sungbin.gitmessengerbot.util.Json
-import me.sungbin.gitmessengerbot.util.Script
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.PathConfig
@@ -46,7 +45,7 @@ object Bot {
     val app: State<App> get() = _app // flow; unnecessary gatter
 
     init {
-        _scripts.addAll(Script.getList())
+        _scripts.addAll(getList())
         Storage.read(PathConfig.AppData, null)?.let { appDataJson ->
             _app.value = Json.toModel(appDataJson, App::class)
         }
@@ -72,7 +71,7 @@ object Bot {
     }
 
     /**
-     * 스크립트 소스코드 저장
+     * 스크립트 메인 클레스(onMessage) 소스코드 저장
      */
     fun save(script: ScriptItem, code: String) {
         Storage.write(
@@ -81,23 +80,69 @@ object Bot {
         )
     }
 
+    /**
+     * 스크립트 클레스 소스코드 저장
+     */
+    fun save(script: ScriptItem, className: String, code: String) {
+        if (className == PathConfig.ScriptDefaultClass) {
+            save(script, code)
+        } else {
+            Storage.write(
+                PathConfig.ScriptClass(script.name, script.lang, className),
+                code
+            )
+        }
+    }
+
     fun addScript(script: ScriptItem) {
         _scripts.add(script)
-        Script.create(script)
+        Storage.write(
+            PathConfig.Script(script.name, script.lang),
+            script.lang.toScriptDefaultSource()
+        )
+        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
     fun removeScript(script: ScriptItem) {
         _scripts.remove(script)
-        Script.remove(script)
+        Storage.remove(PathConfig.Script(script.name, script.lang))
+    }
+
+    private fun getList(): List<ScriptItem> {
+        val scripts = mutableListOf<ScriptItem>()
+        repeat(4) { lang ->
+            Storage.fileList(PathConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
+                .forEach { scriptDataFile ->
+                    scripts.add(
+                        Json.toModel(
+                            Storage.read(scriptDataFile.path, null)!!,
+                            ScriptItem::class
+                        )
+                    )
+                }
+        }
+        return scripts
     }
 
     fun getScriptById(id: Int) = scripts.first { it.id == id }
 
+    /**
+     * 봇 메인 클레스(onMessage) 코드
+     */
     fun getCode(script: ScriptItem) =
         Storage.read(PathConfig.Script(script.name, script.lang), "")!!
 
-    fun getClassList(scriptItem: ScriptItem): List<ScriptClass> { // todo
-        return List(100) { ScriptClass(name = "test{$it}", code = "") }
+    /**
+     * 봇 서브 클레스 코드
+     */
+    fun getCode(script: ScriptItem, className: String) =
+        Storage.read(PathConfig.ScriptClass(script.name, script.lang, className), "")!!
+
+    fun getClassList(script: ScriptItem): List<String> {
+        val classes = mutableListOf(PathConfig.ScriptDefaultClass)
+        Storage.fileList(PathConfig.ScriptClassPath(script.name, script.lang))
+            .forEach { scriptClass -> classes.add(scriptClass.name.substringBefore(".")) }
+        return classes
     }
 
     fun replyToSession(context: Context, session: Notification.Action, message: String) {
