@@ -9,34 +9,24 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -51,22 +41,11 @@ import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
-    val selectedScriptClass = remember { mutableStateOf(PathConfig.ScriptDefaultClass) }
-    var codeField by remember {
-        mutableStateOf(
-            TextFieldValue(
-                Bot.getCode(
-                    script,
-                    selectedScriptClass.value
-                )
-            )
-        )
-    }
+    var codeField by remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -74,8 +53,7 @@ fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
             ToolBar(
                 script = script,
                 ts2JsRepo = ts2JsRepo,
-                codeField = codeField,
-                selectedScriptClass = selectedScriptClass
+                codeField = codeField
             )
         }
     ) {
@@ -97,8 +75,7 @@ fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
 private fun ToolBar(
     script: ScriptItem,
     ts2JsRepo: Ts2JsRepo,
-    codeField: TextFieldValue,
-    selectedScriptClass: MutableState<String>
+    codeField: TextFieldValue
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -106,11 +83,11 @@ private fun ToolBar(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp)
+            .wrapContentHeight()
             .background(color = colors.primary)
-            .padding(top = 8.dp, bottom = 8.dp)
+            .padding(top = 10.dp, bottom = 16.dp)
     ) {
-        val (menu, title, setting, save, reload, classList) = createRefs()
+        val (menu, title, setting, save, reload) = createRefs()
 
         Icon(
             painter = painterResource(R.drawable.ic_round_menu_24),
@@ -149,7 +126,7 @@ private fun ToolBar(
             modifier = Modifier
                 .clickable {
                     toast(context, context.getString(R.string.editor_toast_saved))
-                    Bot.save(script, selectedScriptClass.value, codeField.text)
+                    Bot.save(script, codeField.text)
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
@@ -182,37 +159,5 @@ private fun ToolBar(
                     top.linkTo(parent.top)
                 }
         )
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(classList) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                },
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(Bot.getClassList(script)) { className ->
-                val shape = RoundedCornerShape(15.dp)
-                val backgroundColor by animateColorAsState(if (selectedScriptClass.value == className) Color.White else Color.Transparent)
-                val textColor by animateColorAsState(if (selectedScriptClass.value == className) colors.primary else Color.White)
-
-                Text(
-                    text = className,
-                    color = textColor,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .clip(shape)
-                        .background(color = backgroundColor, shape = shape)
-                        .border(width = 1.dp, color = Color.White)
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
-                        .clickable {
-                            selectedScriptClass.value = className
-                        }
-                )
-            }
-        }
     }
 }

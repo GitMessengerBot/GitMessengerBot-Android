@@ -19,7 +19,6 @@ object PathConfig {
     const val GithubData = "$AppStorage/github-data.json"
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"
-    const val ScriptDefaultClass = "onMessage"
 
     /**
      * 스크립트 코드 파일
@@ -43,20 +42,4 @@ object PathConfig {
      */
     fun ScriptData(name: String, lang: Int) =
         "$AppStorage/scripts/${lang.toScriptLangName()}/$name-data.json"
-
-    /**
-     * 스크립트 클레스 파일
-     *
-     * "$AppStorage/scripts/${lang.toScriptLangName()}/$scriptName-$className.${lang.toScriptSuffix()}"
-     */
-    fun ScriptClass(scriptName: String, lang: Int, className: String) =
-        "$AppStorage/scripts/${lang.toScriptLangName()}/$scriptName/class/$className.${lang.toScriptSuffix()}"
-
-    /**
-     * 스크립트 클레스 파일 경로
-     *
-     * "$AppStorage/scripts/${lang.toScriptLangName()}/$scriptName-$className.${lang.toScriptSuffix()}"
-     */
-    fun ScriptClassPath(scriptName: String, lang: Int) =
-        "$AppStorage/scripts/${lang.toScriptLangName()}/$scriptName/class"
 }

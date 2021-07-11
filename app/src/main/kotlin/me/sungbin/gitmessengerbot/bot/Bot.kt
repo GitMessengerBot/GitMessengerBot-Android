@@ -42,7 +42,7 @@ object Bot {
             .sortedByDescending { it.name }
             .sortedByDescending { it.lang }
             .asReversed()
-    val app: State<App> get() = _app // flow; unnecessary gatter
+    val app: State<App> get() = _app
 
     init {
         _scripts.addAll(getList())
@@ -71,27 +71,13 @@ object Bot {
     }
 
     /**
-     * 스크립트 메인 클레스(onMessage) 소스코드 저장
+     * 스크립트 소스코드 저장
      */
     fun save(script: ScriptItem, code: String) {
         Storage.write(
             PathConfig.Script(script.name, script.lang),
             code
         )
-    }
-
-    /**
-     * 스크립트 클레스 소스코드 저장
-     */
-    fun save(script: ScriptItem, className: String, code: String) {
-        if (className == PathConfig.ScriptDefaultClass) {
-            save(script, code)
-        } else {
-            Storage.write(
-                PathConfig.ScriptClass(script.name, script.lang, className),
-                code
-            )
-        }
     }
 
     fun addScript(script: ScriptItem) {
@@ -126,27 +112,8 @@ object Bot {
 
     fun getScriptById(id: Int) = scripts.first { it.id == id }
 
-    /**
-     * 봇 메인 클레스(onMessage) 코드
-     */
     fun getCode(script: ScriptItem) =
         Storage.read(PathConfig.Script(script.name, script.lang), "")!!
-
-    /**
-     * 봇 서브 클레스 코드
-     */
-    fun getCode(script: ScriptItem, className: String): String {
-        return if (className == PathConfig.ScriptDefaultClass) {
-            Storage.read(PathConfig.Script(script.name, script.lang), null)!!
-        } else Storage.read(PathConfig.ScriptClass(script.name, script.lang, className), null)!!
-    }
-
-    fun getClassList(script: ScriptItem): List<String> {
-        val classes = mutableListOf(PathConfig.ScriptDefaultClass)
-        Storage.fileList(PathConfig.ScriptClassPath(script.name, script.lang))
-            .forEach { scriptClass -> classes.add(scriptClass.name.substringBefore(".")) }
-        return classes
-    }
 
     fun replyToSession(context: Context, session: Notification.Action, message: String) {
         try {
