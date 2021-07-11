@@ -24,10 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,13 +36,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
-fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
+fun Editor(script: ScriptItem) {
     var codeField by remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
 
     Scaffold(
@@ -52,7 +49,6 @@ fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
         topBar = {
             ToolBar(
                 script = script,
-                ts2JsRepo = ts2JsRepo,
                 codeField = codeField
             )
         }
@@ -74,11 +70,9 @@ fun Editor(script: ScriptItem, ts2JsRepo: Ts2JsRepo) {
 @Composable
 private fun ToolBar(
     script: ScriptItem,
-    ts2JsRepo: Ts2JsRepo,
     codeField: TextFieldValue
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
         modifier = Modifier
@@ -130,32 +124,6 @@ private fun ToolBar(
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
-                    top.linkTo(parent.top)
-                }
-        )
-        Icon(
-            painter = painterResource(R.drawable.ic_round_refresh_24),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .rotate(-90f)
-                .clickable {
-                    // todo: ts2js preview dialog
-                    /*coroutineScope.launch {
-                        ts2JsRepo
-                            .convert(codeField.text)
-                            .collect { result ->
-                                println(
-                                    when (result) {
-                                        is Ts2JsResult.Success -> result.ts2js.tsCode
-                                        is Ts2JsResult.Error -> result.exception
-                                    }
-                                )
-                            }
-                    }*/
-                }
-                .constrainAs(reload) {
-                    end.linkTo(save.start, 10.dp)
                     top.linkTo(parent.top)
                 }
         )

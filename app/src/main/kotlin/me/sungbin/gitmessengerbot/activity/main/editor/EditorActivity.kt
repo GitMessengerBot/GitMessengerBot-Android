@@ -13,21 +13,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.Color
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 
-@AndroidEntryPoint
 class EditorActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var ts2JsRepo: Ts2JsRepo
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,7 +32,7 @@ class EditorActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Editor(script = Bot.getScriptById(scriptId), ts2JsRepo = ts2JsRepo)
+                Editor(script = Bot.getScriptById(scriptId))
             }
         }
     }
