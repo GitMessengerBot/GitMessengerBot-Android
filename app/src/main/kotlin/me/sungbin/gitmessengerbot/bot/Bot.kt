@@ -135,8 +135,11 @@ object Bot {
     /**
      * 봇 서브 클레스 코드
      */
-    fun getCode(script: ScriptItem, className: String) =
-        Storage.read(PathConfig.ScriptClass(script.name, script.lang, className), "")!!
+    fun getCode(script: ScriptItem, className: String): String {
+        return if (className == PathConfig.ScriptDefaultClass) {
+            Storage.read(PathConfig.Script(script.name, script.lang), null)!!
+        } else Storage.read(PathConfig.ScriptClass(script.name, script.lang, className), null)!!
+    }
 
     fun getClassList(script: ScriptItem): List<String> {
         val classes = mutableListOf(PathConfig.ScriptDefaultClass)

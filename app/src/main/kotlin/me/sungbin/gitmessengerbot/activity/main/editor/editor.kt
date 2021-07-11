@@ -149,7 +149,7 @@ private fun ToolBar(
             modifier = Modifier
                 .clickable {
                     toast(context, context.getString(R.string.editor_toast_saved))
-                    Bot.save(script, codeField.text)
+                    Bot.save(script, selectedScriptClass.value, codeField.text)
                 }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 10.dp)
