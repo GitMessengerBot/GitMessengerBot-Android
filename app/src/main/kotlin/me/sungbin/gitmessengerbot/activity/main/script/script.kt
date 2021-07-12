@@ -407,7 +407,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(logcat) {
                         end.linkTo(setting.start, 16.dp)
-                        top.linkTo(parent.top)
+                        top.linkTo(setting.top)
+                        bottom.linkTo(setting.bottom)
                     }
             )
             Icon(
@@ -418,7 +419,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(debug) {
                         end.linkTo(logcat.start, 16.dp)
-                        top.linkTo(parent.top)
+                        top.linkTo(logcat.top)
+                        bottom.linkTo(logcat.bottom)
                     }
             )
             Icon(
