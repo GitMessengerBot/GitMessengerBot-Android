@@ -105,6 +105,7 @@ class ScriptCompilerImpl @Inject constructor(
             v8.locker.release()
             CompileResult.Success
         } catch (exception: Exception) {
+            script.power = false
             script.compiled = false
             CompileResult.Error(exception)
         }
@@ -146,6 +147,7 @@ class ScriptCompilerImpl @Inject constructor(
                                 trySend(compileJavaScript(context, script, tsCode))
                             }
                             is Ts2JsResult.Error -> {
+                                script.power = false
                                 script.compiled = false
                                 trySend(CompileResult.Error(ts2JsResult.exception))
                             }

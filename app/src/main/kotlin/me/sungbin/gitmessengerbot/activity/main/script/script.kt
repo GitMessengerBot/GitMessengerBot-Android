@@ -382,7 +382,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .clip(compileStateShape)
                     .background(compileStateBackgroundColor, compileStateShape)
                     .border(1.dp, Color.White, compileStateShape)
-                    .padding(top = 2.dp, bottom = 2.dp, start = 4.dp, end = 4.dp)
+                    .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -418,7 +418,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 modifier = Modifier
                     .size(20.dp)
                     .constrainAs(debug) {
-                        end.linkTo(logcat.start, 16.dp)
+                        end.linkTo(logcat.start, 20.dp)
                         top.linkTo(logcat.top)
                         bottom.linkTo(logcat.bottom)
                     }
@@ -456,7 +456,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                         }
                     }
                     .constrainAs(reload) {
-                        end.linkTo(debug.start, 16.dp)
+                        end.linkTo(debug.start, 20.dp)
                         top.linkTo(debug.top)
                         bottom.linkTo(debug.bottom)
                     }
