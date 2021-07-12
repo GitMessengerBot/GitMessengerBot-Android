@@ -9,7 +9,7 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script
 
-object ScriptType {
+object ScriptLang {
     const val TypeScript = 0
     const val JavaScript = 1
     const val Python = 2 // todo

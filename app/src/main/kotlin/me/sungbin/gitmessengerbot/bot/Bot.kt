@@ -18,13 +18,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.eclipsesource.v8.V8
-import com.eclipsesource.v8.V8Object
 import me.sungbin.gitmessengerbot.App
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
-import me.sungbin.gitmessengerbot.bot.api.BotApi
-import me.sungbin.gitmessengerbot.bot.api.Log
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Util
@@ -130,80 +126,6 @@ object Bot {
         }
     }
 
-    fun compileJavaScript(context: Context, script: ScriptItem, code: String) = try {
-        val v8 = V8.createV8Runtime()
-        v8.addApi(
-            apiName = "Bot",
-            apiClass = BotApi(context),
-            methodNameArray = listOf("reply", "replyShowAll"),
-            argumentsListArray = listOf(
-                listOf(String::class.java, String::class.java),
-                listOf(String::class.java, String::class.java, String::class.java)
-            )
-        )
-        v8.addApi(
-            apiName = "Log",
-            apiClass = Log(),
-            methodNameArray = listOf("print"),
-            argumentsListArray = listOf(listOf(Any::class.java))
-        )
-        /*v8.addApi(
-            "Api",
-            Api(),
-            arrayOf("runRhino"),
-            arrayOf(
-                arrayOf(String::class.java)
-            )
-        )
-        v8.addApi(
-            "File",
-            File(),
-            arrayOf("save", "read"),
-            arrayOf(
-                arrayOf(String::class.java, String::class.java),
-                arrayOf(String::class.java, String::class.java)
-            )
-        )
-        v8.addApi(
-            "Image",
-            Image(),
-            arrayOf("getLastImage", "getProfileImage"),
-            arrayOf(
-                arrayOf(),
-                arrayOf(String::class.java)
-            )
-        )
-        v8.addApi(
-            "Log",
-            Log(),
-            arrayOf("test", "e", "d", "i"),
-            arrayOf(
-                arrayOf(Any::class.java),
-                arrayOf(String::class.java),
-                arrayOf(String::class.java),
-                arrayOf(String::class.java)
-            )
-        )
-        v8.addApi(
-            "UI",
-            UI(),
-            arrayOf("toast", "notification"),
-            arrayOf(
-                arrayOf(String::class.java),
-                arrayOf(String::class.java, String::class.java, Int::class.java),
-            )
-        )*/
-        v8.executeScript(code)
-        StackManager.v8[script.id] = v8
-        println("script compiled: ${script.id}")
-        println("code: $code")
-        v8.locker.release()
-        CompileResult.Success
-    } catch (exception: Exception) {
-        exception.printStackTrace()
-        CompileResult.Error(exception)
-    }
-
     fun callJsResponder(
         context: Context,
         script: ScriptItem,
@@ -230,27 +152,5 @@ object Bot {
         } catch (exception: Exception) {
             Util.error(context, exception)
         }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun V8.addApi(
-        apiName: String,
-        apiClass: Any,
-        methodNameArray: List<String>,
-        argumentsListArray: List<List<Class<*>>>
-    ) {
-        val api = V8Object(this)
-        this.add(apiName, api)
-
-        for ((index, methodName) in methodNameArray.withIndex()) {
-            api.registerJavaMethod(
-                apiClass,
-                methodName,
-                methodName,
-                argumentsListArray[index].toTypedArray()
-            )
-        }
-
-        api.release()
     }
 }

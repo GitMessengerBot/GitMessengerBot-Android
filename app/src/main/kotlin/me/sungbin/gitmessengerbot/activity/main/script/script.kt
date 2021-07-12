@@ -11,6 +11,9 @@ package me.sungbin.gitmessengerbot.activity.main.script
 
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +35,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -44,6 +48,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -75,11 +80,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.js.JsEditorActivity
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
-import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsResult
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.bot.Bot
-import me.sungbin.gitmessengerbot.bot.CompileResult
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
@@ -126,7 +129,7 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(ts2JsRepo: Ts2JsRepo) {
+fun ScriptContent(compiler: ScriptCompiler) {
     Column(modifier = Modifier.fillMaxSize()) {
         Header()
         Column(
@@ -152,7 +155,7 @@ fun ScriptContent(ts2JsRepo: Ts2JsRepo) {
                     fontSize = 18.sp
                 )
             }
-            LazyScript(modifier = Modifier.padding(top = 15.dp), ts2JsRepo = ts2JsRepo)
+            LazyScript(modifier = Modifier.padding(top = 15.dp), compiler = compiler)
         }
     }
 }
@@ -229,7 +232,7 @@ private fun Header() {
                     Switch(
                         checked = power,
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = colors.primaryVariant,
+                            checkedThumbColor = Color.White,
                             checkedTrackColor = colors.primary,
                             uncheckedThumbColor = Color.White,
                             uncheckedTrackColor = colors.secondary
@@ -288,7 +291,7 @@ private fun Header() {
 }
 
 @Composable
-private fun LazyScript(modifier: Modifier, ts2JsRepo: Ts2JsRepo) {
+private fun LazyScript(modifier: Modifier, compiler: ScriptCompiler) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -297,17 +300,45 @@ private fun LazyScript(modifier: Modifier, ts2JsRepo: Ts2JsRepo) {
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         items(Bot.scripts) { script ->
-            ScriptView(script = script, ts2JsRepo = ts2JsRepo)
+            ScriptView(script = script, compiler = compiler)
         }
     }
 }
 
 @Composable
-private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
+private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage: String) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            title = { Text(text = stringResource(R.string.script_dialog_compile_error)) },
+            text = { Text(text = exceptionMessage) }
+        )
+    }
+}
+
+@Composable
+private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val compileErrorDialogVisible = remember { mutableStateOf(false) }
+    var compileErrorExceptionMessage by remember { mutableStateOf("") }
+    var isRotated by remember { mutableStateOf(false) }
 
+    val angle by animateFloatAsState(
+        targetValue = if (isRotated) 360F else 0F,
+        animationSpec = tween(
+            durationMillis = 2000, // duration
+            easing = FastOutSlowInEasing
+        ),
+        finishedListener = { isRotated = false }
+    )
+
+    CompileErrorDialog(
+        visible = compileErrorDialogVisible,
+        exceptionMessage = compileErrorExceptionMessage
+    )
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -417,44 +448,31 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(25.dp)
-                    .rotate(-90f)
+                    .rotate(angle)
                     .clickable {
-                        coroutineScope
-                            .launch {
-                                ts2JsRepo
-                                    .convert(Bot.getCode(script))
-                                    .collect { ts2JsResult ->
-                                        val message: String
-                                        when (ts2JsResult) {
-                                            is Ts2JsResult.Success -> {
-                                                val tsCode = ts2JsResult.ts2js.tsCode
-                                                println(tsCode)
-                                                val compileResult =
-                                                    Bot.compileJavaScript(context, script, tsCode)
-                                                when (compileResult) {
-                                                    is CompileResult.Success -> {
-                                                        script.compiled = true
-                                                        message = "컴파일 성공"
-                                                    }
-                                                    is CompileResult.Error -> {
-                                                        script.compiled = false
-                                                        println(compileResult.exception.message)
-                                                        message =
-                                                            "컴파일 에러: ${compileResult.exception.message}"
-                                                    }
-                                                }
-                                            }
-                                            is Ts2JsResult.Error -> {
-                                                println(ts2JsResult.exception.message)
-                                                script.compiled = false
-                                                message =
-                                                    "ts2js 에러: ${ts2JsResult.exception.message}"
-                                            }
+                        isRotated = true
+                        coroutineScope.launch {
+                            compiler
+                                .process(context, script)
+                                .collect { result ->
+                                    isRotated = true
+                                    val message = when (result) {
+                                        is CompileResult.Success ->
+                                            context.getString(R.string.script_toast_compile_success)
+                                        is CompileResult.Error -> {
+                                            compileErrorDialogVisible.value = true
+                                            compileErrorExceptionMessage =
+                                                result.exception.toString()
+                                            context.getString(
+                                                R.string.script_toast_compile_failed,
+                                                result.exception
+                                            )
                                         }
-                                        Bot.save(script)
-                                        toast(context, message)
                                     }
-                            }
+                                    isRotated = false
+                                    toast(context, message)
+                                }
+                        }
                     }
                     .constrainAs(reload) {
                         end.linkTo(edit.start, 8.dp)
@@ -536,7 +554,7 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
 fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
     val context = LocalContext.current
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
-    var selectedScriptLang by remember { mutableStateOf(ScriptType.TypeScript) }
+    var selectedScriptLang by remember { mutableStateOf(ScriptLang.TypeScript) }
     val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
@@ -589,7 +607,7 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                         .fillMaxHeight()
                         .background(scriptLangSpinnerBackgroundColor(scriptLang))
                         .noRippleClickable {
-                            if (scriptLang == ScriptType.Python) {
+                            if (scriptLang == ScriptLang.Python) {
                                 toast(
                                     context,
                                     context.getString(R.string.script_toast_cant_use_python)
