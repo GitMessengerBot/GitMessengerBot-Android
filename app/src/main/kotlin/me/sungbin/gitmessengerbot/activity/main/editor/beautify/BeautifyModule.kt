@@ -15,6 +15,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
+import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
+import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepoImpl
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 
@@ -35,4 +37,11 @@ object BeautifyModule {
     private fun instance(baseUrl: String): Connection = Jsoup.connect(baseUrl)
         .ignoreContentType(true)
         .ignoreHttpErrors(true)
+
+    @Provides
+    @Singleton
+    fun provideRepo(
+        @Named("pretty") pretty: Connection,
+        @Named("minify") minify: Connection
+    ): BeautifyRepo = BeautifyRepoImpl(pretty = pretty, minify = minify)
 }

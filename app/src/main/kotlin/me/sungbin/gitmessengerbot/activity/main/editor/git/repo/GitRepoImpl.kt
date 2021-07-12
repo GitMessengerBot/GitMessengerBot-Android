@@ -9,7 +9,6 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
 
-import android.util.Base64
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import me.sungbin.gitmessengerbot.activity.main.editor.git.GitService
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.activity.main.editor.git.util.toBase64
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
@@ -32,8 +32,6 @@ class GitRepoImpl @Inject constructor(
     private val gitUser by lazy {
         Json.toModel(Storage.read(PathConfig.GithubData, null)!!, GithubData::class)
     }
-
-    private fun String.toBase64() = Base64.encodeToString(toByteArray(), Base64.NO_WRAP)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun createRepo(repo: Repo) = callbackFlow {
