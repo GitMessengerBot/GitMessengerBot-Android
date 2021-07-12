@@ -70,7 +70,7 @@ class SplashActivity : ComponentActivity() {
             startActivity(
                 Intent(
                     this,
-                    if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                    if (isSetupDone || !BuildConfig.DEBUG) MainActivity::class.java else SetupActivity::class.java
                 )
             )
         }
