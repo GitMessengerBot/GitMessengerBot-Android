@@ -37,22 +37,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
+import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyResult
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
+import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitResult
+import me.sungbin.gitmessengerbot.activity.main.editor.git.util.Git
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
+import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
-fun Editor(script: ScriptItem) {
+fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
     val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ToolBar(
+                gitRepo = gitRepo,
+                beautifyRepo = beautifyRepo,
                 script = script,
                 codeField = codeField
             )
@@ -77,32 +87,101 @@ private fun GitMenu(
     gitRepo: GitRepo,
     beautifyRepo: BeautifyRepo,
     visible: MutableState<Boolean>,
+    script: ScriptItem,
     code: MutableState<TextFieldValue>
 ) {
-    val coroutineState = rememberCoroutineScope()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     DropdownMenu(
         expanded = visible.value,
         onDismissRequest = { visible.value = false }
     ) {
         DropdownMenuItem(onClick = {
-
+            coroutineScope.launch {
+                gitRepo.createRepo(
+                    Repo(
+                        name = script.name,
+                        description = "Created by GitMessengerBot"
+                    )
+                ).collect { result ->
+                    when (result) {
+                        is GitResult.Success -> toast(context, "레포 생성 완료")
+                        is GitResult.Error -> toast(
+                            context,
+                            "레포 생성 실패\n\n${result.exception.message}"
+                        )
+                    }
+                }
+            }
+        }) {
+            Text(text = "Create ${script.name} repo")
+        }
+        DropdownMenuItem(onClick = {
+            coroutineScope.launch {
+                gitRepo.updateFile(
+                    repoName = script.name,
+                    path = "script.${script.lang.toScriptSuffix()}",
+                    gitFile = GitFile(
+                        message = "Commited by GitMessengerBot",
+                        content = code.value.text,
+                        sha = Git.getSha(script.name),
+                        branch = "main"
+                    )
+                ).collect { result ->
+                    when (result) {
+                        is GitResult.Success -> toast(context, "파일 업데이트 완료")
+                        is GitResult.Error -> toast(
+                            context,
+                            "파일 업데이트 실패\n\n${result.exception.message}"
+                        )
+                    }
+                }
+            }
         }) {
             Text(text = "Commit and Push")
         }
         DropdownMenuItem(onClick = {
-
+            toast(context, "TODO")
         }) {
             Text(text = "Update project")
         }
         Divider()
         DropdownMenuItem(onClick = {
+            coroutineScope.launch {
+                beautifyRepo.minify(code.value.text).collect { result ->
+                    when (result) {
+                        is BeautifyResult.Success -> {
+                            code.value = TextFieldValue(text = result.code)
+                            toast(context, "코드 최적화 성공")
+                        }
+                        is BeautifyResult.Error -> toast(
+                            context,
+                            "코드 최적화 실패\n\n${result.exception.message}"
+                        )
+                    }
 
+                }
+            }
         }) {
             Text(text = "Minify")
         }
         DropdownMenuItem(onClick = {
+            coroutineScope.launch {
+                beautifyRepo.pretty(code.value.text).collect { result ->
+                    when (result) {
+                        is BeautifyResult.Success -> {
+                            code.value = TextFieldValue(text = result.code)
+                            toast(context, "코드 최적화 성공")
+                        }
+                        is BeautifyResult.Error -> toast(
+                            context,
+                            "코드 최적화 실패\n\n${result.exception.message}"
+                        )
+                    }
 
+                }
+            }
         }) {
             Text(text = "Beautify")
         }
@@ -111,13 +190,21 @@ private fun GitMenu(
 
 @Composable
 private fun ToolBar(
+    gitRepo: GitRepo,
+    beautifyRepo: BeautifyRepo,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>
 ) {
     val context = LocalContext.current
     val gitMenuVisible = remember { mutableStateOf(false) }
 
-    GitMenu(visible = gitMenuVisible, code = codeField)
+    GitMenu(
+        gitRepo = gitRepo,
+        beautifyRepo = beautifyRepo,
+        visible = gitMenuVisible,
+        script = script,
+        code = codeField
+    )
 
     ConstraintLayout(
         modifier = Modifier

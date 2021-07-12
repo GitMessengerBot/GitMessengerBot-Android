@@ -46,21 +46,19 @@ class GitRepoImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun updateFile(
-        repo: String,
+        repoName: String,
         path: String,
         gitFile: GitFile
     ) = callbackFlow {
         try {
-            trySend(
-                GitResult.Success(
-                    buildRetrofit.updateFile(
-                        owner = gitUser.userName,
-                        repo = repo,
-                        path = path,
-                        body = gitFile.copy(content = gitFile.content.toBase64())
-                    ).await()
-                )
-            )
+            val response = buildRetrofit.updateFile(
+                owner = gitUser.userName,
+                repo = repoName,
+                path = path,
+                body = gitFile.copy(content = gitFile.content.toBase64())
+            ).await()
+            Storage.write(PathConfig.GitCommitSha(repoName), response.commit.sha)
+            trySend(GitResult.Success(response))
         } catch (exception: Exception) {
             trySend(GitResult.Error(exception))
         }

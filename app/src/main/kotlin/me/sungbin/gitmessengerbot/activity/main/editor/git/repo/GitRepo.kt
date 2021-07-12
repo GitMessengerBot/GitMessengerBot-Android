@@ -15,5 +15,5 @@ import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 
 interface GitRepo {
     fun createRepo(repo: Repo): Flow<GitResult>
-    fun updateFile(repo: String, path: String, gitFile: GitFile): Flow<GitResult>
+    fun updateFile(repoName: String, path: String, gitFile: GitFile): Flow<GitResult>
 }

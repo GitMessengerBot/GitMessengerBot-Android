@@ -27,10 +27,10 @@ import me.sungbin.gitmessengerbot.util.config.PathConfig
 class JsEditorActivity : ComponentActivity() {
 
     @Inject
-    lateinit var beautifyRepo: BeautifyRepo
+    lateinit var gitRepo: GitRepo
 
     @Inject
-    lateinit var gitRepo: GitRepo
+    lateinit var beautifyRepo: BeautifyRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,11 @@ class JsEditorActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Editor(script = Bot.getScriptById(scriptId))
+                Editor(
+                    script = Bot.getScriptById(scriptId),
+                    gitRepo = gitRepo,
+                    beautifyRepo = beautifyRepo
+                )
             }
         }
     }
