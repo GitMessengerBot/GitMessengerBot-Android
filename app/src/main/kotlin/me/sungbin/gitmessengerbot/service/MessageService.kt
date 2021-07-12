@@ -82,7 +82,7 @@ class MessageService : NotificationListenerService() {
                 )
             }
         } catch (exception: Exception) {
-            Util.error(applicationContext, exception)
+            Util.error(applicationContext, "chatHook 에러\n\n$exception")
         }
     }
 }

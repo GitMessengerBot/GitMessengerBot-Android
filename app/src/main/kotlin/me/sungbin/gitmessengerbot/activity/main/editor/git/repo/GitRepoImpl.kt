@@ -14,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import me.sungbin.gitmessengerbot.activity.main.editor.git.GitService
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileSha
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.util.toBase64
@@ -21,6 +22,7 @@ import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.PathConfig
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.await
 
@@ -31,6 +33,26 @@ class GitRepoImpl @Inject constructor(
     private val buildRetrofit by lazy { retrofit.create(GitService::class.java) }
     private val gitUser by lazy {
         Json.toModel(Storage.read(PathConfig.GithubData, null)!!, GithubData::class)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getSha(repoName: String) = callbackFlow {
+        try {
+            runCatching {
+                var sha =
+                    buildRetrofit.getSha(gitUser.userName, repoName, "script.ts").await().string()
+                sha = if (sha.contains("sha")) {
+                    JSONObject(sha).getString("sha")
+                } else {
+                    ""
+                }
+                trySend(GitResult.Success(FileSha(sha)))
+            }
+        } catch (exception: Exception) {
+            trySend(GitResult.Error(exception))
+        }
+
+        awaitClose { close() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -53,11 +75,10 @@ class GitRepoImpl @Inject constructor(
         try {
             val response = buildRetrofit.updateFile(
                 owner = gitUser.userName,
-                repo = repoName,
+                repoName = repoName,
                 path = path,
                 body = gitFile.copy(content = gitFile.content.toBase64())
             ).await()
-            Storage.write(PathConfig.GitCommitSha(repoName), response.commit.sha)
             trySend(GitResult.Success(response))
         } catch (exception: Exception) {
             trySend(GitResult.Error(exception))

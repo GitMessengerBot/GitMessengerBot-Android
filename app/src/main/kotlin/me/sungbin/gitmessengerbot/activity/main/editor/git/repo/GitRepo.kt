@@ -14,6 +14,7 @@ import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 
 interface GitRepo {
+    fun getSha(repoName: String): Flow<GitResult>
     fun createRepo(repo: Repo): Flow<GitResult>
     fun updateFile(repoName: String, path: String, gitFile: GitFile): Flow<GitResult>
 }

@@ -10,12 +10,12 @@
 package me.sungbin.gitmessengerbot.util
 
 import android.content.Context
+import android.widget.Toast
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 object Util {
-    fun error(context: Context, exception: Exception) {
-        val message = exception.message!!
-        toast(context, message)
+    fun error(context: Context, message: String) {
+        toast(context, message, Toast.LENGTH_LONG)
         println("Error: $message")
     }
 }

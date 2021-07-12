@@ -34,8 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -44,15 +42,16 @@ import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyResult
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileSha
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitResult
-import me.sungbin.gitmessengerbot.activity.main.editor.git.util.Git
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
@@ -94,6 +93,7 @@ private fun GitMenu( // todo: 위치 조정
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val repoName = script.name
 
     DropdownMenu(
         expanded = visible.value,
@@ -103,41 +103,52 @@ private fun GitMenu( // todo: 위치 조정
             coroutineScope.launch {
                 gitRepo.createRepo(
                     Repo(
-                        name = script.name,
+                        name = repoName,
                         description = "Created by GitMessengerBot"
                     )
                 ).collect { result ->
                     when (result) {
                         is GitResult.Success -> toast(context, "레포 생성 완료")
-                        is GitResult.Error -> toast(
+                        is GitResult.Error -> Util.error(
                             context,
-                            "레포 생성 실패\n\n${result.exception.message}"
+                            "레포 생성 실패\n\n${result.exception}"
                         )
                     }
                 }
             }
         }) {
-            Text(text = "Create ${script.name} repo")
+            Text(text = "Create $repoName repo")
         }
         DropdownMenuItem(onClick = {
             coroutineScope.launch {
-                gitRepo.updateFile(
-                    repoName = script.name,
-                    path = "script.${script.lang.toScriptSuffix()}",
-                    gitFile = GitFile(
-                        message = "Commited by GitMessengerBot",
-                        content = code.value.text,
-                        sha = Git.getSha(script.name),
-                        branch = "main"
-                    )
-                ).collect { result ->
-                    when (result) {
-                        is GitResult.Success -> toast(context, "파일 업데이트 완료")
-                        is GitResult.Error -> toast(
+                gitRepo.getSha(repoName).collect { shaResult ->
+                    when (shaResult) {
+                        is GitResult.Success -> {
+                            gitRepo.updateFile(
+                                repoName = repoName,
+                                path = "script.${script.lang.toScriptSuffix()}",
+                                gitFile = GitFile(
+                                    message = "Commited by GitMessengerBot",
+                                    content = code.value.text,
+                                    sha = (shaResult.result as FileSha).sha,
+                                    branch = "main"
+                                )
+                            ).collect { updateResult ->
+                                when (updateResult) {
+                                    is GitResult.Success -> toast(context, "파일 업데이트 완료")
+                                    is GitResult.Error -> Util.error(
+                                        context,
+                                        "파일 업데이트 실패\n\n${updateResult.exception}"
+                                    )
+                                }
+                            }
+                        }
+                        is GitResult.Error -> Util.error(
                             context,
-                            "파일 업데이트 실패\n\n${result.exception.message}"
+                            "파일 sha값 추출 실패\n\n${shaResult.exception}"
                         )
                     }
+
                 }
             }
         }) {
@@ -157,9 +168,9 @@ private fun GitMenu( // todo: 위치 조정
                             code.value = TextFieldValue(text = result.code)
                             toast(context, "코드 최적화 성공")
                         }
-                        is BeautifyResult.Error -> toast(
+                        is BeautifyResult.Error -> Util.error(
                             context,
-                            "코드 최적화 실패\n\n${result.exception.message}"
+                            "코드 최적화 실패\n\n${result.exception}"
                         )
                     }
 
@@ -176,9 +187,9 @@ private fun GitMenu( // todo: 위치 조정
                             code.value = TextFieldValue(text = result.code)
                             toast(context, "코드 최적화 성공")
                         }
-                        is BeautifyResult.Error -> toast(
+                        is BeautifyResult.Error -> Util.error(
                             context,
-                            "코드 최적화 실패\n\n${result.exception.message}"
+                            "코드 최적화 실패\n\n${result.exception}"
                         )
                     }
 

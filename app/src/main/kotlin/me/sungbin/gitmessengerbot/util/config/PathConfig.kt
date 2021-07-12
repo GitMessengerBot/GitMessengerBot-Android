@@ -20,8 +20,6 @@ object PathConfig {
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"
 
-    fun GitCommitSha(repoName: String) = "$AppStorage/git/$repoName.txt"
-
     /**
      * 스크립트 코드 파일
      *

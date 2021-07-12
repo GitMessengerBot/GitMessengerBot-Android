@@ -24,8 +24,9 @@ class BeautifyRepoImpl @Inject constructor(
     override fun pretty(code: String) = callbackFlow {
         try {
             runCatching {
-                val response = JSONObject(pretty.data("input", code).post().wholeText())["output"]
-                trySend(BeautifyResult.Success(response.toString()))
+                val response =
+                    JSONObject(pretty.data("input", code).post().wholeText()).getString("output")
+                trySend(BeautifyResult.Success(response))
             }
         } catch (exception: Exception) {
             trySend(BeautifyResult.Error(exception))

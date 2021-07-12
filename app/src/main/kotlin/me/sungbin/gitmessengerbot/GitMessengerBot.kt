@@ -11,7 +11,9 @@ package me.sungbin.gitmessengerbot
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.system.exitProcess
 import me.sungbin.gitmessengerbot.util.NotificationUtil
+import me.sungbin.gitmessengerbot.util.Util
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
@@ -22,5 +24,10 @@ class GitMessengerBot : Application() {
             name = getString(R.string.notification_channel_name),
             description = getString(R.string.notification_channel_name)
         )
+
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            Util.error(applicationContext, "알 수 없는 에러 발생\n\n$throwable")
+            exitProcess(0)
+        }
     }
 }
