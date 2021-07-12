@@ -38,10 +38,14 @@ object Storage {
     }
 
     fun read(path: String, default: String?): String? {
-        val file = File(path.parsePath())
-        return if (file.exists()) {
-            FileInputStream(file).bufferedReader().use { it.readText() }
-        } else {
+        return try {
+            val file = File(path.parsePath())
+            if (file.exists()) {
+                FileInputStream(file).bufferedReader().use { it.readText() }
+            } else {
+                default
+            }
+        } catch (ignored: Exception) {
             default
         }
     }

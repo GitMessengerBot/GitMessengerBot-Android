@@ -31,78 +31,84 @@ class ScriptCompilerImpl @Inject constructor(
     private val ts2Js: Ts2JsRepo
 ) : ScriptCompiler {
 
-    private fun compileJavaScript(context: Context, script: ScriptItem, code: String) = try {
-        val v8 = V8.createV8Runtime()
-        v8.addApi(
-            apiName = "Bot",
-            apiClass = BotApi(context),
-            methodNameArray = listOf("reply", "replyShowAll"),
-            argumentsListArray = listOf(
-                listOf(String::class.java, String::class.java),
-                listOf(String::class.java, String::class.java, String::class.java)
+    private fun compileJavaScript(
+        context: Context,
+        script: ScriptItem,
+        code: String
+    ): CompileResult {
+        return try {
+            val v8 = V8.createV8Runtime()
+            v8.addApi(
+                apiName = "Bot",
+                apiClass = BotApi(context),
+                methodNameArray = listOf("reply", "replyShowAll"),
+                argumentsListArray = listOf(
+                    listOf(String::class.java, String::class.java),
+                    listOf(String::class.java, String::class.java, String::class.java)
+                )
             )
-        )
-        v8.addApi(
-            apiName = "Log",
-            apiClass = Log(),
-            methodNameArray = listOf("print"),
-            argumentsListArray = listOf(listOf(Any::class.java))
-        )
-        /*v8.addApi(
-            "Api",
-            Api(),
-            arrayOf("runRhino"),
-            arrayOf(
-                arrayOf(String::class.java)
+            v8.addApi(
+                apiName = "Log",
+                apiClass = Log(),
+                methodNameArray = listOf("print"),
+                argumentsListArray = listOf(listOf(Any::class.java))
             )
-        )
-        v8.addApi(
-            "File",
-            File(),
-            arrayOf("save", "read"),
-            arrayOf(
-                arrayOf(String::class.java, String::class.java),
-                arrayOf(String::class.java, String::class.java)
+            /*v8.addApi(
+                "Api",
+                Api(),
+                arrayOf("runRhino"),
+                arrayOf(
+                    arrayOf(String::class.java)
+                )
             )
-        )
-        v8.addApi(
-            "Image",
-            Image(),
-            arrayOf("getLastImage", "getProfileImage"),
-            arrayOf(
-                arrayOf(),
-                arrayOf(String::class.java)
+            v8.addApi(
+                "File",
+                File(),
+                arrayOf("save", "read"),
+                arrayOf(
+                    arrayOf(String::class.java, String::class.java),
+                    arrayOf(String::class.java, String::class.java)
+                )
             )
-        )
-        v8.addApi(
-            "Log",
-            Log(),
-            arrayOf("test", "e", "d", "i"),
-            arrayOf(
-                arrayOf(Any::class.java),
-                arrayOf(String::class.java),
-                arrayOf(String::class.java),
-                arrayOf(String::class.java)
+            v8.addApi(
+                "Image",
+                Image(),
+                arrayOf("getLastImage", "getProfileImage"),
+                arrayOf(
+                    arrayOf(),
+                    arrayOf(String::class.java)
+                )
             )
-        )
-        v8.addApi(
-            "UI",
-            UI(),
-            arrayOf("toast", "notification"),
-            arrayOf(
-                arrayOf(String::class.java),
-                arrayOf(String::class.java, String::class.java, Int::class.java),
+            v8.addApi(
+                "Log",
+                Log(),
+                arrayOf("test", "e", "d", "i"),
+                arrayOf(
+                    arrayOf(Any::class.java),
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java)
+                )
             )
-        )*/
-        v8.executeScript(code)
-        StackManager.v8[script.id] = v8
-        println("script compiled: ${script.id}")
-        println("code: $code")
-        v8.locker.release()
-        CompileResult.Success
-    } catch (exception: Exception) {
-        exception.printStackTrace()
-        CompileResult.Error(exception)
+            v8.addApi(
+                "UI",
+                UI(),
+                arrayOf("toast", "notification"),
+                arrayOf(
+                    arrayOf(String::class.java),
+                    arrayOf(String::class.java, String::class.java, Int::class.java),
+                )
+            )*/
+            v8.executeScript(code)
+            StackManager.v8[script.id] = v8
+            println("script compiled: ${script.id}")
+            println("code: $code")
+            v8.locker.release()
+            CompileResult.Success
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            CompileResult.Error(exception)
+        }
     }
 
     @Suppress("DEPRECATION")

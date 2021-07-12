@@ -560,11 +560,6 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
 
-    val scriptLangSpinnerBackgroundColor =
-        { lang: Int -> if (selectedScriptLang == lang) colors.secondary else Color.White }
-    val scriptLangSpinnerTextColor =
-        { lang: Int -> if (selectedScriptLang == lang) Color.White else colors.secondary }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -602,11 +597,14 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                 .border(1.dp, colors.secondary, scriptLangSpinnerShape)
         ) {
             repeat(4) { scriptLang ->
+                val backgroundColor by animateColorAsState(if (selectedScriptLang == scriptLang) colors.secondary else Color.White)
+                val textColor by animateColorAsState(if (selectedScriptLang == scriptLang) Color.White else colors.secondary)
+
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .background(scriptLangSpinnerBackgroundColor(scriptLang))
+                        .background(backgroundColor)
                         .noRippleClickable {
                             if (scriptLang == ScriptLang.Python) {
                                 toast(
@@ -622,7 +620,7 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                 ) {
                     Text(
                         text = scriptLang.toScriptLangName(),
-                        color = scriptLangSpinnerTextColor(scriptLang),
+                        color = textColor,
                         fontSize = 10.sp
                     )
                 }
