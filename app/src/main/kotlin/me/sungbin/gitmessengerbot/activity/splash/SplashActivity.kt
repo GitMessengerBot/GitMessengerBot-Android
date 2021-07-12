@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import java.util.Calendar
+import me.sungbin.gitmessengerbot.BuildConfig
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.SetupActivity
@@ -44,6 +46,7 @@ import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 class SplashActivity : ComponentActivity() {
 
@@ -58,6 +61,12 @@ class SplashActivity : ComponentActivity() {
         }
 
         val isSetupDone = Storage.read(PathConfig.GithubData, null) != null
+        val builtTime = BuildConfig.TIMESTAMP
+        val builtDate = Calendar.getInstance().apply {
+            timeInMillis = builtTime
+        }
+        toast(this, "Built in: ${builtDate.time}")
+
         doDelay(2000) {
             finish()
             startActivity(

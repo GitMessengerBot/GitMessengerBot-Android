@@ -101,14 +101,14 @@ private fun MenuBox(
 ) {
     Column(
         modifier = modifier
-            .width(75.dp)
+            .width(65.dp)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Column(
             modifier = Modifier
-                .size(75.dp)
+                .size(55.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -233,7 +233,7 @@ private fun Header() {
                         checked = power,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
-                            checkedTrackColor = colors.primary,
+                            checkedTrackColor = colors.primaryVariant,
                             uncheckedThumbColor = Color.White,
                             uncheckedTrackColor = colors.secondary
                         ),
@@ -254,7 +254,7 @@ private fun Header() {
                 modifier = Modifier.weight(1f)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = Bot.scripts.size.toString(), fontSize = 35.sp)
+                    Text(text = Bot.scripts.size.toString(), fontSize = 25.sp)
                     Text(text = "개", fontSize = 8.sp)
                 }
             }
@@ -265,7 +265,7 @@ private fun Header() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = Bot.getPowerOnScripts().size.toString(),
-                        fontSize = 35.sp
+                        fontSize = 25.sp
                     )
                     Text(text = "개", fontSize = 8.sp)
                 }
@@ -312,7 +312,8 @@ private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage:
             onDismissRequest = { visible.value = false },
             buttons = {},
             title = { Text(text = stringResource(R.string.script_dialog_compile_error)) },
-            text = { Text(text = exceptionMessage) }
+            text = { Text(text = exceptionMessage) },
+            modifier = Modifier.width(250.dp)
         )
     }
 }
@@ -329,7 +330,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
     val angle by animateFloatAsState(
         targetValue = if (isRotated) 360F else 0F,
         animationSpec = tween(
-            durationMillis = 2000, // duration
+            durationMillis = 2000,
             easing = FastOutSlowInEasing
         ),
         finishedListener = { isRotated = false }
@@ -462,10 +463,10 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                                         is CompileResult.Error -> {
                                             compileErrorDialogVisible.value = true
                                             compileErrorExceptionMessage =
-                                                result.exception.toString()
+                                                result.exception.message.toString()
                                             context.getString(
                                                 R.string.script_toast_compile_failed,
-                                                result.exception
+                                                result.exception.message
                                             )
                                         }
                                     }
