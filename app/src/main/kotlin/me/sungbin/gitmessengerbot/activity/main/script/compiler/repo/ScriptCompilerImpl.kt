@@ -101,12 +101,11 @@ class ScriptCompilerImpl @Inject constructor(
             )*/
             v8.executeScript(code)
             StackManager.v8[script.id] = v8
-            println("script compiled: ${script.id}")
-            println("code: $code")
+            script.compiled = true
             v8.locker.release()
             CompileResult.Success
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            script.compiled = false
             CompileResult.Error(exception)
         }
     }
@@ -147,10 +146,10 @@ class ScriptCompilerImpl @Inject constructor(
                                 trySend(compileJavaScript(context, script, tsCode))
                             }
                             is Ts2JsResult.Error -> {
+                                script.compiled = false
                                 trySend(CompileResult.Error(ts2JsResult.exception))
                             }
                         }
-                        Bot.save(script)
                     }
             }
             ScriptLang.JavaScript -> {
@@ -164,6 +163,7 @@ class ScriptCompilerImpl @Inject constructor(
             }
         }
 
+        Bot.save(script)
         awaitClose { close() }
     }
 }

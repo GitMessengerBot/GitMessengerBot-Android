@@ -365,7 +365,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (
-                compileState, reload, edit, debug, logcat, setting, delete,
+                compileState, reload, debug, logcat, setting,
                 scriptName, scriptNameUnderline,
                 scriptLangDeco, scriptLang, scriptLastRunTime, scriptPower
             ) = createRefs()
@@ -389,24 +389,13 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     }
             )
             Icon(
-                painter = painterResource(R.drawable.ic_round_cancel_24),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .size(20.dp)
-                    .constrainAs(delete) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-            )
-            Icon(
                 painter = painterResource(R.drawable.ic_round_settings_24),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
                     .constrainAs(setting) {
-                        end.linkTo(delete.start, 8.dp)
+                        end.linkTo(parent.start, 8.dp)
                         top.linkTo(parent.top)
                     }
             )
@@ -417,7 +406,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 modifier = Modifier
                     .size(20.dp)
                     .constrainAs(logcat) {
-                        end.linkTo(setting.start, 8.dp)
+                        end.linkTo(setting.start, 16.dp)
                         top.linkTo(parent.top)
                     }
             )
@@ -428,18 +417,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 modifier = Modifier
                     .size(20.dp)
                     .constrainAs(debug) {
-                        end.linkTo(logcat.start, 8.dp)
-                        top.linkTo(parent.top)
-                    }
-            )
-            Icon(
-                painter = painterResource(R.drawable.ic_round_pen_24),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .size(20.dp)
-                    .constrainAs(edit) {
-                        end.linkTo(debug.start, 8.dp)
+                        end.linkTo(logcat.start, 16.dp)
                         top.linkTo(parent.top)
                     }
             )
@@ -476,7 +454,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                         }
                     }
                     .constrainAs(reload) {
-                        end.linkTo(edit.start, 8.dp)
+                        end.linkTo(debug.start, 16.dp)
                         top.linkTo(parent.top)
                     }
             )
