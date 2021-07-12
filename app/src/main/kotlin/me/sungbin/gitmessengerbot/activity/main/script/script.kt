@@ -395,7 +395,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 modifier = Modifier
                     .size(20.dp)
                     .constrainAs(setting) {
-                        end.linkTo(parent.start, 8.dp)
+                        end.linkTo(parent.end)
                         top.linkTo(parent.top)
                     }
             )
@@ -455,7 +455,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     }
                     .constrainAs(reload) {
                         end.linkTo(debug.start, 16.dp)
-                        top.linkTo(parent.top)
+                        top.linkTo(debug.top)
+                        bottom.linkTo(debug.bottom)
                     }
             )
             Icon(
