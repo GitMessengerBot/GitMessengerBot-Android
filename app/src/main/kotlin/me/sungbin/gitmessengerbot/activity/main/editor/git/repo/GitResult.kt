@@ -9,7 +9,9 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
 
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitResultWrapper
+
 sealed class GitResult {
-    object Success : GitResult()
+    data class Success(val result: GitResultWrapper) : GitResult()
     data class Error(val exception: Exception) : GitResult()
 }

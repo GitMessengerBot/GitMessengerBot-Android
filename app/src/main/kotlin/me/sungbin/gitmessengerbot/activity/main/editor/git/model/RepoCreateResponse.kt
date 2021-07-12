@@ -251,4 +251,4 @@ data class RepoCreateResponse(
 
     @SerializedName("forks_count")
     val forksCount: Int
-)
+) : GitResultWrapper

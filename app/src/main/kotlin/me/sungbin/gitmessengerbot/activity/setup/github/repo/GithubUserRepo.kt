@@ -11,8 +11,6 @@ package me.sungbin.gitmessengerbot.activity.setup.github.repo
 
 import kotlinx.coroutines.flow.Flow
 
-interface GithubRepo {
-    fun login(githubKey: String): Flow<GithubRepoResult>
-    fun commit()
-    fun merge()
+interface GithubUserRepo {
+    fun login(githubKey: String): Flow<GithubUserResult>
 }

@@ -21,10 +21,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.await
 
-class GithubRepoImpl @Inject constructor(
+class GithubUserRepoImpl @Inject constructor(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val retrofit: Retrofit.Builder
-) : GithubRepo {
+) : GithubUserRepo {
 
     private class AuthInterceptor(private val token: String) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -54,18 +54,10 @@ class GithubRepoImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun login(githubKey: String) = callbackFlow {
         try {
-            trySend(GithubRepoResult.Success(buildRetrofit(githubKey).getUserInfo().await()))
+            trySend(GithubUserResult.Success(buildRetrofit(githubKey).getUserInfo().await()))
         } catch (exception: Exception) {
-            trySend(GithubRepoResult.Error(exception))
+            trySend(GithubUserResult.Error(exception))
         }
         awaitClose { close() }
-    }
-
-    override fun commit() {
-        // todo
-    }
-
-    override fun merge() {
-        // todo
     }
 }

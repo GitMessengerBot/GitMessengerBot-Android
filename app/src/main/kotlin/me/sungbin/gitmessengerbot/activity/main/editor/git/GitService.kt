@@ -9,7 +9,7 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git
 
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.File
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileCreateResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.RepoCreateResponse
@@ -26,7 +26,7 @@ interface GitService {
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Path("path") path: String,
-        @Body body: File
+        @Body body: GitFile
     ): Call<FileCreateResponse>
 
     @POST("/user/repos")

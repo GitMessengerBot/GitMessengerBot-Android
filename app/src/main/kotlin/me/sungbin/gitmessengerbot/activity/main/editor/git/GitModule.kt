@@ -13,8 +13,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
+import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
+import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepoImpl
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
@@ -25,7 +26,6 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -56,10 +56,13 @@ object GitModule {
 
     @Provides
     @Singleton
-    @Named("Api")
     fun provideRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(getInterceptor(loggingInterceptor, AuthInterceptor()))
         .baseUrl(BaseUrl)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideRepo(retrofit: Retrofit): GitRepo = GitRepoImpl(retrofit)
 }
