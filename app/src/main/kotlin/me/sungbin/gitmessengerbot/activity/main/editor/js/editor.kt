@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,11 +71,29 @@ fun Editor(script: ScriptItem) {
 }
 
 @Composable
+private fun GitMenu(visible: MutableState<Boolean>) {
+    DropdownMenu(
+        expanded = visible.value,
+        onDismissRequest = { visible.value = false }
+    ) {
+        DropdownMenuItem(onClick = { println("commit and push") }) {
+            Text(text = "Commit and Push")
+        }
+        DropdownMenuItem(onClick = { println("update project") }) {
+            Text(text = "Update project")
+        }
+    }
+}
+
+@Composable
 private fun ToolBar(
     script: ScriptItem,
     codeField: TextFieldValue
 ) {
     val context = LocalContext.current
+    val gitMenuVisible = remember { mutableStateOf(false) }
+
+    GitMenu(visible = gitMenuVisible)
 
     ConstraintLayout(
         modifier = Modifier
@@ -105,13 +126,15 @@ private fun ToolBar(
             }
         )
         Icon(
-            painter = painterResource(R.drawable.ic_round_settings_24),
+            painter = painterResource(R.drawable.ic_round_code_24),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.constrainAs(setting) {
-                end.linkTo(parent.end, 16.dp)
-                top.linkTo(parent.top)
-            }
+            modifier = Modifier
+                .clickable { gitMenuVisible.value = true }
+                .constrainAs(setting) {
+                    end.linkTo(parent.end, 16.dp)
+                    top.linkTo(parent.top)
+                }
         )
         Icon(
             painter = painterResource(R.drawable.ic_round_save_24),
@@ -123,7 +146,7 @@ private fun ToolBar(
                     Bot.save(script, codeField.text)
                 }
                 .constrainAs(save) {
-                    end.linkTo(setting.start, 10.dp)
+                    end.linkTo(setting.start, 16.dp)
                     top.linkTo(parent.top)
                 }
         )

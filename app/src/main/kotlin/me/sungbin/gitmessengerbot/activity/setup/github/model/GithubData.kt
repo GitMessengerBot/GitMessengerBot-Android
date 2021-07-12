@@ -12,7 +12,7 @@ package me.sungbin.gitmessengerbot.activity.setup.github.model
 import com.google.gson.annotations.SerializedName
 
 data class GithubData(
-    @SerializedName("personal_key") val personalKey: String = "",
+    @SerializedName("personal_key") val token: String = "",
     @SerializedName("user_name") val userName: String = "",
     @SerializedName("profile_image_url") val profileImageUrl: String = ""
 )

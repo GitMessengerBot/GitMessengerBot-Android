@@ -71,9 +71,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var scriptCompiler: ScriptCompiler
 
-    private val settingVm: SettingViewModel by viewModels()
-    private val debugVm: DebugViewModel by viewModels()
-
     private var tab by mutableStateOf(Tab.Script)
     private lateinit var onBackPressedAction: () -> Unit
 

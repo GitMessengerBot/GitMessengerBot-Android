@@ -12,15 +12,15 @@ package me.sungbin.gitmessengerbot.activity.setup.github.model
 import com.google.gson.annotations.SerializedName
 
 data class Plan(
-    @field:SerializedName("private_repos")
+    @SerializedName("private_repos")
     val privateRepos: Int,
 
-    @field:SerializedName("name")
+    @SerializedName("name")
     val name: String,
 
-    @field:SerializedName("collaborators")
+    @SerializedName("collaborators")
     val collaborators: Int,
 
-    @field:SerializedName("space")
+    @SerializedName("space")
     val space: Int
 )

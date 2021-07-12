@@ -210,10 +210,10 @@ class SetupActivity : ComponentActivity() {
                                             .clickable {
                                                 coroutineScope.launch(Dispatchers.IO) {
                                                     var githubData =
-                                                        GithubData(personalKey = personalKeyField.text)
+                                                        GithubData(token = personalKeyField.text)
 
                                                     githubRepo
-                                                        .login(githubData.personalKey)
+                                                        .login(githubData.token)
                                                         .collect { result ->
                                                             when (result) {
                                                                 is GithubRepoResult.Success -> {

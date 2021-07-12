@@ -15,7 +15,7 @@ object Application {
     const val compileSdk = 30
     const val jvmTarget = "1.8"
     const val versionCode = 1
-    const val versionName = "제발코로나종식되게해주세요"
+    const val versionName = "please_die_fucking_covid"
 
     val targetCompat = JavaVersion.VERSION_11
     val sourceCompat = JavaVersion.VERSION_11
@@ -23,7 +23,7 @@ object Application {
 
 object Versions {
     object Essential {
-        const val Python = "9.1.0"
+        // const val Python = "9.1.0"
         const val Kotlin = "1.5.10" // todo: 1.5.20
         const val Gradle = "7.1.0-alpha03"
         const val CoreKtx = "1.6.0"
