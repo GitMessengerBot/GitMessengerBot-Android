@@ -9,12 +9,12 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git
 
-import com.google.gson.JsonObject
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.File
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileCreateResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.RepoCreateResponse
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -27,10 +27,10 @@ interface GitService {
         @Path("repo") repo: String,
         @Path("path") path: String,
         @Body body: File
-    ): Call<JsonObject>
+    ): Call<FileCreateResponse>
 
     @POST("/user/repos")
     fun createRepo(
         @Body body: Repo
-    ): Call<JsonObject>
+    ): Call<RepoCreateResponse>
 }
