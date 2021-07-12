@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor
+package me.sungbin.gitmessengerbot.activity.main.editor.js
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

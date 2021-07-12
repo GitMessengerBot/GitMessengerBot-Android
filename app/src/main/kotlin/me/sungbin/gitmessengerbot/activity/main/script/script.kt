@@ -74,7 +74,7 @@ import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.editor.EditorActivity
+import me.sungbin.gitmessengerbot.activity.main.editor.js.JsEditorActivity
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsResult
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
@@ -315,7 +315,7 @@ private fun ScriptView(ts2JsRepo: Ts2JsRepo, script: ScriptItem) {
             .shadow(3.dp, shape)
             .clip(shape)
             .noRippleClickable {
-                val intent = Intent(context, EditorActivity::class.java).apply {
+                val intent = Intent(context, JsEditorActivity::class.java).apply {
                     putExtra(PathConfig.IntentScriptId, script.id)
                 }
                 context.startActivity(intent)
@@ -588,7 +588,16 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                         .weight(1f)
                         .fillMaxHeight()
                         .background(scriptLangSpinnerBackgroundColor(scriptLang))
-                        .noRippleClickable { selectedScriptLang = scriptLang },
+                        .noRippleClickable {
+                            if (scriptLang == ScriptType.Python) {
+                                toast(
+                                    context,
+                                    context.getString(R.string.script_toast_cant_use_python)
+                                )
+                            } else {
+                                selectedScriptLang = scriptLang
+                            }
+                        },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

@@ -42,7 +42,8 @@
 
         <activity android:name=".activity.setup.SetupActivity" />
         <activity android:name=".activity.main.MainActivity" />
-        <activity android:name=".activity.main.editor.EditorActivity" />
+        <activity android:name=".activity.main.editor.js.JsEditorActivity" />
+        <activity android:name=".activity.main.editor.simple.SimpleEditorActivity" />
 
         <service
             android:name=".service.MessageService"
