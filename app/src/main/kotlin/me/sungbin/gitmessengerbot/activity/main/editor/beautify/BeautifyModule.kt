@@ -13,7 +13,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepoImpl
@@ -24,24 +23,14 @@ import org.jsoup.Jsoup
 @InstallIn(SingletonComponent::class)
 object BeautifyModule {
 
-    @Provides
-    @Singleton
-    @Named("pretty")
-    fun providePretty() = instance("https://amp.prettifyjs.net")
-
-    @Provides
-    @Singleton
-    @Named("minify")
-    fun provideMinify() = instance("https://javascript-minifier.com/raw")
-
     private fun instance(baseUrl: String): Connection = Jsoup.connect(baseUrl)
         .ignoreContentType(true)
         .ignoreHttpErrors(true)
 
     @Provides
     @Singleton
-    fun provideRepo(
-        @Named("pretty") pretty: Connection,
-        @Named("minify") minify: Connection
-    ): BeautifyRepo = BeautifyRepoImpl(pretty = pretty, minify = minify)
+    fun provideRepo(): BeautifyRepo = BeautifyRepoImpl(
+        pretty = instance("https://amp.prettifyjs.net"),
+        minify = instance("https://javascript-minifier.com/raw")
+    )
 }

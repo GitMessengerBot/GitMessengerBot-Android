@@ -17,7 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import me.sungbin.gitmessengerbot.activity.main.script.CompileResult
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo

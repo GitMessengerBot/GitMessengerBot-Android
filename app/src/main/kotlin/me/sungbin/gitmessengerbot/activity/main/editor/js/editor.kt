@@ -34,6 +34,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -83,7 +85,7 @@ fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
 }
 
 @Composable
-private fun GitMenu(
+private fun GitMenu( // todo: 위치 조정
     gitRepo: GitRepo,
     beautifyRepo: BeautifyRepo,
     visible: MutableState<Boolean>,
@@ -237,17 +239,6 @@ private fun ToolBar(
             }
         )
         Icon(
-            painter = painterResource(R.drawable.ic_round_code_24),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .clickable { gitMenuVisible.value = true }
-                .constrainAs(setting) {
-                    end.linkTo(parent.end, 16.dp)
-                    top.linkTo(parent.top)
-                }
-        )
-        Icon(
             painter = painterResource(R.drawable.ic_round_save_24),
             contentDescription = null,
             tint = Color.White,
@@ -256,6 +247,17 @@ private fun ToolBar(
                     toast(context, context.getString(R.string.editor_toast_saved))
                     Bot.save(script, codeField.value.text)
                 }
+                .constrainAs(setting) {
+                    end.linkTo(parent.end, 16.dp)
+                    top.linkTo(parent.top)
+                }
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_round_code_24),
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier
+                .clickable { gitMenuVisible.value = true }
                 .constrainAs(save) {
                     end.linkTo(setting.start, 16.dp)
                     top.linkTo(parent.top)

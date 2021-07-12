@@ -62,7 +62,9 @@ class SplashActivity : ComponentActivity() {
 
         val isSetupDone = Storage.read(PathConfig.GithubData, null) != null
         val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
-        val builtTime = "${builtDate.get(Calendar.MINUTE)}m ${builtDate.get(Calendar.SECOND)}s"
+        val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
+                " ${builtDate.get(Calendar.MINUTE)}m " +
+                "${builtDate.get(Calendar.SECOND)}s"
         toast(this, "Built at: $builtTime")
 
         doDelay(2000) {
