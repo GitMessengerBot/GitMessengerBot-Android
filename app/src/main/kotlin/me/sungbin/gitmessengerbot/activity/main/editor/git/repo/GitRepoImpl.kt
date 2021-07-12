@@ -39,8 +39,10 @@ class GitRepoImpl @Inject constructor(
     override fun getSha(repoName: String) = callbackFlow {
         try {
             runCatching {
-                var sha =
-                    buildRetrofit.getSha(gitUser.userName, repoName, "script.ts").await().string()
+                var sha = buildRetrofit
+                    .getSha(gitUser.userName, repoName, "script.ts")
+                    .await()
+                    .use { it.string() }
                 sha = if (sha.contains("sha")) {
                     JSONObject(sha).getString("sha")
                 } else {
