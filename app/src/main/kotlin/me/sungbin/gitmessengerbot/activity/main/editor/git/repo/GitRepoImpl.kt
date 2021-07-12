@@ -40,7 +40,7 @@ class GitRepoImpl @Inject constructor(
         try {
             runCatching {
                 var sha = buildRetrofit
-                    .getSha(gitUser.userName, repoName, "script.ts")
+                    .getSha(owner = gitUser.userName, repoName = repoName, path = "script.ts")
                     .await()
                     .use { it.string() }
                 sha = if (sha.contains("sha")) {
