@@ -344,7 +344,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(110.dp)
             .shadow(3.dp, shape)
             .clip(shape)
             .noRippleClickable {
@@ -383,7 +383,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .clip(compileStateShape)
                     .background(compileStateBackgroundColor, compileStateShape)
                     .border(1.dp, Color.White, compileStateShape)
-                    .padding(top = 2.dp, bottom = 2.dp, start = 6.dp, end = 6.dp)
+                    .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -458,7 +458,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                         }
                     }
                     .constrainAs(reload) {
-                        end.linkTo(debug.start, 20.dp)
+                        end.linkTo(debug.start, 18.dp)
                         top.linkTo(compileState.top)
                         bottom.linkTo(compileState.bottom)
                     }
@@ -471,7 +471,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(scriptLangDeco) {
                         start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
+                        top.linkTo(scriptPower.top)
+                        bottom.linkTo(scriptPower.bottom)
                     }
             )
             Text(
@@ -525,8 +526,10 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 text = script.name,
                 color = Color.White,
                 modifier = Modifier.constrainAs(scriptName) {
-                    bottom.linkTo(scriptNameUnderline.bottom, 4.dp)
+                    top.linkTo(compileState.bottom)
+                    bottom.linkTo(scriptNameUnderline.top)
                     start.linkTo(parent.start)
+                    height = Dimension.fillToConstraints
                 }
             )
         }
@@ -556,16 +559,14 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
         ) {
             Text(text = stringResource(R.string.script_add_name))
             TextField(
-                label = { Text(text = stringResource(R.string.script_add_name_only_eng), fontSize = 10.sp) },
-                value = scriptNameField,
-                onValueChange = { scriptNameField = it },
                 label = {
                     Text(
                         text = stringResource(R.string.script_add_name_only_eng),
-                        fontSize = 10.sp,
-                        color = Color.Gray
+                        fontSize = 10.sp
                     )
                 },
+                value = scriptNameField,
+                onValueChange = { scriptNameField = it },
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 modifier = Modifier
@@ -650,4 +651,3 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
         }
     }
 }
-
