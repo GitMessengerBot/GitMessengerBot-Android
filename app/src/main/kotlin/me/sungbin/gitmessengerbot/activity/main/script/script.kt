@@ -382,7 +382,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .clip(compileStateShape)
                     .background(compileStateBackgroundColor, compileStateShape)
                     .border(1.dp, Color.White, compileStateShape)
-                    .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                    .padding(top = 2.dp, bottom = 2.dp, start = 6.dp, end = 6.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -396,7 +396,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(setting) {
                         end.linkTo(parent.end)
-                        top.linkTo(parent.top)
+                        top.linkTo(compileState.top)
+                        bottom.linkTo(compileState.bottom)
                     }
             )
             Icon(
@@ -407,8 +408,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(logcat) {
                         end.linkTo(setting.start, 16.dp)
-                        top.linkTo(setting.top)
-                        bottom.linkTo(setting.bottom)
+                        top.linkTo(compileState.top)
+                        bottom.linkTo(compileState.bottom)
                     }
             )
             Icon(
@@ -419,8 +420,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .constrainAs(debug) {
                         end.linkTo(logcat.start, 20.dp)
-                        top.linkTo(logcat.top)
-                        bottom.linkTo(logcat.bottom)
+                        top.linkTo(compileState.top)
+                        bottom.linkTo(compileState.bottom)
                     }
             )
             Icon(
@@ -457,8 +458,8 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     }
                     .constrainAs(reload) {
                         end.linkTo(debug.start, 20.dp)
-                        top.linkTo(debug.top)
-                        bottom.linkTo(debug.bottom)
+                        top.linkTo(compileState.top)
+                        bottom.linkTo(compileState.bottom)
                     }
             )
             Icon(
@@ -556,6 +557,13 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
             TextField(
                 value = scriptNameField,
                 onValueChange = { scriptNameField = it },
+                label = {
+                    Text(
+                        text = stringResource(R.string.script_add_only_eng),
+                        fontSize = 10.sp,
+                        color = Color.Gray
+                    )
+                },
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 modifier = Modifier
