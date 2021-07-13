@@ -529,7 +529,6 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     top.linkTo(compileState.bottom)
                     bottom.linkTo(scriptNameUnderline.top)
                     start.linkTo(parent.start)
-                    height = Dimension.fillToConstraints
                 }
             )
         }
