@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -140,7 +141,9 @@ class SetupActivity : ComponentActivity() {
                     text = {
                         Column {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
@@ -161,7 +164,8 @@ class SetupActivity : ComponentActivity() {
                                     text = stringResource(R.string.setup_dialog_input_personal_key),
                                     color = Color.Black,
                                     fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(start = 8.dp)
+                                    modifier = Modifier.padding(start = 8.dp),
+                                    fontSize = 15.sp
                                 )
                             }
                             TextField(
@@ -288,8 +292,6 @@ class SetupActivity : ComponentActivity() {
                     top.linkTo(parent.top, 20.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    height = Dimension.wrapContent
-                    width = Dimension.fillToConstraints
                 },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -297,6 +299,7 @@ class SetupActivity : ComponentActivity() {
                     painter = painterResource(R.drawable.ic_round_caution_24),
                     modifier = Modifier.size(60.dp),
                     contentDescription = null,
+                    tint = Color.White
                 )
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
@@ -316,7 +319,6 @@ class SetupActivity : ComponentActivity() {
                     top.linkTo(header.bottom)
                     bottom.linkTo(footer.top)
                     height = Dimension.fillToConstraints
-                    width = Dimension.fillToConstraints
                 },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -364,7 +366,6 @@ class SetupActivity : ComponentActivity() {
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
                 },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -434,7 +435,6 @@ class SetupActivity : ComponentActivity() {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
                     }
                 )
                 Text(
@@ -444,7 +444,6 @@ class SetupActivity : ComponentActivity() {
                         start.linkTo(icon.end, 8.dp)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
                     }
                 )
                 Icon(
@@ -455,7 +454,6 @@ class SetupActivity : ComponentActivity() {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
                     }
                 )
             }

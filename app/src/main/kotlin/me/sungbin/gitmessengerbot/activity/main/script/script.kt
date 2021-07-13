@@ -383,7 +383,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .clip(compileStateShape)
                     .background(compileStateBackgroundColor, compileStateShape)
                     .border(1.dp, Color.White, compileStateShape)
-                    .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                    .padding(top = 2.dp, bottom = 2.dp, start = 6.dp, end = 6.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -517,7 +517,6 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(scriptPower.top, 4.dp)
-                    width = Dimension.fillToConstraints
                 },
                 color = Color.White,
                 thickness = 0.5.dp
