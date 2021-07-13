@@ -561,7 +561,7 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                 onValueChange = { scriptNameField = it },
                 label = {
                     Text(
-                        text = stringResource(R.string.script_add_only_eng),
+                        text = stringResource(R.string.script_add_name_only_eng),
                         fontSize = 10.sp,
                         color = Color.Gray
                     )
