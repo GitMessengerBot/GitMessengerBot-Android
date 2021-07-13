@@ -11,7 +11,7 @@ package me.sungbin.gitmessengerbot.activity.setup.github.repo
 
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubUser
 
-sealed class GithubRepoResult {
-    data class Error(val exception: Exception) : GithubRepoResult()
-    data class Success(val user: GithubUser) : GithubRepoResult()
+sealed class GithubUserResult {
+    data class Error(val exception: Exception) : GithubUserResult()
+    data class Success(val user: GithubUser) : GithubUserResult()
 }

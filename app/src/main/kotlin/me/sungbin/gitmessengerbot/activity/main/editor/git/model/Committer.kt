@@ -2,25 +2,22 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Plan.kt] created by Ji Sungbin on 21. 6. 16. 오전 3:23.
+ * [Committer.kt] created by Ji Sungbin on 21. 7. 13. 오전 1:45.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.setup.github.model
+package me.sungbin.gitmessengerbot.activity.main.editor.git.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Plan(
-    @SerializedName("private_repos")
-    val privateRepos: Int,
+data class Committer(
+    @SerializedName("date")
+    val date: String,
 
     @SerializedName("name")
     val name: String,
 
-    @SerializedName("collaborators")
-    val collaborators: Int,
-
-    @SerializedName("space")
-    val space: Int
+    @SerializedName("email")
+    val email: String
 )

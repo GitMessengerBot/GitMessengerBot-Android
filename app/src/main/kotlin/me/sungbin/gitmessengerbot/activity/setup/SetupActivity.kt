@@ -73,8 +73,8 @@ import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepo
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepoResult
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepo
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserResult
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -90,7 +90,7 @@ import me.sungbin.gitmessengerbot.util.extension.toast
 class SetupActivity : ComponentActivity() {
 
     @Inject
-    lateinit var githubRepo: GithubRepo
+    lateinit var githubUserRepo: GithubUserRepo
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -210,13 +210,13 @@ class SetupActivity : ComponentActivity() {
                                             .clickable {
                                                 coroutineScope.launch(Dispatchers.IO) {
                                                     var githubData =
-                                                        GithubData(personalKey = personalKeyField.text)
+                                                        GithubData(token = personalKeyField.text)
 
-                                                    githubRepo
-                                                        .login(githubData.personalKey)
+                                                    githubUserRepo
+                                                        .login(githubData.token)
                                                         .collect { result ->
                                                             when (result) {
-                                                                is GithubRepoResult.Success -> {
+                                                                is GithubUserResult.Success -> {
                                                                     githubData = githubData.copy(
                                                                         userName = result.user.login,
                                                                         profileImageUrl = result.user.avatarUrl
@@ -243,7 +243,7 @@ class SetupActivity : ComponentActivity() {
                                                                         )
                                                                     )
                                                                 }
-                                                                is GithubRepoResult.Error -> {
+                                                                is GithubUserResult.Error -> {
                                                                     toast(
                                                                         activity,
                                                                         getString(

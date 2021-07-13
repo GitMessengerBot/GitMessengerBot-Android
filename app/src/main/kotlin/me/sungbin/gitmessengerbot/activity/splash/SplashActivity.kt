@@ -11,6 +11,7 @@ package me.sungbin.gitmessengerbot.activity.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -62,8 +63,10 @@ class SplashActivity : ComponentActivity() {
 
         val isSetupDone = Storage.read(PathConfig.GithubData, null) != null
         val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
-        val builtTime = "${builtDate.get(Calendar.MINUTE)}m ${builtDate.get(Calendar.SECOND)}s"
-        toast(this, "Built at: $builtTime")
+        val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
+                " ${builtDate.get(Calendar.MINUTE)}m " +
+                "${builtDate.get(Calendar.SECOND)}s"
+        toast(this, "Built at: $builtTime", Toast.LENGTH_LONG)
 
         doDelay(2000) {
             finish()

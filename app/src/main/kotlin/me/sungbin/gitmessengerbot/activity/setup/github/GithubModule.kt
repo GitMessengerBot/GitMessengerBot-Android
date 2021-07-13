@@ -14,8 +14,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepo
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepoImpl
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepo
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepoImpl
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,5 +36,5 @@ object GithubModule {
     fun provideRepo(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         retrofit: Retrofit.Builder
-    ): GithubRepo = GithubRepoImpl(httpLoggingInterceptor, retrofit)
+    ): GithubUserRepo = GithubUserRepoImpl(httpLoggingInterceptor, retrofit)
 }

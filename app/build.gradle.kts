@@ -9,7 +9,7 @@
 
 plugins {
     id("com.android.application")
-    id("com.chaquo.python")
+    // id("com.chaquo.python")
     id("kotlin-android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
@@ -39,9 +39,9 @@ android {
             useSupportLibrary = true
         }
 
-        ndk {
+        /*ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
-        }
+        }*/
 
         buildConfigField("long", "TIMESTAMP", "${System.currentTimeMillis()}L")
     }

@@ -13,13 +13,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.Color
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
+import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.config.PathConfig
 
+@AndroidEntryPoint
 class JsEditorActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var gitRepo: GitRepo
+
+    @Inject
+    lateinit var beautifyRepo: BeautifyRepo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,7 +44,11 @@ class JsEditorActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Editor(script = Bot.getScriptById(scriptId))
+                Editor(
+                    script = Bot.getScriptById(scriptId),
+                    gitRepo = gitRepo,
+                    beautifyRepo = beautifyRepo
+                )
             }
         }
     }

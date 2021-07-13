@@ -80,6 +80,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.js.JsEditorActivity
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.bot.Bot
@@ -555,6 +556,7 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
         ) {
             Text(text = stringResource(R.string.script_add_name))
             TextField(
+                label = { Text(text = stringResource(R.string.script_add_name_only_eng), fontSize = 10.sp) },
                 value = scriptNameField,
                 onValueChange = { scriptNameField = it },
                 label = {
@@ -648,3 +650,4 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
         }
     }
 }
+

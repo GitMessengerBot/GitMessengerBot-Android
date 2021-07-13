@@ -122,7 +122,7 @@ object Bot {
             RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
             session.actionIntent.send(context, 0, sendIntent)
         } catch (exception: Exception) {
-            Util.error(context, exception)
+            Util.error(context, "메시지 답장 실패\n\n$exception")
         }
     }
 
@@ -150,7 +150,7 @@ object Bot {
                 // todo: 디버그 만들기
             }
         } catch (exception: Exception) {
-            Util.error(context, exception)
+            Util.error(context, "js response 호출 실패\n\n$exception")
         }
     }
 }

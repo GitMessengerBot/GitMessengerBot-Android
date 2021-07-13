@@ -11,7 +11,7 @@ package me.sungbin.gitmessengerbot.activity.main.script.compiler.repo
 
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
-import me.sungbin.gitmessengerbot.activity.main.script.CompileResult
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 
 interface ScriptCompiler {
