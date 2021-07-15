@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -114,7 +115,11 @@ private fun DrawerLayout(
                 painter = painterResource(R.drawable.ic_round_code_24),
                 contentDescription = null
             )
-            Text(text = "Git", fontSize = 30.sp, modifier = Modifier.padding(start = 10.dp))
+            Text(
+                text = stringResource(R.string.editor_drawer_git),
+                fontSize = 30.sp,
+                modifier = Modifier.padding(start = 10.dp)
+            )
         }
         OutlinedButton(
             modifier = Modifier
@@ -131,12 +136,12 @@ private fun DrawerLayout(
                         when (result) {
                             is GitResult.Success -> toast(
                                 context,
-                                context.getString(R.string.editor_git_repo_create_success)
+                                context.getString(R.string.editor_toast_repo_create_success)
                             )
                             is GitResult.Error -> Util.error(
                                 context,
                                 context.getString(
-                                    R.string.editor_git_repo_create_error,
+                                    R.string.editor_toast_repo_create_error,
                                     result.exception
                                 )
                             )
@@ -145,7 +150,7 @@ private fun DrawerLayout(
                 }
             }
         ) {
-            Text(text = "Create ${script.name} repo")
+            Text(text = stringResource(R.string.editor_drawer_create_repo, script.name))
         }
         OutlinedButton(
             modifier = Modifier
@@ -171,12 +176,12 @@ private fun DrawerLayout(
                                     when (updateResult) {
                                         is GitResult.Success -> toast(
                                             context,
-                                            context.getString(R.string.editor_git_commit_success)
+                                            context.getString(R.string.editor_toast_commit_success)
                                         )
                                         is GitResult.Error -> Util.error(
                                             context,
                                             context.getString(
-                                                R.string.editor_git_commit_error,
+                                                R.string.editor_toast_commit_error,
                                                 updateResult.exception
                                             )
                                         )
@@ -186,7 +191,7 @@ private fun DrawerLayout(
                             is GitResult.Error -> Util.error(
                                 context,
                                 context.getString(
-                                    R.string.editor_git_content_get_error,
+                                    R.string.editor_toast_content_get_error,
                                     commitResult.exception
                                 )
                             )
@@ -195,7 +200,7 @@ private fun DrawerLayout(
                 }
             }
         ) {
-            Text(text = "Commit and Push")
+            Text(text = stringResource(R.string.editor_drawer_commit_and_push))
         }
         OutlinedButton(
             modifier = Modifier
@@ -217,13 +222,13 @@ private fun DrawerLayout(
                                 codeField.value = TextFieldValue(content.await())
                                 toast(
                                     context,
-                                    context.getString(R.string.editor_git_file_update_success)
+                                    context.getString(R.string.editor_toast_file_update_success)
                                 )
                             }
                             is GitResult.Error -> Util.error(
                                 context,
                                 context.getString(
-                                    R.string.editor_git_content_get_error,
+                                    R.string.editor_toast_content_get_error,
                                     fileContentResult.exception
                                 )
                             )
@@ -232,7 +237,7 @@ private fun DrawerLayout(
                 }
             }
         ) {
-            Text(text = "Update project")
+            Text(text = stringResource(R.string.editor_drawer_update_project))
         }
         Row(
             modifier = Modifier.padding(top = 30.dp),
@@ -243,7 +248,7 @@ private fun DrawerLayout(
                 contentDescription = null
             )
             Text(
-                text = "Beautify",
+                text = stringResource(R.string.editor_drawer_beautify),
                 modifier = Modifier.padding(start = 10.dp),
                 fontSize = 30.sp
             )
@@ -271,7 +276,7 @@ private fun DrawerLayout(
                     .weight(1f)
                     .padding(end = 8.dp)
             ) {
-                Text(text = "Minify")
+                Text(text = stringResource(R.string.editor_drawer_minify))
             }
             OutlinedButton(
                 onClick = {
@@ -293,7 +298,7 @@ private fun DrawerLayout(
                     .weight(1f)
                     .padding(start = 8.dp)
             ) {
-                Text(text = "Pretty")
+                Text(text = stringResource(R.string.editor_drawer_pretty))
             }
         }
     }
