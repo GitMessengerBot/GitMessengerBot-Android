@@ -9,7 +9,6 @@
 
 package me.sungbin.gitmessengerbot.util
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.app.NotificationManager
@@ -18,14 +17,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.DrawableRes
+import androidx.core.app.NotificationCompat
 import me.sungbin.gitmessengerbot.activity.splash.SplashActivity
 
 @Suppress("DEPRECATION")
 object NotificationUtil {
     private fun builder(context: Context, channelId: String) =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder(context, channelId)
-        } else Notification.Builder(context)
+            NotificationCompat.Builder(context, channelId)
+        } else NotificationCompat.Builder(context)
 
     fun createChannel(context: Context, name: String, description: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,7 +46,7 @@ object NotificationUtil {
         }
     }
 
-    private fun pendingIntent(context: Context): PendingIntent {
+    private fun splashActivityPendingIntent(context: Context): PendingIntent {
         val intent = Intent(context, SplashActivity::class.java)
         return PendingIntent.getActivity(context, 500, intent, PendingIntent.FLAG_IMMUTABLE)
     }
@@ -61,43 +61,21 @@ object NotificationUtil {
         title: String,
         content: String,
         icon: Int,
-        isOnGoing: Boolean
+        isOnGoing: Boolean,
+        showTimestamp: Boolean
     ) {
         getManager(context).notify(
             id,
-            getNormalNotification(context, channelId, title, content, icon, isOnGoing).build()
+            getNormalNotification(
+                context,
+                channelId,
+                title,
+                content,
+                icon,
+                isOnGoing,
+                showTimestamp
+            ).build()
         )
-    }
-
-    fun showInboxStyleNotification(
-        context: Context,
-        id: Int,
-        channelId: String,
-        title: String,
-        content: String,
-        boxText: List<String>,
-        @DrawableRes icon: Int,
-        isOnGoing: Boolean
-    ) {
-        val builder = builder(context, channelId)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setSmallIcon(icon)
-            .setAutoCancel(true)
-            .setOngoing(isOnGoing)
-            .setContentIntent(pendingIntent(context))
-
-        val inboxStyle = Notification.InboxStyle()
-        inboxStyle.setBigContentTitle(title)
-        inboxStyle.setSummaryText(content)
-
-        for (element in boxText) {
-            inboxStyle.addLine(element)
-        }
-
-        builder.style = inboxStyle
-
-        getManager(context).notify(id, builder.build())
     }
 
     fun getNormalNotification(
@@ -106,12 +84,15 @@ object NotificationUtil {
         title: String,
         content: String,
         @DrawableRes icon: Int,
-        isOnGoing: Boolean
+        isOnGoing: Boolean,
+        showTimestamp: Boolean
     ) = builder(context, channelId)
         .setContentTitle(title)
         .setContentText(content)
         .setSmallIcon(icon)
         .setAutoCancel(true)
         .setOngoing(isOnGoing)
-        .setContentIntent(pendingIntent(context))
+        .setContentIntent(splashActivityPendingIntent(context))
+        .setWhen(System.currentTimeMillis())
+        .setShowWhen(showTimestamp)
 }

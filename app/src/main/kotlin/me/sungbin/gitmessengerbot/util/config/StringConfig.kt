@@ -24,6 +24,10 @@ object StringConfig {
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"
 
+    const val IntentNotificationAction = "intent-notifiaction-action"
+    const val IntentBotPowerToggle = "intent-bot-power-onoff"
+    const val IntentBotRecompile = "intent-bot-recompile"
+
     /**
      * 스크립트 코드 파일
      *
