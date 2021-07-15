@@ -12,9 +12,12 @@ package me.sungbin.gitmessengerbot.activity.main.editor.js
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
@@ -28,6 +31,8 @@ class JsEditorActivity : ComponentActivity() {
     @Inject
     lateinit var gitRepo: GitRepo
 
+    private lateinit var onBackPressedAction: () -> Unit
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,11 +45,33 @@ class JsEditorActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
+                val scaffoldState = rememberScaffoldState()
+                val coroutineScope = rememberCoroutineScope()
+
+                onBackPressedAction = {
+                    if (scaffoldState.drawerState.isOpen) {
+                        coroutineScope.launch {
+                            scaffoldState.drawerState.close()
+                        }
+                    } else {
+                        super.onBackPressed()
+                    }
+                }
+
                 Editor(
                     script = Bot.getScriptById(scriptId),
-                    gitRepo = gitRepo
+                    gitRepo = gitRepo,
+                    scaffoldState = scaffoldState
                 )
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (::onBackPressedAction.isInitialized) {
+            onBackPressedAction()
+        } else {
+            super.onBackPressed()
         }
     }
 }

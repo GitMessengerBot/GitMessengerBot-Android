@@ -10,6 +10,7 @@
 <resources>
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright">© 2021 지성빈 &amp; 구환. all rights reserved.</string>
+    <string name="need_pro_license">PRO 기능입니다.\n\n권한 업그레이드가 필요합니다!</string>
 
     <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="setup_last_func">마지막으로,</string>
@@ -66,9 +67,10 @@
     <string name="editor_toast_file_update_error">파일 업데이트 실패\n\n%s</string>
     <string name="editor_toast_content_get_error">파일 정보 추출 실패\n\n%s</string>
     <string name="editor_drawer_git">Git</string>
-    <string name="editor_drawer_create_repo">Creat %s repo</string>
+    <string name="editor_drawer_create_repo">Create %s repo</string>
     <string name="editor_drawer_commit_and_push">Commit and Push</string>
     <string name="editor_drawer_update_project">Update project</string>
+    <string name="editor_drawer_commit_history">Commit history</string>
     <string name="editor_drawer_beautify">Beautify</string>
     <string name="editor_drawer_minify">Minify</string>
     <string name="editor_drawer_pretty">Pretty</string>

@@ -25,7 +25,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -64,9 +63,8 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 
 @Composable
-fun Editor(gitRepo: GitRepo, script: ScriptItem) {
+fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
     val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
-    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -238,6 +236,16 @@ private fun DrawerLayout(
             }
         ) {
             Text(text = stringResource(R.string.editor_drawer_update_project))
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = {
+                toast(context, context.getString(R.string.need_pro_license))
+            }
+        ) {
+            Text(text = stringResource(R.string.editor_drawer_commit_history))
         }
         Row(
             modifier = Modifier.padding(top = 30.dp),
