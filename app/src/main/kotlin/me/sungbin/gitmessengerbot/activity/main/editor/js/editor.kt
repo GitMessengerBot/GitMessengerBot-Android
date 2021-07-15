@@ -42,8 +42,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
-import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyResult
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileContentResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
@@ -55,10 +53,11 @@ import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.extension.toast
+import org.json.JSONObject
 import org.jsoup.Jsoup
 
 @Composable
-fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
+fun Editor(gitRepo: GitRepo, script: ScriptItem) {
     val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
 
     Scaffold(
@@ -66,7 +65,6 @@ fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
         topBar = {
             ToolBar(
                 gitRepo = gitRepo,
-                beautifyRepo = beautifyRepo,
                 script = script,
                 codeField = codeField
             )
@@ -89,7 +87,6 @@ fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
 @Composable
 private fun GitMenu( // todo: 위치 조정
     gitRepo: GitRepo,
-    beautifyRepo: BeautifyRepo,
     visible: MutableState<Boolean>,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>
@@ -194,18 +191,13 @@ private fun GitMenu( // todo: 위치 조정
         DropdownMenuItem(
             onClick = {
                 coroutineScope.launch {
-                    beautifyRepo.minify(codeField.value.text).collect { result ->
-                        when (result) {
-                            is BeautifyResult.Success -> {
-                                codeField.value = TextFieldValue(text = result.code)
-                                toast(context, "코드 최적화 성공")
-                            }
-                            is BeautifyResult.Error -> Util.error(
-                                context,
-                                "코드 최적화 실패\n\n${result.exception}"
-                            )
-                        }
+                    val minify = async(Dispatchers.IO) {
+                        Jsoup.connect("https://javascript-minifier.com/raw")
+                            .ignoreContentType(true)
+                            .ignoreHttpErrors(true)
+                            .data("input", codeField.value.text).post().wholeText()
                     }
+                    codeField.value = TextFieldValue(minify.await())
                 }
             }
         ) {
@@ -214,18 +206,15 @@ private fun GitMenu( // todo: 위치 조정
         DropdownMenuItem(
             onClick = {
                 coroutineScope.launch {
-                    beautifyRepo.pretty(codeField.value.text).collect { result ->
-                        when (result) {
-                            is BeautifyResult.Success -> {
-                                codeField.value = TextFieldValue(text = result.code)
-                                toast(context, "코드 최적화 성공")
-                            }
-                            is BeautifyResult.Error -> Util.error(
-                                context,
-                                "코드 최적화 실패\n\n${result.exception}"
-                            )
-                        }
+                    val beautify = async(Dispatchers.IO) {
+                        JSONObject(
+                            Jsoup.connect("https://amp.prettifyjs.net")
+                                .ignoreContentType(true)
+                                .ignoreHttpErrors(true)
+                                .data("input", codeField.value.text).post().wholeText()
+                        ).getString("output")
                     }
+                    codeField.value = TextFieldValue(beautify.await())
                 }
             }
         ) {
@@ -237,7 +226,6 @@ private fun GitMenu( // todo: 위치 조정
 @Composable
 private fun ToolBar(
     gitRepo: GitRepo,
-    beautifyRepo: BeautifyRepo,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>
 ) {
@@ -246,7 +234,6 @@ private fun ToolBar(
 
     GitMenu(
         gitRepo = gitRepo,
-        beautifyRepo = beautifyRepo,
         visible = gitMenuVisible,
         script = script,
         codeField = codeField
