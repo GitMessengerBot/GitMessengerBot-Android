@@ -2,7 +2,7 @@ package me.sungbin.gitmessengerbot.activity.main.editor.git.model
 
 import com.google.gson.annotations.SerializedName
 
-data class FileCotent(
+data class FileContentResponse(
     @field:SerializedName("path")
     val path: String,
 

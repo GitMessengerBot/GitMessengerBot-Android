@@ -9,17 +9,18 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git
 
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileContentResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileCreateResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.RepoCreateResponse
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GitService {
 
@@ -36,11 +37,11 @@ interface GitService {
         @Body body: Repo
     ): Call<RepoCreateResponse>
 
-    // https://api.github.com/repos/jisungbin/test/contents/script.ts
     @GET("/repos/{owner}/{repoName}/contents/{path}")
-    fun getSha(
+    fun getFileContent(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-        @Path("path") path: String
-    ): Call<ResponseBody>
+        @Path("path") path: String,
+        @Query("ref") branch: String
+    ): Call<FileContentResponse>
 }

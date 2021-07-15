@@ -12,9 +12,15 @@ package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
 import kotlinx.coroutines.flow.Flow
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.util.config.PathConfig
 
 interface GitRepo {
-    fun getSha(repoName: String): Flow<GitResult>
+    fun getFileContent(
+        repoName: String,
+        path: String,
+        branch: String = PathConfig.GitDefaultBranch
+    ): Flow<GitResult>
+
     fun createRepo(repo: Repo): Flow<GitResult>
     fun updateFile(repoName: String, path: String, gitFile: GitFile): Flow<GitResult>
 }

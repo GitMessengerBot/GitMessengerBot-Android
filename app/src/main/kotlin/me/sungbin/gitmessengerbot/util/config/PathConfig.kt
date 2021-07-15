@@ -17,6 +17,8 @@ object PathConfig {
     private const val AppStorage = "GitMessengerBot/data"
 
     const val GithubData = "$AppStorage/github-data.json"
+    const val GitDefaultBranch = "main"
+
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"
 

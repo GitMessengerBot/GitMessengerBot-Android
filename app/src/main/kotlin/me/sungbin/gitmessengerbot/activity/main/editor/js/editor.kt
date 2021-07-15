@@ -37,12 +37,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyRepo
 import me.sungbin.gitmessengerbot.activity.main.editor.beautify.repo.BeautifyResult
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileSha
+import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileContentResponse
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
@@ -53,6 +55,7 @@ import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.extension.toast
+import org.jsoup.Jsoup
 
 @Composable
 fun Editor(gitRepo: GitRepo, beautifyRepo: BeautifyRepo, script: ScriptItem) {
@@ -89,7 +92,7 @@ private fun GitMenu( // todo: 위치 조정
     beautifyRepo: BeautifyRepo,
     visible: MutableState<Boolean>,
     script: ScriptItem,
-    code: MutableState<TextFieldValue>
+    codeField: MutableState<TextFieldValue>
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -99,103 +102,132 @@ private fun GitMenu( // todo: 위치 조정
         expanded = visible.value,
         onDismissRequest = { visible.value = false }
     ) {
-        DropdownMenuItem(onClick = {
-            coroutineScope.launch {
-                gitRepo.createRepo(
-                    Repo(
-                        name = repoName,
-                        description = "Created by GitMessengerBot"
-                    )
-                ).collect { result ->
-                    when (result) {
-                        is GitResult.Success -> toast(context, "레포 생성 완료")
-                        is GitResult.Error -> Util.error(
-                            context,
-                            "레포 생성 실패\n\n${result.exception}"
+        DropdownMenuItem(
+            onClick = {
+                coroutineScope.launch {
+                    gitRepo.createRepo(
+                        Repo(
+                            name = repoName,
+                            description = "Created by GitMessengerBot"
                         )
+                    ).collect { result ->
+                        when (result) {
+                            is GitResult.Success -> toast(context, "레포 생성 완료")
+                            is GitResult.Error -> Util.error(
+                                context,
+                                "레포 생성 실패\n\n${result.exception}"
+                            )
+                        }
                     }
                 }
             }
-        }) {
+        ) {
             Text(text = "Create $repoName repo")
         }
-        DropdownMenuItem(onClick = {
-            coroutineScope.launch {
-                gitRepo.getSha(repoName).collect { shaResult ->
-                    when (shaResult) {
-                        is GitResult.Success -> {
-                            gitRepo.updateFile(
-                                repoName = repoName,
-                                path = "script.${script.lang.toScriptSuffix()}",
-                                gitFile = GitFile(
-                                    message = "Commited by GitMessengerBot",
-                                    content = code.value.text,
-                                    sha = (shaResult.result as FileSha).sha,
-                                    branch = "main"
-                                )
-                            ).collect { updateResult ->
-                                when (updateResult) {
-                                    is GitResult.Success -> toast(context, "파일 업데이트 완료")
-                                    is GitResult.Error -> Util.error(
-                                        context,
-                                        "파일 업데이트 실패\n\n${updateResult.exception}"
+        DropdownMenuItem(
+            onClick = {
+                coroutineScope.launch {
+                    gitRepo.getFileContent(
+                        repoName = repoName,
+                        path = "script.${script.lang.toScriptSuffix()}"
+                    ).collect { fileContentResult ->
+                        when (fileContentResult) {
+                            is GitResult.Success -> {
+                                gitRepo.updateFile(
+                                    repoName = repoName,
+                                    path = "script.${script.lang.toScriptSuffix()}",
+                                    gitFile = GitFile(
+                                        message = "Commited by GitMessengerBot",
+                                        content = codeField.value.text,
+                                        sha = (fileContentResult.result as FileContentResponse).sha
                                     )
+                                ).collect { updateResult ->
+                                    when (updateResult) {
+                                        is GitResult.Success -> toast(context, "파일 업데이트 완료")
+                                        is GitResult.Error -> Util.error(
+                                            context,
+                                            "파일 업데이트 실패\n\n${updateResult.exception}"
+                                        )
+                                    }
                                 }
                             }
+                            is GitResult.Error -> Util.error(
+                                context,
+                                "파일 정보 추출 실패\n\n${fileContentResult.exception}"
+                            )
                         }
-                        is GitResult.Error -> Util.error(
-                            context,
-                            "파일 sha값 추출 실패\n\n${shaResult.exception}"
-                        )
                     }
-
                 }
             }
-        }) {
+        ) {
             Text(text = "Commit and Push")
         }
-        DropdownMenuItem(onClick = {
-            toast(context, "TODO")
-        }) {
+        DropdownMenuItem(
+            onClick = {
+                coroutineScope.launch {
+                    gitRepo.getFileContent(
+                        repoName = repoName,
+                        path = "script.${script.lang.toScriptSuffix()}"
+                    ).collect { fileContentResult ->
+                        when (fileContentResult) {
+                            is GitResult.Success -> {
+                                val contentDownloadUrl =
+                                    (fileContentResult.result as FileContentResponse).downloadUrl
+                                val content = async(Dispatchers.IO) {
+                                    Jsoup.connect(contentDownloadUrl).get().toString()
+                                }
+                                codeField.value = TextFieldValue(content.await())
+                            }
+                            is GitResult.Error -> Util.error(
+                                context,
+                                "파일 정보 추출 실패\n\n${fileContentResult.exception}"
+                            )
+                        }
+                    }
+                }
+            }
+        ) {
             Text(text = "Update project")
         }
         Divider()
-        DropdownMenuItem(onClick = {
-            coroutineScope.launch {
-                beautifyRepo.minify(code.value.text).collect { result ->
-                    when (result) {
-                        is BeautifyResult.Success -> {
-                            code.value = TextFieldValue(text = result.code)
-                            toast(context, "코드 최적화 성공")
+        DropdownMenuItem(
+            onClick = {
+                coroutineScope.launch {
+                    beautifyRepo.minify(codeField.value.text).collect { result ->
+                        when (result) {
+                            is BeautifyResult.Success -> {
+                                codeField.value = TextFieldValue(text = result.code)
+                                toast(context, "코드 최적화 성공")
+                            }
+                            is BeautifyResult.Error -> Util.error(
+                                context,
+                                "코드 최적화 실패\n\n${result.exception}"
+                            )
                         }
-                        is BeautifyResult.Error -> Util.error(
-                            context,
-                            "코드 최적화 실패\n\n${result.exception}"
-                        )
                     }
-
                 }
             }
-        }) {
+        ) {
             Text(text = "Minify")
         }
-        DropdownMenuItem(onClick = {
-            coroutineScope.launch {
-                beautifyRepo.pretty(code.value.text).collect { result ->
-                    when (result) {
-                        is BeautifyResult.Success -> {
-                            code.value = TextFieldValue(text = result.code)
-                            toast(context, "코드 최적화 성공")
+        DropdownMenuItem(
+            onClick = {
+                coroutineScope.launch {
+                    beautifyRepo.pretty(codeField.value.text).collect { result ->
+                        when (result) {
+                            is BeautifyResult.Success -> {
+                                codeField.value = TextFieldValue(text = result.code)
+                                toast(context, "코드 최적화 성공")
+                            }
+                            is BeautifyResult.Error -> Util.error(
+                                context,
+                                "코드 최적화 실패\n\n${result.exception}"
+                            )
                         }
-                        is BeautifyResult.Error -> Util.error(
-                            context,
-                            "코드 최적화 실패\n\n${result.exception}"
-                        )
                     }
-
                 }
             }
-        }) {
+        ) {
             Text(text = "Beautify")
         }
     }
@@ -216,7 +248,7 @@ private fun ToolBar(
         beautifyRepo = beautifyRepo,
         visible = gitMenuVisible,
         script = script,
-        code = codeField
+        codeField = codeField
     )
 
     ConstraintLayout(
