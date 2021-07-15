@@ -40,7 +40,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.setup.SetupActivity" />
+        <activity
+            android:name=".activity.setup.SetupActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="authorize"
+                    android:scheme="gmb" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".activity.main.MainActivity" />
         <activity android:name=".activity.main.editor.js.JsEditorActivity" />
         <activity android:name=".activity.main.editor.simple.SimpleEditorActivity" />
