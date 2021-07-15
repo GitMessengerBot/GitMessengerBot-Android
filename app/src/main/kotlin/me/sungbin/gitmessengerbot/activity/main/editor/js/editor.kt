@@ -174,9 +174,10 @@ private fun GitMenu( // todo: 위치 조정
                                 val contentDownloadUrl =
                                     (fileContentResult.result as FileContentResponse).downloadUrl
                                 val content = async(Dispatchers.IO) {
-                                    Jsoup.connect(contentDownloadUrl).get().toString()
+                                    Jsoup.connect(contentDownloadUrl).get().wholeText()
                                 }
                                 codeField.value = TextFieldValue(content.await())
+                                toast(context, "업데이트 성공")
                             }
                             is GitResult.Error -> Util.error(
                                 context,
