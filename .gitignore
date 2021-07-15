@@ -4,3 +4,4 @@
 /buildSrc
 local.properties
 /app/build/
+/build/
