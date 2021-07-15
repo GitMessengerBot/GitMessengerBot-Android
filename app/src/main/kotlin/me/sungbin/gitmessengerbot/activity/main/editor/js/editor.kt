@@ -11,23 +11,27 @@ package me.sungbin.gitmessengerbot.activity.main.editor.js
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.Dispatchers
@@ -60,16 +65,20 @@ import org.jsoup.Jsoup
 @Composable
 fun Editor(gitRepo: GitRepo, script: ScriptItem) {
     val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ToolBar(
-                gitRepo = gitRepo,
                 script = script,
-                codeField = codeField
+                codeField = codeField,
+                scaffoldState = scaffoldState
             )
-        }
+        },
+        scaffoldState = scaffoldState,
+        drawerContent = { DrawerLayout(gitRepo = gitRepo, script = script, codeField = codeField) },
+        drawerShape = RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp)
     ) {
         TextField(
             value = codeField.value,
@@ -86,9 +95,8 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem) {
 }
 
 @Composable
-private fun GitMenu( // todo: 위치 조정
+private fun DrawerLayout(
     gitRepo: GitRepo,
-    visible: MutableState<Boolean>,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>
 ) {
@@ -96,15 +104,26 @@ private fun GitMenu( // todo: 위치 조정
     val coroutineScope = rememberCoroutineScope()
     val repoName = script.name
 
-    DropdownMenu(
-        expanded = visible.value,
-        onDismissRequest = { visible.value = false }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp)
     ) {
-        DropdownMenuItem(
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(R.drawable.ic_round_code_24),
+                contentDescription = null
+            )
+            Text(text = "Git", fontSize = 30.sp, modifier = Modifier.padding(start = 10.dp))
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
             onClick = {
                 coroutineScope.launch {
                     gitRepo.createRepo(
-                        Repo(
+                        repo = Repo(
                             name = repoName,
                             description = StringConfig.GitDefaultRepoDescription
                         )
@@ -126,9 +145,12 @@ private fun GitMenu( // todo: 위치 조정
                 }
             }
         ) {
-            Text(text = "Create $repoName repo")
+            Text(text = "Create ${script.name} repo")
         }
-        DropdownMenuItem(
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
                     gitRepo.getFileContent(
@@ -175,7 +197,10 @@ private fun GitMenu( // todo: 위치 조정
         ) {
             Text(text = "Commit and Push")
         }
-        DropdownMenuItem(
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
                     gitRepo.getFileContent(
@@ -190,11 +215,17 @@ private fun GitMenu( // todo: 위치 조정
                                     Jsoup.connect(contentDownloadUrl).get().wholeText()
                                 }
                                 codeField.value = TextFieldValue(content.await())
-                                toast(context, "업데이트 성공")
+                                toast(
+                                    context,
+                                    context.getString(R.string.editor_git_file_update_success)
+                                )
                             }
                             is GitResult.Error -> Util.error(
                                 context,
-                                "파일 정보 추출 실패\n\n${fileContentResult.exception}"
+                                context.getString(
+                                    R.string.editor_git_content_get_error,
+                                    fileContentResult.exception
+                                )
                             )
                         }
                     }
@@ -203,61 +234,79 @@ private fun GitMenu( // todo: 위치 조정
         ) {
             Text(text = "Update project")
         }
-        Divider()
-        DropdownMenuItem(
-            onClick = {
-                coroutineScope.launch {
-                    val minify = async(Dispatchers.IO) {
-                        Jsoup.connect("https://javascript-minifier.com/raw")
-                            .ignoreContentType(true)
-                            .ignoreHttpErrors(true)
-                            .data("input", codeField.value.text)
-                            .post()
-                            .wholeText()
-                    }
-                    codeField.value = TextFieldValue(minify.await())
-                }
-            }
+        Row(
+            modifier = Modifier.padding(top = 30.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Minify")
+            Icon(
+                painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
+                contentDescription = null
+            )
+            Text(
+                text = "Beautify",
+                modifier = Modifier.padding(start = 10.dp),
+                fontSize = 30.sp
+            )
         }
-        DropdownMenuItem(
-            onClick = {
-                coroutineScope.launch {
-                    val beautify = async(Dispatchers.IO) {
-                        JSONObject(
-                            Jsoup.connect("https://amp.prettifyjs.net")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    coroutineScope.launch {
+                        val minify = async(Dispatchers.IO) {
+                            Jsoup.connect("https://javascript-minifier.com/raw")
                                 .ignoreContentType(true)
                                 .ignoreHttpErrors(true)
                                 .data("input", codeField.value.text)
                                 .post()
                                 .wholeText()
-                        ).getString("output")
+                        }
+                        codeField.value = TextFieldValue(minify.await())
                     }
-                    codeField.value = TextFieldValue(beautify.await())
-                }
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            ) {
+                Text(text = "Minify")
             }
-        ) {
-            Text(text = "Beautify")
+            OutlinedButton(
+                onClick = {
+                    coroutineScope.launch {
+                        val beautify = async(Dispatchers.IO) {
+                            JSONObject(
+                                Jsoup.connect("https://amp.prettifyjs.net")
+                                    .ignoreContentType(true)
+                                    .ignoreHttpErrors(true)
+                                    .data("input", codeField.value.text)
+                                    .post()
+                                    .wholeText()
+                            ).getString("output")
+                        }
+                        codeField.value = TextFieldValue(beautify.await())
+                    }
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text(text = "Pretty")
+            }
         }
     }
 }
 
 @Composable
 private fun ToolBar(
-    gitRepo: GitRepo,
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>
+    codeField: MutableState<TextFieldValue>,
+    scaffoldState: ScaffoldState
 ) {
     val context = LocalContext.current
-    val gitMenuVisible = remember { mutableStateOf(false) }
-
-    GitMenu(
-        gitRepo = gitRepo,
-        visible = gitMenuVisible,
-        script = script,
-        codeField = codeField
-    )
+    val coroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
         modifier = Modifier
@@ -266,16 +315,22 @@ private fun ToolBar(
             .background(color = colors.primary)
             .padding(top = 10.dp, bottom = 16.dp)
     ) {
-        val (menu, title, setting, save, reload) = createRefs()
+        val (menu, title, save, reload) = createRefs()
 
         Icon(
             painter = painterResource(R.drawable.ic_round_menu_24),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.constrainAs(menu) {
-                start.linkTo(parent.start, 16.dp)
-                top.linkTo(parent.top)
-            }
+            modifier = Modifier
+                .clickable {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+                .constrainAs(menu) {
+                    start.linkTo(parent.start, 16.dp)
+                    top.linkTo(parent.top)
+                }
         )
         Text(
             text = script.name,
@@ -298,19 +353,8 @@ private fun ToolBar(
                     toast(context, context.getString(R.string.editor_toast_saved))
                     Bot.save(script, codeField.value.text)
                 }
-                .constrainAs(setting) {
-                    end.linkTo(parent.end, 16.dp)
-                    top.linkTo(parent.top)
-                }
-        )
-        Icon(
-            painter = painterResource(R.drawable.ic_round_code_24),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .clickable { gitMenuVisible.value = true }
                 .constrainAs(save) {
-                    end.linkTo(setting.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
                     top.linkTo(parent.top)
                 }
         )
