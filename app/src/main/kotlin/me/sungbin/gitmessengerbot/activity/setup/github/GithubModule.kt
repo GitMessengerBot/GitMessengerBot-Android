@@ -14,8 +14,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepo
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepoImpl
+import me.sungbin.gitmessengerbot.activity.setup.github.qualifier.AouthRetrofit
+import me.sungbin.gitmessengerbot.activity.setup.github.qualifier.UserRetrofit
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepo
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepoImpl
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,18 +25,25 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 object GithubModule {
-    private const val BaseUrl = "https://api.github.com"
+    private fun retrofit(baseUrl: String) = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
 
+    @UserRetrofit
     @Provides
     @Singleton
-    fun provideRetrofit() = Retrofit.Builder()
-        .baseUrl(BaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
+    fun provideUserRetrofit() = retrofit("https://api.github.com")
+
+    @AouthRetrofit
+    @Provides
+    @Singleton
+    fun provideAouthRetrofit() = retrofit("https://github.com")
 
     @Provides
     @Singleton
     fun provideRepo(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        retrofit: Retrofit.Builder
-    ): GithubUserRepo = GithubUserRepoImpl(httpLoggingInterceptor, retrofit)
+        @UserRetrofit userRetrofit: Retrofit.Builder,
+        @AouthRetrofit aouthRetrofit: Retrofit.Builder
+    ): GithubRepo = GithubRepoImpl(httpLoggingInterceptor, userRetrofit, aouthRetrofit)
 }

@@ -20,62 +20,45 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.MainActivity
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserRepo
-import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubUserResult
+import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubTokenResponse
+import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubUserResponse
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubRepo
+import me.sungbin.gitmessengerbot.activity.setup.github.repo.GithubResult
+import me.sungbin.gitmessengerbot.secret.SecretConfig
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
@@ -91,12 +74,11 @@ import me.sungbin.gitmessengerbot.util.extension.toast
 class SetupActivity : ComponentActivity() {
 
     @Inject
-    lateinit var githubUserRepo: GithubUserRepo
+    lateinit var githubRepo: GithubRepo
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
     private var batteryPermissionGranted by mutableStateOf(false)
-    private var personalKeyDialogVisible by mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -113,164 +95,6 @@ class SetupActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Setup()
-                PersonalKeyDialog()
-            }
-        }
-    }
-
-    @OptIn(ExperimentalComposeUiApi::class)
-    @Composable
-    private fun PersonalKeyDialog() {
-        if (personalKeyDialogVisible) {
-            val context = LocalContext.current
-            var personalKeyField by remember { mutableStateOf(TextFieldValue()) }
-            val focusManager = LocalFocusManager.current
-            val coroutineScope = rememberCoroutineScope()
-            val activity = this@SetupActivity
-
-            MaterialTheme {
-                AlertDialog(
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.width(300.dp),
-                    properties = DialogProperties(
-                        dismissOnClickOutside = false
-                    ),
-                    onDismissRequest = {
-                        personalKeyDialogVisible = false
-                    },
-                    text = {
-                        Column {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_round_circle_24),
-                                        contentDescription = null,
-                                        tint = Color.Black,
-                                        modifier = Modifier.size(35.dp),
-                                    )
-                                    Icon(
-                                        modifier = Modifier.size(15.dp),
-                                        painter = painterResource(R.drawable.ic_round_key_24),
-                                        contentDescription = null,
-                                        tint = Color.White
-                                    )
-                                }
-                                Text(
-                                    text = stringResource(R.string.setup_dialog_input_personal_key),
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(start = 8.dp),
-                                    fontSize = 15.sp
-                                )
-                            }
-                            TextField(
-                                maxLines = 1,
-                                singleLine = true,
-                                modifier = Modifier
-                                    .padding(top = 10.dp)
-                                    .focusRequester(FocusRequester()),
-                                value = personalKeyField,
-                                colors = TextFieldDefaults.textFieldColors(
-                                    backgroundColor = Color.White,
-                                    cursorColor = Color.Black,
-                                    textColor = Color.Black,
-                                    focusedIndicatorColor = Color.Black
-                                ),
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions = KeyboardActions(
-                                    onDone = { focusManager.clearFocus() }
-                                ),
-                                onValueChange = { personalKeyField = it }
-                            )
-                            Row(modifier = Modifier.padding(top = 20.dp)) {
-                                Text(
-                                    text = stringResource(R.string.setup_dialog_way_to_get_personal_key),
-                                    modifier = Modifier.clickable {
-                                        Web.open(this@SetupActivity, Web.Link.PersonalKeyGuide)
-                                    },
-                                    fontSize = 13.sp,
-                                    color = Color.Black
-                                )
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.setup_dialog_open_github),
-                                        modifier = Modifier.clickable {
-                                            Web.open(this@SetupActivity, Web.Link.Github)
-                                        },
-                                        fontSize = 13.sp,
-                                        color = Color.Black
-                                    )
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(start = 8.dp)
-                                            .clickable {
-                                                coroutineScope.launch(Dispatchers.IO) {
-                                                    var githubData =
-                                                        GithubData(token = personalKeyField.text)
-
-                                                    githubUserRepo
-                                                        .login(githubData.token)
-                                                        .collect { result ->
-                                                            when (result) {
-                                                                is GithubUserResult.Success -> {
-                                                                    githubData = githubData.copy(
-                                                                        userName = result.user.login,
-                                                                        profileImageUrl = result.user.avatarUrl
-                                                                    )
-
-                                                                    Storage.write(
-                                                                        StringConfig.GithubData,
-                                                                        Json.toString(githubData)
-                                                                    )
-
-                                                                    finish()
-                                                                    startActivity(
-                                                                        Intent(
-                                                                            context,
-                                                                            MainActivity::class.java
-                                                                        )
-                                                                    )
-
-                                                                    toast(
-                                                                        activity,
-                                                                        getString(
-                                                                            R.string.setup_toast_welcome_start,
-                                                                            result.user.login
-                                                                        )
-                                                                    )
-                                                                }
-                                                                is GithubUserResult.Error -> {
-                                                                    toast(
-                                                                        activity,
-                                                                        getString(
-                                                                            R.string.setup_toast_github_connect_error,
-                                                                            result.exception.localizedMessage
-                                                                        ),
-                                                                        Toast.LENGTH_LONG
-                                                                    )
-                                                                }
-                                                            }
-                                                        }
-                                                }
-                                            },
-                                        text = stringResource(R.string.setup_dialog_start),
-                                        fontSize = 13.sp,
-                                        color = Color.Black
-                                    )
-                                }
-                            }
-                        }
-                    },
-                    buttons = {}
-                )
             }
         }
     }
@@ -385,7 +209,10 @@ class SetupActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .clickable {
                                 if (notificationPermissionGranted && storagePermissionGranted) {
-                                    personalKeyDialogVisible = true
+                                    Web.open(
+                                        applicationContext,
+                                        Web.Link.Custom(SecretConfig.GithubOauthAddress)
+                                    )
                                 } else {
                                     toast(
                                         activity,
@@ -495,5 +322,77 @@ class SetupActivity : ComponentActivity() {
     private fun requestReadNotification() {
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
         startActivity(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val activity = this@SetupActivity
+        val requestCode = intent!!.data!!.getQueryParameter("code")!!
+        println(requestCode)
+
+        lifecycleScope.launchWhenCreated {
+            githubRepo.getAccessToken(requestCode).collect { accessKeyResult ->
+                when (accessKeyResult) {
+                    is GithubResult.Success -> {
+                        var githubData = GithubData(
+                            token = (accessKeyResult.result as GithubTokenResponse).accessToken
+                        )
+                        githubRepo
+                            .getUserInfo(githubData.token)
+                            .collect { userResult ->
+                                when (userResult) {
+                                    is GithubResult.Success -> {
+                                        val user = userResult.result as GithubUserResponse
+
+                                        githubData = githubData.copy(
+                                            userName = user.login,
+                                            profileImageUrl = user.avatarUrl
+                                        )
+
+                                        Storage.write(
+                                            StringConfig.GithubData,
+                                            Json.toString(githubData)
+                                        )
+
+                                        finish()
+                                        startActivity(
+                                            Intent(
+                                                activity,
+                                                MainActivity::class.java
+                                            )
+                                        )
+
+                                        toast(
+                                            activity,
+                                            getString(
+                                                R.string.setup_toast_welcome_start,
+                                                user.login
+                                            )
+                                        )
+                                    }
+                                    is GithubResult.Error -> {
+                                        toast(
+                                            activity,
+                                            getString(
+                                                R.string.setup_toast_github_connect_error,
+                                                userResult.exception.message
+                                            ),
+                                            Toast.LENGTH_LONG
+                                        )
+                                    }
+                                }
+                            }
+                    }
+                    is GithubResult.Error -> toast(
+                        activity,
+                        activity.getString(
+                            R.string.setup_toast_github_authorize_error,
+                            accessKeyResult.exception.message
+                        )
+                    )
+                }
+            }
+        }
     }
 }

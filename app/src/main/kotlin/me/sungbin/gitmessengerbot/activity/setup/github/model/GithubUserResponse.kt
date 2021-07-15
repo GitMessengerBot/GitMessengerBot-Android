@@ -11,7 +11,7 @@ package me.sungbin.gitmessengerbot.activity.setup.github.model
 
 import com.google.gson.annotations.SerializedName
 
-data class GithubUser(
+data class GithubUserResponse(
     @SerializedName("gists_url")
     val gistsUrl: String,
 
@@ -128,4 +128,4 @@ data class GithubUser(
 
     @SerializedName("node_id")
     val nodeId: String
-)
+) : GithubResultWrapper

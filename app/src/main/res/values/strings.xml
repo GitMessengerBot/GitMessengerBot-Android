@@ -26,7 +26,8 @@
     <string name="setup_dialog_way_to_get_personal_key">개인 키 얻는법</string>
     <string name="setup_dialog_open_github">깃허브 열기</string>
     <string name="setup_dialog_start">시작하기</string>
-    <string name="setup_toast_github_connect_error">깃허브 연결에 실패했어요.\n제대로된 키를 입력하셨나요?\n\n(%s)</string>
+    <string name="setup_toast_github_connect_error">깃허브 연결에 실패했어요.\n\n(%s)</string>
+    <string name="setup_toast_github_authorize_error">access-token 추출에 실패했어요 :(\n다시 시도해 주세요.\n\n(%s)</string>
     <string name="setup_toast_welcome_start">%s님 환영합니다! 🎉🎈</string>
 
     <string name="main_welcome">Hi, %s</string>

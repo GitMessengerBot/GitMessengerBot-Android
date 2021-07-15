@@ -21,6 +21,13 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!-- https://developer.chrome.com/docs/android/custom-tabs/best-practices/#applications-targeting-android-11-api-level-30-or-above -->
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".GitMessengerBot"
         android:allowBackup="true"
