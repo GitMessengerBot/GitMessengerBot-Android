@@ -13,11 +13,13 @@ import me.sungbin.gitmessengerbot.activity.main.script.toScriptLangName
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 
 @Suppress("FunctionName")
-object PathConfig {
+object StringConfig {
     private const val AppStorage = "GitMessengerBot/data"
 
     const val GithubData = "$AppStorage/github-data.json"
     const val GitDefaultBranch = "main"
+    const val GitDefaultRepoDescription = "Created by GitMessengerBot"
+    const val GitDefaultCommitMessage = "Commited by GitMessengerBot"
 
     const val AppData = "$AppStorage/app.json"
     const val IntentScriptId = "intent-script-id"

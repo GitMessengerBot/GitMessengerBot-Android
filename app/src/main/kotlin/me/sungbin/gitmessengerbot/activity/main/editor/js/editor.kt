@@ -52,6 +52,7 @@ import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.Util
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 import org.json.JSONObject
 import org.jsoup.Jsoup
@@ -105,14 +106,20 @@ private fun GitMenu( // todo: 위치 조정
                     gitRepo.createRepo(
                         Repo(
                             name = repoName,
-                            description = "Created by GitMessengerBot"
+                            description = StringConfig.GitDefaultRepoDescription
                         )
                     ).collect { result ->
                         when (result) {
-                            is GitResult.Success -> toast(context, "레포 생성 완료")
+                            is GitResult.Success -> toast(
+                                context,
+                                context.getString(R.string.editor_git_repo_create_success)
+                            )
                             is GitResult.Error -> Util.error(
                                 context,
-                                "레포 생성 실패\n\n${result.exception}"
+                                context.getString(
+                                    R.string.editor_git_repo_create_error,
+                                    result.exception
+                                )
                             )
                         }
                     }
@@ -134,23 +141,32 @@ private fun GitMenu( // todo: 위치 조정
                                     repoName = repoName,
                                     path = "script.${script.lang.toScriptSuffix()}",
                                     gitFile = GitFile(
-                                        message = "Commited by GitMessengerBot",
+                                        message = StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
                                         sha = (fileContentResult.result as FileContentResponse).sha
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
-                                        is GitResult.Success -> toast(context, "파일 업데이트 완료")
+                                        is GitResult.Success -> toast(
+                                            context,
+                                            context.getString(R.string.editor_git_file_update_success)
+                                        )
                                         is GitResult.Error -> Util.error(
                                             context,
-                                            "파일 업데이트 실패\n\n${updateResult.exception}"
+                                            context.getString(
+                                                R.string.editor_git_file_update_error,
+                                                updateResult.exception
+                                            )
                                         )
                                     }
                                 }
                             }
                             is GitResult.Error -> Util.error(
                                 context,
-                                "파일 정보 추출 실패\n\n${fileContentResult.exception}"
+                                context.getString(
+                                    R.string.editor_git_content_get_error,
+                                    fileContentResult.exception
+                                )
                             )
                         }
                     }
@@ -195,7 +211,9 @@ private fun GitMenu( // todo: 위치 조정
                         Jsoup.connect("https://javascript-minifier.com/raw")
                             .ignoreContentType(true)
                             .ignoreHttpErrors(true)
-                            .data("input", codeField.value.text).post().wholeText()
+                            .data("input", codeField.value.text)
+                            .post()
+                            .wholeText()
                     }
                     codeField.value = TextFieldValue(minify.await())
                 }
@@ -211,7 +229,9 @@ private fun GitMenu( // todo: 위치 조정
                             Jsoup.connect("https://amp.prettifyjs.net")
                                 .ignoreContentType(true)
                                 .ignoreHttpErrors(true)
-                                .data("input", codeField.value.text).post().wholeText()
+                                .data("input", codeField.value.text)
+                                .post()
+                                .wholeText()
                         ).getString("output")
                     }
                     codeField.value = TextFieldValue(beautify.await())

@@ -19,7 +19,7 @@ import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepoImpl
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -36,7 +36,7 @@ object GitModule {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
             return try {
-                val githubJson = Storage.read(PathConfig.GithubData, null)!!
+                val githubJson = Storage.read(StringConfig.GithubData, null)!!
                 val githubData = Json.toModel(githubJson, GithubData::class)
                 builder = builder
                     .addHeader("Authorization", "token ${githubData.token}")

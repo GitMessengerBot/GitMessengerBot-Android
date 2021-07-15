@@ -12,13 +12,13 @@ package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
 import kotlinx.coroutines.flow.Flow
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 interface GitRepo {
     fun getFileContent(
         repoName: String,
         path: String,
-        branch: String = PathConfig.GitDefaultBranch
+        branch: String = StringConfig.GitDefaultBranch
     ): Flow<GitResult>
 
     fun createRepo(repo: Repo): Flow<GitResult>

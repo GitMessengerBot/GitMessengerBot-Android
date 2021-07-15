@@ -24,7 +24,7 @@ import me.sungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Util
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 @Suppress("ObjectPropertyName")
 object Bot {
@@ -42,7 +42,7 @@ object Bot {
 
     init {
         _scripts.addAll(getList())
-        Storage.read(PathConfig.AppData, null)?.let { appDataJson ->
+        Storage.read(StringConfig.AppData, null)?.let { appDataJson ->
             _app.value = Json.toModel(appDataJson, App::class)
         }
     }
@@ -54,7 +54,7 @@ object Bot {
      */
     fun save(app: App) {
         _app.value = app
-        Storage.write(PathConfig.AppData, Json.toString(app))
+        Storage.write(StringConfig.AppData, Json.toString(app))
     }
 
     /**
@@ -63,7 +63,7 @@ object Bot {
     fun save(script: ScriptItem) {
         _scripts.removeIf { it.id == script.id }
         _scripts.add(script)
-        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
+        Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
     /**
@@ -71,7 +71,7 @@ object Bot {
      */
     fun save(script: ScriptItem, code: String) {
         Storage.write(
-            PathConfig.Script(script.name, script.lang),
+            StringConfig.Script(script.name, script.lang),
             code
         )
     }
@@ -79,21 +79,21 @@ object Bot {
     fun addScript(script: ScriptItem) {
         _scripts.add(script)
         Storage.write(
-            PathConfig.Script(script.name, script.lang),
+            StringConfig.Script(script.name, script.lang),
             script.lang.toScriptDefaultSource()
         )
-        Storage.write(PathConfig.ScriptData(script.name, script.lang), Json.toString(script))
+        Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
 
     fun removeScript(script: ScriptItem) {
         _scripts.remove(script)
-        Storage.remove(PathConfig.Script(script.name, script.lang))
+        Storage.remove(StringConfig.Script(script.name, script.lang))
     }
 
     private fun getList(): List<ScriptItem> {
         val scripts = mutableListOf<ScriptItem>()
         repeat(4) { lang ->
-            Storage.fileList(PathConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
+            Storage.fileList(StringConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
                     scripts.add(
                         Json.toModel(
@@ -109,7 +109,7 @@ object Bot {
     fun getScriptById(id: Int) = scripts.first { it.id == id }
 
     fun getCode(script: ScriptItem) =
-        Storage.read(PathConfig.Script(script.name, script.lang), "")!!
+        Storage.read(StringConfig.Script(script.name, script.lang), "")!!
 
     fun replyToSession(context: Context, session: Notification.Action, message: String) {
         try {

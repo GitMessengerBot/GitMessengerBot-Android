@@ -20,7 +20,7 @@ import me.sungbin.gitmessengerbot.activity.main.editor.git.util.toBase64
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 import retrofit2.Retrofit
 import retrofit2.await
 
@@ -29,7 +29,7 @@ class GitRepoImpl @Inject constructor(
 ) : GitRepo {
     private val buildRetrofit by lazy { retrofit.create(GitService::class.java) }
     private val gitUser by lazy {
-        Json.toModel(Storage.read(PathConfig.GithubData, null)!!, GithubData::class)
+        Json.toModel(Storage.read(StringConfig.GithubData, null)!!, GithubData::class)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

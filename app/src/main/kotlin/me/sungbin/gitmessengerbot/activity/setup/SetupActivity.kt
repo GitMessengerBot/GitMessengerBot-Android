@@ -83,7 +83,7 @@ import me.sungbin.gitmessengerbot.util.BatteryUtil
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
 import me.sungbin.gitmessengerbot.util.extension.toast
 
@@ -227,7 +227,7 @@ class SetupActivity : ComponentActivity() {
                                                                     )
 
                                                                     Storage.write(
-                                                                        PathConfig.GithubData,
+                                                                        StringConfig.GithubData,
                                                                         Json.toString(githubData)
                                                                     )
 

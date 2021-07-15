@@ -9,11 +9,11 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.git.model
 
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 data class GitFile(
     val message: String,
     val content: String,
     val sha: String,
-    val branch: String = PathConfig.GitDefaultBranch
+    val branch: String = StringConfig.GitDefaultBranch
 )

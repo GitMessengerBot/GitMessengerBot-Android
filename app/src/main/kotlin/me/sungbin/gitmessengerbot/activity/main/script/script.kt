@@ -90,7 +90,7 @@ import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
-import me.sungbin.gitmessengerbot.util.config.PathConfig
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
 
@@ -164,7 +164,7 @@ fun ScriptContent(compiler: ScriptCompiler) {
 @Composable
 private fun Header() {
     val context = LocalContext.current
-    val githubJson = Storage.read(PathConfig.GithubData, "")!!
+    val githubJson = Storage.read(StringConfig.GithubData, "")!!
     val githubData = Json.toModel(githubJson, GithubData::class)
     var power by remember { mutableStateOf(Bot.app.value.power) }
 
@@ -349,7 +349,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
             .clip(shape)
             .noRippleClickable {
                 val intent = Intent(context, JsEditorActivity::class.java).apply {
-                    putExtra(PathConfig.IntentScriptId, script.id)
+                    putExtra(StringConfig.IntentScriptId, script.id)
                 }
                 context.startActivity(intent)
             }
