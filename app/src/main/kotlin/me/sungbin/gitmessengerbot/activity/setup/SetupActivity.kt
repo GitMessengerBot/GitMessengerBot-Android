@@ -35,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,6 +69,7 @@ import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
+import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @AndroidEntryPoint
@@ -193,40 +195,40 @@ class SetupActivity : ComponentActivity() {
                 },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val shape = RoundedCornerShape(15.dp)
+
                 Text(
                     text = stringResource(R.string.setup_last_func),
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Column(
-                    modifier = Modifier.background(
-                        color = colors.primaryVariant,
-                        RoundedCornerShape(15.dp)
-                    )
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                if (notificationPermissionGranted && storagePermissionGranted) {
-                                    Web.open(
-                                        applicationContext,
-                                        Web.Link.Custom(SecretConfig.GithubOauthAddress)
-                                    )
-                                } else {
-                                    toast(
-                                        activity,
-                                        getString(R.string.setup_need_manage_permission)
-                                    )
-                                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape)
+                        .background(
+                            color = colors.primaryVariant,
+                            shape = shape
+                        )
+                        .padding(8.dp)
+                        .noRippleClickable {
+                            if (notificationPermissionGranted && storagePermissionGranted) {
+                                Web.open(
+                                    applicationContext,
+                                    Web.Link.Custom(SecretConfig.GithubOauthAddress)
+                                )
+                            } else {
+                                toast(
+                                    activity,
+                                    getString(R.string.setup_need_manage_permission)
+                                )
                             }
-                            .padding(8.dp),
-                        text = stringResource(R.string.setup_start_with_personal_key),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
+                        },
+                    text = stringResource(R.string.setup_start_with_github_login),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }
@@ -329,7 +331,6 @@ class SetupActivity : ComponentActivity() {
 
         val activity = this@SetupActivity
         val requestCode = intent!!.data!!.getQueryParameter("code")!!
-        println(requestCode)
 
         lifecycleScope.launchWhenCreated {
             githubRepo.getAccessToken(requestCode).collect { accessKeyResult ->
