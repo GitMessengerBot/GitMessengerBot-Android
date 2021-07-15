@@ -5,4 +5,4 @@
 local.properties
 /app/build/
 /build/
-/app/src/main/kotlin/me/sungbin/gitmessengerbot/util/secret/
+/app/src/main/kotlin/me/sungbin/gitmessengerbot/secret/
