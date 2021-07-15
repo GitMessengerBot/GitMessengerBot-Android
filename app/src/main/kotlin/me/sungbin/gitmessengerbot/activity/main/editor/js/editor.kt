@@ -156,8 +156,8 @@ private fun DrawerLayout(
                     gitRepo.getFileContent(
                         repoName = repoName,
                         path = "script.${script.lang.toScriptSuffix()}"
-                    ).collect { fileContentResult ->
-                        when (fileContentResult) {
+                    ).collect { commitResult ->
+                        when (commitResult) {
                             is GitResult.Success -> {
                                 gitRepo.updateFile(
                                     repoName = repoName,
@@ -165,18 +165,18 @@ private fun DrawerLayout(
                                     gitFile = GitFile(
                                         message = StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
-                                        sha = (fileContentResult.result as FileContentResponse).sha
+                                        sha = (commitResult.result as FileContentResponse).sha
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
                                         is GitResult.Success -> toast(
                                             context,
-                                            context.getString(R.string.editor_git_file_update_success)
+                                            context.getString(R.string.editor_git_commit_success)
                                         )
                                         is GitResult.Error -> Util.error(
                                             context,
                                             context.getString(
-                                                R.string.editor_git_file_update_error,
+                                                R.string.editor_git_commit_error,
                                                 updateResult.exception
                                             )
                                         )
@@ -187,7 +187,7 @@ private fun DrawerLayout(
                                 context,
                                 context.getString(
                                     R.string.editor_git_content_get_error,
-                                    fileContentResult.exception
+                                    commitResult.exception
                                 )
                             )
                         }
