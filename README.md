@@ -45,9 +45,6 @@
 
 -----
 
-# 개인 키 얻는법
-[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
-
 # 스크립트 터미널 가이드
 > 준비중...
 
