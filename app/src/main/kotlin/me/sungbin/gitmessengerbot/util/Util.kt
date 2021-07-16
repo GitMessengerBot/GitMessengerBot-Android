@@ -11,6 +11,9 @@ package me.sungbin.gitmessengerbot.util
 
 import android.content.Context
 import android.widget.Toast
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 object Util {
@@ -18,4 +21,8 @@ object Util {
         toast(context, message, Toast.LENGTH_LONG)
         println("Error: $message")
     }
+
+    fun glideRequestOption() = RequestOptions()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .format(DecodeFormat.PREFER_ARGB_8888)
 }

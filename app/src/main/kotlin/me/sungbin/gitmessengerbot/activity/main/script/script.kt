@@ -75,9 +75,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
@@ -93,6 +90,7 @@ import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.isEnglish
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
@@ -201,9 +199,7 @@ private fun Header() {
                     top.linkTo(appName.top)
                     bottom.linkTo(profileName.bottom)
                 },
-            requestOptions = RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .format(DecodeFormat.PREFER_ARGB_8888),
+            requestOptions = Util.glideRequestOption(),
             circularRevealedEnabled = true
         )
         Text(
