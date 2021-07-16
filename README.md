@@ -29,7 +29,7 @@
 + **Git**
   + Commit and Push
   + Merge
-+ **카카오톡 봇 전용 유사 깃허브**
++ **카카오톡 봇 전용 유사 깃허브** (kaven)
 
 # 개발 스킬
 1. Jetpack Compose
