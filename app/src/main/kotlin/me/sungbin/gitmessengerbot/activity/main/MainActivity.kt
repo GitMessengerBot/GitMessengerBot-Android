@@ -13,7 +13,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -51,11 +50,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.debug.DebugViewModel
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
-import me.sungbin.gitmessengerbot.activity.main.setting.SettingViewModel
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
