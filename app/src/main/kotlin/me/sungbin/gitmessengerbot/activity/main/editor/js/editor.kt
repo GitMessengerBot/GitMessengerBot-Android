@@ -9,8 +9,10 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.js
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +69,7 @@ import org.jsoup.Jsoup
 @Composable
 fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
     val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
+    val undoStack = remember { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -74,11 +77,19 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
             ToolBar(
                 script = script,
                 codeField = codeField,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                undoStack = undoStack
             )
         },
         scaffoldState = scaffoldState,
-        drawerContent = { DrawerLayout(gitRepo = gitRepo, script = script, codeField = codeField) },
+        drawerContent = {
+            DrawerLayout(
+                gitRepo = gitRepo,
+                script = script,
+                codeField = codeField,
+                undoStack = undoStack
+            )
+        },
         drawerShape = RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp)
     ) {
         TextField(
@@ -99,7 +110,8 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
 private fun DrawerLayout(
     gitRepo: GitRepo,
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>
+    codeField: MutableState<TextFieldValue>,
+    undoStack: MutableState<String>
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -268,6 +280,7 @@ private fun DrawerLayout(
             ) {
                 OutlinedButton(
                     onClick = {
+                        undoStack.value = codeField.value.text
                         coroutineScope.launch {
                             val minify = async(Dispatchers.IO) {
                                 Jsoup.connect("https://javascript-minifier.com/raw")
@@ -288,6 +301,7 @@ private fun DrawerLayout(
                 }
                 OutlinedButton(
                     onClick = {
+                        undoStack.value = codeField.value.text
                         coroutineScope.launch {
                             val beautify = async(Dispatchers.IO) {
                                 JSONObject(
@@ -313,11 +327,13 @@ private fun DrawerLayout(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ToolBar(
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    undoStack: MutableState<String>
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -329,7 +345,7 @@ private fun ToolBar(
             .background(color = colors.primary)
             .padding(top = 10.dp, bottom = 16.dp)
     ) {
-        val (menu, title, save, reload) = createRefs()
+        val (menu, title, undo, save, reload) = createRefs()
 
         Icon(
             painter = painterResource(R.drawable.ic_round_menu_24),
@@ -372,5 +388,30 @@ private fun ToolBar(
                     top.linkTo(parent.top)
                 }
         )
+        if (undoStack.value.isNotBlank()) {
+            Icon(
+                painter = painterResource(R.drawable.ic_round_undo_24),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .combinedClickable(
+                        onClick = {
+                            toast(
+                                context,
+                                context.getString(R.string.editor_toast_confirm_undo_beautify)
+                            )
+                        },
+                        onLongClick = {
+                            codeField.value = TextFieldValue(undoStack.value)
+                            undoStack.value = ""
+                        }
+                    )
+                    .constrainAs(undo) {
+                        end.linkTo(save.start, 16.dp)
+                        top.linkTo(save.top)
+                        bottom.linkTo(save.bottom)
+                    }
+            )
+        }
     }
 }
