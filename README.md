@@ -20,7 +20,7 @@
   + 수정
   + 전원
   + 로그켓
-  + 터미널
+  + 마지막 작동 시간
 + **다양한 언어**
   + 타입스크립트
   + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
@@ -45,11 +45,8 @@
 
 -----
 
-# 스크립트 터미널 가이드
-> 준비중...
-
 # API 가이드
-[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/api-guide.md)
+> 준비중...
 
 # 라이선스
 GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.<br/>
