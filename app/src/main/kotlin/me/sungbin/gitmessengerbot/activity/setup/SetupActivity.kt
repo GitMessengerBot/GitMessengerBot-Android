@@ -63,9 +63,9 @@ import me.sungbin.gitmessengerbot.secret.SecretConfig
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.util.BatteryUtil
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
+import me.sungbin.gitmessengerbot.util.Wear
 import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.doDelay
@@ -80,7 +80,7 @@ class SetupActivity : ComponentActivity() {
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
-    private var batteryPermissionGranted by mutableStateOf(false)
+    private var wearAppInstalled by mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -92,6 +92,7 @@ class SetupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        wearAppInstalled = Wear.checkInstalled(applicationContext)
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
         setContent {
@@ -178,12 +179,12 @@ class SetupActivity : ComponentActivity() {
                 )
                 PermissionView(
                     permission = Permission(
-                        permissions = listOf(PermissionType.Battery),
-                        name = stringResource(R.string.setup_permission_battery_label),
-                        description = stringResource(R.string.setup_permission_battery_description),
-                        icon = R.drawable.ic_round_battery_alert_24
+                        permissions = listOf(PermissionType.Wear),
+                        name = stringResource(R.string.setup_app_wear_label),
+                        description = stringResource(R.string.setup_app_wear_description),
+                        icon = R.drawable.ic_round_watch_24
                     ),
-                    permissionGranted = batteryPermissionGranted,
+                    permissionGranted = wearAppInstalled,
                     padding = PermissionViewPadding(16.dp, 0.dp)
                 )
             }
@@ -300,19 +301,17 @@ class SetupActivity : ComponentActivity() {
 
     @SuppressLint("NewApi")
     private fun Permission.requestAllPermissions() {
-        val activity = this@SetupActivity
-
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
                 requestReadNotification()
                 doDelay(1000) { notificationPermissionGranted = true }
             }
-            PermissionType.Battery -> {
-                BatteryUtil.requestIgnoreBatteryOptimization(activity)
-                doDelay(1000) { batteryPermissionGranted = true }
+            PermissionType.Wear -> {
+                Wear.install(applicationContext)
+                doDelay(1000) { wearAppInstalled = true }
             }
             PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(activity)
+                Storage.requestStorageManagePermission(applicationContext)
                 doDelay(1000) { storagePermissionGranted = true }
             }
             else -> {

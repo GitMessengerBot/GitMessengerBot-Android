@@ -15,12 +15,12 @@
     <string name="setup_last_func">마지막으로,</string>
     <string name="setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
     <string name="setup_start_with_github_login">깃허브 로그인으로 시작하기</string>
-    <string name="setup_permission_storage_label">저장소 접근 권한 (필수)</string>
-    <string name="setup_permission_storage_description">소스코드 저장을 위해 저장공간에 접근이 필요합니다.</string>
-    <string name="setup_permission_notification_label">알림 읽기 권한 (필수)</string>
+    <string name="setup_permission_storage_label">저장소 접근 권한</string>
+    <string name="setup_permission_storage_description">봇 데이터 저장을 위해 저장공간에 접근이 필요합니다.</string>
+    <string name="setup_permission_notification_label">알림 읽기 권한</string>
     <string name="setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
-    <string name="setup_permission_battery_label">배터리 최적화 제외 (선택)</string>
-    <string name="setup_permission_battery_description">봇이 안정적으로 작동하기 위해 필요합니다.</string>
+    <string name="setup_app_wear_label">안드로이드 웨어 설치</string>
+    <string name="setup_app_wear_description">봇이 정상적으로 작동하기 위해 필요합니다.</string>
     <string name="setup_dialog_input_personal_key">개인 키 입력</string>
     <string name="setup_dialog_way_to_get_personal_key">개인 키 얻는법</string>
     <string name="setup_dialog_open_github">깃허브 열기</string>

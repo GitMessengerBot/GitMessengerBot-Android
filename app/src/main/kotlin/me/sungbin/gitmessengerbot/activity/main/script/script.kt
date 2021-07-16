@@ -75,6 +75,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.skydoves.landscapist.glide.GlideImage
 import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -87,7 +91,6 @@ import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
-import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.StringConfig
@@ -177,16 +180,31 @@ private fun Header() {
     ) {
         val (appName, profileName, profileImage, menuBoxes) = createRefs()
 
+        /* GlideImage(
+             src = githubData.profileImageUrl,
+             modifier = Modifier
+                 .size(70.dp)
+                 .clip(CircleShape)
+                 .constrainAs(profileImage) {
+                     end.linkTo(parent.end)
+                     top.linkTo(appName.top)
+                     bottom.linkTo(profileName.bottom)
+                 }
+         )*/
         GlideImage(
-            src = githubData.profileImageUrl,
+            imageModel = githubData.profileImageUrl,
             modifier = Modifier
-                .size(70.dp)
+                .size(65.dp)
                 .clip(CircleShape)
                 .constrainAs(profileImage) {
                     end.linkTo(parent.end)
                     top.linkTo(appName.top)
                     bottom.linkTo(profileName.bottom)
-                }
+                },
+            requestOptions = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .format(DecodeFormat.PREFER_ARGB_8888),
+            circularRevealedEnabled = true
         )
         Text(
             text = stringResource(R.string.app_name),

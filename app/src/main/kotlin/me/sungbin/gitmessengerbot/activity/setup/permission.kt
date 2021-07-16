@@ -13,7 +13,7 @@ import androidx.annotation.DrawableRes
 
 object PermissionType {
     const val NotificationRead = "notification-read"
-    const val Battery = "battery"
+    const val Wear = "android-wear"
     const val ScopedStorage = "scoped"
 }
 
