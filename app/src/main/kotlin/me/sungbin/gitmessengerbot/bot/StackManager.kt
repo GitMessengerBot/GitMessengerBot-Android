@@ -11,8 +11,10 @@ package me.sungbin.gitmessengerbot.bot
 
 import android.app.Notification
 import com.eclipsesource.v8.V8
+import com.eclipsesource.v8.V8Object
 
 object StackManager {
     val sessions: HashMap<String, Notification.Action> = hashMapOf()
     val v8: HashMap<Int, V8> = hashMapOf()
+    val npm: HashMap<String, V8Object> = hashMapOf()
 }

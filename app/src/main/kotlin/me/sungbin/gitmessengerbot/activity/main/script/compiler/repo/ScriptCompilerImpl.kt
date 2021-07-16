@@ -11,21 +11,22 @@ package me.sungbin.gitmessengerbot.activity.main.script.compiler.repo
 
 import android.content.Context
 import com.eclipsesource.v8.V8
-import com.eclipsesource.v8.V8Object
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.util.addApi
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
 import me.sungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsResult
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.StackManager
 import me.sungbin.gitmessengerbot.bot.api.BotApi
 import me.sungbin.gitmessengerbot.bot.api.Log
+import me.sungbin.gitmessengerbot.bot.api.Npm
 
 class ScriptCompilerImpl @Inject constructor(
     private val ts2Js: Ts2JsRepo
@@ -41,8 +42,8 @@ class ScriptCompilerImpl @Inject constructor(
             v8.addApi(
                 apiName = "Bot",
                 apiClass = BotApi(context),
-                methodNameArray = listOf("reply", "replyShowAll"),
-                argumentsListArray = listOf(
+                methodNames = listOf("reply", "replyShowAll"),
+                argumentsList = listOf(
                     listOf(String::class.java, String::class.java),
                     listOf(String::class.java, String::class.java, String::class.java)
                 )
@@ -50,8 +51,14 @@ class ScriptCompilerImpl @Inject constructor(
             v8.addApi(
                 apiName = "Log",
                 apiClass = Log(),
-                methodNameArray = listOf("print"),
-                argumentsListArray = listOf(listOf(Any::class.java))
+                methodNames = listOf("print"),
+                argumentsList = listOf(listOf(Any::class.java))
+            )
+            v8.addApi(
+                apiName = "Npm",
+                apiClass = Npm(),
+                methodNames = listOf("execute"),
+                argumentsList = listOf(listOf(String::class.java, String::class.java))
             )
             /*v8.addApi(
                 "Api",
@@ -109,28 +116,6 @@ class ScriptCompilerImpl @Inject constructor(
             script.compiled = false
             CompileResult.Error(exception)
         }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun V8.addApi(
-        apiName: String,
-        apiClass: Any,
-        methodNameArray: List<String>,
-        argumentsListArray: List<List<Class<*>>>
-    ) {
-        val api = V8Object(this)
-        this.add(apiName, api)
-
-        for ((index, methodName) in methodNameArray.withIndex()) {
-            api.registerJavaMethod(
-                apiClass,
-                methodName,
-                methodName,
-                argumentsListArray[index].toTypedArray()
-            )
-        }
-
-        api.release()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
