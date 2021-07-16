@@ -14,8 +14,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.util.extension.toast
+import org.jsoup.Jsoup
 
 object Web {
     sealed class Link(val url: String) {
@@ -29,6 +33,12 @@ object Web {
 
         class Custom(address: String) : Link(address)
     }
+
+    suspend fun parse(address: String) = coroutineScope {
+        return@coroutineScope async(Dispatchers.IO) {
+            Jsoup.connect(address).get().wholeText()
+        }
+    }.await()
 
     fun open(context: Context, link: Link) {
         try {

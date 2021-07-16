@@ -53,10 +53,12 @@ import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
 import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitResult
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.util.Util
+import me.sungbin.gitmessengerbot.util.Web
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 import org.json.JSONObject
@@ -214,10 +216,7 @@ private fun DrawerLayout(
                             is GitResult.Success -> {
                                 val contentDownloadUrl =
                                     (fileContentResult.result as FileContentResponse).downloadUrl
-                                val content = async(Dispatchers.IO) {
-                                    Jsoup.connect(contentDownloadUrl).get().wholeText()
-                                }
-                                codeField.value = TextFieldValue(content.await())
+                                codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))
                                 toast(
                                     context,
                                     context.getString(R.string.editor_toast_file_update_success)
@@ -242,71 +241,73 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                toast(context, context.getString(R.string.need_pro_license))
+                // todo
             }
         ) {
             Text(text = stringResource(R.string.editor_drawer_commit_history))
         }
-        Row(
-            modifier = Modifier.padding(top = 30.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
-                contentDescription = null
-            )
-            Text(
-                text = stringResource(R.string.editor_drawer_beautify),
-                modifier = Modifier.padding(start = 10.dp),
-                fontSize = 30.sp
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
-        ) {
-            OutlinedButton(
-                onClick = {
-                    coroutineScope.launch {
-                        val minify = async(Dispatchers.IO) {
-                            Jsoup.connect("https://javascript-minifier.com/raw")
-                                .ignoreContentType(true)
-                                .ignoreHttpErrors(true)
-                                .data("input", codeField.value.text)
-                                .post()
-                                .wholeText()
-                        }
-                        codeField.value = TextFieldValue(minify.await())
-                    }
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
+        if (script.lang == ScriptLang.JavaScript) {
+            Row(
+                modifier = Modifier.padding(top = 30.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(R.string.editor_drawer_minify))
+                Icon(
+                    painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.editor_drawer_beautify),
+                    modifier = Modifier.padding(start = 10.dp),
+                    fontSize = 30.sp
+                )
             }
-            OutlinedButton(
-                onClick = {
-                    coroutineScope.launch {
-                        val beautify = async(Dispatchers.IO) {
-                            JSONObject(
-                                Jsoup.connect("https://amp.prettifyjs.net")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            val minify = async(Dispatchers.IO) {
+                                Jsoup.connect("https://javascript-minifier.com/raw")
                                     .ignoreContentType(true)
                                     .ignoreHttpErrors(true)
                                     .data("input", codeField.value.text)
                                     .post()
                                     .wholeText()
-                            ).getString("output")
+                            }
+                            codeField.value = TextFieldValue(minify.await())
                         }
-                        codeField.value = TextFieldValue(beautify.await())
-                    }
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-            ) {
-                Text(text = stringResource(R.string.editor_drawer_pretty))
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                ) {
+                    Text(text = stringResource(R.string.editor_drawer_minify))
+                }
+                OutlinedButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            val beautify = async(Dispatchers.IO) {
+                                JSONObject(
+                                    Jsoup.connect("https://amp.prettifyjs.net")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
+                                        .data("input", codeField.value.text)
+                                        .post()
+                                        .wholeText()
+                                ).getString("output")
+                            }
+                            codeField.value = TextFieldValue(beautify.await())
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                ) {
+                    Text(text = stringResource(R.string.editor_drawer_pretty))
+                }
             }
         }
     }

@@ -10,7 +10,6 @@
 <resources>
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright">© 2021 지성빈 &amp; 구환. all rights reserved.</string>
-    <string name="need_pro_license">PRO 기능입니다.\n\n권한 업그레이드가 필요합니다!</string>
 
     <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="setup_last_func">마지막으로,</string>
