@@ -1,4 +1,4 @@
-// 187
+// 192
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
@@ -44,9 +44,6 @@
 - `import ordering` 프로젝트 단위 비활성화
 
 -----
-
-# 개인 키 얻는법
-[[참고]](https://github.com/jisungbin/GitMessengerBot/blob/master/get-personal-access-key.md)
 
 # 스크립트 터미널 가이드
 > 준비중...
