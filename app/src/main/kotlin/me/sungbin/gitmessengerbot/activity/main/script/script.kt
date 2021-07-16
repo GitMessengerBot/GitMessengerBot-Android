@@ -395,7 +395,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable {  }
+                    .clickable { }
                     .constrainAs(setting) {
                         end.linkTo(parent.end)
                         top.linkTo(compileState.top)
@@ -408,7 +408,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable {  }
+                    .clickable { }
                     .constrainAs(logcat) {
                         end.linkTo(setting.start, 16.dp)
                         top.linkTo(compileState.top)
@@ -421,7 +421,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable {  }
+                    .clickable { }
                     .constrainAs(debug) {
                         end.linkTo(logcat.start, 20.dp)
                         top.linkTo(compileState.top)
