@@ -311,7 +311,7 @@ class SetupActivity : ComponentActivity() {
                 doDelay(1000) { wearAppInstalled = true }
             }
             PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(applicationContext)
+                Storage.requestStorageManagePermission(this@SetupActivity)
                 doDelay(1000) { storagePermissionGranted = true }
             }
             else -> {

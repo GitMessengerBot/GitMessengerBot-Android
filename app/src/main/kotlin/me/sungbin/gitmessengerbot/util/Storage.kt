@@ -9,7 +9,7 @@
 
 package me.sungbin.gitmessengerbot.util
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -63,13 +63,11 @@ object Storage {
     fun fileList(path: String) = File(path.parsePath()).listFiles()?.toList() ?: emptyList()
 
     @RequiresApi(Build.VERSION_CODES.R)
-    fun requestStorageManagePermission(context: Context) {
-        val uri = Uri.parse("package:" + context.packageName)
-        context.startActivity(
-            Intent(
-                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                uri
-            )
+    fun requestStorageManagePermission(activity: Activity) {
+        val intent = Intent(
+            Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+            Uri.parse("package:" + activity.packageName)
         )
+        activity.startActivity(intent)
     }
 }
