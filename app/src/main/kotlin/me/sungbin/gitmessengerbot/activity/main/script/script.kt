@@ -91,6 +91,7 @@ import me.sungbin.gitmessengerbot.ui.glideimage.GlideImage
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.StringConfig
+import me.sungbin.gitmessengerbot.util.extension.isEnglish
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.gitmessengerbot.util.extension.toast
 
@@ -567,7 +568,11 @@ fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
                     )
                 },
                 value = scriptNameField,
-                onValueChange = { scriptNameField = it },
+                onValueChange = {
+                    if (it.text.isEnglish()) {
+                        scriptNameField = it
+                    }
+                },
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 modifier = Modifier

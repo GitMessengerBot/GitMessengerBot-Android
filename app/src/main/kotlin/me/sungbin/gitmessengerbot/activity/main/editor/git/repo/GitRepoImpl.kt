@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import me.sungbin.gitmessengerbot.activity.main.editor.git.GitService
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
 import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
-import me.sungbin.gitmessengerbot.activity.main.editor.git.util.toBase64
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.StringConfig
+import me.sungbin.gitmessengerbot.util.extension.toBase64
 import retrofit2.Retrofit
 import retrofit2.await
 
