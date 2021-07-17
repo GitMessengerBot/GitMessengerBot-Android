@@ -9,8 +9,10 @@
 
 package me.sungbin.gitmessengerbot.activity.main.debug
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +33,7 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -57,6 +61,7 @@ import me.sungbin.gitmessengerbot.bot.debug.Sender
 import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
+import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 @Composable
@@ -155,8 +160,8 @@ private fun DebugContent() {
 
             itemsIndexed(items) { index, _ ->
                 ChatBubble(
-                    item = items[index],
                     preItem = items.getOrNull(index - 1),
+                    item = items[index],
                     nextItem = items.getOrNull(index + 1)
                 )
             }
@@ -174,13 +179,18 @@ private fun DebugContent() {
                                 StringConfig.DebugAllBot,
                                 inputField.text,
                                 "null",
-                                Sender.Bot
+                                "Sender.Bot"
                             )
                         )
                         inputField = TextFieldValue()
                     }
                 )
             },
+            colors = TextFieldDefaults.textFieldColors(
+                disabledIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
             modifier = Modifier
                 .constrainAs(textfield) {
                     start.linkTo(parent.start)
@@ -192,8 +202,10 @@ private fun DebugContent() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ChatBubble(item: DebugItem, preItem: DebugItem?, nextItem: DebugItem?) {
+private fun ChatBubble(preItem: DebugItem?, item: DebugItem, nextItem: DebugItem?) {
+    val context = LocalContext.current
     val date = SimpleDateFormat("a hh:mm", Locale.KOREA).format(Date().apply { time = item.time })
     val nextDate = SimpleDateFormat("a hh:mm", Locale.KOREA).format(
         Date().apply { time = nextItem?.time ?: item.time }
@@ -219,9 +231,16 @@ private fun ChatBubble(item: DebugItem, preItem: DebugItem?, nextItem: DebugItem
                 val (message, time) = createRefs()
 
                 Surface(
-                    modifier = Modifier.constrainAs(message) {
-                        start.linkTo(parent.start)
-                    },
+                    modifier = Modifier
+                        .combinedClickable(
+                            onClick = {},
+                            onLongClick = {
+                                Util.copy(context, item.message)
+                            }
+                        )
+                        .constrainAs(message) {
+                            start.linkTo(parent.start)
+                        },
                     elevation = 1.dp,
                     contentColor = Color.White,
                     shape = RoundedCornerShape(10.dp)
@@ -267,34 +286,75 @@ private fun ChatBubble(item: DebugItem, preItem: DebugItem?, nextItem: DebugItem
                                 end.linkTo(parent.end)
                             }
                     )
-                }
-                Text(
-                    text = item.sender,
-                    modifier = Modifier.constrainAs(name) {
-                        end.linkTo(parent.end, 60.dp)
-                    }
-                )
-                Text(
-                    text = item.message,
-                    color = Color.Black,
-                    fontSize = 15.sp,
-                    modifier = Modifier
-                        .constrainAs(message) {
-                            top.linkTo(name.bottom, 10.dp)
-                            end.linkTo(name.end)
+                    Text(
+                        text = item.sender,
+                        fontSize = 13.sp,
+                        modifier = Modifier.constrainAs(name) {
+                            end.linkTo(parent.end, 60.dp)
                         }
-                        .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
-                        .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                )
-                Text(
-                    text = date,
-                    color = Color.Gray,
-                    fontSize = 10.sp,
-                    modifier = Modifier.constrainAs(time) {
-                        start.linkTo(message.start)
-                        top.linkTo(message.bottom, 5.dp)
+                    )
+                    Surface(
+                        modifier = Modifier
+                            .combinedClickable(
+                                onClick = {},
+                                onLongClick = {
+                                    Util.copy(context, item.message)
+                                }
+                            )
+                            .constrainAs(message) {
+                                top.linkTo(name.bottom, 10.dp)
+                                end.linkTo(name.end)
+                            },
+                        elevation = 1.dp,
+                        contentColor = Color.White,
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Text(
+                            text = item.message,
+                            color = Color.Black,
+                            fontSize = 15.sp,
+                            modifier = Modifier
+                                .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
+                                .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                        )
                     }
-                )
+                } else {
+                    Surface(
+                        modifier = Modifier
+                            .combinedClickable(
+                                onClick = {},
+                                onLongClick = {
+                                    Util.copy(context, item.message)
+                                }
+                            )
+                            .constrainAs(message) {
+                                end.linkTo(parent.end, 60.dp)
+                            },
+                        elevation = 1.dp,
+                        contentColor = Color.White,
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Text(
+                            text = item.message,
+                            color = Color.Black,
+                            fontSize = 15.sp,
+                            modifier = Modifier
+                                .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
+                                .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                        )
+                    }
+                }
+                if (visibleTime) {
+                    Text(
+                        text = date,
+                        color = Color.Gray,
+                        fontSize = 10.sp,
+                        modifier = Modifier.constrainAs(time) {
+                            start.linkTo(message.start)
+                            top.linkTo(message.bottom, 5.dp)
+                        }
+                    )
+                }
             }
         }
     }

@@ -77,4 +77,6 @@
     <string name="editor_drawer_beautify">Beautify</string>
     <string name="editor_drawer_minify">Minify</string>
     <string name="editor_drawer_pretty">Pretty</string>
+
+    <string name="util_toast_copied_clipboard">클립보드에 복사되었습니다.</string>
 </resources>

@@ -37,6 +37,13 @@ object StringConfig {
     fun Debug(scriptId: Int) = "$AppStorage/debug/$scriptId/${Random.nextInt()}.json"
 
     /**
+     * 디버그 저장소 경로
+     *
+     * "$AppStorage/debug"
+     */
+    fun DebugPath() = "$AppStorage/debug"
+
+    /**
      * 스크립트 코드 파일
      *
      * "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"

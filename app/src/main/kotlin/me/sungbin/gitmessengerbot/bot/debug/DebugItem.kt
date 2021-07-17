@@ -42,6 +42,20 @@ object DebugStore {
 
     val items get() = _items.sortedByDescending { it.time }.asReversed()
 
+    init {
+        _items.addAll(getList())
+    }
+
+    private fun getList(): List<DebugItem> {
+        val debugs = mutableListOf<DebugItem>()
+        Storage.fileList(StringConfig.DebugPath()).forEach { debugFolder ->
+            Storage.fileList(debugFolder.path).forEach { debugFile ->
+                debugs.add(Json.toModel(Storage.read(debugFile.path, null)!!, DebugItem::class))
+            }
+        }
+        return debugs
+    }
+
     fun add(item: DebugItem) {
         _items.add(item)
         Storage.write(StringConfig.Debug(item.scriptId), Json.toString(item))
