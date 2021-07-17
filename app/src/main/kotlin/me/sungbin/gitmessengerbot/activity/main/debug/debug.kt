@@ -143,7 +143,6 @@ private fun DebugContent() {
             .fillMaxSize()
             .background(twiceLightGray)
     ) {
-        val context = LocalContext.current
         val (chats, textfield) = createRefs()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
