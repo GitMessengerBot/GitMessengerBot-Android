@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor.git.model
+package me.sungbin.gitmessengerbot.activity.editor.git.model
 
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 

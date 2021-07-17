@@ -56,8 +56,12 @@ object Storage {
         write(path, newContent)
     }
 
-    fun remove(path: String) {
+    fun delete(path: String) {
         File(path.parsePath()).delete()
+    }
+
+    fun deleteAll(path: String) {
+        File(path.parsePath()).deleteRecursively()
     }
 
     fun fileList(path: String) = File(path.parsePath()).listFiles()?.toList() ?: emptyList()

@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor.js
+package me.sungbin.gitmessengerbot.activity.editor.js
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -50,11 +50,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileContentResponse
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
-import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitRepo
-import me.sungbin.gitmessengerbot.activity.main.editor.git.repo.GitResult
+import me.sungbin.gitmessengerbot.activity.editor.git.model.FileContentResponse
+import me.sungbin.gitmessengerbot.activity.editor.git.model.GitFile
+import me.sungbin.gitmessengerbot.activity.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
+import me.sungbin.gitmessengerbot.activity.editor.git.repo.GitResult
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
@@ -344,7 +344,7 @@ private fun ToolBar(
             .fillMaxWidth()
             .wrapContentHeight()
             .background(color = colors.primary)
-            .padding(top = 10.dp, bottom = 16.dp)
+            .padding(top = 10.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         val (menu, title, undo, save, reload) = createRefs()
 
@@ -359,7 +359,7 @@ private fun ToolBar(
                     }
                 }
                 .constrainAs(menu) {
-                    start.linkTo(parent.start, 16.dp)
+                    start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 }
         )
@@ -385,7 +385,7 @@ private fun ToolBar(
                     Bot.save(script, codeField.value.text)
                 }
                 .constrainAs(save) {
-                    end.linkTo(parent.end, 16.dp)
+                    end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 }
         )

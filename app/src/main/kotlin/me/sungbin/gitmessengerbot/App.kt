@@ -9,7 +9,12 @@
 
 package me.sungbin.gitmessengerbot
 
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
+import me.sungbin.gitmessengerbot.util.config.StringConfig
+
 data class App(
     var power: Boolean = false,
-    var defaultLang: Int = 0
+    var defaultLang: Int = ScriptLang.TypeScript,
+    var evalMode: Boolean = false,
+    var defaultBranch: String = StringConfig.GitDefaultBranch
 )

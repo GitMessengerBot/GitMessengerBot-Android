@@ -40,7 +40,7 @@ class ScriptCompilerImpl @Inject constructor(
             val v8 = V8.createV8Runtime()
             v8.addApi(
                 apiName = "Bot",
-                apiClass = BotApi(context),
+                apiClass = BotApi(context = context, scriptId = script.id),
                 methodNames = listOf("reply", "replyShowAll"),
                 argumentsList = listOf(
                     listOf(String::class.java, String::class.java),

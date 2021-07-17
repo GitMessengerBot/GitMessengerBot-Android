@@ -32,6 +32,7 @@ object Bot {
     private val _scripts = SnapshotStateList<ScriptItem>()
     private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
     private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
+    var debugMode = false
 
     val scripts
         get() = _scripts
@@ -48,6 +49,8 @@ object Bot {
     }
 
     fun getPowerOnScripts() = scripts.filter { it.power }
+
+    fun getCompiledScripts() = scripts.filter { it.power && it.compiled }
 
     /**
      * 앱 정보 json 파일 저장
@@ -87,7 +90,7 @@ object Bot {
 
     fun removeScript(script: ScriptItem) {
         _scripts.remove(script)
-        Storage.remove(StringConfig.Script(script.name, script.lang))
+        Storage.delete(StringConfig.Script(script.name, script.lang))
     }
 
     private fun getList(): List<ScriptItem> {
@@ -132,23 +135,18 @@ object Bot {
         room: String,
         message: String,
         sender: String,
-        isGroupChat: Boolean,
-        isDebugMode: Boolean
+        isGroupChat: Boolean
     ) {
         try {
-            if (!isDebugMode) {
-                val v8 = StackManager.v8[script.id] ?: run {
-                    println("${script.name} - v8 instance is null")
-                    return
-                }
-                v8.locker.acquire()
-                val arguments = listOf(room, message, sender, isGroupChat, "null") // todo
-                v8.executeJSFunction("onMessage", *arguments.toTypedArray())
-                v8.locker.release()
-                println("${script.name}: 실행됨")
-            } else {
-                // todo: 디버그 만들기
+            val v8 = StackManager.v8[script.id] ?: run {
+                println("${script.name} - v8 instance is null")
+                return
             }
+            v8.locker.acquire()
+            val arguments = listOf(room, message, sender, isGroupChat, "null") // todo
+            v8.executeJSFunction("onMessage", *arguments.toTypedArray())
+            v8.locker.release()
+            println("${script.name}: 실행됨")
         } catch (exception: Exception) {
             Util.error(context, "js response 호출 실패\n\n$exception")
         }

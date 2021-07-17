@@ -9,9 +9,9 @@
 
 package me.sungbin.gitmessengerbot.util.config
 
+import kotlin.random.Random
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptLangName
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
-import me.sungbin.gitmessengerbot.util.Storage
 
 @Suppress("FunctionName")
 object StringConfig {
@@ -23,19 +23,17 @@ object StringConfig {
     const val GitDefaultCommitMessage = "Commited by GitMessengerBot"
 
     const val AppData = "$AppStorage/app.json"
-    const val IntentScriptId = "intent-script-id"
 
+    const val IntentScriptId = "intent-script-id"
     const val IntentNotificationAction = "intent-notifiaction-action"
     const val IntentBotPowerToggle = "intent-bot-power-onoff"
     const val IntentBotRecompile = "intent-bot-recompile"
     const val IntentImageUrl = "intent-image-url"
 
     /**
-     * NPM 모듈 경로
-     *
-     * File에 바로 쓰일거라, sdcard 경로 필요
+     * 스크립트 디버그 파일
      */
-    fun ModulePath(moduleName: String) = "${Storage.sdcard}/GitMessengerBot/module/$moduleName"
+    fun Debug(scriptId: Int) = "$AppStorage/debug/$scriptId/${Random.nextInt()}.json"
 
     /**
      * 스크립트 코드 파일

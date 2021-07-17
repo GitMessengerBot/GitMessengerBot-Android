@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.debug.Debug
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.bot.Bot
@@ -104,7 +105,8 @@ class MainActivity : ComponentActivity() {
                         compiler = scriptCompiler,
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
-                    else -> Text(text = "TODO")
+                    Tab.Debug -> Debug()
+                    else -> Text("TODO")
                 }
             }
             Footer(scriptAddDialogVisible)

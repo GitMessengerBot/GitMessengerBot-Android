@@ -7,15 +7,15 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
+package me.sungbin.gitmessengerbot.activity.editor.git.repo
 
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import me.sungbin.gitmessengerbot.activity.main.editor.git.GitService
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.activity.editor.git.GitService
+import me.sungbin.gitmessengerbot.activity.editor.git.model.GitFile
+import me.sungbin.gitmessengerbot.activity.editor.git.model.Repo
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage

@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor.git.repo
+package me.sungbin.gitmessengerbot.activity.editor.git.repo
 
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitResultWrapper
+import me.sungbin.gitmessengerbot.activity.editor.git.model.GitResultWrapper
 
 sealed class GitResult {
     data class Success(val result: GitResultWrapper) : GitResult()

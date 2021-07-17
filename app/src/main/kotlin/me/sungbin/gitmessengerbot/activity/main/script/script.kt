@@ -80,7 +80,8 @@ import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.editor.js.JsEditorActivity
+import me.sungbin.gitmessengerbot.activity.debug.DebugActivty
+import me.sungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.activity.setup.github.model.GithubData
@@ -443,7 +444,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable { }
+                    .clickable { context.startActivity(Intent(context, DebugActivty::class.java)) }
                     .constrainAs(debug) {
                         end.linkTo(logcat.start, 20.dp)
                         top.linkTo(compileState.top)

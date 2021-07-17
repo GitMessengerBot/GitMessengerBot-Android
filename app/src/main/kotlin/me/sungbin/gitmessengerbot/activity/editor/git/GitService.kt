@@ -7,13 +7,13 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.editor.git
+package me.sungbin.gitmessengerbot.activity.editor.git
 
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileContentResponse
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.FileCreateResponse
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.GitFile
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.Repo
-import me.sungbin.gitmessengerbot.activity.main.editor.git.model.RepoCreateResponse
+import me.sungbin.gitmessengerbot.activity.editor.git.model.FileContentResponse
+import me.sungbin.gitmessengerbot.activity.editor.git.model.FileCreateResponse
+import me.sungbin.gitmessengerbot.activity.editor.git.model.GitFile
+import me.sungbin.gitmessengerbot.activity.editor.git.model.Repo
+import me.sungbin.gitmessengerbot.activity.editor.git.model.RepoCreateResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
