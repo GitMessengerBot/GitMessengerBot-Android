@@ -25,20 +25,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetScaffoldState
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,9 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.script.ScriptAddContent
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.bot.Bot
@@ -69,7 +62,6 @@ class MainActivity : ComponentActivity() {
     lateinit var scriptCompiler: ScriptCompiler
 
     private var tab by mutableStateOf(Tab.Script)
-    private lateinit var onBackPressedAction: () -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,55 +85,35 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun Main() {
-        val coroutineScope = rememberCoroutineScope()
-        val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
-        )
-        onBackPressedAction = {
-            coroutineScope.launch {
-                if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-                    bottomSheetScaffoldState.bottomSheetState.collapse()
-                } else {
-                    finish()
-                }
-            }
-        }
-        BottomSheetScaffold(
-            scaffoldState = bottomSheetScaffoldState,
-            sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            sheetContent = { ScriptAddContent(bottomSheetScaffoldState) },
-            sheetElevation = 0.dp,
-            sheetPeekHeight = 0.dp,
-            modifier = Modifier.fillMaxSize()
+        val scriptAddDialogVisible = remember { mutableStateOf(false) }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.primary)
         ) {
-            Box(
+            Crossfade(
+                targetState = tab,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colors.primary)
-            ) {
-                Crossfade(
-                    targetState = tab,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 60.dp)
-                ) { index ->
-                    when (index) {
-                        Tab.Script -> ScriptContent(
-                            activity = this@MainActivity,
-                            compiler = scriptCompiler
-                        )
-                        else -> Text(text = "TODO")
-                    }
+                    .padding(bottom = 60.dp)
+            ) { index ->
+                when (index) {
+                    Tab.Script -> ScriptContent(
+                        activity = this@MainActivity,
+                        compiler = scriptCompiler,
+                        scriptAddDialogVisible = scriptAddDialogVisible
+                    )
+                    else -> Text(text = "TODO")
                 }
-                Footer(bottomSheetScaffoldState = bottomSheetScaffoldState)
             }
+            Footer(scriptAddDialogVisible)
         }
     }
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
     @Composable
-    private fun Footer(bottomSheetScaffoldState: BottomSheetScaffoldState) {
-        val coroutineScope = rememberCoroutineScope()
+    private fun Footer(scriptAddDialogVisible: MutableState<Boolean>) {
         val items = listOf(
             FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
             FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
@@ -165,9 +137,7 @@ class MainActivity : ComponentActivity() {
                         .size(50.dp)
                         .clip(CircleShape)
                         .clickable {
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.bottomSheetState.expand()
-                            }
+                            scriptAddDialogVisible.value = true
                         },
                     color = colors.primary,
                     elevation = 2.dp
@@ -186,10 +156,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        if (::onBackPressedAction.isInitialized) {
-            onBackPressedAction()
-        } else {
-            super.onBackPressed()
-        }
+        super.onBackPressed() // 닫기 확인 todo
     }
 }

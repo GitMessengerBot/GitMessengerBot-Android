@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,7 +37,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -135,7 +133,13 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(activity: Activity, compiler: ScriptCompiler) {
+fun ScriptContent(
+    activity: Activity,
+    compiler: ScriptCompiler,
+    scriptAddDialogVisible: MutableState<Boolean>
+) {
+    ScriptAddDialog(visible = scriptAddDialogVisible)
+
     Column(modifier = Modifier.fillMaxSize()) {
         Header(activity)
         Column(
@@ -557,120 +561,151 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ScriptAddContent(bottomSheetScaffoldState: BottomSheetScaffoldState) {
+fun ScriptAddDialog(visible: MutableState<Boolean>) {
     val context = LocalContext.current
     var scriptNameField by remember { mutableStateOf(TextFieldValue()) }
     var selectedScriptLang by remember { mutableStateOf(ScriptLang.TypeScript) }
-    val scriptLangSpinnerShape = RoundedCornerShape(10.dp)
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(start = 30.dp, end = 30.dp, bottom = 30.dp, top = 10.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = stringResource(R.string.script_add_name))
-            TextField(
-                label = {
-                    Text(
-                        text = stringResource(R.string.script_add_name_only_eng),
-                        fontSize = 10.sp
-                    )
-                },
-                value = scriptNameField,
-                onValueChange = {
-                    if (it.text.isEnglish()) {
-                        scriptNameField = it
-                    }
-                },
-                singleLine = true,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                modifier = Modifier
-                    .width(200.dp)
-                    .focusRequester(FocusRequester()),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
-            )
-        }
-        Text(
-            text = stringResource(R.string.script_add_lang),
-            modifier = Modifier.padding(top = 15.dp)
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(top = 5.dp)
-                .clip(scriptLangSpinnerShape)
-                .border(1.dp, colors.secondary, scriptLangSpinnerShape)
-        ) {
-            repeat(4) { scriptLang ->
-                val backgroundColor by animateColorAsState(if (selectedScriptLang == scriptLang) colors.secondary else Color.White)
-                val textColor by animateColorAsState(if (selectedScriptLang == scriptLang) Color.White else colors.secondary)
-
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            shape = RoundedCornerShape(30.dp),
+            text = {
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(backgroundColor)
-                        .noRippleClickable {
-                            if (scriptLang == ScriptLang.Python) {
-                                toast(
-                                    context,
-                                    context.getString(R.string.script_toast_cant_use_python)
-                                )
-                            } else {
-                                selectedScriptLang = scriptLang
+                        .width(200.dp)
+                        .wrapContentHeight()
+                ) {
+                    Text(text = stringResource(R.string.script_add_name), color = Color.Black)
+                    TextField(
+                        label = {
+                            Text(
+                                text = stringResource(R.string.script_add_name_only_eng),
+                                fontSize = 10.sp
+                            )
+                        },
+                        value = scriptNameField,
+                        onValueChange = {
+                            if (it.text.isEnglish()) {
+                                scriptNameField = it
                             }
                         },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = scriptLang.toScriptLangName(),
-                        color = textColor,
-                        fontSize = 10.sp
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(FocusRequester()),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp)
+                    ) {
+                        repeat(4) { scriptLang ->
+                            val backgroundColor by animateColorAsState(if (selectedScriptLang == scriptLang) colors.secondary else Color.White)
+                            val primaryColor by animateColorAsState(if (selectedScriptLang == scriptLang) colors.primary else Color.Gray)
+                            val shape = RoundedCornerShape(10.dp)
+
+                            ConstraintLayout(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(30.dp)
+                                    .clip(shape)
+                                    .background(
+                                        color = backgroundColor.copy(alpha = 0.5f),
+                                        shape = shape
+                                    )
+                                    .noRippleClickable {
+                                        if (scriptLang == ScriptLang.Python) {
+                                            toast(
+                                                context,
+                                                context.getString(R.string.script_toast_cant_use_python)
+                                            )
+                                        } else {
+                                            selectedScriptLang = scriptLang
+                                        }
+                                    }
+                                    .padding(4.dp)
+                            ) {
+                                val (circle, name, check) = createRefs()
+
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_outline_circle_24),
+                                    contentDescription = null,
+                                    tint = primaryColor,
+                                    modifier = Modifier
+                                        .padding(2.dp)
+                                        .constrainAs(circle) {
+                                            top.linkTo(parent.top)
+                                            bottom.linkTo(parent.bottom)
+                                            start.linkTo(parent.start)
+                                        }
+                                )
+                                Text(
+                                    text = scriptLang.toScriptLangName(),
+                                    color = primaryColor,
+                                    fontSize = 13.sp,
+                                    modifier = Modifier
+                                        .constrainAs(name) {
+                                            top.linkTo(parent.top)
+                                            bottom.linkTo(parent.bottom)
+                                            start.linkTo(circle.end, 15.dp)
+                                        }
+                                )
+                                if (selectedScriptLang == scriptLang) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_round_check_24),
+                                        contentDescription = null,
+                                        tint = primaryColor,
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .constrainAs(check) {
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                end.linkTo(parent.end)
+                                            }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Button(
+                        onClick = {
+                            val scriptName = scriptNameField.text
+                            if (scriptName.isNotBlank()) {
+                                val scriptItem = ScriptItem(
+                                    id = Random.nextInt(),
+                                    name = scriptName,
+                                    power = false,
+                                    lang = selectedScriptLang,
+                                    compiled = false,
+                                    lastRun = ""
+                                )
+                                Bot.addScript(scriptItem)
+                                scriptNameField = TextFieldValue()
+                            } else {
+                                toast(
+                                    context,
+                                    context.getString(R.string.script_add_input_name)
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 30.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.script_add_create_new),
+                            color = Color.White
+                        )
+                    }
                 }
             }
-        }
-        Button(
-            onClick = {
-                val scriptName = scriptNameField.text
-                if (scriptName.isNotBlank()) {
-                    val scriptItem = ScriptItem(
-                        id = Random.nextInt(),
-                        name = scriptName,
-                        power = false,
-                        lang = selectedScriptLang,
-                        compiled = false,
-                        lastRun = ""
-                    )
-                    Bot.addScript(scriptItem)
-                    coroutineScope.launch {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
-                    }
-                    scriptNameField = TextFieldValue()
-                } else {
-                    toast(context, context.getString(R.string.script_add_input_name))
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary)
-        ) {
-            Text(
-                text = stringResource(R.string.script_add_create_new),
-                color = Color.White
-            )
-        }
+        )
     }
 }
