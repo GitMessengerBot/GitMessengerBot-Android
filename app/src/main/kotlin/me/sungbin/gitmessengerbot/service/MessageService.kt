@@ -77,7 +77,8 @@ class MessageService : NotificationListenerService() {
                     room = room,
                     message = message,
                     sender = sender,
-                    isGroupChat = isGroupChat
+                    isGroupChat = isGroupChat,
+                    isDebugMode = false
                 )
             }
         } catch (exception: Exception) {

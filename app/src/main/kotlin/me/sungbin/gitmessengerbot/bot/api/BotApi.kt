@@ -19,18 +19,18 @@ import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 class BotApi(private val context: Context, private val scriptId: Int) {
     private val showAll = "\u200b".repeat(500)
 
-    fun reply(room: String, message: String) {
-        if (!Bot.debugMode) {
+    fun reply(room: String, message: String, isDebugMode: Boolean) {
+        if (!isDebugMode) {
             Bot.replyToSession(context, StackManager.sessions[room]!!, message)
         } else {
             DebugStore.add(createDebugItem(scriptId, message, "null", Sender.Bot))
         }
     }
 
-    fun replyShowAll(room: String, message: String, message2: String) {
+    fun replyShowAll(room: String, message: String, message2: String, isDebugMode: Boolean) {
         val content = "$message$showAll$message2"
 
-        if (!Bot.debugMode) {
+        if (!isDebugMode) {
             Bot.replyToSession(context, StackManager.sessions[room]!!, content)
         } else {
             DebugStore.add(createDebugItem(scriptId, content, "null", Sender.Bot))

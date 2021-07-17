@@ -43,8 +43,13 @@ class ScriptCompilerImpl @Inject constructor(
                 apiClass = BotApi(context = context, scriptId = script.id),
                 methodNames = listOf("reply", "replyShowAll"),
                 argumentsList = listOf(
-                    listOf(String::class.java, String::class.java),
-                    listOf(String::class.java, String::class.java, String::class.java)
+                    listOf(String::class.java, String::class.java, Boolean::class.java),
+                    listOf(
+                        String::class.java,
+                        String::class.java,
+                        String::class.java,
+                        Boolean::class.java
+                    )
                 )
             )
             v8.addApi(

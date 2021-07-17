@@ -688,6 +688,7 @@ fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                     lastRun = ""
                                 )
                                 Bot.addScript(scriptItem)
+                                visible.value = false
                                 scriptNameField = TextFieldValue()
                             } else {
                                 toast(

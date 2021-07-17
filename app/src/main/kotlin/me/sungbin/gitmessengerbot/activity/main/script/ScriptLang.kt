@@ -33,8 +33,8 @@ fun Int.toScriptSuffix() = when (this) {
 }
 
 fun Int.toScriptDefaultSource() = when (this) {
-    0 -> "const onMessage = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string) => {\n}"
-    1 -> "const onMessage = (room, message, sender, isGroupChat, profileImageBase64) => {\n}"
+    0 -> "const onMessage = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string, isDebugMode: Boolean) => {\nconst reply = (message: String) => {\nBot.reply(room, message, isDebugMode);\n}\n}"
+    1 -> "const onMessage = (room, message, sender, isGroupChat, profileImageBase64, isDebugMode) => {\nconst reply = (message) => {\nBot.reply(room, message, isDebugMode);\n}\n}"
     2 -> "def onMessage(self, room, message, sender, isGroupChat, profileImageBase64):\n    "
     3 -> "sim"
     else -> throw Error("Unknown script type.")

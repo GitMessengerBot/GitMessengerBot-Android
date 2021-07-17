@@ -32,7 +32,6 @@ object Bot {
     private val _scripts = SnapshotStateList<ScriptItem>()
     private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
     private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
-    var debugMode = false
 
     val scripts
         get() = _scripts
@@ -135,7 +134,8 @@ object Bot {
         room: String,
         message: String,
         sender: String,
-        isGroupChat: Boolean
+        isGroupChat: Boolean,
+        isDebugMode: Boolean
     ) {
         try {
             val v8 = StackManager.v8[script.id] ?: run {
@@ -143,12 +143,12 @@ object Bot {
                 return
             }
             v8.locker.acquire()
-            val arguments = listOf(room, message, sender, isGroupChat, "null") // todo
+            val arguments = listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
             v8.executeJSFunction("onMessage", *arguments.toTypedArray())
             v8.locker.release()
             println("${script.name}: 실행됨")
         } catch (exception: Exception) {
-            Util.error(context, "js response 호출 실패\n\n$exception")
+            Util.error(context, "js response 호출 실패\n\n${exception.message}")
         }
     }
 }

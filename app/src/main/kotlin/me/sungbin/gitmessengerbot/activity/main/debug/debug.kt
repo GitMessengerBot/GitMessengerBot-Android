@@ -147,6 +147,7 @@ private fun DebugContent() {
             .fillMaxSize()
             .background(twiceLightGray)
     ) {
+        val context = LocalContext.current
         val (chats, textfield) = createRefs()
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -188,15 +189,27 @@ private fun DebugContent() {
                     painter = painterResource(R.drawable.ic_round_send_24),
                     contentDescription = null,
                     modifier = Modifier.clickable {
+                        val message = inputField.text
                         DebugStore.add(
                             createDebugItem(
                                 StringConfig.DebugAllBot,
-                                inputField.text,
+                                message,
                                 "null", // todo: Profile image
                                 "Sender" // todo: Sender name
                             )
                         )
                         inputField = TextFieldValue()
+                        Bot.getCompiledScripts().forEach { script ->
+                            Bot.callJsResponder(
+                                context = context,
+                                script = script,
+                                room = "Debug Room", // todo
+                                message = message,
+                                sender = "Sender", // todo
+                                isGroupChat = false, // todo
+                                isDebugMode = true
+                            )
+                        }
                         coroutineScope.launch {
                             lazyListState.animateScrollToItem(DebugStore.items.size)
                         }
