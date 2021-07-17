@@ -16,19 +16,20 @@ import me.sungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 @Suppress("FunctionName")
 object StringConfig {
     private const val AppStorage = "GitMessengerBot/data"
+    const val AppData = "$AppStorage/app.json"
 
     const val GithubData = "$AppStorage/github-data.json"
     const val GitDefaultBranch = "main"
     const val GitDefaultRepoDescription = "Created by GitMessengerBot"
     const val GitDefaultCommitMessage = "Commited by GitMessengerBot"
 
-    const val AppData = "$AppStorage/app.json"
-
     const val IntentScriptId = "intent-script-id"
     const val IntentNotificationAction = "intent-notifiaction-action"
     const val IntentBotPowerToggle = "intent-bot-power-onoff"
     const val IntentBotRecompile = "intent-bot-recompile"
     const val IntentImageUrl = "intent-image-url"
+
+    const val DebugAllBot = -1
 
     /**
      * 스크립트 디버그 파일

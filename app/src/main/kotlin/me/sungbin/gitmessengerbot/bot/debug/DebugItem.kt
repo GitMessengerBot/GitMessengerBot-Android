@@ -15,22 +15,29 @@ import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 
+fun createDebugItem(scriptId: Int, message: String, profileImageBase64: String, sender: String) =
+    DebugItem(
+        scriptId = scriptId,
+        message = message,
+        time = Date().time,
+        profileImageBase64 = profileImageBase64,
+        sender = sender
+    )
+
 data class DebugItem(
     val scriptId: Int,
     val message: String,
     val time: Long,
-    val profileImageBase64: String
+    val profileImageBase64: String,
+    val sender: String
 )
 
-fun createDebugItem(scriptId: Int, message: String, profileImageBase64: String) = DebugItem(
-    scriptId = scriptId,
-    message = message,
-    time = Date().time,
-    profileImageBase64 = profileImageBase64
-)
+object Sender {
+    const val Bot = "Bot"
+}
 
 @Suppress("ObjectPropertyName")
-object Debug {
+object DebugStore {
     private val _items = mutableStateListOf<DebugItem>()
 
     val items get() = _items.sortedByDescending { it.time }.asReversed()

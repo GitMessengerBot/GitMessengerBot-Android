@@ -12,7 +12,8 @@ package me.sungbin.gitmessengerbot.bot.api
 import android.content.Context
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.StackManager
-import me.sungbin.gitmessengerbot.bot.debug.Debug
+import me.sungbin.gitmessengerbot.bot.debug.DebugStore
+import me.sungbin.gitmessengerbot.bot.debug.Sender
 import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 
 class BotApi(private val context: Context, private val scriptId: Int) {
@@ -22,7 +23,7 @@ class BotApi(private val context: Context, private val scriptId: Int) {
         if (!Bot.debugMode) {
             Bot.replyToSession(context, StackManager.sessions[room]!!, message)
         } else {
-            Debug.add(createDebugItem(scriptId, message, "null"))
+            DebugStore.add(createDebugItem(scriptId, message, "null", Sender.Bot))
         }
     }
 
@@ -32,7 +33,7 @@ class BotApi(private val context: Context, private val scriptId: Int) {
         if (!Bot.debugMode) {
             Bot.replyToSession(context, StackManager.sessions[room]!!, content)
         } else {
-            Debug.add(createDebugItem(scriptId, content, "null"))
+            DebugStore.add(createDebugItem(scriptId, content, "null", Sender.Bot))
         }
     }
 }

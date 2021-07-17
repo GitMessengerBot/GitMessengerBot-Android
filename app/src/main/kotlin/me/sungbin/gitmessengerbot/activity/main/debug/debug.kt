@@ -10,30 +10,54 @@
 package me.sungbin.gitmessengerbot.activity.main.debug
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.bot.Bot
+import me.sungbin.gitmessengerbot.bot.debug.DebugItem
+import me.sungbin.gitmessengerbot.bot.debug.DebugStore
+import me.sungbin.gitmessengerbot.bot.debug.Sender
+import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.theme.twiceLightGray
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 @Composable
 fun Debug() {
@@ -109,15 +133,169 @@ private fun DebugToolbar() {
 
 @Composable
 private fun DebugContent() {
-    Text(
-        text = "AA",
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan)
-    )
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (chats, textfield) = createRefs()
+        var inputField by remember { mutableStateOf(TextFieldValue()) }
+
+        LazyColumn(
+            modifier = Modifier
+                .background(twiceLightGray)
+                .constrainAs(chats) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(textfield.top, 8.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
+                    width = Dimension.fillToConstraints
+                },
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val items = DebugStore.items
+
+            itemsIndexed(items) { index, _ ->
+                ChatBubble(
+                    item = items[index],
+                    preItem = items.getOrNull(index - 1),
+                    nextItem = items.getOrNull(index + 1)
+                )
+            }
+        }
+        TextField(
+            value = inputField,
+            onValueChange = { inputField = it },
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_round_send_24),
+                    contentDescription = null,
+                    modifier = Modifier.clickable {
+                        DebugStore.add(
+                            createDebugItem(
+                                StringConfig.DebugAllBot,
+                                inputField.text,
+                                "null",
+                                Sender.Bot
+                            )
+                        )
+                        inputField = TextFieldValue()
+                    }
+                )
+            },
+            modifier = Modifier
+                .constrainAs(textfield) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                }
+        )
+    }
 }
 
 @Composable
-private fun ChatBubble() {
+private fun ChatBubble(item: DebugItem, preItem: DebugItem?, nextItem: DebugItem?) {
+    val date = SimpleDateFormat("a hh:mm", Locale.KOREA).format(Date().apply { time = item.time })
+    val nextDate = SimpleDateFormat("a hh:mm", Locale.KOREA).format(
+        Date().apply { time = nextItem?.time ?: item.time }
+    )
+    val visibleTime = if (nextItem != null) {
+        date != nextDate
+    } else {
+        true
+    }
+    val visibleProfileImage = if (preItem != null) {
+        item.sender != preItem.sender
+    } else {
+        true
+    }
 
+    when (item.sender) {
+        Sender.Bot -> { // 왼쪽 (봇이 답장)
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                val (message, time) = createRefs()
+
+                Surface(
+                    modifier = Modifier.constrainAs(message) {
+                        start.linkTo(parent.start)
+                    },
+                    elevation = 1.dp,
+                    contentColor = Color.White,
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text(
+                        text = item.message,
+                        color = Color.Black,
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
+                            .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                    )
+                }
+                if (visibleTime) {
+                    Text(
+                        text = date,
+                        color = Color.Gray,
+                        fontSize = 10.sp,
+                        modifier = Modifier.constrainAs(time) {
+                            end.linkTo(message.end)
+                            top.linkTo(message.bottom, 5.dp)
+                        }
+                    )
+                }
+            }
+        }
+        else -> { // 오른쪽 (사용자가 입력)
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                val (profileImage, name, message, time) = createRefs()
+
+                if (visibleProfileImage) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_round_account_circle_24),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .constrainAs(profileImage) {
+                                end.linkTo(parent.end)
+                            }
+                    )
+                }
+                Text(
+                    text = item.sender,
+                    modifier = Modifier.constrainAs(name) {
+                        end.linkTo(parent.end, 60.dp)
+                    }
+                )
+                Text(
+                    text = item.message,
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    modifier = Modifier
+                        .constrainAs(message) {
+                            top.linkTo(name.bottom, 10.dp)
+                            end.linkTo(name.end)
+                        }
+                        .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                        .background(color = Color.White, shape = RoundedCornerShape(10.dp))
+                )
+                Text(
+                    text = date,
+                    color = Color.Gray,
+                    fontSize = 10.sp,
+                    modifier = Modifier.constrainAs(time) {
+                        start.linkTo(message.start)
+                        top.linkTo(message.bottom, 5.dp)
+                    }
+                )
+            }
+        }
+    }
 }
