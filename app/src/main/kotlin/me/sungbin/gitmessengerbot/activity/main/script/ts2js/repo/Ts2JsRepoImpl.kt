@@ -38,6 +38,7 @@ class Ts2JsRepoImpl @Inject constructor(
                 trySend(Ts2JsResult.Error(exception))
             }
         }
+
         awaitClose { close() }
     }
 }

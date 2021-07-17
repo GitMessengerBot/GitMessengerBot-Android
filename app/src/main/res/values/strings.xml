@@ -57,6 +57,8 @@
     <string name="service_notification_bot_running">봇이 작동중 입니다…</string>
     <string name="service_message_bot_start">알림 읽기 서비스가 시작되었습니다.</string>
     <string name="service_message_bot_stop">알림 읽기 서비스가 중지되었습니다.</string>
+    <string name="service_toast_compile_running">전체 활성화 스크립트 리컴파일중…</string>
+    <string name="service_toast_compile_error">%s 컴파일 에러\n\n%s</string>
 
     <string name="editor_toast_saved">저장되었습니다.</string>
     <string name="editor_toast_repo_create_success">레포 생성 성공</string>
