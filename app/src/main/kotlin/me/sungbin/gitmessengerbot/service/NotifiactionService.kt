@@ -45,7 +45,7 @@ class NotifiactionService : BroadcastReceiver() {
                 Bot.save(Bot.app.value.copy(power = power))
             }
             StringConfig.IntentBotRecompile -> {
-                toast(context!!, context.getString(R.string.service_toast_compile_running))
+                toast(context!!, context.getString(R.string.service_toast_active_scripts_recompile))
                 CoroutineScope(Dispatchers.Default).launch {
                     Bot.getPowerOnScripts().forEach { script ->
                         scriptCompiler.process(context, script).collect { result ->
