@@ -337,7 +337,8 @@ private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage:
             buttons = {},
             title = { Text(text = stringResource(R.string.script_dialog_compile_error)) },
             text = { Text(text = exceptionMessage) },
-            modifier = Modifier.width(250.dp)
+            modifier = Modifier.width(250.dp),
+            shape = RoundedCornerShape(30.dp)
         )
     }
 }
@@ -698,7 +699,8 @@ fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 30.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary)
+                        colors = ButtonDefaults.buttonColors(backgroundColor = colors.secondary),
+                        shape = RoundedCornerShape(10.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.script_add_create_new),

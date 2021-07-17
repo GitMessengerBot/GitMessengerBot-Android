@@ -138,13 +138,17 @@ private fun DebugToolbar() {
 
 @Composable
 private fun DebugContent() {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(twiceLightGray)
+    ) {
+        val context = LocalContext.current
         val (chats, textfield) = createRefs()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
         LazyColumn(
             modifier = Modifier
-                .background(twiceLightGray)
                 .constrainAs(chats) {
                     top.linkTo(parent.top)
                     bottom.linkTo(textfield.top, 8.dp)
@@ -178,8 +182,8 @@ private fun DebugContent() {
                             createDebugItem(
                                 StringConfig.DebugAllBot,
                                 inputField.text,
-                                "null",
-                                "Sender.Bot"
+                                "null", // todo: Profile image
+                                "Sender" // todo: Sender name
                             )
                         )
                         inputField = TextFieldValue()
@@ -189,15 +193,18 @@ private fun DebugContent() {
             colors = TextFieldDefaults.textFieldColors(
                 disabledIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                backgroundColor = Color.White
             ),
             modifier = Modifier
+                .padding(16.dp)
                 .constrainAs(textfield) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
-                }
+                },
+            shape = RoundedCornerShape(30.dp)
         )
     }
 }
