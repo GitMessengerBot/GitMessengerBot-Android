@@ -40,6 +40,7 @@ object Versions {
         const val CrashReporter = "1.1.0"
         const val Gson = "2.8.7"
         const val CheckDependencyUpdates = "1.4.0"
+        const val ViewColorGenerator = "v0.1"
     }
 
     object Network {
@@ -105,7 +106,8 @@ object Dependencies {
 
     val util = listOf(
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
-        "com.google.code.gson:gson:${Versions.Util.Gson}"
+        "com.google.code.gson:gson:${Versions.Util.Gson}",
+        "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
     )
 
     val room = listOf(

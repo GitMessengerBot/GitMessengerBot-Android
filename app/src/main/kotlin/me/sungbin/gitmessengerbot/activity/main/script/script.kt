@@ -9,6 +9,8 @@
 
 package me.sungbin.gitmessengerbot.activity.main.script
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -88,6 +90,7 @@ import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
+import me.sungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Util
@@ -132,9 +135,9 @@ private fun MenuBox(
 }
 
 @Composable
-fun ScriptContent(compiler: ScriptCompiler) {
+fun ScriptContent(activity: Activity, compiler: ScriptCompiler) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Header()
+        Header(activity)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -164,7 +167,7 @@ fun ScriptContent(compiler: ScriptCompiler) {
 }
 
 @Composable
-private fun Header() {
+private fun Header(activity: Activity) {
     val context = LocalContext.current
     val githubJson = Storage.read(StringConfig.GithubData, "")!!
     val githubData = Json.toModel(githubJson, GithubData::class)
@@ -178,22 +181,22 @@ private fun Header() {
     ) {
         val (appName, profileName, profileImage, menuBoxes) = createRefs()
 
-        /* GlideImage(
-             src = githubData.profileImageUrl,
-             modifier = Modifier
-                 .size(70.dp)
-                 .clip(CircleShape)
-                 .constrainAs(profileImage) {
-                     end.linkTo(parent.end)
-                     top.linkTo(appName.top)
-                     bottom.linkTo(profileName.bottom)
-                 }
-         )*/
         GlideImage(
             imageModel = githubData.profileImageUrl,
             modifier = Modifier
                 .size(65.dp)
                 .clip(CircleShape)
+                .noRippleClickable {
+                    val intent = Intent(activity, ImageViewActivity::class.java).apply {
+                        putExtra(StringConfig.IntentImageUrl, githubData.profileImageUrl)
+                    }
+                    activity.startActivity(
+                        intent,
+                        ActivityOptions
+                            .makeSceneTransitionAnimation(activity)
+                            .toBundle()
+                    )
+                }
                 .constrainAs(profileImage) {
                     end.linkTo(parent.end)
                     top.linkTo(appName.top)

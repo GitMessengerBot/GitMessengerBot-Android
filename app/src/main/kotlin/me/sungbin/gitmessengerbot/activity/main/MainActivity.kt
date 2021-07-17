@@ -126,7 +126,10 @@ class MainActivity : ComponentActivity() {
                         .padding(bottom = 60.dp)
                 ) { index ->
                     when (index) {
-                        Tab.Script -> ScriptContent(compiler = scriptCompiler)
+                        Tab.Script -> ScriptContent(
+                            activity = this@MainActivity,
+                            compiler = scriptCompiler
+                        )
                         else -> Text(text = "TODO")
                     }
                 }

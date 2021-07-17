@@ -9,6 +9,7 @@
 
 package me.sungbin.gitmessengerbot.activity.main.editor.js
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -327,7 +328,7 @@ private fun DrawerLayout(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
 private fun ToolBar(
     script: ScriptItem,
@@ -388,7 +389,7 @@ private fun ToolBar(
                     top.linkTo(parent.top)
                 }
         )
-        if (undoStack.value.isNotBlank()) {
+        AnimatedVisibility(visible = undoStack.value.isNotBlank()) {
             Icon(
                 painter = painterResource(R.drawable.ic_round_undo_24),
                 contentDescription = null,

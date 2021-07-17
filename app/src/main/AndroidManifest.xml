@@ -69,6 +69,7 @@
         <activity android:name=".activity.main.MainActivity" />
         <activity android:name=".activity.main.editor.js.JsEditorActivity" />
         <activity android:name=".activity.main.editor.simple.SimpleEditorActivity" />
+        <activity android:name=".ui.imageviewer.ImageViewActivity" />
 
         <service
             android:name=".service.MessageService"
@@ -79,7 +80,6 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
         <service android:name=".service.BackgroundService" />
 
         <receiver android:name=".service.NotifiactionService" />

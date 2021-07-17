@@ -28,6 +28,7 @@ object StringConfig {
     const val IntentNotificationAction = "intent-notifiaction-action"
     const val IntentBotPowerToggle = "intent-bot-power-onoff"
     const val IntentBotRecompile = "intent-bot-recompile"
+    const val IntentImageUrl = "intent-image-url"
 
     /**
      * NPM 모듈 경로
