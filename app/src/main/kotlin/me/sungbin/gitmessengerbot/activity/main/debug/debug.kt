@@ -229,7 +229,7 @@ private fun ChatBubble(preItem: DebugItem?, item: DebugItem, nextItem: DebugItem
     val context = LocalContext.current
     val date = SimpleDateFormat("a hh:mm", Locale.KOREA).format(Date().apply { time = item.time })
     val nextDate = SimpleDateFormat("a hh:mm", Locale.KOREA).format(
-        Date().apply { time = nextItem?.time ?: item.time }
+        Date().apply { time = nextItem?.time ?: 0L }
     )
     val visibleTime = if (nextItem != null) {
         date != nextDate
