@@ -66,6 +66,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activity.test.TestActivity"
+            android:exported="true" />
+
         <activity android:name=".activity.main.MainActivity" />
         <activity android:name="me.sungbin.gitmessengerbot.activity.editor.js.JsEditorActivity" />
         <activity android:name="me.sungbin.gitmessengerbot.activity.editor.simple.SimpleEditorActivity" />
