@@ -18,6 +18,7 @@ import me.sungbin.gitmessengerbot.theme.colors
 
 data class TimeLineOption(
     @DrawableRes val circleIcon: Int = R.drawable.ic_outline_circle_24,
+    val circleSize: Dp = Dp.Unspecified,
     val circleColor: Color = Color.Gray,
     val lineColor: Color = colors.primary,
     val lineWidth: Dp = 2.dp,

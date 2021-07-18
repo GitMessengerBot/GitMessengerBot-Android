@@ -11,6 +11,7 @@ package me.sungbin.gitmessengerbot.ui.timeline
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
@@ -43,11 +44,13 @@ fun <T> TimeLine(
                     painter = painterResource(timeLineOption.circleIcon),
                     contentDescription = null,
                     tint = timeLineOption.circleColor,
-                    modifier = Modifier.constrainAs(circle) {
-                        start.linkTo(parent.start)
-                        top.linkTo(timeLineContent.top)
-                        bottom.linkTo(timeLineContent.bottom)
-                    }
+                    modifier = Modifier
+                        .size(timeLineOption.circleSize)
+                        .constrainAs(circle) {
+                            start.linkTo(parent.start)
+                            top.linkTo(timeLineContent.top)
+                            bottom.linkTo(timeLineContent.bottom)
+                        }
                 )
                 content(
                     Modifier.constrainAs(timeLineContent) {

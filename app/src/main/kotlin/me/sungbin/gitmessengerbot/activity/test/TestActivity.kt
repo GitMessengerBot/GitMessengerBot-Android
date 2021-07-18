@@ -42,12 +42,12 @@ class TestActivity : ComponentActivity() {
     @Composable
     private fun TimeLineView() {
         TimeLine(
-            items = List(size = 100, init = { Random.nextInt() }),
+            items = List(size = 10, init = { Random.nextInt() }),
             modifier = Modifier.background(Color.White)
         ) { modifier, item ->
             Surface(
                 modifier = modifier,
-                elevation = 5.dp,
+                elevation = 1.dp,
                 color = Color.Gray,
                 shape = RoundedCornerShape(15.dp)
             ) {
