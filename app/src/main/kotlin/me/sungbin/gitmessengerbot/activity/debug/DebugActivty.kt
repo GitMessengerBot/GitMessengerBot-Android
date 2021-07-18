@@ -15,6 +15,9 @@ import androidx.activity.compose.setContent
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.bot.debug.Debug
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
+import me.sungbin.gitmessengerbot.theme.SystemUiController
+import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 class DebugActivty : ComponentActivity() {
@@ -24,9 +27,13 @@ class DebugActivty : ComponentActivity() {
         val scriptId = intent.getIntExtra(StringConfig.IntentDebugScriptId, -1)
         val script = Bot.getScriptById(scriptId)
 
+        SystemUiController(window).run {
+            setStatusBarColor(colors.primary)
+            setNavigationBarColor(twiceLightGray)
+        }
         setContent {
             MaterialTheme {
-                Debug(script)
+                Debug(activity = this, script = script)
             }
         }
     }

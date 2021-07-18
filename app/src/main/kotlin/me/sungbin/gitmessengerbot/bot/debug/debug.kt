@@ -9,6 +9,7 @@
 
 package me.sungbin.gitmessengerbot.bot.debug
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -73,14 +74,27 @@ import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
-fun Debug(script: ScriptItem?) {
+fun Debug(activity: Activity? = null, script: ScriptItem? = null) {
     val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
     val settingDialogVisible = remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            topBar = { DebugToolbar(script, evalMode, settingDialogVisible) },
-            content = { DebugContent(script, evalMode, settingDialogVisible) }
+            topBar = {
+                DebugToolbar(
+                    activity = activity,
+                    script = script,
+                    evalMode = evalMode,
+                    settingDialogVisible = settingDialogVisible
+                )
+            },
+            content = {
+                DebugContent(
+                    script = script,
+                    evalMode = evalMode,
+                    settingDialogVisible = settingDialogVisible
+                )
+            }
         )
     }
 }
@@ -137,6 +151,7 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
 
 @Composable
 private fun DebugToolbar(
+    activity: Activity?,
     script: ScriptItem?,
     evalMode: MutableState<Boolean>,
     settingDialogVisible: MutableState<Boolean>
@@ -148,17 +163,44 @@ private fun DebugToolbar(
             .background(color = colors.primary)
             .padding(top = 10.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
-        val (title, setting, switchDescription, modeSwitch) = createRefs()
+        val (back, title, setting, switchDescription, modeSwitch) = createRefs()
 
-        Text(
-            text = script?.name ?: stringResource(R.string.debug_title),
-            color = Color.White,
-            modifier = Modifier.constrainAs(title) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-        )
+        if (script != null) {
+            Icon(
+                painter = painterResource(R.drawable.ic_round_arrow_left_24),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(15.dp)
+                    .clickable {
+                        activity!!.finish()
+                    }
+                    .constrainAs(back) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+            )
+            Text(
+                text = script.name,
+                color = Color.White,
+                modifier = Modifier.constrainAs(title) {
+                    start.linkTo(back.end, 10.dp)
+                    top.linkTo(back.top)
+                    bottom.linkTo(back.bottom)
+                }
+            )
+        } else {
+            Text(
+                text = stringResource(R.string.debug_title),
+                color = Color.White,
+                modifier = Modifier.constrainAs(title) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+            )
+        }
         Icon(
             painter = painterResource(R.drawable.ic_round_settings_24),
             contentDescription = null,
