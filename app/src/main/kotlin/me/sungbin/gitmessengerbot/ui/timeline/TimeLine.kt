@@ -30,7 +30,7 @@ fun <T> TimeLine(
     timeLinePadding: TimeLinePadding = TimeLinePadding(),
     content: @Composable (Modifier, T) -> Unit
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier, contentPadding = timeLinePadding.defaultPadding) {
         itemsIndexed(items) { index, item ->
             ConstraintLayout(
                 modifier = Modifier
