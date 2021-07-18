@@ -2,12 +2,21 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [debug.kt] created by Ji Sungbin on 21. 7. 19. 오전 12:38.
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
  * [debug.kt] created by Ji Sungbin on 21. 6. 19. 오후 11:52.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package me.sungbin.gitmessengerbot.activity.main.debug
+package me.sungbin.gitmessengerbot.bot.debug
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -37,6 +46,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +57,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -58,28 +69,27 @@ import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.launch
 import me.sungbin.gitmessengerbot.R
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.bot.Bot
-import me.sungbin.gitmessengerbot.bot.debug.DebugItem
-import me.sungbin.gitmessengerbot.bot.debug.DebugStore
-import me.sungbin.gitmessengerbot.bot.debug.Sender
-import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 @Composable
-fun Debug() {
+fun Debug(script: ScriptItem?) {
+    val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            topBar = { DebugToolbar() },
-            content = { DebugContent() }
+            topBar = { DebugToolbar(script, evalMode) },
+            content = { DebugContent(script, evalMode) }
         )
     }
 }
 
 @Composable
-private fun DebugToolbar() {
+private fun DebugToolbar(script: ScriptItem?, evalMode: MutableState<Boolean>) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -88,10 +98,9 @@ private fun DebugToolbar() {
             .padding(top = 10.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         val (title, setting, switchDescription, modeSwitch) = createRefs()
-        var evalMode by remember { mutableStateOf(Bot.app.value.evalMode) }
 
         Text(
-            text = "DebugRoom",
+            text = script?.name ?: stringResource(R.string.debug_title),
             color = Color.White,
             modifier = Modifier.constrainAs(title) {
                 start.linkTo(parent.start)
@@ -110,10 +119,10 @@ private fun DebugToolbar() {
             }
         )
         Switch(
-            checked = evalMode,
+            checked = evalMode.value,
             onCheckedChange = {
-                evalMode = !evalMode
-                Bot.save(Bot.app.value.copy(evalMode = evalMode))
+                evalMode.value = !evalMode.value
+                Bot.save(Bot.app.value.copy(evalMode = evalMode.value))
             },
             modifier = Modifier.constrainAs(modeSwitch) {
                 end.linkTo(setting.start, 16.dp)
@@ -128,7 +137,7 @@ private fun DebugToolbar() {
             ),
         )
         Text(
-            text = "eval mode",
+            text = stringResource(R.string.debug_eval_mode),
             color = Color.White,
             fontSize = 13.sp,
             modifier = Modifier.constrainAs(switchDescription) {
@@ -141,7 +150,7 @@ private fun DebugToolbar() {
 }
 
 @Composable
-private fun DebugContent() {
+private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -171,7 +180,11 @@ private fun DebugContent() {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val items = DebugStore.items
+            val items = when {
+                script == null -> DebugStore.items
+                evalMode.value -> DebugStore.getByScriptId(StringConfig.ScriptEvalId)
+                else -> DebugStore.getByScriptId(script.id)
+            }
 
             itemsIndexed(items) { index, _ ->
                 ChatBubble(
@@ -199,16 +212,49 @@ private fun DebugContent() {
                             )
                         )
                         inputField = TextFieldValue()
-                        Bot.getCompiledScripts().forEach { script ->
-                            Bot.callJsResponder(
-                                context = context,
-                                script = script,
-                                room = "Debug Room", // todo
-                                message = message,
-                                sender = "Sender", // todo
-                                isGroupChat = false, // todo
-                                isDebugMode = true
-                            )
+                        when {
+                            script == null -> {
+                                Bot.getCompiledScripts().forEach { script ->
+                                    Bot.callJsResponder(
+                                        context = context,
+                                        script = script,
+                                        room = "Debug Room", // todo
+                                        message = message,
+                                        sender = "Sender", // todo
+                                        isGroupChat = false, // todo
+                                        isDebugMode = true
+                                    )
+                                }
+                            }
+                            evalMode.value -> {
+                                Bot.callJsResponder(
+                                    context = context,
+                                    script = ScriptItem(
+                                        id = StringConfig.ScriptEvalId,
+                                        name = "",
+                                        lang = 0,
+                                        power = false,
+                                        compiled = false,
+                                        lastRun = ""
+                                    ),
+                                    room = "",
+                                    message = message,
+                                    sender = "",
+                                    isGroupChat = false,
+                                    isDebugMode = true
+                                )
+                            }
+                            else -> {
+                                Bot.callJsResponder(
+                                    context = context,
+                                    script = script,
+                                    room = "Debug Room", // todo
+                                    message = message,
+                                    sender = "Sender", // todo
+                                    isGroupChat = false, // todo
+                                    isDebugMode = true
+                                )
+                            }
                         }
                         coroutineScope.launch {
                             lazyListState.animateScrollToItem(DebugStore.items.size)

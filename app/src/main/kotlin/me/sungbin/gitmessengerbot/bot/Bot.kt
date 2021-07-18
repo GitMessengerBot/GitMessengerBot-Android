@@ -21,6 +21,9 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import me.sungbin.gitmessengerbot.App
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
+import me.sungbin.gitmessengerbot.bot.debug.DebugStore
+import me.sungbin.gitmessengerbot.bot.debug.Sender
+import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
 import me.sungbin.gitmessengerbot.util.Util
@@ -143,8 +146,21 @@ object Bot {
                 return
             }
             v8.locker.acquire()
-            val arguments = listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
-            v8.executeJSFunction("onMessage", *arguments.toTypedArray())
+            if (script.id == StringConfig.ScriptEvalId) {
+                val result = v8.executeStringScript(message)
+                DebugStore.add(
+                    createDebugItem(
+                        StringConfig.ScriptEvalId,
+                        result,
+                        "null",
+                        Sender.Bot
+                    )
+                )
+            } else {
+                val arguments =
+                    listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
+                v8.executeJSFunction("onMessage", *arguments.toTypedArray())
+            }
             v8.locker.release()
             println("${script.name}: 실행됨")
         } catch (exception: Exception) {

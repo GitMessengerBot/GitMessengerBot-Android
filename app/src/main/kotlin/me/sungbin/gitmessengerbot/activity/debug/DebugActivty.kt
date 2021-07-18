@@ -12,16 +12,21 @@ package me.sungbin.gitmessengerbot.activity.debug
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Text
+import me.sungbin.gitmessengerbot.bot.Bot
+import me.sungbin.gitmessengerbot.bot.debug.Debug
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
+import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 class DebugActivty : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val scriptId = intent.getIntExtra(StringConfig.IntentDebugScriptId, -1)
+        val script = Bot.getScriptById(scriptId)
+
         setContent {
             MaterialTheme {
-                Text(text = "TODO")
+                Debug(script)
             }
         }
     }

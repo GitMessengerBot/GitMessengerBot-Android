@@ -445,7 +445,12 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 tint = Color.White,
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable { context.startActivity(Intent(context, DebugActivty::class.java)) }
+                    .clickable {
+                        val intent = Intent(context, DebugActivty::class.java).apply {
+                            putExtra(StringConfig.IntentDebugScriptId, script.id)
+                        }
+                        context.startActivity(intent)
+                    }
                     .constrainAs(debug) {
                         end.linkTo(logcat.start, 20.dp)
                         top.linkTo(compileState.top)

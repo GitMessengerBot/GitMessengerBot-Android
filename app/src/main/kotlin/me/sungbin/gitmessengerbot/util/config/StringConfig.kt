@@ -28,8 +28,10 @@ object StringConfig {
     const val IntentBotPowerToggle = "intent-bot-power-onoff"
     const val IntentBotRecompile = "intent-bot-recompile"
     const val IntentImageUrl = "intent-image-url"
+    const val IntentDebugScriptId = "intent-debug-script-id"
 
     const val DebugAllBot = -1
+    const val ScriptEvalId = -2
 
     /**
      * 스크립트 디버그 파일

@@ -41,13 +41,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 import me.sungbin.gitmessengerbot.R
-import me.sungbin.gitmessengerbot.activity.main.debug.Debug
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptContent
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
+import me.sungbin.gitmessengerbot.activity.main.script.ScriptLang
+import me.sungbin.gitmessengerbot.activity.main.script.compiler.CompileResult
 import me.sungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import me.sungbin.gitmessengerbot.bot.Bot
+import me.sungbin.gitmessengerbot.bot.StackManager
+import me.sungbin.gitmessengerbot.bot.debug.Debug
 import me.sungbin.gitmessengerbot.service.BackgroundService
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
@@ -55,6 +61,8 @@ import me.sungbin.gitmessengerbot.theme.colors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyBottomBar
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyColors
 import me.sungbin.gitmessengerbot.ui.fancybottombar.FancyItem
+import me.sungbin.gitmessengerbot.util.config.StringConfig
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -74,6 +82,33 @@ class MainActivity : ComponentActivity() {
         SystemUiController(window).run {
             setStatusBarColor(colors.primary)
             setNavigationBarColor(Color.White)
+        }
+
+        lifecycleScope.launchWhenCreated {
+            if (StackManager.v8[StringConfig.ScriptEvalId] == null) {
+                scriptCompiler.process(
+                    applicationContext,
+                    ScriptItem(
+                        id = StringConfig.ScriptEvalId,
+                        name = "",
+                        lang = ScriptLang.JavaScript,
+                        power = false,
+                        compiled = false,
+                        lastRun = ""
+                    )
+                ).collect { result ->
+                    when (result) {
+                        is CompileResult.Success -> toast(
+                            this@MainActivity,
+                            getString(R.string.main_toast_eval_loaded)
+                        )
+                        is CompileResult.Error -> toast(
+                            this@MainActivity,
+                            getString(R.string.main_toast_eval_load_fail, result.exception.message)
+                        )
+                    }
+                }
+            }
         }
 
         setContent {
@@ -105,7 +140,7 @@ class MainActivity : ComponentActivity() {
                         compiler = scriptCompiler,
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
-                    Tab.Debug -> Debug()
+                    Tab.Debug -> Debug(null)
                     else -> Text("TODO")
                 }
             }

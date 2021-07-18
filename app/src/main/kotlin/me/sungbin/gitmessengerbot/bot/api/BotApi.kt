@@ -16,7 +16,7 @@ import me.sungbin.gitmessengerbot.bot.debug.DebugStore
 import me.sungbin.gitmessengerbot.bot.debug.Sender
 import me.sungbin.gitmessengerbot.bot.debug.createDebugItem
 
-// todo: 메모리 누수 발생; 어떻게 고치지??
+// todo: context <- 메모리 누수 발생; 어떻게 고치지??
 class BotApi(private val context: Context, private val scriptId: Int) {
     private val showAll = "\u200b".repeat(500)
 
