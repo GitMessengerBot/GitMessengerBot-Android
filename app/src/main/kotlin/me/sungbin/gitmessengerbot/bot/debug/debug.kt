@@ -124,13 +124,12 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
                         },
                     ),
                     elevation = 1.dp,
+                    color = orange,
                     shape = RoundedCornerShape(5.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .background(orange)
-                            .padding(8.dp)
+                        modifier = Modifier.padding(8.dp)
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_round_warning_24),

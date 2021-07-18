@@ -47,8 +47,9 @@ class TestActivity : ComponentActivity() {
                 .background(Color.White)
         ) { modifier, item ->
             Surface(
-                modifier = modifier.background(Color.Gray),
-                elevation = 1.dp
+                modifier = modifier,
+                elevation = 1.dp,
+                color = Color.Black,
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Text(
