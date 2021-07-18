@@ -17,7 +17,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -36,7 +35,7 @@ fun <T> TimeLine(
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(timeLineOption.contentHeight)
             ) {
                 val (circle, topLine, bottomLine, timeLineContent) = createRefs()
 
@@ -74,8 +73,7 @@ fun <T> TimeLine(
                             width = Dimension.value(timeLineOption.lineWidth)
                             height = Dimension.fillToConstraints
                         },
-                        color = Color.Black,
-                        thickness = timeLineOption.lineWidth
+                        color = timeLineOption.lineColor
                     )
                 }
                 if (index != items.size - 1) {
@@ -88,8 +86,7 @@ fun <T> TimeLine(
                             width = Dimension.value(timeLineOption.lineWidth)
                             height = Dimension.fillToConstraints
                         },
-                        color = Color.Black,
-                        thickness = timeLineOption.lineWidth
+                        color = timeLineOption.lineColor
                     )
                 }
             }

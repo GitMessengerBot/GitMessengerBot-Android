@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class TimeLinePadding(
-    val contentStart: Dp = 2.dp,
+    val contentStart: Dp = 4.dp,
     val contentTop: Dp = 4.dp,
     val contentBottom: Dp = 4.dp,
     val circleLineGap: Dp = 1.dp

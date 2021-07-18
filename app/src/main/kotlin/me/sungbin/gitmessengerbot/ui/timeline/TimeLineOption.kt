@@ -15,11 +15,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.theme.colors
-import me.sungbin.gitmessengerbot.theme.twiceLightGray
 
 data class TimeLineOption(
     @DrawableRes val circleIcon: Int = R.drawable.ic_outline_circle_24,
-    val circleColor: Color = twiceLightGray,
+    val circleColor: Color = Color.Gray,
     val lineColor: Color = colors.primary,
-    val lineWidth: Dp = 1.dp
+    val lineWidth: Dp = 2.dp,
+    val contentHeight: Dp = 100.dp
 )
