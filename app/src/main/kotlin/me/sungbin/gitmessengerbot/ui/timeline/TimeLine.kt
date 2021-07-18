@@ -10,13 +10,14 @@
 package me.sungbin.gitmessengerbot.ui.timeline
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -35,7 +36,7 @@ fun <T> TimeLine(
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .height(200.dp)
             ) {
                 val (circle, topLine, bottomLine, timeLineContent) = createRefs()
 
@@ -67,10 +68,13 @@ fun <T> TimeLine(
                     Divider(
                         modifier = Modifier.constrainAs(topLine) {
                             top.linkTo(parent.top)
-                            bottom.linkTo(circle.bottom, timeLinePadding.circleLineGap)
+                            bottom.linkTo(circle.top, timeLinePadding.circleLineGap)
+                            start.linkTo(circle.start)
+                            end.linkTo(circle.end)
+                            width = Dimension.value(timeLineOption.lineWidth)
                             height = Dimension.fillToConstraints
                         },
-                        color = timeLineOption.lineColor,
+                        color = Color.Black,
                         thickness = timeLineOption.lineWidth
                     )
                 }
@@ -79,9 +83,12 @@ fun <T> TimeLine(
                         modifier = Modifier.constrainAs(bottomLine) {
                             top.linkTo(circle.bottom, timeLinePadding.circleLineGap)
                             bottom.linkTo(parent.bottom)
+                            start.linkTo(circle.start)
+                            end.linkTo(circle.end)
+                            width = Dimension.value(timeLineOption.lineWidth)
                             height = Dimension.fillToConstraints
                         },
-                        color = timeLineOption.lineColor,
+                        color = Color.Black,
                         thickness = timeLineOption.lineWidth
                     )
                 }

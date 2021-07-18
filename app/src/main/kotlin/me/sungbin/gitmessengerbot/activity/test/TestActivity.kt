@@ -9,27 +9,35 @@
 
 package me.sungbin.gitmessengerbot.activity.test
 
+import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.random.Random
-import me.sungbin.gitmessengerbot.theme.twiceLightGray
+import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.ui.timeline.TimeLine
 
 class TestActivity : ComponentActivity() {
-    @Preview
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MaterialTheme {
+                TimeLineView()
+            }
+        }
+    }
+
     @Composable
     private fun TimeLineView() {
         TimeLine(
@@ -39,14 +47,15 @@ class TestActivity : ComponentActivity() {
                 .background(Color.White)
         ) { modifier, item ->
             Surface(
-                modifier = modifier
-                    .width(100.dp)
-                    .height(50.dp)
-                    .background(twiceLightGray),
+                modifier = modifier.background(Color.Gray),
                 elevation = 1.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = item.toString(), fontSize = 15.sp)
+                    Text(
+                        text = item.toString(),
+                        fontSize = 15.sp,
+                        color = Color.White
+                    )
                 }
             }
         }
