@@ -84,4 +84,5 @@
 
     <string name="debug_title">DebugRoom</string>
     <string name="debug_eval_mode">eval mode</string>
+    <string name="debug_setting_title">디버그 설정</string>
 </resources>

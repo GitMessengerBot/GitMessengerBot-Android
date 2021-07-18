@@ -2,15 +2,6 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [debug.kt] created by Ji Sungbin on 21. 7. 19. 오전 12:38.
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
  * [debug.kt] created by Ji Sungbin on 21. 6. 19. 오후 11:52.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
@@ -25,6 +16,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,6 +29,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -52,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -72,24 +66,76 @@ import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.activity.main.script.ScriptItem
 import me.sungbin.gitmessengerbot.bot.Bot
 import me.sungbin.gitmessengerbot.theme.colors
+import me.sungbin.gitmessengerbot.theme.orange
 import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
+import me.sungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun Debug(script: ScriptItem?) {
     val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
+    val settingDialogVisible = remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            topBar = { DebugToolbar(script, evalMode) },
-            content = { DebugContent(script, evalMode) }
+            topBar = { DebugToolbar(script, evalMode, settingDialogVisible) },
+            content = { DebugContent(script, evalMode, settingDialogVisible) }
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
+    val context = LocalContext.current
+
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            title = { Text(text = stringResource(R.string.debug_setting_title)) },
+            text = {
+                Surface(
+                    modifier = Modifier.combinedClickable(
+                        onClick = { toast(context, "정말 삭제하시려면 길게 눌러주세요.") },
+                        onLongClick = {
+                            toast(context, "삭제되었습니다.")
+                            DebugStore.removeAll(debugId)
+                        },
+                    ),
+                    elevation = 1.dp,
+                    shape = RoundedCornerShape(5.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .background(orange)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_round_warning_24),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        Text(
+                            text = "디버그 기록 전체 삭제",
+                            color = Color.White,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+            }
         )
     }
 }
 
 @Composable
-private fun DebugToolbar(script: ScriptItem?, evalMode: MutableState<Boolean>) {
+private fun DebugToolbar(
+    script: ScriptItem?,
+    evalMode: MutableState<Boolean>,
+    settingDialogVisible: MutableState<Boolean>
+) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,11 +158,15 @@ private fun DebugToolbar(script: ScriptItem?, evalMode: MutableState<Boolean>) {
             painter = painterResource(R.drawable.ic_round_settings_24),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.constrainAs(setting) {
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
+            modifier = Modifier
+                .clickable {
+                    settingDialogVisible.value = true
+                }
+                .constrainAs(setting) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
         )
         Switch(
             checked = evalMode.value,
@@ -150,7 +200,11 @@ private fun DebugToolbar(script: ScriptItem?, evalMode: MutableState<Boolean>) {
 }
 
 @Composable
-private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
+private fun DebugContent(
+    script: ScriptItem?,
+    evalMode: MutableState<Boolean>,
+    settingDialogVisible: MutableState<Boolean>
+) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -162,8 +216,28 @@ private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
         val coroutineScope = rememberCoroutineScope()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
+        val items: List<DebugItem>
+        val debugId: Int
+
+        when {
+            evalMode.value -> {
+                items = DebugStore.getByScriptId(StringConfig.ScriptEvalId)
+                debugId = StringConfig.ScriptEvalId
+            }
+            script == null -> {
+                items = DebugStore.items
+                debugId = StringConfig.DebugAllBot
+            }
+            else -> {
+                items = DebugStore.getByScriptId(script.id)
+                debugId = script.id
+            }
+        }
+
+        DebugSettingDialog(visible = settingDialogVisible, debugId = debugId)
+
         coroutineScope.launch {
-            lazyListState.animateScrollToItem(DebugStore.items.size)
+            lazyListState.animateScrollToItem(items.size)
         }
 
         LazyColumn(
@@ -180,12 +254,6 @@ private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val items = when {
-                script == null -> DebugStore.items
-                evalMode.value -> DebugStore.getByScriptId(StringConfig.ScriptEvalId)
-                else -> DebugStore.getByScriptId(script.id)
-            }
-
             itemsIndexed(items) { index, _ ->
                 ChatBubble(
                     preItem = items.getOrNull(index - 1),
@@ -205,7 +273,7 @@ private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
                         val message = inputField.text
                         DebugStore.add(
                             createDebugItem(
-                                StringConfig.DebugAllBot,
+                                debugId,
                                 message,
                                 "null", // todo: Profile image
                                 "Sender" // todo: Sender name
@@ -213,19 +281,6 @@ private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
                         )
                         inputField = TextFieldValue()
                         when {
-                            script == null -> {
-                                Bot.getCompiledScripts().forEach { script ->
-                                    Bot.callJsResponder(
-                                        context = context,
-                                        script = script,
-                                        room = "Debug Room", // todo
-                                        message = message,
-                                        sender = "Sender", // todo
-                                        isGroupChat = false, // todo
-                                        isDebugMode = true
-                                    )
-                                }
-                            }
                             evalMode.value -> {
                                 Bot.callJsResponder(
                                     context = context,
@@ -239,16 +294,29 @@ private fun DebugContent(script: ScriptItem?, evalMode: MutableState<Boolean>) {
                                     ),
                                     room = "",
                                     message = message,
-                                    sender = "",
+                                    sender = "User",
                                     isGroupChat = false,
                                     isDebugMode = true
                                 )
+                            }
+                            script == null -> {
+                                Bot.getCompiledScripts().forEach { script ->
+                                    Bot.callJsResponder(
+                                        context = context,
+                                        script = script,
+                                        room = "DebugRoom", // todo
+                                        message = message,
+                                        sender = "Sender", // todo
+                                        isGroupChat = false, // todo
+                                        isDebugMode = true
+                                    )
+                                }
                             }
                             else -> {
                                 Bot.callJsResponder(
                                     context = context,
                                     script = script,
-                                    room = "Debug Room", // todo
+                                    room = "DebugRoom", // todo
                                     message = message,
                                     sender = "Sender", // todo
                                     isGroupChat = false, // todo

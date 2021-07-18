@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val twiceLightGray = Color(236, 236, 236)
+val orange = Color(0xFFF9A825)
 
 val colors = lightColors().copy(
     primary = Color(0xFF6b1aa5),
