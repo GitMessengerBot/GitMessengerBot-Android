@@ -85,4 +85,7 @@
     <string name="debug_title">DebugRoom</string>
     <string name="debug_eval_mode">eval mode</string>
     <string name="debug_setting_title">디버그 설정</string>
+    <string name="debug_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
+    <string name="debug_toast_removed">삭제되었습니다.</string>
+    <string name="debug_remove_all_history">디버그 기록 전체 삭제</string>
 </resources>

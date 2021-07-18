@@ -147,7 +147,7 @@ object Bot {
             }
             v8.locker.acquire()
             if (script.id == StringConfig.ScriptEvalId) {
-                val result = v8.executeStringScript(message)
+                val result = v8.executeScript(message).toString()
                 DebugStore.add(
                     createDebugItem(
                         StringConfig.ScriptEvalId,

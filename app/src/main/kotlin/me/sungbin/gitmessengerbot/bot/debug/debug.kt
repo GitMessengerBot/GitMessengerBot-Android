@@ -98,9 +98,14 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
             text = {
                 Surface(
                     modifier = Modifier.combinedClickable(
-                        onClick = { toast(context, "정말 삭제하시려면 길게 눌러주세요.") },
+                        onClick = {
+                            toast(
+                                context,
+                                context.getString(R.string.debug_toast_confirm_remove)
+                            )
+                        },
                         onLongClick = {
-                            toast(context, "삭제되었습니다.")
+                            toast(context, context.getString(R.string.debug_toast_removed))
                             DebugStore.removeAll(debugId)
                         },
                     ),
@@ -119,7 +124,7 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
                             tint = Color.White
                         )
                         Text(
-                            text = "디버그 기록 전체 삭제",
+                            text = stringResource(R.string.debug_remove_all_history),
                             color = Color.White,
                             modifier = Modifier.padding(start = 8.dp)
                         )
