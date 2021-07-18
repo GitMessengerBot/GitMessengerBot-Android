@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.random.Random
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
-import me.sungbin.gitmessengerbot.ui.timeline.TimeLine
+import me.sungbin.timelineview.TimeLine
 
 class TestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

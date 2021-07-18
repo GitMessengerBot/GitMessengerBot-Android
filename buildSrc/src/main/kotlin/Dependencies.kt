@@ -25,28 +25,29 @@ object Versions {
     object Essential {
         // const val Python = "9.1.0"
         const val Kotlin = "1.5.10" // todo: 1.5.20
-        const val Gradle = "7.1.0-alpha03"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
+        const val Gradle = "7.1.0-alpha03"
     }
 
     object Ui {
-        const val Landscapist = "1.2.8"
         const val Browser = "1.3.0"
+        const val Landscapist = "1.2.8"
+        const val TimeLineView = "1.0.1"
         const val ConstraintLayout = "1.0.0-alpha08"
     }
 
     object Util {
-        const val CrashReporter = "1.1.0"
         const val Gson = "2.8.7"
-        const val CheckDependencyUpdates = "1.4.0"
+        const val CrashReporter = "1.1.0"
         const val ViewColorGenerator = "v0.1"
+        const val CheckDependencyUpdates = "1.4.0"
     }
 
     object Network {
+        const val Jsoup = "1.14.1"
         const val OkHttp = "4.9.1"
         const val Retrofit = "2.9.0"
-        const val Jsoup = "1.14.1"
     }
 
     object Jetpack {
@@ -55,8 +56,8 @@ object Versions {
 
     object Hilt {
         const val Master = "2.37"
-        const val ViewModel = "1.0.0-alpha03"
         const val ViewModelCompiler = "1.0.0"
+        const val ViewModel = "1.0.0-alpha03"
     }
 
     object Compose {
@@ -69,8 +70,8 @@ object Versions {
     }
 
     object Bot {
-        const val RhinoEngine = "1.7.13"
         const val J2V8 = "6.2.0@aar"
+        const val RhinoEngine = "1.7.13"
     }
 }
 
@@ -85,11 +86,11 @@ object Dependencies {
     )
 
     val network = listOf(
+        "org.jsoup:jsoup:${Versions.Network.Jsoup}",
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
-        "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
-        "org.jsoup:jsoup:${Versions.Network.Jsoup}",
+        "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}"
     )
 
     val essential = listOf(
@@ -100,19 +101,20 @@ object Dependencies {
 
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
+        "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
         "com.github.skydoves:landscapist-glide:${Versions.Ui.Landscapist}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 
     val util = listOf(
-        "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
         "com.google.code.gson:gson:${Versions.Util.Gson}",
+        "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
         "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
     )
 
     val room = listOf(
-        "androidx.room:room-runtime:${Versions.Jetpack.Room}",
-        "androidx.room:room-ktx:${Versions.Jetpack.Room}"
+        "androidx.room:room-ktx:${Versions.Jetpack.Room}",
+        "androidx.room:room-runtime:${Versions.Jetpack.Room}"
     )
 
     val hilt = listOf(
@@ -121,17 +123,17 @@ object Dependencies {
     )
 
     val compose = listOf(
-        "androidx.activity:activity-compose:${Versions.Compose.Activity}",
-        "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
-        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
-        "androidx.compose.material:material:${Versions.Compose.Master}",
+        "androidx.compose.ui:ui:${Versions.Compose.Master}",
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
-        "androidx.compose.ui:ui:${Versions.Compose.Master}"
+        "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
+        "androidx.compose.material:material:${Versions.Compose.Master}",
+        "androidx.activity:activity-compose:${Versions.Compose.Activity}",
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}"
     )
 
     val compiler = listOf(
         "androidx.room:room-compiler:${Versions.Jetpack.Room}",
-        "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}",
-        "androidx.hilt:hilt-compiler:${Versions.Hilt.ViewModelCompiler}"
+        "androidx.hilt:hilt-compiler:${Versions.Hilt.ViewModelCompiler}",
+        "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
     )
 }
