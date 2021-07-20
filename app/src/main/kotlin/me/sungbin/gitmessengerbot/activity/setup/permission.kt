@@ -10,6 +10,7 @@
 package me.sungbin.gitmessengerbot.activity.setup
 
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.unit.Dp
 
 object PermissionType {
     const val NotificationRead = "notification-read"
@@ -23,3 +24,5 @@ data class Permission(
     val description: String,
     @DrawableRes val icon: Int
 )
+
+data class PermissionViewPadding(val top: Dp, val bottom: Dp)

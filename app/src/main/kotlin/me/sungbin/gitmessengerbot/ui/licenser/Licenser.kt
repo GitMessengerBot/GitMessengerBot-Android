@@ -70,6 +70,7 @@ private fun LicenserItem(project: Project) {
     }
 }
 
+@Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.Licenser(projects: List<Project>) {
     val projectGroup = projects.groupBy { it.license }
