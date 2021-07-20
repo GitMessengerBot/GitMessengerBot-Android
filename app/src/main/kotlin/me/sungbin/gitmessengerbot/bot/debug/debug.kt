@@ -300,7 +300,7 @@ private fun DebugContent(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            itemsIndexed(items) { index, _ ->
+            itemsIndexed(items = items) { index, _ ->
                 ChatBubble(
                     preItem = items.getOrNull(index - 1),
                     item = items[index],
