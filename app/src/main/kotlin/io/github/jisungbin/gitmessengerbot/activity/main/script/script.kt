@@ -10,7 +10,6 @@
 package io.github.jisungbin.gitmessengerbot.activity.main.script
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -32,7 +31,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -63,7 +61,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -71,25 +68,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
 import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.jisungbin.gitmessengerbot.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
-import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
-import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.isEnglish
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
@@ -97,41 +86,6 @@ import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
-@Composable
-private fun MenuBox(
-    modifier: Modifier,
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .width(65.dp)
-            .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Column(
-            modifier = Modifier
-                .size(55.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            content()
-        }
-        Text(
-            text = title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp),
-            fontSize = 10.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White
-        )
-    }
-}
 
 @Composable
 fun ScriptContent(
@@ -167,149 +121,6 @@ fun ScriptContent(
                 )
             }
             LazyScript(modifier = Modifier.padding(top = 15.dp), compiler = compiler)
-        }
-    }
-}
-
-@Composable
-private fun Header(activity: Activity) {
-    val context = LocalContext.current
-    val githubJson = Storage.read(StringConfig.GithubData, "")!!
-    val githubData = Json.toModel(githubJson, GithubData::class)
-    var power by remember { mutableStateOf(Bot.app.value.power) }
-
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp)
-    ) {
-        val (appName, profileName, profileImage, menuBoxes) = createRefs()
-
-        CoilImage(
-            imageModel = githubData.profileImageUrl,
-            modifier = Modifier
-                .size(65.dp)
-                .clip(CircleShape)
-                .noRippleClickable {
-                    val intent = Intent(activity, ImageViewActivity::class.java).apply {
-                        putExtra(StringConfig.IntentImageUrl, githubData.profileImageUrl)
-                    }
-                    activity.startActivity(
-                        intent,
-                        ActivityOptions
-                            .makeSceneTransitionAnimation(activity)
-                            .toBundle()
-                    )
-                }
-                .constrainAs(profileImage) {
-                    end.linkTo(parent.end)
-                    top.linkTo(appName.top)
-                    bottom.linkTo(profileName.bottom)
-                },
-            contentScale = ContentScale.Crop,
-            circularRevealedEnabled = true
-        )
-        Text(
-            text = stringResource(R.string.app_name),
-            color = Color.LightGray,
-            fontSize = 13.sp,
-            modifier = Modifier.constrainAs(appName) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-            }
-        )
-        Text(
-            text = stringResource(
-                R.string.main_welcome,
-                githubData.userName
-            ),
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier.constrainAs(profileName) {
-                start.linkTo(parent.start)
-                top.linkTo(appName.bottom, 8.dp)
-            }
-        )
-        Row(
-            modifier = Modifier.constrainAs(menuBoxes) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(profileName.bottom, 30.dp)
-                width = Dimension.fillToConstraints
-            },
-            horizontalArrangement = Arrangement.Center
-        ) {
-            MenuBox(
-                title = stringResource(R.string.main_power),
-                modifier = Modifier.weight(1f)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        if (power) stringResource(R.string.main_menu_on)
-                        else stringResource(R.string.main_menu_off)
-                    )
-                    Switch(
-                        checked = power,
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = colors.primaryVariant,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = colors.secondary
-                        ),
-                        onCheckedChange = {
-                            if (it) {
-                                context.startService(Intent(context, BackgroundService::class.java))
-                            } else {
-                                context.stopService(Intent(context, BackgroundService::class.java))
-                            }
-                            power = it
-                            Bot.save(Bot.app.value.copy(power = power))
-                        }
-                    )
-                }
-            }
-            MenuBox(
-                title = stringResource(R.string.main_menu_all_script_count),
-                modifier = Modifier.weight(1f)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = Bot.scripts.size.toString(), fontSize = 25.sp)
-                    Text(text = "개", fontSize = 8.sp)
-                }
-            }
-            MenuBox(
-                title = stringResource(R.string.main_menu_running_script_count),
-                modifier = Modifier.weight(1f)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = Bot.getPowerOnScripts().size.toString(),
-                        fontSize = 25.sp
-                    )
-                    Text(text = "개", fontSize = 8.sp)
-                }
-            }
-            MenuBox(
-                title = stringResource(R.string.main_menu_script_search),
-                modifier = Modifier.weight(1f)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_round_search_24),
-                        contentDescription = null,
-                        modifier = Modifier.size(25.dp),
-                        tint = Color.Black
-                    )
-                }
-            }
         }
     }
 }
