@@ -26,12 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import com.mindorks.ViewColorGenerator
 import com.mindorks.`interface`.OnImageLoaded
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import me.sungbin.gitmessengerbot.theme.MaterialTheme
 import me.sungbin.gitmessengerbot.theme.SystemUiController
-import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 
 class ImageViewActivity : ComponentActivity() {
@@ -76,10 +76,10 @@ class ImageViewActivity : ComponentActivity() {
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
-                        GlideImage(
+                        CoilImage(
                             imageModel = imageUrl,
                             modifier = Modifier.wrapContentSize(),
-                            requestOptions = Util.glideRequestOption().centerCrop(),
+                            contentScale = ContentScale.Crop,
                             circularRevealedEnabled = true
                         )
                     }

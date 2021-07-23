@@ -13,9 +13,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import me.sungbin.gitmessengerbot.R
 import me.sungbin.gitmessengerbot.util.extension.toast
 
@@ -24,10 +21,6 @@ object Util {
         toast(context, message, Toast.LENGTH_LONG)
         println("Error: $message")
     }
-
-    fun glideRequestOption() = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .format(DecodeFormat.PREFER_ARGB_8888)
 
     fun copy(context: Context, text: String, showToast: Boolean = true) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

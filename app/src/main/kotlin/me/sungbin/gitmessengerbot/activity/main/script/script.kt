@@ -63,6 +63,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -75,7 +76,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -92,7 +93,6 @@ import me.sungbin.gitmessengerbot.theme.twiceLightGray
 import me.sungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
 import me.sungbin.gitmessengerbot.util.Json
 import me.sungbin.gitmessengerbot.util.Storage
-import me.sungbin.gitmessengerbot.util.Util
 import me.sungbin.gitmessengerbot.util.config.StringConfig
 import me.sungbin.gitmessengerbot.util.extension.isEnglish
 import me.sungbin.gitmessengerbot.util.extension.noRippleClickable
@@ -186,7 +186,7 @@ private fun Header(activity: Activity) {
     ) {
         val (appName, profileName, profileImage, menuBoxes) = createRefs()
 
-        GlideImage(
+        CoilImage(
             imageModel = githubData.profileImageUrl,
             modifier = Modifier
                 .size(65.dp)
@@ -207,7 +207,7 @@ private fun Header(activity: Activity) {
                     top.linkTo(appName.top)
                     bottom.linkTo(profileName.bottom)
                 },
-            requestOptions = Util.glideRequestOption(),
+            contentScale = ContentScale.Crop,
             circularRevealedEnabled = true
         )
         Text(

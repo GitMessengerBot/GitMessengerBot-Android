@@ -32,7 +32,7 @@ object Versions {
 
     object Ui {
         const val Browser = "1.3.0"
-        const val Landscapist = "1.2.8"
+        const val LandscapistCoil = "1.2.8"
         const val TimeLineView = "1.0.1"
         const val ConstraintLayout = "1.0.0-alpha08"
     }
@@ -102,7 +102,7 @@ object Dependencies {
     val ui = listOf(
         "androidx.browser:browser:${Versions.Ui.Browser}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
-        "com.github.skydoves:landscapist-glide:${Versions.Ui.Landscapist}",
+        "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 
