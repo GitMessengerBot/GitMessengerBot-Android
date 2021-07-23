@@ -88,4 +88,6 @@
     <string name="debug_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
     <string name="debug_toast_removed">삭제되었습니다.</string>
     <string name="debug_remove_all_history">디버그 기록 전체 삭제</string>
+    <string name="service_notification_action_bot_power_toggle">봇 전원 On/Off</string>
+    <string name="service_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
 </resources>

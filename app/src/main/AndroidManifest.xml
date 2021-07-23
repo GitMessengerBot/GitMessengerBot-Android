@@ -9,7 +9,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.sungbin.gitmessengerbot"
+    package="io.github.jisungbin.gitmessengerbot"
     tools:ignore="ScopedStorage">
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
@@ -66,13 +66,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activity.test.TestActivity"
-            android:exported="true" />
-
         <activity android:name=".activity.main.MainActivity" />
-        <activity android:name="me.sungbin.gitmessengerbot.activity.editor.js.JsEditorActivity" />
-        <activity android:name="me.sungbin.gitmessengerbot.activity.editor.simple.SimpleEditorActivity" />
+        <activity android:name=".activity.editor.js.JsEditorActivity" />
+        <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
         <activity android:name=".ui.imageviewer.ImageViewActivity" />
         <activity android:name=".activity.debug.DebugActivty" />
 
