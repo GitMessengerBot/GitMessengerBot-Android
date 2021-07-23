@@ -84,7 +84,7 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat")
     }
 
-    Dependencies.bot.forEach(::debugImplementation)
+    Dependencies.bot.forEach(::implementation)
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)
