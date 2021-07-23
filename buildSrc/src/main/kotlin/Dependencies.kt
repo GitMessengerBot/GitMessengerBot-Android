@@ -33,7 +33,6 @@ object Versions {
     object Ui {
         const val FancyBottomBar = "1.0.0"
         const val Browser = "1.3.0"
-        const val LandscapistCoil = "1.2.8"
         const val TimeLineView = "1.0.1"
         const val ConstraintLayout = "1.0.0-alpha08"
     }
@@ -104,7 +103,6 @@ object Dependencies {
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "androidx.browser:browser:${Versions.Ui.Browser}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
-        "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 

@@ -65,7 +65,6 @@ android {
     sourceSets {
         getByName("main").run {
             java.srcDirs("src/main/kotlin")
-            resources.excludes.add("META-INF/library_release.kotlin_module")
         }
     }
 
@@ -80,6 +79,11 @@ android {
 }
 
 dependencies {
+    implementation("com.github.skydoves:landscapist-coil:1.2.8") {
+        exclude(group = "androidx.appcompat", module = "appcompat-resources")
+        exclude(group = "androidx.appcompat", module = "appcompat")
+    }
+
     Dependencies.bot.forEach(::debugImplementation)
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.essential.forEach(::implementation)
