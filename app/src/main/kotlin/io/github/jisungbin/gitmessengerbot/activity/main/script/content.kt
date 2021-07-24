@@ -283,7 +283,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                                 .collect { result ->
                                     isRotated = true
                                     val message = when (result) {
-                                        is Result.Success<*> ->
+                                        is Result.Success ->
                                             context.getString(R.string.script_toast_compile_success)
                                         is Result.Fail -> {
                                             compileErrorDialogVisible.value = true

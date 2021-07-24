@@ -150,7 +150,7 @@ private fun DrawerLayout(
                         )
                     ).collect { result ->
                         when (result) {
-                            is Result.Success<*> -> toast(
+                            is Result.Success -> toast(
                                 context,
                                 context.getString(R.string.editor_toast_repo_create_success)
                             )
@@ -179,7 +179,7 @@ private fun DrawerLayout(
                         path = "script.${script.lang.toScriptSuffix()}"
                     ).collect { commitResult ->
                         when (commitResult) {
-                            is Result.Success<*> -> {
+                            is Result.Success -> {
                                 gitRepo.updateFile(
                                     repoName = repoName,
                                     path = "script.${script.lang.toScriptSuffix()}",
@@ -190,7 +190,7 @@ private fun DrawerLayout(
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
-                                        is Result.Success<*> -> toast(
+                                        is Result.Success -> toast(
                                             context,
                                             context.getString(R.string.editor_toast_commit_success)
                                         )
@@ -229,7 +229,7 @@ private fun DrawerLayout(
                         path = "script.${script.lang.toScriptSuffix()}"
                     ).collect { fileContentResult ->
                         when (fileContentResult) {
-                            is Result.Success<*> -> {
+                            is Result.Success -> {
                                 val contentDownloadUrl =
                                     (fileContentResult.response as FileContentResponse).downloadUrl
                                 codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))

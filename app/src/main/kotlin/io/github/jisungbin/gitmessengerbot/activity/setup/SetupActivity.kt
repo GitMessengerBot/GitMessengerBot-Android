@@ -331,7 +331,7 @@ class SetupActivity : ComponentActivity() {
         lifecycleScope.launchWhenCreated {
             githubRepo.getAccessToken(requestCode).collect { accessKeyResult ->
                 when (accessKeyResult) {
-                    is Result.Success<*> -> {
+                    is Result.Success -> {
                         var githubData = GithubData(
                             token = (accessKeyResult.response as GithubTokenResponse).accessToken
                         )
@@ -339,7 +339,7 @@ class SetupActivity : ComponentActivity() {
                             .getUserInfo(githubData.token)
                             .collect { userResult ->
                                 when (userResult) {
-                                    is Result.Success<*> -> {
+                                    is Result.Success -> {
                                         val user = userResult.response as GithubUserResponse
 
                                         githubData = githubData.copy(

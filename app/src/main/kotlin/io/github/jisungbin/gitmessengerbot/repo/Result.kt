@@ -10,6 +10,6 @@
 package io.github.jisungbin.gitmessengerbot.repo
 
 sealed class Result {
-    data class Success<T>(val response: T) : Result()
+    data class Success(val response: Any) : Result()
     data class Fail(val exception: Exception) : Result()
 }

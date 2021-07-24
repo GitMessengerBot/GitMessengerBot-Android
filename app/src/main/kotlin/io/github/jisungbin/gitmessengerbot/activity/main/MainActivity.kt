@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                     )
                 ).collect { result ->
                     when (result) {
-                        is Result.Success<*> -> toast(
+                        is Result.Success -> toast(
                             this@MainActivity,
                             getString(R.string.main_toast_eval_loaded)
                         )

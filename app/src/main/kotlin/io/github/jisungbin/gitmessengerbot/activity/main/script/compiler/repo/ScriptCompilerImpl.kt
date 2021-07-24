@@ -147,7 +147,7 @@ class ScriptCompilerImpl @Inject constructor(
                     .convert(Bot.getCode(script))
                     .collect { ts2JsResult ->
                         when (ts2JsResult) {
-                            is Result.Success<*> -> {
+                            is Result.Success -> {
                                 val tsCode = (ts2JsResult.response as Ts2JsResponse).tsCode
                                 println(tsCode)
                                 trySend(compileJavaScript(context, script, tsCode))
