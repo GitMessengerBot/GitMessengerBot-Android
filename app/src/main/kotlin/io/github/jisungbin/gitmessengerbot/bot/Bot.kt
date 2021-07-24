@@ -18,9 +18,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import io.github.jisungbin.gitmessengerbot.App
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
+import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.App
 import io.github.jisungbin.gitmessengerbot.bot.debug.DebugStore
 import io.github.jisungbin.gitmessengerbot.bot.debug.Sender
 import io.github.jisungbin.gitmessengerbot.bot.debug.createDebugItem
@@ -159,7 +159,7 @@ object Bot {
             } else {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
-                v8.executeJSFunction("onMessage", *arguments.toTypedArray())
+                v8.executeJSFunction(app.value.scriptResponseFunctioName, *arguments.toTypedArray())
             }
             v8.locker.release()
             println("${script.name}: 실행됨")

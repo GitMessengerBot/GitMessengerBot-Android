@@ -48,6 +48,7 @@ import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
+import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.bot.StackManager
 import io.github.jisungbin.gitmessengerbot.bot.debug.Debug
@@ -143,7 +144,8 @@ class MainActivity : ComponentActivity() {
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
                     Tab.Debug -> Debug(activity = this@MainActivity)
-                    else -> Text("TODO")
+                    Tab.Setting -> Setting()
+                    else -> Text(text = "TODO")
                 }
             }
             Footer(scriptAddDialogVisible)

@@ -38,7 +38,6 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -64,6 +63,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.orange
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
 import io.github.jisungbin.gitmessengerbot.util.Util
@@ -384,12 +384,7 @@ private fun DebugContent(
                     }
                 )
             },
-            colors = TextFieldDefaults.textFieldColors(
-                disabledIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = Color.White
-            ),
+            colors = transparentTextFieldColors(backgroundColor = Color.White),
             modifier = Modifier
                 .padding(16.dp)
                 .requiredHeightIn(min = Dp.Unspecified, max = 150.dp)

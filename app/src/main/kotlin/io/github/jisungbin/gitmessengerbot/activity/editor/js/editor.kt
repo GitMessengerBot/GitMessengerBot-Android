@@ -28,7 +28,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +56,7 @@ import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptSuffix
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.Web
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
@@ -99,12 +99,7 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
             value = codeField.value,
             onValueChange = { codeField.value = it },
             modifier = Modifier.fillMaxSize(),
-            colors = TextFieldDefaults.textFieldColors(
-                disabledIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = Color.White
-            )
+            colors = transparentTextFieldColors(backgroundColor = Color.White)
         )
     }
 }

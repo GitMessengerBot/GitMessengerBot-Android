@@ -17,6 +17,7 @@ import kotlin.random.Random
 object StringConfig {
     private const val AppStorage = "GitMessengerBot/data"
     const val AppData = "$AppStorage/app.json"
+    const val KakaoTalkDefaultPackageName = "com.kakao.talk"
 
     const val GithubData = "$AppStorage/github-data.json"
     const val GitDefaultBranch = "main"
@@ -31,7 +32,9 @@ object StringConfig {
     const val IntentDebugScriptId = "intent-debug-script-id"
 
     const val DebugAllBot = -1
+
     const val ScriptEvalId = -2
+    const val ScriptResponseFunctionName = "onMessage"
 
     /**
      * 스크립트 디버그 파일

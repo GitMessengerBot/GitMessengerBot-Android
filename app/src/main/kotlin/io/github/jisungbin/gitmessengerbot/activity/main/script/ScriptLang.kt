@@ -9,6 +9,8 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.script
 
+import io.github.jisungbin.gitmessengerbot.bot.Bot
+
 object ScriptLang {
     const val TypeScript = 0
     const val JavaScript = 1
@@ -17,25 +19,25 @@ object ScriptLang {
 }
 
 fun Int.toScriptLangName() = when (this) {
-    0 -> "TypeScript"
-    1 -> "JavaScript"
-    2 -> "Python"
-    3 -> "Simple"
+    ScriptLang.TypeScript -> "TypeScript"
+    ScriptLang.JavaScript -> "JavaScript"
+    ScriptLang.Python -> "Python"
+    ScriptLang.Simple -> "Simple"
     else -> throw Error("Unknown script type.")
 }
 
 fun Int.toScriptSuffix() = when (this) {
-    0 -> "ts"
-    1 -> "js"
-    2 -> "py"
-    3 -> "sim"
+    ScriptLang.TypeScript -> "ts"
+    ScriptLang.JavaScript -> "js"
+    ScriptLang.Python -> "py"
+    ScriptLang.Simple -> "sim"
     else -> throw Error("Unknown script type.")
 }
 
 fun Int.toScriptDefaultSource() = when (this) {
-    0 -> "const onMessage = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string, isDebugMode: Boolean) => {\nconst reply = (message: String) => {\nBot.reply(room, message, isDebugMode);\n}\n}"
-    1 -> "const onMessage = (room, message, sender, isGroupChat, profileImageBase64, isDebugMode) => {\nconst reply = (message) => {\nBot.reply(room, message, isDebugMode);\n}\n}"
-    2 -> "def onMessage(self, room, message, sender, isGroupChat, profileImageBase64):\n    "
-    3 -> "sim"
+    ScriptLang.TypeScript -> Bot.app.value.scriptDefaultCode.ts
+    ScriptLang.JavaScript -> Bot.app.value.scriptDefaultCode.js
+    ScriptLang.Python -> Bot.app.value.scriptDefaultCode.python
+    ScriptLang.Simple -> Bot.app.value.scriptDefaultCode.sim
     else -> throw Error("Unknown script type.")
 }

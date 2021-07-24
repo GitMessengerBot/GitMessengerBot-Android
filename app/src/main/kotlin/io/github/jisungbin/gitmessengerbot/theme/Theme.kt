@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.theme
 
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -31,3 +32,13 @@ fun MaterialTheme(content: @Composable () -> Unit) {
         content()
     }
 }
+
+@Composable
+fun transparentTextFieldColors(
+    backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.BackgroundOpacity)
+) = TextFieldDefaults.textFieldColors(
+    disabledIndicatorColor = Color.Transparent,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    backgroundColor = backgroundColor
+)

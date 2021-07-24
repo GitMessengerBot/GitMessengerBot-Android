@@ -34,7 +34,6 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -66,6 +65,7 @@ import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubDat
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.Storage
@@ -179,8 +179,8 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                 width = Dimension.fillToConstraints
                 height = Dimension.value(90.dp)
             }
-        ) { _searching ->
-            if (!_searching) {
+        ) { state ->
+            if (!state) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center
@@ -282,13 +282,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                             .height(50.dp)
                             .focusRequester(FocusRequester()),
                         shape = RoundedCornerShape(30.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = colors.secondary,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            textColor = Color.White
-                        ),
+                        colors = transparentTextFieldColors(),
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_round_search_24),
