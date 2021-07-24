@@ -92,4 +92,5 @@
 
     <string name="service_notification_action_bot_power_toggle">봇 전원 On/Off</string>
     <string name="service_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
+    <string name="main_toast_confirm_finish">정말 종료하실려면 뒤로가기를 한 번 더 눌러주세요.</string>
 </resources>

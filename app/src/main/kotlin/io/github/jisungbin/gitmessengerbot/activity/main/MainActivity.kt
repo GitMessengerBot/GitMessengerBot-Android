@@ -70,6 +70,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var scriptCompiler: ScriptCompiler
 
+    private var onBackPressedTime = 0L
+
     private var tab by mutableStateOf(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -193,6 +195,12 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed() // 닫기 확인 todo
+        val now = System.currentTimeMillis()
+        if (now - onBackPressedTime <= 3000) {
+            onBackPressedTime = now
+            toast(this, getString(R.string.main_toast_confirm_finish))
+        } else {
+            super.onBackPressed()
+        }
     }
 }
