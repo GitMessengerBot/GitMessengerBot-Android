@@ -38,6 +38,7 @@
     <string name="main_menu_script_search">스크립트 검색</string>
     <string name="main_toast_eval_loaded">eval 준비 완료</string>
     <string name="main_toast_eval_load_fail">eval 준비 실패\n\n%s</string>
+    <string name="main_header_script_search">스크립트 검색</string>
 
     <string name="web_menu_project_github">프로젝트 깃허브</string>
     <string name="web_toast_non_install_browser">설치돼 있는 브라우저 앱이 없어요 😢</string>
@@ -88,6 +89,7 @@
     <string name="debug_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
     <string name="debug_toast_removed">삭제되었습니다.</string>
     <string name="debug_remove_all_history">디버그 기록 전체 삭제</string>
+
     <string name="service_notification_action_bot_power_toggle">봇 전원 On/Off</string>
     <string name="service_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
 </resources>

@@ -93,10 +93,11 @@ fun ScriptContent(
     compiler: ScriptCompiler,
     scriptAddDialogVisible: MutableState<Boolean>
 ) {
+    val searchField = remember { mutableStateOf(TextFieldValue()) }
     ScriptAddDialog(visible = scriptAddDialogVisible)
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Header(activity)
+        Header(activity, searchField)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,13 +121,21 @@ fun ScriptContent(
                     fontSize = 18.sp
                 )
             }
-            LazyScript(modifier = Modifier.padding(top = 15.dp), compiler = compiler)
+            LazyScript(
+                modifier = Modifier.padding(top = 15.dp),
+                compiler = compiler,
+                searchField = searchField.value
+            )
         }
     }
 }
 
 @Composable
-private fun LazyScript(modifier: Modifier, compiler: ScriptCompiler) {
+private fun LazyScript(
+    modifier: Modifier,
+    compiler: ScriptCompiler,
+    searchField: TextFieldValue
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -134,7 +143,10 @@ private fun LazyScript(modifier: Modifier, compiler: ScriptCompiler) {
         contentPadding = PaddingValues(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        items(items = Bot.scripts, key = { script -> script.id }) { script ->
+        items(
+            items = Bot.scripts.filter { script -> script.name.contains(searchField.text) },
+            key = { script -> script.id }
+        ) { script ->
             ScriptView(script = script, compiler = compiler)
         }
     }
