@@ -377,17 +377,21 @@ class SetupActivity : ComponentActivity() {
                                             ),
                                             Toast.LENGTH_LONG
                                         )
+                                        userResult.exception.printStackTrace()
                                     }
                                 }
                             }
                     }
-                    is Result.Fail -> toast(
-                        activity,
-                        activity.getString(
-                            R.string.setup_toast_github_authorize_error,
-                            accessKeyResult.exception.message
+                    is Result.Fail -> {
+                        toast(
+                            activity,
+                            activity.getString(
+                                R.string.setup_toast_github_authorize_error,
+                                accessKeyResult.exception.message
+                            )
                         )
-                    )
+                        accessKeyResult.exception.printStackTrace()
+                    }
                 }
             }
         }

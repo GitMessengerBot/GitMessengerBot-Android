@@ -9,11 +9,11 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.setup.github
 
-import io.github.jisungbin.gitmessengerbot.repo.Result
+import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubUserResponse
 import retrofit2.Call
 import retrofit2.http.GET
 
 interface GithubUserService {
     @GET("/user")
-    fun getUserInfo(): Call<Result>
+    fun getUserInfo(): Call<GithubUserResponse>
 }

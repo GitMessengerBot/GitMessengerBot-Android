@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.setup.github
 
-import io.github.jisungbin.gitmessengerbot.repo.Result
+import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubTokenResponse
 import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -20,5 +20,5 @@ interface GithubAouthService {
         @Query("code") requestCode: String,
         @Query("client_id") clientId: String,
         @Query("client_secret") clientSecret: String
-    ): Call<Result>
+    ): Call<GithubTokenResponse>
 }

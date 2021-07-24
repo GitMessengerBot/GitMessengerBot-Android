@@ -14,7 +14,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -282,7 +281,10 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                             .height(50.dp)
                             .focusRequester(FocusRequester()),
                         shape = RoundedCornerShape(30.dp),
-                        colors = transparentTextFieldColors(),
+                        colors = transparentTextFieldColors(
+                            backgroundColor = colors.secondary,
+                            textColor = Color.White
+                        ),
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_round_search_24),
@@ -296,7 +298,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                                 painter = painterResource(R.drawable.ic_round_cancel_in_circle_24),
                                 contentDescription = null,
                                 tint = Color.White,
-                                modifier = Modifier.clickable {
+                                modifier = Modifier.noRippleClickable {
                                     focusManager.clearFocus()
                                     searching = false
                                     searchField.value = TextFieldValue()

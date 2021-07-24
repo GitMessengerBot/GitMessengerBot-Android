@@ -9,11 +9,11 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.setting.model
 
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 
 data class ScriptDefaultCode(
-    var js: String = "const ${Bot.app.value.scriptResponseFunctioName} = (room, message, sender, isGroupChat, profileImageBase64, isDebugMode) => {\n\t\tconst reply = (message) => {\n\t\t\t\tBot.reply(room, message, isDebugMode);\n\t\t}\n}",
-    var ts: String = "const ${Bot.app.value.scriptResponseFunctioName} = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string, isDebugMode: Boolean) => {\n\t\tconst reply = (message: String) => {\n\t\t\t\tBot.reply(room, message, isDebugMode);\n\t\t}\n}",
-    var python: String = "def ${Bot.app.value.scriptResponseFunctioName}(self, room, message, sender, isGroupChat, profileImageBase64):\n\t\t\t\t",
+    var js: String = "const ${StringConfig.ScriptResponseFunctionName} = (room, message, sender, isGroupChat, profileImageBase64, isDebugMode) => {\n\t\tconst reply = (message) => {\n\t\t\t\tBot.reply(room, message, isDebugMode);\n\t\t}\n}",
+    var ts: String = "const ${StringConfig.ScriptResponseFunctionName} = (room: string, message: string, sender: string, isGroupChat: boolean, profileImageBase64: string, isDebugMode: Boolean) => {\n\t\tconst reply = (message: String) => {\n\t\t\t\tBot.reply(room, message, isDebugMode);\n\t\t}\n}",
+    var python: String = "def ${StringConfig.ScriptResponseFunctionName}(self, room, message, sender, isGroupChat, profileImageBase64):\n\t\t\t\t",
     var sim: String = "sim"
 )

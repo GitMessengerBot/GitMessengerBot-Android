@@ -100,12 +100,11 @@ object Bot {
         repeat(4) { lang ->
             Storage.fileList(StringConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
-                    scripts.add(
-                        Json.toModel(
-                            Storage.read(scriptDataFile.path, null)!!,
-                            ScriptItem::class
-                        )
-                    )
+                    val scriptItem =
+                        Json.toModel(Storage.read(scriptDataFile.path, null)!!, ScriptItem::class)
+                    if (scriptItem.id != StringConfig.ScriptEvalId) {
+                        scripts.add(scriptItem)
+                    }
                 }
         }
         return scripts

@@ -35,10 +35,12 @@ fun MaterialTheme(content: @Composable () -> Unit) {
 
 @Composable
 fun transparentTextFieldColors(
-    backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.BackgroundOpacity)
+    backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.BackgroundOpacity),
+    textColor: Color = Color.Black
 ) = TextFieldDefaults.textFieldColors(
     disabledIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent,
-    backgroundColor = backgroundColor
+    backgroundColor = backgroundColor,
+    textColor = textColor
 )
