@@ -140,7 +140,7 @@ class MainActivity : ComponentActivity() {
                         compiler = scriptCompiler,
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
-                    Tab.Debug -> Debug()
+                    Tab.Debug -> Debug(activity = this@MainActivity)
                     else -> Text("TODO")
                 }
             }

@@ -88,7 +88,11 @@ class BackgroundService : Service() {
     }
 
     override fun onDestroy() {
-        stopForeground(true)
-        wakeLock.release()
+        try {
+            stopForeground(true)
+            wakeLock.release()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
     }
 }

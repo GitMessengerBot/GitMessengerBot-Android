@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.bot.Bot
@@ -74,7 +75,7 @@ import java.util.Locale
 import kotlinx.coroutines.launch
 
 @Composable
-fun Debug(activity: Activity? = null, script: ScriptItem? = null) {
+fun Debug(activity: Activity, script: ScriptItem? = null) {
     val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
     val settingDialogVisible = remember { mutableStateOf(false) }
 
@@ -90,6 +91,7 @@ fun Debug(activity: Activity? = null, script: ScriptItem? = null) {
             },
             content = {
                 DebugContent(
+                    activity = activity,
                     script = script,
                     evalMode = evalMode,
                     settingDialogVisible = settingDialogVisible
@@ -150,7 +152,7 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
 
 @Composable
 private fun DebugToolbar(
-    activity: Activity?,
+    activity: Activity,
     script: ScriptItem?,
     evalMode: MutableState<Boolean>,
     settingDialogVisible: MutableState<Boolean>
@@ -172,7 +174,7 @@ private fun DebugToolbar(
                 modifier = Modifier
                     .size(15.dp)
                     .clickable {
-                        activity!!.finish()
+                        activity.finish()
                     }
                     .constrainAs(back) {
                         start.linkTo(parent.start)
@@ -247,6 +249,7 @@ private fun DebugToolbar(
 
 @Composable
 private fun DebugContent(
+    activity: Activity,
     script: ScriptItem?,
     evalMode: MutableState<Boolean>,
     settingDialogVisible: MutableState<Boolean>
@@ -280,10 +283,17 @@ private fun DebugContent(
             }
         }
 
+        fun scrollDown() {
+            coroutineScope.launch {
+                lazyListState.animateScrollToItem(items.size)
+            }
+        }
+
+        scrollDown()
         DebugSettingDialog(visible = settingDialogVisible, debugId = debugId)
 
-        coroutineScope.launch {
-            lazyListState.animateScrollToItem(items.size)
+        TedKeyboardObserver(activity).listen {
+            scrollDown()
         }
 
         LazyColumn(
@@ -370,9 +380,7 @@ private fun DebugContent(
                                 )
                             }
                         }
-                        coroutineScope.launch {
-                            lazyListState.animateScrollToItem(DebugStore.items.size)
-                        }
+                        scrollDown()
                     }
                 )
             },
