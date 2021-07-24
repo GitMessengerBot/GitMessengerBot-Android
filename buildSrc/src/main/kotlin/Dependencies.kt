@@ -42,7 +42,7 @@ object Versions {
         const val CrashReporter = "1.1.0"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
-        const val CheckDependencyUpdates = "1.4.0"
+        const val CheckDependencyUpdates = "1.4.1"
     }
 
     object Network {
@@ -56,9 +56,9 @@ object Versions {
     }
 
     object Hilt {
-        const val Master = "2.37"
-        const val ViewModelCompiler = "1.0.0"
-        const val ViewModel = "1.0.0-alpha03"
+        const val Master = "2.38"
+        const val ViewModelCompiler = "1.0.0" // required
+        const val ViewModel = "1.0.0-alpha03" // required
     }
 
     object Compose {

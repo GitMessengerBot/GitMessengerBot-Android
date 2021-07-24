@@ -97,14 +97,12 @@ object Bot {
 
     private fun getList(): List<ScriptItem> {
         val scripts = mutableListOf<ScriptItem>()
-        repeat(4) { lang ->
+        repeat(4) { lang -> // 스크립트 코드파일이 아니라, 스크립트 정보 파일을 읽어와야함
             Storage.fileList(StringConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
-                    val scriptItem =
+                    val script =
                         Json.toModel(Storage.read(scriptDataFile.path, null)!!, ScriptItem::class)
-                    if (scriptItem.id != StringConfig.ScriptEvalId) {
-                        scripts.add(scriptItem)
-                    }
+                    scripts.add(script)
                 }
         }
         return scripts

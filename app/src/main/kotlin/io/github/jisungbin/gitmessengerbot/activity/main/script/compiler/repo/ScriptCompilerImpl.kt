@@ -22,6 +22,7 @@ import io.github.jisungbin.gitmessengerbot.bot.api.BotApi
 import io.github.jisungbin.gitmessengerbot.bot.api.Log
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.util.Nothing
+import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -171,7 +172,9 @@ class ScriptCompilerImpl @Inject constructor(
             }
         }
 
-        Bot.save(script)
+        if (script.id != StringConfig.ScriptEvalId) {
+            Bot.save(script)
+        }
         awaitClose { close() }
     }
 }

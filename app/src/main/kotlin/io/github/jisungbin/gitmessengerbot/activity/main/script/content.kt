@@ -136,18 +136,31 @@ private fun LazyScript(
     compiler: ScriptCompiler,
     searchField: TextFieldValue
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White, RoundedCornerShape(20.dp)),
-        contentPadding = PaddingValues(15.dp),
-        verticalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
-        items(
-            items = Bot.scripts.filter { script -> script.name.contains(searchField.text) },
-            key = { script -> script.id }
-        ) { script ->
-            ScriptView(script = script, compiler = compiler)
+    val scripts = Bot.scripts.filter { script -> script.name.contains(searchField.text) }
+    if (scripts.isNotEmpty()) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = Color.White, shape = RoundedCornerShape(20.dp)),
+            contentPadding = PaddingValues(15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            items(
+                items = scripts,
+                key = { script -> script.id }
+            ) { script ->
+                ScriptView(script = script, compiler = compiler)
+            }
+        }
+    } else {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White, RoundedCornerShape(20.dp)),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(R.string.script_empty), color = Color.Gray)
         }
     }
 }

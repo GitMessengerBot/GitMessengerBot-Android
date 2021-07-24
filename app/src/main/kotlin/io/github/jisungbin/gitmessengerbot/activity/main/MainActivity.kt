@@ -70,9 +70,7 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var scriptCompiler: ScriptCompiler
-
     private var onBackPressedTime = 0L
-
     private var tab by mutableStateOf(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {

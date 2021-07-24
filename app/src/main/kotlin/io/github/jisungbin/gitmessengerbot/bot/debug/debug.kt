@@ -15,7 +15,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +37,7 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -63,8 +63,8 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.orange
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
@@ -79,26 +79,25 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
     val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
     val settingDialogVisible = remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            topBar = {
-                DebugToolbar(
-                    activity = activity,
-                    script = script,
-                    evalMode = evalMode,
-                    settingDialogVisible = settingDialogVisible
-                )
-            },
-            content = {
-                DebugContent(
-                    activity = activity,
-                    script = script,
-                    evalMode = evalMode,
-                    settingDialogVisible = settingDialogVisible
-                )
-            }
-        )
-    }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            DebugToolbar(
+                activity = activity,
+                script = script,
+                evalMode = evalMode,
+                settingDialogVisible = settingDialogVisible
+            )
+        },
+        content = {
+            DebugContent(
+                activity = activity,
+                script = script,
+                evalMode = evalMode,
+                settingDialogVisible = settingDialogVisible
+            )
+        }
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -157,93 +156,99 @@ private fun DebugToolbar(
     evalMode: MutableState<Boolean>,
     settingDialogVisible: MutableState<Boolean>
 ) {
-    ConstraintLayout(
+    TopAppBar(
+        backgroundColor = colors.primary,
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .background(color = colors.primary)
-            .padding(top = 10.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+            .wrapContentHeight(),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
     ) {
-        val (back, title, setting, switchDescription, modeSwitch) = createRefs()
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            val (back, title, setting, switchDescription, modeSwitch) = createRefs()
 
-        if (script != null) {
-            Icon(
-                painter = painterResource(R.drawable.ic_round_arrow_left_24),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .size(15.dp)
-                    .clickable {
-                        activity.finish()
+            if (script != null) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_round_arrow_left_24),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(15.dp)
+                        .clickable {
+                            activity.finish()
+                        }
+                        .constrainAs(back) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                )
+                Text(
+                    text = script.name,
+                    color = Color.White,
+                    modifier = Modifier.constrainAs(title) {
+                        start.linkTo(back.end, 10.dp)
+                        top.linkTo(back.top)
+                        bottom.linkTo(back.bottom)
                     }
-                    .constrainAs(back) {
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.debug_title),
+                    color = Color.White,
+                    modifier = Modifier.constrainAs(title) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
+                )
+            }
+            Icon(
+                painter = painterResource(R.drawable.ic_round_settings_24),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .clickable {
+                        settingDialogVisible.value = true
+                    }
+                    .constrainAs(setting) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+            )
+            Switch(
+                checked = evalMode.value,
+                onCheckedChange = {
+                    evalMode.value = !evalMode.value
+                    Bot.save(Bot.app.value.copy(evalMode = evalMode.value))
+                },
+                modifier = Modifier.constrainAs(modeSwitch) {
+                    end.linkTo(setting.start, 16.dp)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = colors.primaryVariant,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.Black
+                ),
             )
             Text(
-                text = script.name,
+                text = stringResource(R.string.debug_eval_mode),
                 color = Color.White,
-                modifier = Modifier.constrainAs(title) {
-                    start.linkTo(back.end, 10.dp)
-                    top.linkTo(back.top)
-                    bottom.linkTo(back.bottom)
-                }
-            )
-        } else {
-            Text(
-                text = stringResource(R.string.debug_title),
-                color = Color.White,
-                modifier = Modifier.constrainAs(title) {
-                    start.linkTo(parent.start)
+                fontSize = 13.sp,
+                modifier = Modifier.constrainAs(switchDescription) {
+                    end.linkTo(modeSwitch.start, 5.dp)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
             )
         }
-        Icon(
-            painter = painterResource(R.drawable.ic_round_settings_24),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .clickable {
-                    settingDialogVisible.value = true
-                }
-                .constrainAs(setting) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-        )
-        Switch(
-            checked = evalMode.value,
-            onCheckedChange = {
-                evalMode.value = !evalMode.value
-                Bot.save(Bot.app.value.copy(evalMode = evalMode.value))
-            },
-            modifier = Modifier.constrainAs(modeSwitch) {
-                end.linkTo(setting.start, 16.dp)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = colors.primaryVariant,
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color.Black
-            ),
-        )
-        Text(
-            text = stringResource(R.string.debug_eval_mode),
-            color = Color.White,
-            fontSize = 13.sp,
-            modifier = Modifier.constrainAs(switchDescription) {
-                end.linkTo(modeSwitch.start, 5.dp)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-        )
     }
 }
 
