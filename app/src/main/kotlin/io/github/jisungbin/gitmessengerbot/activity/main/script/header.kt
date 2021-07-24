@@ -303,6 +303,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                                 contentDescription = null,
                                 tint = Color.White,
                                 modifier = Modifier.clickable {
+                                    focusManager.clearFocus()
                                     searching = false
                                     searchField.value = TextFieldValue()
                                 }
