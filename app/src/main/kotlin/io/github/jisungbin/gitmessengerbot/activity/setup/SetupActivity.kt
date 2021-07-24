@@ -61,6 +61,7 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.Json
+import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.Wear
 import io.github.jisungbin.gitmessengerbot.util.Web
@@ -300,7 +301,7 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                requestReadNotification()
+                NotificationUtil.requestReadPermission(this@SetupActivity)
                 doDelay(1000) { notificationPermissionGranted = true }
             }
             PermissionType.Wear -> {
@@ -315,11 +316,6 @@ class SetupActivity : ComponentActivity() {
                 permissionsContracts.launch(this.permissions.toTypedArray())
             }
         }
-    }
-
-    private fun requestReadNotification() {
-        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-        startActivity(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {

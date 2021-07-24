@@ -9,6 +9,8 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -35,13 +38,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.util.BatteryUtil
+import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.util.Storage
 
 @Composable
-fun Setting() {
+fun Setting(activity: Activity) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -56,13 +66,14 @@ fun Setting() {
             }
         },
         content = {
-            SettingContent()
+            SettingContent(activity)
         }
     )
 }
 
+@SuppressLint("NewApi")
 @Composable
-private fun SettingContent() {
+private fun SettingContent(activity: Activity) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +81,8 @@ private fun SettingContent() {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
+        val context = LocalContext.current
+
         var editorFontSize by remember { mutableStateOf(Bot.app.value.editorFontSize) }
         var editorAutoSave by remember { mutableStateOf(Bot.app.value.editorAutoSave) }
         var scriptDefaultCode by remember { mutableStateOf(Bot.app.value.scriptDefaultCode) }
@@ -84,9 +97,17 @@ private fun SettingContent() {
             }
         }
 
-        Text(text = "에디터", fontSize = 18.sp, color = Color.Gray)
+        Text(
+            text = stringResource(R.string.setting_label_editor),
+            fontSize = 18.sp,
+            color = Color.Gray
+        )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
-            Text(text = "폰트 사이즈", fontSize = 15.sp, color = Color.Black)
+            Text(
+                text = stringResource(R.string.setting_editor_font_size),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
             TextField(
                 value = editorFontSize.toString(),
                 onValueChange = {
@@ -98,11 +119,16 @@ private fun SettingContent() {
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 modifier = Modifier
                     .wrapContentHeight()
-                    .width(80.dp)
+                    .width(80.dp),
+                singleLine = true
             )
         }
-        RowContent(modifier = Modifier.padding(top = 4.dp)) {
-            Text(text = "자동 저장 (분 단위, 0: 비활성화)", fontSize = 15.sp, color = Color.Black)
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_editor_auto_save),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
             TextField(
                 value = editorAutoSave.toString(),
                 onValueChange = {
@@ -114,9 +140,179 @@ private fun SettingContent() {
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 modifier = Modifier
                     .wrapContentHeight()
-                    .width(80.dp)
+                    .width(80.dp),
+                singleLine = true
             )
         }
+        Text(
+            text = stringResource(R.string.setting_label_script),
+            fontSize = 18.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_script_add_default_code),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_script_each_language_option))
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_script_default_response_function_name),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            TextField(
+                value = scriptResponseFunctionName,
+                onValueChange = {
+                    if (!it.contains(" ")) {
+                        scriptResponseFunctionName = it
+                    }
+                },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .width(120.dp),
+                singleLine = true
+            )
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_script_default_add_lang),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = scriptDefaultAddLang.toScriptLangName())
+            }
+        }
+        Text(
+            text = stringResource(R.string.setting_label_git),
+            fontSize = 18.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_git_default_branch),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            TextField(
+                value = gitDefaultBranch,
+                onValueChange = {
+                    gitDefaultBranch = it.replace(" ", "-")
+                },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .width(120.dp),
+                singleLine = true
+            )
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_git_default_commit_message),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_button_setting))
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_git_default_new_repo_options),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_button_setting))
+            }
+        }
+        Text(
+            text = "앱 설정",
+            fontSize = 18.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_app_kakaotak_package_names),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_button_setting))
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_app_notification_read_permission),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { NotificationUtil.requestReadPermission(activity) }) {
+                Text(text = stringResource(R.string.setting_button_setting))
+            }
+        }
+        if (Storage.isScoped) {
+            RowContent(modifier = Modifier.padding(top = 8.dp)) {
+                Text(
+                    text = stringResource(R.string.setting_app_access_storage_manager_permission),
+                    fontSize = 15.sp,
+                    color = Color.Black
+                )
+                OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
+                    Text(text = stringResource(R.string.setting_button_setting))
+                }
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_app_ignore_battery_optimization),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
+                Text(text = stringResource(R.string.setting_button_setting))
+            }
+        }
+        Text(
+            text = stringResource(R.string.setting_label_etc),
+            fontSize = 18.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_etc_opensource_license),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_button_show))
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(R.string.setting_etc_donate),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
+                Text(text = stringResource(R.string.setting_button_thanks))
+            }
+        }
+        Text(
+            text = stringResource(R.string.setting_etc_lovers),
+            modifier = Modifier.padding(top = 15.dp),
+            color = colors.primary
+        )
     }
 }
 

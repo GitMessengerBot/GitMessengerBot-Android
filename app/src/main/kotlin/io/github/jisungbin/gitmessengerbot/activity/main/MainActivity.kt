@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity() {
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
                     Tab.Debug -> Debug(activity = this@MainActivity)
-                    Tab.Setting -> Setting()
+                    Tab.Setting -> Setting(this@MainActivity)
                     else -> Text(text = "TODO")
                 }
             }
@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     private fun Footer(scriptAddDialogVisible: MutableState<Boolean>) {
         val items = listOf(

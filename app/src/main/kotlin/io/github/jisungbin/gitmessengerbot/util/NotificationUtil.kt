@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.util
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.app.NotificationManager
@@ -44,6 +45,11 @@ object NotificationUtil {
                 }
             getManager(context).createNotificationChannel(channelMessage)
         }
+    }
+
+    fun requestReadPermission(activity: Activity) {
+        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+        activity.startActivity(intent)
     }
 
     private fun splashActivityPendingIntent(context: Context): PendingIntent {
