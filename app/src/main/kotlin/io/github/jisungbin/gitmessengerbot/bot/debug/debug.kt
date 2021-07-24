@@ -271,7 +271,7 @@ private fun DebugContent(
                 debugId = StringConfig.ScriptEvalId
             }
             script == null -> {
-                items = DebugStore.items
+                items = DebugStore.items.filterNot { it.scriptId == StringConfig.ScriptEvalId }
                 debugId = StringConfig.DebugAllBot
             }
             else -> {

@@ -41,8 +41,22 @@ object DebugStore {
         Storage.write(StringConfig.Debug(item.scriptId), Json.toString(item))
     }
 
+    fun removeAll() {
+        _items.clear()
+        Storage.deleteAll(StringConfig.DebugPath())
+    }
+
     fun removeAll(scriptId: Int) {
-        _items.removeAll { it.scriptId == scriptId }
-        Storage.deleteAll(StringConfig.Debug(scriptId))
+        if (scriptId == StringConfig.DebugAllBot) {
+            _items.removeAll { it.scriptId != StringConfig.ScriptEvalId }
+            Storage.fileList(StringConfig.DebugPath()).forEach { debugFolder ->
+                if (debugFolder.path != StringConfig.Debug(StringConfig.ScriptEvalId)) {
+                    debugFolder.deleteRecursively()
+                }
+            }
+        } else {
+            _items.removeAll { it.scriptId == scriptId }
+            Storage.deleteAll(StringConfig.Debug(scriptId))
+        }
     }
 }

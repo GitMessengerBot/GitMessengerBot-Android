@@ -66,7 +66,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.main.MainActivity" />
+        <activity
+            android:name=".activity.main.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".activity.editor.js.JsEditorActivity" />
         <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
         <activity android:name=".ui.imageviewer.ImageViewActivity" />
