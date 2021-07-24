@@ -1,10 +1,10 @@
 /*
- * DevEventAndroid © 2021 용감한 친구들. all rights reserved.
- * DevEventAndroid license is under the MIT.
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
  *
  * [Licenser.kt] created by Ji Sungbin on 21. 6. 27. 오전 3:12.
  *
- * Please see: https://github.com/brave-people/Dev-Event-Android/blob/master/LICENSE.
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
 package io.github.jisungbin.gitmessengerbot.ui.licenser

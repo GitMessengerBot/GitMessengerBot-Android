@@ -97,6 +97,10 @@ private fun SettingContent(activity: Activity) {
             }
         }
 
+        val openSourceLicenseVisible = remember { mutableStateOf(false) }
+
+        OpenSourceDialog(visible = openSourceLicenseVisible)
+
         Text(
             text = stringResource(R.string.setting_label_editor),
             fontSize = 18.sp,
@@ -148,7 +152,7 @@ private fun SettingContent(activity: Activity) {
             text = stringResource(R.string.setting_label_script),
             fontSize = 18.sp,
             color = Color.Gray,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
@@ -194,7 +198,7 @@ private fun SettingContent(activity: Activity) {
             text = stringResource(R.string.setting_label_git),
             fontSize = 18.sp,
             color = Color.Gray,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
@@ -235,10 +239,10 @@ private fun SettingContent(activity: Activity) {
             }
         }
         Text(
-            text = "앱 설정",
+            text = stringResource(R.string.setting_label_app),
             fontSize = 18.sp,
             color = Color.Gray,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
@@ -286,7 +290,7 @@ private fun SettingContent(activity: Activity) {
             text = stringResource(R.string.setting_label_etc),
             fontSize = 18.sp,
             color = Color.Gray,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
@@ -294,7 +298,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { openSourceLicenseVisible.value = true }) {
                 Text(text = stringResource(R.string.setting_button_show))
             }
         }

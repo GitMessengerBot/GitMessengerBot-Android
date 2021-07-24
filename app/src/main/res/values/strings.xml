@@ -118,4 +118,6 @@
     <string name="setting_etc_donate">개발자 사탕 사주기</string>
     <string name="setting_button_thanks">감사합니다</string>
     <string name="setting_etc_lovers">후원해주신 분들: %s</string>
+    <string name="setting_label_app">앱</string>
+    <string name="setting_dialog_opensource_license">오픈소스 라이선스</string>
 </resources>

@@ -278,7 +278,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                         onValueChange = { searchField.value = it },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp)
+                            .height(60.dp)
                             .focusRequester(FocusRequester()),
                         shape = RoundedCornerShape(30.dp),
                         colors = transparentTextFieldColors(
