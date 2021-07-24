@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         val now = System.currentTimeMillis()
-        if (now - onBackPressedTime <= 3000) {
+        if (now - onBackPressedTime >= 3000) {
             onBackPressedTime = now
             toast(this, getString(R.string.main_toast_confirm_finish))
         } else {

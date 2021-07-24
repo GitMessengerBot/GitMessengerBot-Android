@@ -132,4 +132,6 @@ class SplashActivity : ComponentActivity() {
             )
         }
     }
+
+    override fun onBackPressed() {}
 }
