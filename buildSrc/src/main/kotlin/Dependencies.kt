@@ -56,9 +56,8 @@ object Versions {
     }
 
     object Hilt {
-        const val Master = "2.38"
-        const val ViewModelCompiler = "1.0.0" // required
-        const val ViewModel = "1.0.0-alpha03" // required
+        // https://stackoverflow.com/questions/68492472/hilt-field-injection-throwing-property-not-initialized-error
+        const val Master = "2.37" // todo: 2.38
     }
 
     object Compose {
@@ -121,7 +120,6 @@ object Dependencies {
 
     val hilt = listOf(
         "com.google.dagger:hilt-android:${Versions.Hilt.Master}",
-        "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.Hilt.ViewModel}"
     )
 
     val compose = listOf(
@@ -135,7 +133,6 @@ object Dependencies {
 
     val compiler = listOf(
         "androidx.room:room-compiler:${Versions.Jetpack.Room}",
-        "androidx.hilt:hilt-compiler:${Versions.Hilt.ViewModelCompiler}",
         "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
     )
 }
