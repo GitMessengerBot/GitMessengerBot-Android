@@ -12,6 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.main.setting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,10 +21,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
@@ -51,21 +52,24 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptDefaultCode
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.Web
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun OpenSourceDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
-            modifier = Modifier.width(300.dp),
             onDismissRequest = { visible.value = false },
             buttons = {},
             title = {
@@ -338,7 +342,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Text(text = "", modifier = Modifier.height(10.dp))
+                    Spacer()
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -376,13 +380,125 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
 @Composable
 fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
+        val scriptLangItemShape = RoundedCornerShape(10.dp)
+        val scriptDefaultCodeSettingDialogVisible = remember { mutableStateOf(false) }
+        val scriptDefaultCodeLang = remember { mutableStateOf(ScriptLang.TypeScript) }
+
+        ScriptDefaultCodeSettingDialog(
+            visible = scriptDefaultCodeSettingDialogVisible,
+            innerVisible = visible,
+            scriptLang = scriptDefaultCodeLang.value
+        )
+
         AlertDialog(
             onDismissRequest = { visible.value = false },
+            title = { Text(text = stringResource(R.string.setting_script_add_default_code)) },
             buttons = {},
             text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    Spacer()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .clip(scriptLangItemShape)
+                            .border(1.dp, colors.secondary, scriptLangItemShape)
+                    ) {
+                        repeat(4) { scriptLang ->
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .background(Color.White)
+                                    .noRippleClickable {
+                                        scriptDefaultCodeLang.value = scriptLang
+                                        scriptDefaultCodeSettingDialogVisible.value = true
+                                    },
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = scriptLang.toScriptLangName(),
+                                    color = colors.primary,
+                                    fontSize = 10.sp
+                                )
+                            }
+                        }
+                    }
+                }
             }
         )
     }
+}
+
+@Composable
+private fun ScriptDefaultCodeSettingDialog(
+    visible: MutableState<Boolean>,
+    innerVisible: MutableState<Boolean>,
+    scriptLang: Int
+) {
+    if (visible.value) {
+        val context = LocalContext.current
+        var scriptDefaultCodeField by remember { mutableStateOf(TextFieldValue(scriptLang.getScriptDefaultCode())) }
+
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            title = {
+                Text(
+                    text = stringResource(
+                        R.string.setting_dialog_edit_default_code,
+                        scriptLang.toScriptLangName()
+                    )
+                )
+            },
+            confirmButton = {
+                OutlinedButton(
+                    onClick = {
+                        val newCode = scriptDefaultCodeField.text
+                        when (scriptLang) {
+                            0 -> Bot.app.value.scriptDefaultCode.value.ts = newCode
+                            1 -> Bot.app.value.scriptDefaultCode.value.js = newCode
+                            2 -> Bot.app.value.scriptDefaultCode.value.py = newCode
+                            3 -> Bot.app.value.scriptDefaultCode.value.sim = newCode
+                        }
+                        Bot.saveAndUpdate(Bot.app.value)
+                        toast(context, context.getString(R.string.setting_toast_saved))
+                        visible.value = false
+                        innerVisible.value = false
+                    }
+                ) {
+                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    Spacer()
+                    TextField(
+                        value = scriptDefaultCodeField,
+                        onValueChange = { scriptDefaultCodeField = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .horizontalScroll(rememberScrollState()),
+                        colors = transparentTextFieldColors(backgroundColor = Color.White),
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun Spacer() {
+    Text(text = "", modifier = Modifier.height(10.dp))
 }
 
 @Composable

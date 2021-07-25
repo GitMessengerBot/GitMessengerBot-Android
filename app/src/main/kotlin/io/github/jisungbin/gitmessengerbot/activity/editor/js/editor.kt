@@ -52,7 +52,7 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptSuffix
+import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -171,13 +171,13 @@ private fun DrawerLayout(
                 coroutineScope.launch {
                     gitRepo.getFileContent(
                         repoName = repoName,
-                        path = "script.${script.lang.toScriptSuffix()}"
+                        path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { commitResult ->
                         when (commitResult) {
                             is Result.Success -> {
                                 gitRepo.updateFile(
                                     repoName = repoName,
-                                    path = "script.${script.lang.toScriptSuffix()}",
+                                    path = "script.${script.lang.getScriptSuffix()}",
                                     gitFile = GitFile(
                                         message = StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
@@ -221,7 +221,7 @@ private fun DrawerLayout(
                 coroutineScope.launch {
                     gitRepo.getFileContent(
                         repoName = repoName,
-                        path = "script.${script.lang.toScriptSuffix()}"
+                        path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { fileContentResult ->
                         when (fileContentResult) {
                             is Result.Success -> {

@@ -125,4 +125,7 @@
     <string name="setting_dialog_donate">1인 개발자를 도와주셔서 감사합니다! 🥰🥰\n카카오톡 오픈채팅방으로 와 주세요!\n\n또는? 성빈 카톡: sungbin5304</string>
     <string name="setting_dialog_button_direct_go">바로가기</string>
     <string name="setting_dialog_button_copy_kakaotalk_id">톡디 복사</string>
+    <string name="setting_dialog_button_save">저장</string>
+    <string name="setting_dialog_edit_default_code">%s 기본 코드 편집</string>
+    <string name="setting_toast_saved">저장 되었습니다.</string>
 </resources>

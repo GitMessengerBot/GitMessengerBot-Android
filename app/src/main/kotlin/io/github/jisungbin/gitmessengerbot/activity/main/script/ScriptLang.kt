@@ -26,7 +26,7 @@ fun Int.toScriptLangName() = when (this) {
     else -> throw Error("Unknown script type.")
 }
 
-fun Int.toScriptSuffix() = when (this) {
+fun Int.getScriptSuffix() = when (this) {
     ScriptLang.TypeScript -> "ts"
     ScriptLang.JavaScript -> "js"
     ScriptLang.Python -> "py"
@@ -34,10 +34,10 @@ fun Int.toScriptSuffix() = when (this) {
     else -> throw Error("Unknown script type.")
 }
 
-fun Int.toScriptDefaultSource() = when (this) {
+fun Int.getScriptDefaultCode() = when (this) {
     ScriptLang.TypeScript -> Bot.app.value.scriptDefaultCode.value.ts
     ScriptLang.JavaScript -> Bot.app.value.scriptDefaultCode.value.js
-    ScriptLang.Python -> Bot.app.value.scriptDefaultCode.value.python
+    ScriptLang.Python -> Bot.app.value.scriptDefaultCode.value.py
     ScriptLang.Simple -> Bot.app.value.scriptDefaultCode.value.sim
     else -> throw Error("Unknown script type.")
 }

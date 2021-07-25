@@ -10,7 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.util.config
 
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
-import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptSuffix
+import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptSuffix
 import kotlin.random.Random
 
 @Suppress("FunctionName")
@@ -54,7 +54,7 @@ object StringConfig {
      * "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"
      */
     fun Script(name: String, lang: Int) =
-        "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.toScriptSuffix()}"
+        "$AppStorage/scripts/${lang.toScriptLangName()}/$name.${lang.getScriptSuffix()}"
 
     /**
      * 스크립트 리스트 경로

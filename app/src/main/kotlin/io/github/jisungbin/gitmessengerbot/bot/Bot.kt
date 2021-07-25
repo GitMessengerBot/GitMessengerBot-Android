@@ -20,7 +20,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
-import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
+import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptDefaultCode
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.App
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.MutableApp
 import io.github.jisungbin.gitmessengerbot.bot.debug.DebugStore
@@ -118,7 +118,7 @@ object Bot {
         _scripts.add(script)
         Storage.write(
             StringConfig.Script(script.name, script.lang),
-            script.lang.toScriptDefaultSource()
+            script.lang.getScriptDefaultCode()
         )
         Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
     }
