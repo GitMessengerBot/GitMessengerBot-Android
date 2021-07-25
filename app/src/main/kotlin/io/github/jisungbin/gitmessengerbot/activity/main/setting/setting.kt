@@ -62,7 +62,7 @@ fun Setting(activity: Activity) {
                     .wrapContentHeight(),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
             ) {
-                Text(text = "앱 설정")
+                Text(text = stringResource(R.string.setting_appbar_title))
             }
         },
         content = {
@@ -97,9 +97,21 @@ private fun SettingContent(activity: Activity) {
             }
         }
 
+        val scriptAddDefaultCodeDialogVisible = remember { mutableStateOf(false) }
+        val scriptAddDefaultLanguageDialogVisible = remember { mutableStateOf(false) }
+        val gitDefaultCommitMessageDialogVisible = remember { mutableStateOf(false) }
+        val gitDefaultCreateRepoOptionsDialogVisible = remember { mutableStateOf(false) }
+        val kakaoTalkPackageNamesDialogVisible = remember { mutableStateOf(false) }
         val openSourceLicenseVisible = remember { mutableStateOf(false) }
+        val donateDialogVisble = remember { mutableStateOf(false) }
 
+        ScriptAddDefaultCodeDialog(visible = scriptAddDefaultCodeDialogVisible)
+        ScriptAddDefaultLanguageDialog(visible = scriptAddDefaultLanguageDialogVisible)
+        GitDefaultCommitMessageDialog(visible = gitDefaultCommitMessageDialogVisible)
+        GitDefaultCreateRepoOptionsDialog(visible = gitDefaultCreateRepoOptionsDialogVisible)
+        KakaoTalkPackageNamesDialog(visible = kakaoTalkPackageNamesDialogVisible)
         OpenSourceDialog(visible = openSourceLicenseVisible)
+        DonateDialog(visible = donateDialogVisble)
 
         Text(
             text = stringResource(R.string.setting_label_editor),
@@ -160,7 +172,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { scriptAddDefaultCodeDialogVisible.value = true }) {
                 Text(text = stringResource(R.string.setting_script_each_language_option))
             }
         }
@@ -190,7 +202,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { scriptAddDefaultLanguageDialogVisible.value = true }) {
                 Text(text = scriptDefaultAddLang.toScriptLangName())
             }
         }
@@ -224,7 +236,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { gitDefaultCommitMessageDialogVisible.value = true }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }
@@ -234,7 +246,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { gitDefaultCreateRepoOptionsDialogVisible.value = true }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }
@@ -250,7 +262,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }
@@ -308,7 +320,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = { donateDialogVisble.value = true }) {
                 Text(text = stringResource(R.string.setting_button_thanks))
             }
         }

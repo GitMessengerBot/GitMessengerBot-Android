@@ -25,6 +25,7 @@ object Web {
     sealed class Link(val url: String) {
         object Github : Link("https://github.com")
         object ProjectGithub : Link("https://github.com/GitMessengerBot")
+        object DonateOpenChat : Link("https://open.kakao.com/me/duck__bin")
         object PersonalKeyGuide :
             Link("https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/get-personal-access-key.md")
 

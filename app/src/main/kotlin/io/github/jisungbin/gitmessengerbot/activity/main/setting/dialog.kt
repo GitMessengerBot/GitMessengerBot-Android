@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +31,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
+import io.github.jisungbin.gitmessengerbot.util.Web
 
 @Composable
 fun OpenSourceDialog(visible: MutableState<Boolean>) {
@@ -171,6 +174,89 @@ fun OpenSourceDialog(visible: MutableState<Boolean>) {
                         )
                     }
                 }
+            }
+        )
+    }
+}
+
+@Composable
+fun DonateDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        val context = LocalContext.current
+
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            confirmButton = {
+                OutlinedButton(
+                    onClick = {
+                        Web.open(context, Web.Link.DonateOpenChat)
+                    }
+                ) {
+                    Text(text = stringResource(R.string.setting_dialog_button_direct_go))
+                }
+            },
+            title = {
+                Text(text = stringResource(R.string.setting_dialog_donate))
+            }
+        )
+    }
+}
+
+@Composable
+fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            text = {
+            }
+        )
+    }
+}
+
+@Composable
+fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            text = {
+            }
+        )
+    }
+}
+
+@Composable
+fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            text = {
+            }
+        )
+    }
+}
+
+@Composable
+fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            text = {
+            }
+        )
+    }
+}
+
+@Composable
+fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
+    if (visible.value) {
+        AlertDialog(
+            onDismissRequest = { visible.value = false },
+            buttons = {},
+            text = {
             }
         )
     }
