@@ -62,6 +62,7 @@ import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.jisungbin.gitmessengerbot.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
@@ -108,10 +109,12 @@ private fun MenuBox(
 @Composable
 fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    val backgroundService = Intent(context, BackgroundService::class.java)
     val githubJson = Storage.read(StringConfig.GithubData, "")!!
     val githubData = Json.toModel(githubJson, GithubData::class)
     var searching by remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
 
     ConstraintLayout(
         modifier = Modifier
@@ -203,6 +206,11 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                                     uncheckedTrackColor = colors.secondary
                                 ),
                                 onCheckedChange = {
+                                    if (it) {
+                                        context.startService(backgroundService)
+                                    } else {
+                                        context.stopService(backgroundService)
+                                    }
                                     Bot.saveAndUpdate(Bot.app.value.copy(power = mutableStateOf(it)))
                                 }
                             )
