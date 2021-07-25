@@ -22,7 +22,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.App
-import io.github.jisungbin.gitmessengerbot.activity.main.setting.model._App
+import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.MutableApp
 import io.github.jisungbin.gitmessengerbot.bot.debug.DebugStore
 import io.github.jisungbin.gitmessengerbot.bot.debug.Sender
 import io.github.jisungbin.gitmessengerbot.bot.debug.createDebugItem
@@ -33,7 +33,7 @@ import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 
 @Suppress("ObjectPropertyName")
 object Bot {
-    private val _app = mutableStateOf(App())
+    private val _app = mutableStateOf(MutableApp())
     private val _scripts = SnapshotStateList<ScriptItem>()
     private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
     private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
@@ -43,24 +43,24 @@ object Bot {
             .sortedByDescending { it.name }
             .sortedByDescending { it.lang }
             .asReversed()
-    val app: State<App> get() = _app
+    val app: State<MutableApp> get() = _app
 
     init {
         _scripts.addAll(getList())
         Storage.read(StringConfig.AppData, null)?.let { appDataJson ->
             @Suppress("LocalVariableName")
-            val _app = Json.toModel(appDataJson, _App::class)
-            val app = App(
-                power = _app.power,
-                evalMode = _app.evalMode,
-                editorFontSize = _app.editorFontSize,
-                editorAutoSave = _app.editorAutoSave,
-                scriptDefaultCode = _app.scriptDefaultCode,
+            val _app = Json.toModel(appDataJson, App::class)
+            val app = MutableApp(
+                power = mutableStateOf(_app.power),
+                evalMode = mutableStateOf(_app.evalMode),
+                editorFontSize = mutableStateOf(_app.editorFontSize),
+                editorAutoSave = mutableStateOf(_app.editorAutoSave),
+                scriptDefaultCode = mutableStateOf(_app.scriptDefaultCode),
                 scriptDefaultLang = mutableStateOf(_app.scriptDefaultLang),
-                scriptResponseFunctionName = _app.scriptResponseFunctionName,
-                gitDefaultBranch = _app.gitDefaultBranch,
-                gitDefaultCommitMessage = _app.gitDefaultCommitMessage,
-                gitDefaultRepoOptions = _app.gitDefaultRepoOptions,
+                scriptResponseFunctionName = mutableStateOf(_app.scriptResponseFunctionName),
+                gitDefaultBranch = mutableStateOf(_app.gitDefaultBranch),
+                gitDefaultCommitMessage = mutableStateOf(_app.gitDefaultCommitMessage),
+                gitDefaultRepoOptions = mutableStateOf(_app.gitDefaultRepoOptions),
                 kakaoTalkPackageNames = mutableStateListOf<String>().apply {
                     addAll(_app.kakaoTalkPackageNames)
                 }
@@ -76,20 +76,20 @@ object Bot {
     /**
      * 앱 정보 json 파일 저장
      */
-    fun saveAndUpdate(app: App) {
+    fun saveAndUpdate(app: MutableApp) {
         _app.value = app
         @Suppress("LocalVariableName")
-        val _app = _App(
-            power = app.power,
-            evalMode = app.evalMode,
-            editorFontSize = app.editorFontSize,
-            editorAutoSave = app.editorAutoSave,
-            scriptDefaultCode = app.scriptDefaultCode,
+        val _app = App(
+            power = app.power.value,
+            evalMode = app.evalMode.value,
+            editorFontSize = app.editorFontSize.value,
+            editorAutoSave = app.editorAutoSave.value,
+            scriptDefaultCode = app.scriptDefaultCode.value,
             scriptDefaultLang = app.scriptDefaultLang.value,
-            scriptResponseFunctionName = app.scriptResponseFunctionName,
-            gitDefaultBranch = app.gitDefaultBranch,
-            gitDefaultCommitMessage = app.gitDefaultCommitMessage,
-            gitDefaultRepoOptions = app.gitDefaultRepoOptions,
+            scriptResponseFunctionName = app.scriptResponseFunctionName.value,
+            gitDefaultBranch = app.gitDefaultBranch.value,
+            gitDefaultCommitMessage = app.gitDefaultCommitMessage.value,
+            gitDefaultRepoOptions = app.gitDefaultRepoOptions.value,
             kakaoTalkPackageNames = app.kakaoTalkPackageNames.toList()
         )
         Storage.write(StringConfig.AppData, Json.toString(_app))
@@ -135,6 +135,11 @@ object Bot {
                 .forEach { scriptDataFile ->
                     val script =
                         Json.toModel(Storage.read(scriptDataFile.path, null)!!, ScriptItem::class)
+                    if (script.compiled) {
+                        if (StackManager.v8[script.id] == null) {
+                            script.compiled = false
+                        }
+                    }
                     scripts.add(script)
                 }
         }
@@ -190,7 +195,7 @@ object Bot {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
                 v8.executeJSFunction(
-                    app.value.scriptResponseFunctionName,
+                    app.value.scriptResponseFunctionName.value,
                     *arguments.toTypedArray()
                 )
             }

@@ -62,7 +62,6 @@ import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import io.github.jisungbin.gitmessengerbot.bot.Bot
-import io.github.jisungbin.gitmessengerbot.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
@@ -111,7 +110,6 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val context = LocalContext.current
     val githubJson = Storage.read(StringConfig.GithubData, "")!!
     val githubData = Json.toModel(githubJson, GithubData::class)
-    var power by remember { mutableStateOf(Bot.app.value.power) }
     var searching by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
@@ -193,11 +191,11 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                if (power) stringResource(R.string.main_menu_on)
+                                if (Bot.app.value.power.value) stringResource(R.string.main_menu_on)
                                 else stringResource(R.string.main_menu_off)
                             )
                             Switch(
-                                checked = power,
+                                checked = Bot.app.value.power.value,
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = Color.White,
                                     checkedTrackColor = colors.primaryVariant,
@@ -205,23 +203,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                                     uncheckedTrackColor = colors.secondary
                                 ),
                                 onCheckedChange = {
-                                    if (it) {
-                                        context.startService(
-                                            Intent(
-                                                context,
-                                                BackgroundService::class.java
-                                            )
-                                        )
-                                    } else {
-                                        context.stopService(
-                                            Intent(
-                                                context,
-                                                BackgroundService::class.java
-                                            )
-                                        )
-                                    }
-                                    power = it
-                                    Bot.saveAndUpdate(Bot.app.value.copy(power = power))
+                                    Bot.saveAndUpdate(Bot.app.value.copy(power = mutableStateOf(it)))
                                 }
                             )
                         }

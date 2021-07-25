@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Bot.app.value.power) {
+        if (Bot.app.value.power.value) {
             startService(Intent(this, BackgroundService::class.java))
         }
 

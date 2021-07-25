@@ -29,11 +29,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -80,21 +77,8 @@ private fun SettingContent(activity: Activity) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
+        val app = Bot.app.value
         val context = LocalContext.current
-
-        var editorFontSize by remember { mutableStateOf(Bot.app.value.editorFontSize) }
-        var editorAutoSave by remember { mutableStateOf(Bot.app.value.editorAutoSave) }
-        var scriptDefaultCode by remember { mutableStateOf(Bot.app.value.scriptDefaultCode) }
-        var scriptResponseFunctionName by remember { mutableStateOf(Bot.app.value.scriptResponseFunctionName) }
-        val scriptDefaultAddLang by Bot.app.value.scriptDefaultLang
-        var gitDefaultBranch by remember { mutableStateOf(Bot.app.value.gitDefaultBranch) }
-        var gitDefaultCommitMessage by remember { mutableStateOf(Bot.app.value.gitDefaultCommitMessage) }
-        var gitDefaultRepoOptions by remember { mutableStateOf(Bot.app.value.gitDefaultRepoOptions) }
-        var kakaoTalkPackageNames = remember {
-            mutableStateListOf<String>().apply {
-                addAll(Bot.app.value.kakaoTalkPackageNames)
-            }
-        }
 
         val scriptAddDefaultCodeDialogVisible = remember { mutableStateOf(false) }
         val scriptAddDefaultLanguageDialogVisible = remember { mutableStateOf(false) }
@@ -124,12 +108,11 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             TextField(
-                value = editorFontSize.toString(),
+                value = app.editorFontSize.value.toString(),
                 onValueChange = {
                     try {
-                        editorFontSize = it.toInt()
-                        Bot.app.value.editorFontSize = editorFontSize
-                        Bot.saveAndUpdate(Bot.app.value)
+                        app.editorFontSize.value = it.toInt()
+                        Bot.saveAndUpdate(app)
                     } catch (ignored: Exception) {
                     }
                 },
@@ -147,12 +130,11 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             TextField(
-                value = editorAutoSave.toString(),
+                value = app.editorAutoSave.value.toString(),
                 onValueChange = {
                     try {
-                        editorAutoSave = it.toInt()
-                        Bot.app.value.editorAutoSave = editorAutoSave
-                        Bot.saveAndUpdate(Bot.app.value)
+                        app.editorAutoSave.value = it.toInt()
+                        Bot.saveAndUpdate(app)
                     } catch (ignored: Exception) {
                     }
                 },
@@ -186,7 +168,7 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { scriptAddDefaultLanguageDialogVisible.value = true }) {
-                Text(text = scriptDefaultAddLang.toScriptLangName())
+                Text(text = app.scriptDefaultLang.value.toScriptLangName())
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
@@ -196,11 +178,10 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             TextField(
-                value = scriptResponseFunctionName,
+                value = app.scriptResponseFunctionName.value,
                 onValueChange = {
                     if (!it.contains(" ")) {
-                        scriptResponseFunctionName = it
-                        Bot.app.value.scriptResponseFunctionName = scriptResponseFunctionName
+                        app.scriptResponseFunctionName.value = it
                         Bot.saveAndUpdate(Bot.app.value)
                     }
                 },
@@ -224,10 +205,9 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             TextField(
-                value = gitDefaultBranch,
+                value = app.gitDefaultBranch.value,
                 onValueChange = {
-                    gitDefaultBranch = it.replace(" ", "-")
-                    Bot.app.value.gitDefaultBranch = gitDefaultBranch
+                    app.gitDefaultBranch.value = it.replace(" ", "-")
                     Bot.saveAndUpdate(Bot.app.value)
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),

@@ -76,7 +76,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Debug(activity: Activity, script: ScriptItem? = null) {
-    val evalMode = remember { mutableStateOf(Bot.app.value.evalMode) }
     val settingDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -85,7 +84,7 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
             DebugToolbar(
                 activity = activity,
                 script = script,
-                evalMode = evalMode,
+                evalMode = Bot.app.value.evalMode,
                 settingDialogVisible = settingDialogVisible
             )
         },
@@ -93,7 +92,7 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
             DebugContent(
                 activity = activity,
                 script = script,
-                evalMode = evalMode,
+                evalMode = Bot.app.value.evalMode,
                 settingDialogVisible = settingDialogVisible
             )
         }
@@ -223,8 +222,7 @@ private fun DebugToolbar(
             Switch(
                 checked = evalMode.value,
                 onCheckedChange = {
-                    evalMode.value = !evalMode.value
-                    Bot.saveAndUpdate(Bot.app.value.copy(evalMode = evalMode.value))
+                    Bot.saveAndUpdate(Bot.app.value.copy(evalMode = mutableStateOf(it)))
                 },
                 modifier = Modifier.constrainAs(modeSwitch) {
                     end.linkTo(setting.start, 16.dp)

@@ -35,9 +35,9 @@ fun Int.toScriptSuffix() = when (this) {
 }
 
 fun Int.toScriptDefaultSource() = when (this) {
-    ScriptLang.TypeScript -> Bot.app.value.scriptDefaultCode.ts
-    ScriptLang.JavaScript -> Bot.app.value.scriptDefaultCode.js
-    ScriptLang.Python -> Bot.app.value.scriptDefaultCode.python
-    ScriptLang.Simple -> Bot.app.value.scriptDefaultCode.sim
+    ScriptLang.TypeScript -> Bot.app.value.scriptDefaultCode.value.ts
+    ScriptLang.JavaScript -> Bot.app.value.scriptDefaultCode.value.js
+    ScriptLang.Python -> Bot.app.value.scriptDefaultCode.value.python
+    ScriptLang.Simple -> Bot.app.value.scriptDefaultCode.value.sim
     else -> throw Error("Unknown script type.")
 }
