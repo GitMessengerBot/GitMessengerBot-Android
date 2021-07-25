@@ -63,7 +63,8 @@ object Bot {
                 gitDefaultRepoOptions = mutableStateOf(_app.gitDefaultRepoOptions),
                 kakaoTalkPackageNames = mutableStateListOf<String>().apply {
                     addAll(_app.kakaoTalkPackageNames)
-                }
+                },
+                useHorizontalScroll = mutableStateOf(_app.useHorizontalScroll)
             )
             this._app.value = app
         }
@@ -90,7 +91,8 @@ object Bot {
             gitDefaultBranch = app.gitDefaultBranch.value,
             gitDefaultCommitMessage = app.gitDefaultCommitMessage.value,
             gitDefaultRepoOptions = app.gitDefaultRepoOptions.value,
-            kakaoTalkPackageNames = app.kakaoTalkPackageNames.toList()
+            kakaoTalkPackageNames = app.kakaoTalkPackageNames.toList(),
+            useHorizontalScroll = app.useHorizontalScroll.value
         )
         Storage.write(StringConfig.AppData, Json.toString(_app))
     }

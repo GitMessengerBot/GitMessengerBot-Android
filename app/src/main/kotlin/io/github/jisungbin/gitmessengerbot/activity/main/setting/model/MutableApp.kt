@@ -28,6 +28,7 @@ data class MutableApp(
     var gitDefaultCommitMessage: MutableState<String> = mutableStateOf(StringConfig.GitDefaultCommitMessage),
     var gitDefaultRepoOptions: MutableState<RepoOptions> = mutableStateOf(RepoOptions()),
     val kakaoTalkPackageNames: SnapshotStateList<String> = mutableStateListOf(StringConfig.KakaoTalkDefaultPackageName),
+    val useHorizontalScroll: MutableState<Boolean> = mutableStateOf(true)
 )
 
 data class App(
@@ -42,4 +43,5 @@ data class App(
     var gitDefaultCommitMessage: String = StringConfig.GitDefaultCommitMessage,
     var gitDefaultRepoOptions: RepoOptions = RepoOptions(),
     val kakaoTalkPackageNames: List<String> = listOf(StringConfig.KakaoTalkDefaultPackageName),
+    val useHorizontalScroll: Boolean = true
 )

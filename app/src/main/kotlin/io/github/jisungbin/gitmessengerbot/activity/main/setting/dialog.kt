@@ -64,6 +64,7 @@ import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.Web
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.runIf
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 
 @Composable
@@ -487,7 +488,10 @@ private fun ScriptDefaultCodeSettingDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .horizontalScroll(rememberScrollState()),
+                            .horizontalScroll(rememberScrollState())
+                            .runIf(Bot.app.value.useHorizontalScroll.value) {
+                                horizontalScroll(rememberScrollState())
+                            },
                         colors = transparentTextFieldColors(backgroundColor = Color.White),
                     )
                 }

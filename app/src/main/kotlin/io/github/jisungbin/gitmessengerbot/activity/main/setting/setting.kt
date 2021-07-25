@@ -24,6 +24,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -103,6 +105,25 @@ private fun SettingContent(activity: Activity) {
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
+                text = stringResource(R.string.setting_editor_horizontal_scroll),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            Switch(
+                checked = app.useHorizontalScroll.value,
+                onCheckedChange = {
+                    Bot.saveAndUpdate(app.copy(useHorizontalScroll = mutableStateOf(it)))
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = colors.primaryVariant,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = colors.secondary
+                ),
+            )
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
                 text = stringResource(R.string.setting_editor_font_size),
                 fontSize = 15.sp,
                 color = Color.Black
@@ -111,8 +132,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorFontSize.value.toString(),
                 onValueChange = {
                     try {
-                        app.editorFontSize.value = it.toInt()
-                        Bot.saveAndUpdate(app)
+                        Bot.saveAndUpdate(app.copy(editorFontSize = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -133,8 +153,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorAutoSave.value.toString(),
                 onValueChange = {
                     try {
-                        app.editorAutoSave.value = it.toInt()
-                        Bot.saveAndUpdate(app)
+                        Bot.saveAndUpdate(app.copy(editorAutoSave = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -181,8 +200,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.scriptResponseFunctionName.value,
                 onValueChange = {
                     if (!it.contains(" ")) {
-                        app.scriptResponseFunctionName.value = it
-                        Bot.saveAndUpdate(Bot.app.value)
+                        Bot.saveAndUpdate(app.copy(scriptResponseFunctionName = mutableStateOf(it)))
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -207,8 +225,16 @@ private fun SettingContent(activity: Activity) {
             TextField(
                 value = app.gitDefaultBranch.value,
                 onValueChange = {
-                    app.gitDefaultBranch.value = it.replace(" ", "-")
-                    Bot.saveAndUpdate(Bot.app.value)
+                    Bot.saveAndUpdate(
+                        app.copy(
+                            gitDefaultBranch = mutableStateOf(
+                                it.replace(
+                                    " ",
+                                    "-"
+                                )
+                            )
+                        )
+                    )
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 modifier = Modifier
@@ -312,7 +338,10 @@ private fun SettingContent(activity: Activity) {
             }
         }
         Text(
-            text = stringResource(R.string.setting_etc_lovers),
+            text = stringResource(
+                R.string.setting_etc_lovers,
+                stringResource(R.string.setting_etc_empty)
+            ),
             modifier = Modifier.padding(top = 15.dp),
             color = colors.primary
         )
