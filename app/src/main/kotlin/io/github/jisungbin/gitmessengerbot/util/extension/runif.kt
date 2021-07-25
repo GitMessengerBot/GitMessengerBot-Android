@@ -14,6 +14,6 @@ inline fun <T> T.runIf(
     run: T.() -> T
 ) = run {
     if (condition) {
-        run { run() }
+        run()
     } else this
 }

@@ -488,7 +488,6 @@ private fun ScriptDefaultCodeSettingDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .horizontalScroll(rememberScrollState())
                             .runIf(Bot.app.value.useHorizontalScroll.value) {
                                 horizontalScroll(rememberScrollState())
                             },
