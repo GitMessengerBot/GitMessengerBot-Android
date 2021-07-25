@@ -9,10 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.util.extension
 
-inline fun <T> T.runIf(
-    condition: Boolean,
-    run: T.() -> T
-) = run {
+inline fun <T> T.runIf(condition: Boolean, run: T.() -> T) = run {
     if (condition) {
         run()
     } else this

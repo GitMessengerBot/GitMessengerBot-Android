@@ -244,10 +244,44 @@ fun DonateDialog(visible: MutableState<Boolean>) {
 @Composable
 fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
+        var commitMessageField by remember { mutableStateOf(TextFieldValue(Bot.app.value.gitDefaultCommitMessage.value)) }
+
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            buttons = {},
+            title = { Text(text = stringResource(R.string.setting_git_default_commit_message)) },
+            confirmButton = {
+                OutlinedButton(
+                    onClick = {
+                        Bot.saveAndUpdate(
+                            Bot.app.value.copy(
+                                gitDefaultCommitMessage = mutableStateOf(
+                                    commitMessageField.text
+                                )
+                            )
+                        )
+                    }
+                ) {
+                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                }
+            },
             text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    Spacer()
+                    TextField(
+                        value = commitMessageField,
+                        onValueChange = {
+                            commitMessageField = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        colors = transparentTextFieldColors(backgroundColor = Color.White)
+                    )
+                }
             }
         )
     }
@@ -258,8 +292,21 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            buttons = {},
+            title = { Text(text = stringResource(R.string.setting_git_default_new_repo_options)) },
+            confirmButton = {
+                OutlinedButton(onClick = { /*TODO*/ }) {
+                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                }
+            },
             text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    Spacer()
+                    // todo
+                }
             }
         )
     }

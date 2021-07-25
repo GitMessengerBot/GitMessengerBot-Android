@@ -123,7 +123,7 @@
     <string name="setting_etc_opensource_license">오픈소스 라이선스</string>
     <string name="setting_etc_donate">개발자 사탕 사주기</string>
     <string name="setting_etc_lovers">후원해주신 분들: %s</string>
-    <string name="setting_etc_empty">비었어요 😭</string>
+    <string name="setting_etc_empty">없네요 😭</string>
     <string name="setting_dialog_opensource_license">오픈소스 라이선스</string>
     <string name="setting_dialog_edit_default_code">%s 기본 코드 편집</string>
     <string name="setting_dialog_donate">1인 개발자를 도와주셔서 감사합니다! 🥰🥰\n카카오톡 오픈채팅방으로 와 주세요!\n\n또는? 성빈 카톡: sungbin5304</string>
