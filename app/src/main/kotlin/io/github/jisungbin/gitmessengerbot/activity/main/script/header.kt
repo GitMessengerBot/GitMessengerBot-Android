@@ -221,7 +221,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                                         )
                                     }
                                     power = it
-                                    Bot.save(Bot.app.value.copy(power = power))
+                                    Bot.saveAndUpdate(Bot.app.value.copy(power = power))
                                 }
                             )
                         }

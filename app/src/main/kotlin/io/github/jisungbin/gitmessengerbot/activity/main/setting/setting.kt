@@ -9,7 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -71,7 +70,7 @@ fun Setting(activity: Activity) {
     )
 }
 
-@SuppressLint("NewApi")
+@Suppress("NewApi")
 @Composable
 private fun SettingContent(activity: Activity) {
     Column(
@@ -86,8 +85,8 @@ private fun SettingContent(activity: Activity) {
         var editorFontSize by remember { mutableStateOf(Bot.app.value.editorFontSize) }
         var editorAutoSave by remember { mutableStateOf(Bot.app.value.editorAutoSave) }
         var scriptDefaultCode by remember { mutableStateOf(Bot.app.value.scriptDefaultCode) }
-        var scriptResponseFunctionName by remember { mutableStateOf(Bot.app.value.scriptResponseFunctioName) }
-        var scriptDefaultAddLang by remember { mutableStateOf(Bot.app.value.scriptDefaultLang) }
+        var scriptResponseFunctionName by remember { mutableStateOf(Bot.app.value.scriptResponseFunctionName) }
+        val scriptDefaultAddLang by Bot.app.value.scriptDefaultLang
         var gitDefaultBranch by remember { mutableStateOf(Bot.app.value.gitDefaultBranch) }
         var gitDefaultCommitMessage by remember { mutableStateOf(Bot.app.value.gitDefaultCommitMessage) }
         var gitDefaultRepoOptions by remember { mutableStateOf(Bot.app.value.gitDefaultRepoOptions) }
@@ -129,6 +128,8 @@ private fun SettingContent(activity: Activity) {
                 onValueChange = {
                     try {
                         editorFontSize = it.toInt()
+                        Bot.app.value.editorFontSize = editorFontSize
+                        Bot.saveAndUpdate(Bot.app.value)
                     } catch (ignored: Exception) {
                     }
                 },
@@ -150,6 +151,8 @@ private fun SettingContent(activity: Activity) {
                 onValueChange = {
                     try {
                         editorAutoSave = it.toInt()
+                        Bot.app.value.editorAutoSave = editorAutoSave
+                        Bot.saveAndUpdate(Bot.app.value)
                     } catch (ignored: Exception) {
                     }
                 },
@@ -178,6 +181,16 @@ private fun SettingContent(activity: Activity) {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
+                text = stringResource(R.string.setting_script_default_add_lang),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(onClick = { scriptAddDefaultLanguageDialogVisible.value = true }) {
+                Text(text = scriptDefaultAddLang.toScriptLangName())
+            }
+        }
+        RowContent(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
                 text = stringResource(R.string.setting_script_default_response_function_name),
                 fontSize = 15.sp,
                 color = Color.Black
@@ -187,6 +200,8 @@ private fun SettingContent(activity: Activity) {
                 onValueChange = {
                     if (!it.contains(" ")) {
                         scriptResponseFunctionName = it
+                        Bot.app.value.scriptResponseFunctionName = scriptResponseFunctionName
+                        Bot.saveAndUpdate(Bot.app.value)
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -195,16 +210,6 @@ private fun SettingContent(activity: Activity) {
                     .width(120.dp),
                 singleLine = true
             )
-        }
-        RowContent(modifier = Modifier.padding(top = 8.dp)) {
-            Text(
-                text = stringResource(R.string.setting_script_default_add_lang),
-                fontSize = 15.sp,
-                color = Color.Black
-            )
-            OutlinedButton(onClick = { scriptAddDefaultLanguageDialogVisible.value = true }) {
-                Text(text = scriptDefaultAddLang.toScriptLangName())
-            }
         }
         Text(
             text = stringResource(R.string.setting_label_git),
@@ -222,6 +227,8 @@ private fun SettingContent(activity: Activity) {
                 value = gitDefaultBranch,
                 onValueChange = {
                     gitDefaultBranch = it.replace(" ", "-")
+                    Bot.app.value.gitDefaultBranch = gitDefaultBranch
+                    Bot.saveAndUpdate(Bot.app.value)
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 modifier = Modifier

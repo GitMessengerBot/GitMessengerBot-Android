@@ -363,7 +363,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                 ),
                 onCheckedChange = {
                     script.power = it
-                    Bot.save(script)
+                    Bot.saveAndUpdate(script)
                 },
                 modifier = Modifier.constrainAs(scriptPower) {
                     end.linkTo(parent.end)

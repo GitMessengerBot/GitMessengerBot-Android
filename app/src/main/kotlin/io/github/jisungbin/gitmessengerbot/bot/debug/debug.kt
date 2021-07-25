@@ -224,7 +224,7 @@ private fun DebugToolbar(
                 checked = evalMode.value,
                 onCheckedChange = {
                     evalMode.value = !evalMode.value
-                    Bot.save(Bot.app.value.copy(evalMode = evalMode.value))
+                    Bot.saveAndUpdate(Bot.app.value.copy(evalMode = evalMode.value))
                 },
                 modifier = Modifier.constrainAs(modeSwitch) {
                     end.linkTo(setting.start, 16.dp)

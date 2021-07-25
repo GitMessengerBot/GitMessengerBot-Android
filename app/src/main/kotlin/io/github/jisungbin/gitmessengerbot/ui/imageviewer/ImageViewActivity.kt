@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import com.mindorks.ViewColorGenerator
 import com.mindorks.`interface`.OnImageLoaded
 import com.skydoves.landscapist.coil.CoilImage
@@ -79,7 +78,6 @@ class ImageViewActivity : ComponentActivity() {
                         CoilImage(
                             imageModel = imageUrl,
                             modifier = Modifier.wrapContentSize(),
-                            contentScale = ContentScale.Crop,
                             circularRevealedEnabled = true
                         )
                     }

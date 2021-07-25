@@ -42,7 +42,7 @@ class NotifiactionService : BroadcastReceiver() {
                     context!!.stopService(Intent(context, BackgroundService::class.java))
                 }
                 power = !power
-                Bot.save(Bot.app.value.copy(power = power))
+                Bot.saveAndUpdate(Bot.app.value.copy(power = power))
             }
             StringConfig.IntentBotRecompile -> {
                 toast(context!!, context.getString(R.string.service_toast_active_scripts_recompile))

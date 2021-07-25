@@ -16,11 +16,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptDefaultSource
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.model.App
+import io.github.jisungbin.gitmessengerbot.activity.main.setting.model._App
 import io.github.jisungbin.gitmessengerbot.bot.debug.DebugStore
 import io.github.jisungbin.gitmessengerbot.bot.debug.Sender
 import io.github.jisungbin.gitmessengerbot.bot.debug.createDebugItem
@@ -46,7 +48,24 @@ object Bot {
     init {
         _scripts.addAll(getList())
         Storage.read(StringConfig.AppData, null)?.let { appDataJson ->
-            _app.value = Json.toModel(appDataJson, App::class)
+            @Suppress("LocalVariableName")
+            val _app = Json.toModel(appDataJson, _App::class)
+            val app = App(
+                power = _app.power,
+                evalMode = _app.evalMode,
+                editorFontSize = _app.editorFontSize,
+                editorAutoSave = _app.editorAutoSave,
+                scriptDefaultCode = _app.scriptDefaultCode,
+                scriptDefaultLang = mutableStateOf(_app.scriptDefaultLang),
+                scriptResponseFunctionName = _app.scriptResponseFunctionName,
+                gitDefaultBranch = _app.gitDefaultBranch,
+                gitDefaultCommitMessage = _app.gitDefaultCommitMessage,
+                gitDefaultRepoOptions = _app.gitDefaultRepoOptions,
+                kakaoTalkPackageNames = mutableStateListOf<String>().apply {
+                    addAll(_app.kakaoTalkPackageNames)
+                }
+            )
+            this._app.value = app
         }
     }
 
@@ -57,15 +76,29 @@ object Bot {
     /**
      * 앱 정보 json 파일 저장
      */
-    fun save(app: App) {
+    fun saveAndUpdate(app: App) {
         _app.value = app
-        Storage.write(StringConfig.AppData, Json.toString(app))
+        @Suppress("LocalVariableName")
+        val _app = _App(
+            power = app.power,
+            evalMode = app.evalMode,
+            editorFontSize = app.editorFontSize,
+            editorAutoSave = app.editorAutoSave,
+            scriptDefaultCode = app.scriptDefaultCode,
+            scriptDefaultLang = app.scriptDefaultLang.value,
+            scriptResponseFunctionName = app.scriptResponseFunctionName,
+            gitDefaultBranch = app.gitDefaultBranch,
+            gitDefaultCommitMessage = app.gitDefaultCommitMessage,
+            gitDefaultRepoOptions = app.gitDefaultRepoOptions,
+            kakaoTalkPackageNames = app.kakaoTalkPackageNames.toList()
+        )
+        Storage.write(StringConfig.AppData, Json.toString(_app))
     }
 
     /**
      * 스크립트 추가 및 json 정보 파일 저장
      */
-    fun save(script: ScriptItem) {
+    fun saveAndUpdate(script: ScriptItem) {
         _scripts.removeIf { it.id == script.id }
         _scripts.add(script)
         Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
@@ -74,7 +107,7 @@ object Bot {
     /**
      * 스크립트 소스코드 저장
      */
-    fun save(script: ScriptItem, code: String) {
+    fun saveAndUpdate(script: ScriptItem, code: String) {
         Storage.write(
             StringConfig.Script(script.name, script.lang),
             code
@@ -156,7 +189,10 @@ object Bot {
             } else {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
-                v8.executeJSFunction(app.value.scriptResponseFunctioName, *arguments.toTypedArray())
+                v8.executeJSFunction(
+                    app.value.scriptResponseFunctionName,
+                    *arguments.toTypedArray()
+                )
             }
             v8.locker.release()
             println("${script.name}: 실행됨")
