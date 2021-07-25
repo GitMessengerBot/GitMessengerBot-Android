@@ -40,8 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -261,6 +264,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
 fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         var newKakaoTalkPackage by remember { mutableStateOf(TextFieldValue()) }
+        val focusManager = LocalFocusManager.current
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
@@ -291,11 +295,14 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                                             )
                                             Bot.saveAndUpdate(Bot.app.value)
                                             newKakaoTalkPackage = TextFieldValue()
+                                            focusManager.clearFocus()
                                         }
                                     }
                                 )
                             },
-                            modifier = Modifier.padding(bottom = 15.dp)
+                            modifier = Modifier
+                                .padding(bottom = 15.dp)
+                                .focusRequester(FocusRequester())
                         )
                     }
                     items(

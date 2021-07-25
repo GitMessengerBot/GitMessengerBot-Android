@@ -32,34 +32,36 @@ class MessageService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (sbn.packageName != "com.kakao.talk") return
-        // todo: 커스텀 패키지, power 추가
-        val wExt = Notification.WearableExtender(sbn.notification)
-        for (action in wExt.actions) {
-            if (action.remoteInputs.isNotEmpty()) {
-                if (action.title.toString().lowercase().contains("reply") ||
-                    action.title.toString().contains("답장")
-                ) {
-                    val extras = sbn.notification.extras
-                    var isGroupChat: Boolean
+        try {
+            if (!Bot.app.value.kakaoTalkPackageNames.contains(sbn.packageName)) return
+            val wExt = Notification.WearableExtender(sbn.notification)
+            for (action in wExt.actions) {
+                if (action.remoteInputs.isNotEmpty()) {
+                    if (action.title.toString().lowercase().contains("reply") ||
+                        action.title.toString().contains("답장")
+                    ) {
+                        val extras = sbn.notification.extras
+                        var isGroupChat: Boolean
 
-                    var room = extras.getString("android.summaryText")
-                    val sender = extras.get("android.title").toString()
-                    val message = extras.get("android.text").toString()
+                        var room = extras.getString("android.summaryText")
+                        val sender = extras.get("android.title").toString()
+                        val message = extras.get("android.text").toString()
 
-                    if (room == null) {
-                        room = sender
-                        isGroupChat = false
-                    } else isGroupChat = true
+                        if (room == null) {
+                            room = sender
+                            isGroupChat = false
+                        } else isGroupChat = true
 
-                    if (!sessions.containsKey(room)) sessions[room] = action
-                    /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
+                        if (!sessions.containsKey(room)) sessions[room] = action
+                        /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
                          sbn.notification.getLargeIcon().toBitmap(context)*/ // todo
 
-                    println(listOf(room, message, sender, isGroupChat))
-                    chatHook(room, message, sender, isGroupChat)
+                        println(listOf(room, message, sender, isGroupChat))
+                        chatHook(room, message, sender, isGroupChat)
+                    }
                 }
             }
+        } catch (ignored: Exception) {
         }
     }
 
