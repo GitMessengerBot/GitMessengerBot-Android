@@ -31,6 +31,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
+import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.Web
 
 @Composable
@@ -194,9 +195,19 @@ fun DonateDialog(visible: MutableState<Boolean>) {
                 ) {
                     Text(text = stringResource(R.string.setting_dialog_button_direct_go))
                 }
+                OutlinedButton(
+                    onClick = {
+                        Util.copy(context, context.getString(R.string.kakaotalk_id))
+                    }
+                ) {
+                    Text(text = stringResource(R.string.setting_dialog_button_copy_kakaotalk_id))
+                }
             },
             title = {
-                Text(text = stringResource(R.string.setting_dialog_donate))
+                Text(
+                    text = stringResource(R.string.setting_dialog_donate),
+                    modifier = Modifier.padding(bottom = 30.dp)
+                )
             }
         )
     }

@@ -10,6 +10,7 @@
 <resources>
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright">© 2021 지성빈 &amp; 구환. all rights reserved.</string>
+    <string name="kakaotalk_id">sungbin5304</string>
 
     <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="setup_last_func">마지막으로,</string>
@@ -121,6 +122,7 @@
     <string name="setting_etc_donate">개발자 사탕 사주기</string>
     <string name="setting_etc_lovers">후원해주신 분들: %s</string>
     <string name="setting_dialog_opensource_license">오픈소스 라이선스</string>
-    <string name="setting_dialog_donate">감사합니다! 🥰🥰\n\n카카오톡 오픈채팅방으로 와 주세요!</string>
+    <string name="setting_dialog_donate">1인 개발자를 도와주셔서 감사합니다! 🥰🥰\n카카오톡 오픈채팅방으로 와 주세요!\n\n또는? 성빈 카톡: sungbin5304</string>
     <string name="setting_dialog_button_direct_go">바로가기</string>
+    <string name="setting_dialog_button_copy_kakaotalk_id">톡디 복사</string>
 </resources>
