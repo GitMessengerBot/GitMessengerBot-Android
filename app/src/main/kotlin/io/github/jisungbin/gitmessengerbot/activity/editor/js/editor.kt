@@ -41,6 +41,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -106,7 +109,8 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
                 .runIf(Bot.app.value.useHorizontalScroll.value) {
                     horizontalScroll(rememberScrollState())
                 },
-            colors = transparentTextFieldColors(backgroundColor = Color.White)
+            colors = transparentTextFieldColors(backgroundColor = Color.White),
+            textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.d2coding)))
         )
     }
 }
