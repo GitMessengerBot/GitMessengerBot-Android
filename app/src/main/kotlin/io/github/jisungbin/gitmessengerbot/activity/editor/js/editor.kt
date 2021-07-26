@@ -106,7 +106,7 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
             onValueChange = { codeField.value = it },
             modifier = Modifier
                 .fillMaxSize()
-                .runIf(Bot.app.value.useHorizontalScroll.value) {
+                .runIf(Bot.app.value.editorHorizontalScroll.value) {
                     horizontalScroll(rememberScrollState())
                 },
             colors = transparentTextFieldColors(backgroundColor = Color.White),

@@ -535,7 +535,7 @@ private fun ScriptDefaultCodeSettingDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .runIf(Bot.app.value.useHorizontalScroll.value) {
+                            .runIf(Bot.app.value.editorHorizontalScroll.value) {
                                 horizontalScroll(rememberScrollState())
                             },
                         colors = transparentTextFieldColors(backgroundColor = Color.White),

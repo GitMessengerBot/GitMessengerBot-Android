@@ -53,6 +53,8 @@ object Bot {
             val app = MutableApp(
                 power = mutableStateOf(_app.power),
                 evalMode = mutableStateOf(_app.evalMode),
+                editorHorizontalScroll = mutableStateOf(_app.editorHorizontalScroll),
+                editorFontName = mutableStateOf(_app.editorFontName),
                 editorFontSize = mutableStateOf(_app.editorFontSize),
                 editorAutoSave = mutableStateOf(_app.editorAutoSave),
                 scriptDefaultCode = mutableStateOf(_app.scriptDefaultCode),
@@ -64,7 +66,6 @@ object Bot {
                 kakaoTalkPackageNames = mutableStateListOf<String>().apply {
                     addAll(_app.kakaoTalkPackageNames)
                 },
-                useHorizontalScroll = mutableStateOf(_app.useHorizontalScroll)
             )
             this._app.value = app
         }
@@ -83,6 +84,8 @@ object Bot {
         val _app = App(
             power = app.power.value,
             evalMode = app.evalMode.value,
+            editorHorizontalScroll = app.editorHorizontalScroll.value,
+            editorFontName = app.editorFontName.value,
             editorFontSize = app.editorFontSize.value,
             editorAutoSave = app.editorAutoSave.value,
             scriptDefaultCode = app.scriptDefaultCode.value,
@@ -92,7 +95,6 @@ object Bot {
             gitDefaultCommitMessage = app.gitDefaultCommitMessage.value,
             gitDefaultRepoOptions = app.gitDefaultRepoOptions.value,
             kakaoTalkPackageNames = app.kakaoTalkPackageNames.toList(),
-            useHorizontalScroll = app.useHorizontalScroll.value
         )
         Storage.write(StringConfig.AppData, Json.toString(_app))
     }

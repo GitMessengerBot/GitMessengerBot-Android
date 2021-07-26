@@ -130,4 +130,6 @@
     <string name="setting_dialog_button_direct_go">바로가기</string>
     <string name="setting_dialog_button_copy_kakaotalk_id">톡디 복사</string>
     <string name="setting_dialog_button_save">저장</string>
+    <string name="setting_editor_font_name">폰트 설정</string>
+    <string name="setting_toast_todo_dev">개발 예정</string>
 </resources>

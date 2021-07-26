@@ -47,6 +47,7 @@ import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.Storage
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 
 @Composable
 fun Setting(activity: Activity) {
@@ -110,9 +111,9 @@ private fun SettingContent(activity: Activity) {
                 color = Color.Black
             )
             Switch(
-                checked = app.useHorizontalScroll.value,
+                checked = app.editorHorizontalScroll.value,
                 onCheckedChange = {
-                    Bot.saveAndUpdate(app.copy(useHorizontalScroll = mutableStateOf(it)))
+                    Bot.saveAndUpdate(app.copy(editorHorizontalScroll = mutableStateOf(it)))
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
@@ -121,6 +122,23 @@ private fun SettingContent(activity: Activity) {
                     uncheckedTrackColor = colors.secondary
                 ),
             )
+        }
+        RowContent(modifier = Modifier.padding(top = 16.dp)) {
+            Text(
+                text = stringResource(R.string.setting_editor_font_name),
+                fontSize = 15.sp,
+                color = Color.Black
+            )
+            OutlinedButton(
+                onClick = {
+                    toast(
+                        context,
+                        context.getString(R.string.setting_toast_todo_dev)
+                    )
+                }
+            ) {
+                Text(text = app.editorFontName.value)
+            }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
