@@ -11,9 +11,15 @@ package io.github.jisungbin.gitmessengerbot.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.Typography
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import io.github.jisungbin.gitmessengerbot.R
+
+val defaultFontFamily = FontFamily(Font(R.font.nanumbarungothic))
 
 val twiceLightGray = Color(236, 236, 236)
 val orange = Color(0xFFF9A825)
@@ -24,10 +30,15 @@ val colors = lightColors().copy(
     secondary = Color(0xFF9e4dd7)
 )
 
+private val typography = Typography(
+    defaultFontFamily = defaultFontFamily
+)
+
 @Composable
 fun MaterialTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = colors
+        colors = colors,
+        typography = typography
     ) {
         content()
     }
