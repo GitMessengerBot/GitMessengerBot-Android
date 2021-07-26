@@ -394,29 +394,31 @@ private fun ToolBar(
                     top.linkTo(parent.top)
                 }
         )
-        AnimatedVisibility(visible = undoStack.value.isNotBlank()) {
+        AnimatedVisibility(
+            visible = undoStack.value.isNotBlank(),
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = {
+                        toast(
+                            context,
+                            context.getString(R.string.editor_toast_confirm_undo_beautify)
+                        )
+                    },
+                    onLongClick = {
+                        codeField.value = TextFieldValue(undoStack.value)
+                        undoStack.value = ""
+                    }
+                )
+                .constrainAs(undo) {
+                    end.linkTo(save.start, 16.dp)
+                    top.linkTo(save.top)
+                    bottom.linkTo(save.bottom)
+                }
+        ) {
             Icon(
                 painter = painterResource(R.drawable.ic_round_undo_24),
                 contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .combinedClickable(
-                        onClick = {
-                            toast(
-                                context,
-                                context.getString(R.string.editor_toast_confirm_undo_beautify)
-                            )
-                        },
-                        onLongClick = {
-                            codeField.value = TextFieldValue(undoStack.value)
-                            undoStack.value = ""
-                        }
-                    )
-                    .constrainAs(undo) {
-                        end.linkTo(save.start, 16.dp)
-                        top.linkTo(save.top)
-                        bottom.linkTo(save.bottom)
-                    }
+                tint = Color.White
             )
         }
     }
