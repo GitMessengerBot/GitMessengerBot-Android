@@ -31,7 +31,7 @@ object Versions {
     }
 
     object Ui {
-        const val FancyBottomBar = "1.0.0"
+        const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
         const val TimeLineView = "1.0.1"
         const val ConstraintLayout = "1.0.0-beta01"
