@@ -34,7 +34,7 @@ object Versions {
         const val FancyBottomBar = "1.0.0"
         const val Browser = "1.3.0"
         const val TimeLineView = "1.0.1"
-        const val ConstraintLayout = "1.0.0-alpha08"
+        const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object Util {
