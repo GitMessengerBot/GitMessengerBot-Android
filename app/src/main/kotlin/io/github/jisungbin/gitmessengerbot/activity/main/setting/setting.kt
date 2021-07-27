@@ -358,7 +358,7 @@ private fun SettingContent(activity: Activity) {
         Text(
             text = stringResource(
                 R.string.setting_etc_lovers,
-                stringResource(R.string.setting_etc_empty)
+                "클라이드님" // todo: firebase realtime update
             ),
             modifier = Modifier.padding(top = 15.dp),
             color = colors.primary

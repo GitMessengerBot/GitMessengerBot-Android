@@ -102,7 +102,7 @@ object Dependencies {
     val ui = listOf(
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
+        // "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 

@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -41,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
@@ -54,9 +56,10 @@ import io.github.jisungbin.gitmessengerbot.bot.StackManager
 import io.github.jisungbin.gitmessengerbot.bot.debug.Debug
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.service.BackgroundService
-import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLine
+import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLineItem
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import javax.inject.Inject
@@ -67,6 +70,8 @@ import me.sungbin.fancybottombar.FancyItem
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private data class Item(override val key: Int) : TimeLineItem<Int>
 
     @Inject
     lateinit var scriptCompiler: ScriptCompiler
@@ -113,8 +118,53 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MaterialTheme {
+            /*MaterialTheme {
                 Main()
+            }*/
+
+            TimeLine(
+                items = listOf(
+                    Item(1),
+                    Item(1),
+                    Item(1),
+                    Item(1),
+                    Item(1),
+                    Item(1),
+                    Item(2),
+                    Item(3),
+                    Item(4),
+                    Item(4),
+                    Item(4),
+                    Item(4),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                    Item(5),
+                ),
+                modifier = Modifier.background(Color.White)
+            ) { modifier, item ->
+                Surface(
+                    modifier = modifier,
+                    elevation = 1.dp,
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(15.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(30.dp)) {
+                        Text(
+                            text = item.key.toString(),
+                            fontSize = 15.sp,
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }
