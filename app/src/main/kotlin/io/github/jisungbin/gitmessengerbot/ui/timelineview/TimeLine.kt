@@ -28,39 +28,24 @@ fun <K, E : TimeLineItem<K>> TimeLine(
     LazyColumn(modifier = modifier, contentPadding = timeLinePadding.defaultPadding) {
         val groupedItems = items.groupBy { it.key }
 
-        groupedItems.onEachIndexed { index, entry ->
-            val values = entry.value
+        groupedItems.forEach { (_, values) ->
+            stickyHeader {
+                TimeLineContent(
+                    item = values.first(),
+                    items = items,
+                    timeLineOption = timeLineOption,
+                    timeLinePadding = timeLinePadding,
+                    content = content
+                )
+            }
 
-            if (values.size == 1) {
-                stickyHeader {
-                    TimeLineContent(
-                        item = values.first(),
-                        timeLineOption = timeLineOption,
-                        timeLinePadding = timeLinePadding,
-                        index = index,
-                        groupedSize = groupedItems.size,
-                        content = content
-                    )
-                }
-            } else {
-                stickyHeader {
-                    TimeLineContent(
-                        item = values.first(),
-                        timeLineOption = timeLineOption,
-                        timeLinePadding = timeLinePadding,
-                        index = index,
-                        groupedSize = groupedItems.size,
-                        content = content
-                    )
-                }
-
+            if (values.size > 1) {
                 items(values.drop(1)) { item ->
                     TimeLineContent(
                         item = item,
+                        items = items,
                         timeLineOption = timeLineOption,
                         timeLinePadding = timeLinePadding,
-                        index = index,
-                        groupedSize = groupedItems.size,
                         hideCircle = true,
                         content = content
                     )
@@ -73,10 +58,9 @@ fun <K, E : TimeLineItem<K>> TimeLine(
 @Composable
 private fun <E> TimeLineContent(
     item: E,
+    items: List<E>,
     timeLineOption: TimeLineOption,
     timeLinePadding: TimeLinePadding,
-    index: Int,
-    groupedSize: Int,
     hideCircle: Boolean = false,
     content: @Composable (Modifier, E) -> Unit
 ) {
@@ -120,7 +104,7 @@ private fun <E> TimeLineContent(
             },
             item
         )
-        if (index != 0) {
+        if (items.indexOf(item) != 0) {
             Divider(
                 modifier = Modifier.constrainAs(topLine) {
                     top.linkTo(parent.top)
@@ -136,7 +120,7 @@ private fun <E> TimeLineContent(
                 color = timeLineOption.lineColor
             )
         }
-        if (index != groupedSize - 1) {
+        if (items.indexOf(item) != items.size - 1) {
             Divider(
                 modifier = Modifier.constrainAs(bottomLine) {
                     top.linkTo(
