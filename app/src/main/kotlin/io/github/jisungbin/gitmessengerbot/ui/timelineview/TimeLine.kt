@@ -16,6 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
+// todo: sticky header content
+// todo: main item content
+// todo: fix index calc error
+// todo: migration data class to interface & impl
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <K, E : TimeLineItem<K>> TimeLine(
