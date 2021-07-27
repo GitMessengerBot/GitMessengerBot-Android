@@ -27,7 +27,7 @@ object Versions {
         const val Kotlin = "1.5.10" // todo: 1.5.20
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
-        const val Gradle = "7.1.0-alpha04"
+        const val Gradle = "7.1.0-alpha05"
     }
 
     object Ui {

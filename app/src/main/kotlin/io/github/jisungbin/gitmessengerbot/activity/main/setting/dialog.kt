@@ -199,6 +199,11 @@ fun OpenSourceDialog(visible: MutableState<Boolean>) {
                                 "rhino",
                                 "https://github.com/mozilla/rhino",
                                 License.Custom("MPL-2.0")
+                            ),
+                            Project(
+                                "Landscapist",
+                                "https://github.com/skydoves/Landscapist",
+                                License.Apache2
                             )
                         )
                     )
