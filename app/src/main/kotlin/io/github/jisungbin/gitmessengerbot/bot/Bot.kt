@@ -65,7 +65,7 @@ object Bot {
                 gitDefaultRepoOptions = mutableStateOf(_app.gitDefaultRepoOptions),
                 kakaoTalkPackageNames = mutableStateListOf<String>().apply {
                     addAll(_app.kakaoTalkPackageNames)
-                },
+                }
             )
             this._app.value = app
         }
