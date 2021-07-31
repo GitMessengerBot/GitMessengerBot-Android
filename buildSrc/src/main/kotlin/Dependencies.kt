@@ -61,8 +61,8 @@ object Versions {
     }
 
     object Compose {
-        const val Master = "1.0.0-rc02"
-        const val Activity = "1.3.0-rc02"
+        const val Master = "1.0.0"
+        const val Activity = "1.3.0"
     }
 
     object Debug {
