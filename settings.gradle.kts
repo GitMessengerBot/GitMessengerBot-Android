@@ -7,5 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-include(":app")
+include(":presentation")
 rootProject.name = "GitMessengerBot"
+include(":domain")
+include(":data")

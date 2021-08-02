@@ -33,16 +33,19 @@ object Versions {
     object Ui {
         const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
-        const val TimeLineView = "1.0.1"
+        const val TimeLineView = "1.0.2"
         const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object Util {
-        const val Gson = "2.8.7"
         const val CrashReporter = "1.1.0"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.4.1"
+    }
+
+    object NetworkUtil {
+        const val Gson = "2.8.7"
     }
 
     object Network {
@@ -88,9 +91,13 @@ object Dependencies {
     val network = listOf(
         "org.jsoup:jsoup:${Versions.Network.Jsoup}",
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
-        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}",
+        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
+    )
+
+    val networkutil = listOf(
+        "com.google.code.gson:gson:${Versions.NetworkUtil.Gson}",
+        "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
-        "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}"
     )
 
     val essential = listOf(
@@ -102,12 +109,11 @@ object Dependencies {
     val ui = listOf(
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "androidx.browser:browser:${Versions.Ui.Browser}",
-        // "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
+        "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 
     val util = listOf(
-        "com.google.code.gson:gson:${Versions.Util.Gson}",
         "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}",
         "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
         "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
