@@ -8,7 +8,7 @@
  */
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
 }
 
@@ -18,8 +18,6 @@ android {
     defaultConfig {
         minSdk = Application.minSdk
         targetSdk = Application.targetSdk
-        versionCode = Application.versionCode
-        versionName = Application.versionName
         multiDexEnabled = true
     }
 

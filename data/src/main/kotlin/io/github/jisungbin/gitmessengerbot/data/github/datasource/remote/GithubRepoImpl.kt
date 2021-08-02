@@ -7,13 +7,12 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup.github.repo
+package io.github.jisungbin.gitmessengerbot.data.github.datasource.remote
 
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.GithubAouthService
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.GithubUserService
-import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.jisungbin.gitmessengerbot.secret.SecretConfig
-import javax.inject.Inject
+import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
+import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
+import io.github.jisungbin.gitmessengerbot.data.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.domain.repo.RepoResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,7 +23,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.await
 
-class GithubRepoImpl @Inject constructor(
+class GithubRepoImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
     private val aouthRetrofit: Retrofit.Builder
@@ -61,7 +60,7 @@ class GithubRepoImpl @Inject constructor(
     override fun getUserInfo(githubKey: String) = callbackFlow {
         try {
             trySend(
-                Result.Success(
+                RepoResult.Success(
                     buildRetrofit(
                         userRetrofit,
                         githubKey,
@@ -70,8 +69,9 @@ class GithubRepoImpl @Inject constructor(
                 )
             )
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(RepoResult.Fail(exception))
         }
+
         awaitClose { close() }
     }
 
@@ -79,7 +79,7 @@ class GithubRepoImpl @Inject constructor(
     override fun getAccessToken(requestCode: String) = callbackFlow {
         try {
             trySend(
-                Result.Success(
+                RepoResult.Success(
                     buildRetrofit(
                         aouthRetrofit,
                         null,
@@ -92,8 +92,9 @@ class GithubRepoImpl @Inject constructor(
                 )
             )
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(RepoResult.Fail(exception))
         }
+
         awaitClose { close() }
     }
 }

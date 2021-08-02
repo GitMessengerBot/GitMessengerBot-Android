@@ -90,6 +90,7 @@ dependencies {
     Dependencies.bot.forEach(::implementation)
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)
+    Dependencies.networkutil.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)

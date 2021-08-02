@@ -7,20 +7,11 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup.github.model
-
-import com.google.gson.annotations.SerializedName
+package io.github.jisungbin.gitmessengerbot.domain.model
 
 data class Plan(
-    @SerializedName("private_repos")
     val privateRepos: Int,
-
-    @SerializedName("name")
     val name: String,
-
-    @SerializedName("collaborators")
     val collaborators: Int,
-
-    @SerializedName("space")
     val space: Int
 )

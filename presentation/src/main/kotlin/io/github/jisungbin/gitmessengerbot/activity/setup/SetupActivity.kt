@@ -51,12 +51,12 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubTokenResponse
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubUserResponse
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.repo.GithubRepo
-import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.jisungbin.gitmessengerbot.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.data.github.datasource.remote.GithubRepo
+import io.github.jisungbin.gitmessengerbot.data.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.domain.model.GithubData
+import io.github.jisungbin.gitmessengerbot.domain.model.GithubTokenResponse
+import io.github.jisungbin.gitmessengerbot.domain.model.GithubUserResponse
+import io.github.jisungbin.gitmessengerbot.domain.repo.RepoResult
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -327,7 +327,7 @@ class SetupActivity : ComponentActivity() {
         lifecycleScope.launchWhenCreated {
             githubRepo.getAccessToken(requestCode).collect { accessKeyResult ->
                 when (accessKeyResult) {
-                    is Result.Success -> {
+                    is RepoResult.Success -> {
                         var githubData = GithubData(
                             token = (accessKeyResult.response as GithubTokenResponse).accessToken
                         )
@@ -335,7 +335,7 @@ class SetupActivity : ComponentActivity() {
                             .getUserInfo(githubData.token)
                             .collect { userResult ->
                                 when (userResult) {
-                                    is Result.Success -> {
+                                    is RepoResult.Success -> {
                                         val user = userResult.response as GithubUserResponse
 
                                         githubData = githubData.copy(
@@ -364,7 +364,7 @@ class SetupActivity : ComponentActivity() {
                                             )
                                         )
                                     }
-                                    is Result.Fail -> {
+                                    is RepoResult.Fail -> {
                                         toast(
                                             activity,
                                             getString(
@@ -378,7 +378,7 @@ class SetupActivity : ComponentActivity() {
                                 }
                             }
                     }
-                    is Result.Fail -> {
+                    is RepoResult.Fail -> {
                         toast(
                             activity,
                             activity.getString(
