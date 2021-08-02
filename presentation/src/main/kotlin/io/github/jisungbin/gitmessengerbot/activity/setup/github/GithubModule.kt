@@ -15,6 +15,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.qualifier.UserRetrofit
+import io.github.jisungbin.gitmessengerbot.data.github.datasource.remote.GithubRepo
+import io.github.jisungbin.gitmessengerbot.data.github.datasource.remote.GithubRepoImpl
 import javax.inject.Singleton
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
