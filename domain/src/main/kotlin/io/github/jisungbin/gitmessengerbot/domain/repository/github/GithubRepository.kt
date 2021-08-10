@@ -7,12 +7,12 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.datasource.remote
+package io.github.jisungbin.gitmessengerbot.domain.repository.github
 
-import io.github.jisungbin.gitmessengerbot.domain.repo.RepoResult
+import io.github.jisungbin.gitmessengerbot.domain.repository.DomainResult
 import kotlinx.coroutines.flow.Flow
 
-interface GithubRepo {
-    fun getAccessToken(requestCode: String): Flow<RepoResult>
-    fun getUserInfo(githubKey: String): Flow<RepoResult>
+interface GithubRepository {
+    suspend fun getAccessToken(requestCode: String): Flow<DomainResult>
+    suspend fun getUserInfo(githubKey: String): Flow<DomainResult>
 }

@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(Dependencies.json)
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)
     Dependencies.networkutil.forEach(::implementation)

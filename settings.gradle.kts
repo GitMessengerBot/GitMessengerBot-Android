@@ -10,4 +10,4 @@
 include(":presentation")
 rootProject.name = "GitMessengerBot"
 include(":domain")
-include(":data")
+include(":data-remote")

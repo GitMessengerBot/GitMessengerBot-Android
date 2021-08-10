@@ -22,6 +22,8 @@ object Application {
 }
 
 object Versions {
+    const val Gson = "2.8.7"
+
     object Essential {
         // const val Python = "9.1.0"
         const val Kotlin = "1.5.10" // todo: 1.5.20
@@ -31,6 +33,7 @@ object Versions {
     }
 
     object Ui {
+        const val LandscapistCoil = "1.2.8"
         const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
         const val TimeLineView = "1.0.2"
@@ -42,10 +45,6 @@ object Versions {
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.4.1"
-    }
-
-    object NetworkUtil {
-        const val Gson = "2.8.7"
     }
 
     object Network {
@@ -79,6 +78,10 @@ object Versions {
 }
 
 object Dependencies {
+    const val json = "com.google.code.gson:gson:${Versions.Gson}"
+    const val LandscapistCoil =
+        "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}"
+
     val bot = listOf(
         "org.mozilla:rhino:${Versions.Bot.RhinoEngine}",
         "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
@@ -95,7 +98,6 @@ object Dependencies {
     )
 
     val networkutil = listOf(
-        "com.google.code.gson:gson:${Versions.NetworkUtil.Gson}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
     )

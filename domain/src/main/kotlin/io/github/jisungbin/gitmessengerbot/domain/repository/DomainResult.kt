@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.domain.repo
+package io.github.jisungbin.gitmessengerbot.domain.repository
 
-sealed class RepoResult {
-    data class Success(val response: Any) : RepoResult()
-    data class Fail(val exception: Exception) : RepoResult()
+sealed class DomainResult {
+    data class Success(val response: Any) : DomainResult()
+    data class Fail(val exception: Exception) : DomainResult()
 }

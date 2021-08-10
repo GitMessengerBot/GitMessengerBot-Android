@@ -4,7 +4,8 @@
 local.properties
 /presentation/release
 /presentation/build
-/data/build
+/data-remote/build
+/data-local/build
 /domain/build
 /build
-/data/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/secret/
+/data-remote/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/secret/

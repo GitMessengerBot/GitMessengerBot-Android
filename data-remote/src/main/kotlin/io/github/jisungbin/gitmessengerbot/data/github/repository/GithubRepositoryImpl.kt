@@ -7,12 +7,13 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.datasource.remote
+package io.github.jisungbin.gitmessengerbot.data.github.repository
 
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.repo.RepoResult
+import io.github.jisungbin.gitmessengerbot.domain.repository.DomainResult
+import io.github.jisungbin.gitmessengerbot.domain.repository.github.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -23,11 +24,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.await
 
-class GithubRepoImpl(
+class GithubRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
     private val aouthRetrofit: Retrofit.Builder
-) : GithubRepo {
+) : GithubRepository {
 
     private class AuthInterceptor(private val token: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -57,10 +58,10 @@ class GithubRepoImpl(
             .create(service)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getUserInfo(githubKey: String) = callbackFlow {
+    override suspend fun getUserInfo(githubKey: String) = callbackFlow {
         try {
             trySend(
-                RepoResult.Success(
+                DomainResult.Success(
                     buildRetrofit(
                         userRetrofit,
                         githubKey,
@@ -69,17 +70,17 @@ class GithubRepoImpl(
                 )
             )
         } catch (exception: Exception) {
-            trySend(RepoResult.Fail(exception))
+            trySend(DomainResult.Fail(exception))
         }
 
         awaitClose { close() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getAccessToken(requestCode: String) = callbackFlow {
+    override suspend fun getAccessToken(requestCode: String) = callbackFlow {
         try {
             trySend(
-                RepoResult.Success(
+                DomainResult.Success(
                     buildRetrofit(
                         aouthRetrofit,
                         null,
@@ -92,7 +93,7 @@ class GithubRepoImpl(
                 )
             )
         } catch (exception: Exception) {
-            trySend(RepoResult.Fail(exception))
+            trySend(DomainResult.Fail(exception))
         }
 
         awaitClose { close() }

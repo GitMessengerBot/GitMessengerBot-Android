@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.google.gson.annotations.SerializedName
+import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubResultWrapper
 
 data class GithubTokenResponse(
     @field:SerializedName("access_token")

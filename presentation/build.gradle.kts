@@ -79,9 +79,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":domain"))
-    implementation("com.github.skydoves:landscapist-coil:1.2.8") {
+    implementation(project(":data-remote"))
+    implementation(Dependencies.json)
+    implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }

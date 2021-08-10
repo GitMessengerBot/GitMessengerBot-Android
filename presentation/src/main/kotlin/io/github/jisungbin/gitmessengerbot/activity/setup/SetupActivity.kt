@@ -51,12 +51,12 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.data.github.datasource.remote.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.repository.github.GithubRepository
 import io.github.jisungbin.gitmessengerbot.data.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.domain.model.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.model.GithubTokenResponse
 import io.github.jisungbin.gitmessengerbot.domain.model.GithubUserResponse
-import io.github.jisungbin.gitmessengerbot.domain.repo.RepoResult
+import io.github.jisungbin.gitmessengerbot.domain.repository.DomainResult
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -76,7 +76,7 @@ import kotlinx.coroutines.flow.collect
 class SetupActivity : ComponentActivity() {
 
     @Inject
-    lateinit var githubRepo: GithubRepo
+    lateinit var githubRepository: GithubRepository
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -325,17 +325,17 @@ class SetupActivity : ComponentActivity() {
         val requestCode = intent!!.data!!.getQueryParameter("code")!!
 
         lifecycleScope.launchWhenCreated {
-            githubRepo.getAccessToken(requestCode).collect { accessKeyResult ->
+            githubRepository.getAccessToken(requestCode).collect { accessKeyResult ->
                 when (accessKeyResult) {
-                    is RepoResult.Success -> {
+                    is DomainResult.Success -> {
                         var githubData = GithubData(
                             token = (accessKeyResult.response as GithubTokenResponse).accessToken
                         )
-                        githubRepo
+                        githubRepository
                             .getUserInfo(githubData.token)
                             .collect { userResult ->
                                 when (userResult) {
-                                    is RepoResult.Success -> {
+                                    is DomainResult.Success -> {
                                         val user = userResult.response as GithubUserResponse
 
                                         githubData = githubData.copy(
@@ -364,7 +364,7 @@ class SetupActivity : ComponentActivity() {
                                             )
                                         )
                                     }
-                                    is RepoResult.Fail -> {
+                                    is DomainResult.Fail -> {
                                         toast(
                                             activity,
                                             getString(
@@ -378,7 +378,7 @@ class SetupActivity : ComponentActivity() {
                                 }
                             }
                     }
-                    is RepoResult.Fail -> {
+                    is DomainResult.Fail -> {
                         toast(
                             activity,
                             activity.getString(

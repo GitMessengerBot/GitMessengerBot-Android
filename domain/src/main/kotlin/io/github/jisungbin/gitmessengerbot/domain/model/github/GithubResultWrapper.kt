@@ -7,6 +7,6 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.domain.model
+package io.github.jisungbin.gitmessengerbot.domain.model.github
 
 interface GithubResultWrapper

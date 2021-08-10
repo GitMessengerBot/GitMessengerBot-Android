@@ -10,6 +10,8 @@
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.google.gson.annotations.SerializedName
+import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubResultWrapper
+import io.github.jisungbin.gitmessengerbot.domain.model.github.Plan
 
 data class GithubUserResponse(
     @SerializedName("gists_url")
