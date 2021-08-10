@@ -15,7 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepoImpl
-import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubData
+import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubUser
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
@@ -37,7 +37,7 @@ object GitModule {
             var builder = chain.request().newBuilder()
             return try {
                 val githubJson = Storage.read(StringConfig.GithubData, null)!!
-                val githubData = Json.toModel(githubJson, GithubData::class)
+                val githubData = Json.toModel(githubJson, GithubUser::class)
                 builder = builder
                     .addHeader("Authorization", "token ${githubData.token}")
                     .addHeader("Accept", "application/json")

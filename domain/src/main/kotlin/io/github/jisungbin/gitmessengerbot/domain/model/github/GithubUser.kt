@@ -9,10 +9,4 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.model.github
 
-import com.google.gson.annotations.SerializedName
-
-data class GithubData(
-    @SerializedName("personal_key") val token: String = "",
-    @SerializedName("user_name") val userName: String = "",
-    @SerializedName("profile_image_url") val profileImageUrl: String = ""
-)
+data class GithubUser(val userName: String, val profileImageUrl: String)

@@ -10,9 +10,8 @@
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.google.gson.annotations.SerializedName
-import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubResultWrapper
 
-data class GithubTokenResponse(
+data class GithubAouthResponse(
     @field:SerializedName("access_token")
     val accessToken: String,
 
@@ -21,4 +20,4 @@ data class GithubTokenResponse(
 
     @field:SerializedName("token_type")
     val tokenType: String
-) : GithubResultWrapper
+)

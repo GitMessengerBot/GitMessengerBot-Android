@@ -9,10 +9,12 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.repository.github
 
-import io.github.jisungbin.gitmessengerbot.domain.repository.DomainResult
+import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubAouth
+import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.repository.Result
 import kotlinx.coroutines.flow.Flow
 
 interface GithubRepository {
-    suspend fun getAccessToken(requestCode: String): Flow<DomainResult>
-    suspend fun getUserInfo(githubKey: String): Flow<DomainResult>
+    suspend fun requestAouthToken(requestCode: String): Flow<Result<GithubAouth>>
+    suspend fun getUserInfo(githubKey: String): Flow<Result<GithubUser>>
 }

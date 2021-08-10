@@ -11,8 +11,9 @@ package io.github.jisungbin.gitmessengerbot.data.github.repository
 
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
+import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.repository.DomainResult
+import io.github.jisungbin.gitmessengerbot.domain.repository.Result
 import io.github.jisungbin.gitmessengerbot.domain.repository.github.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -61,39 +62,39 @@ class GithubRepositoryImpl(
     override suspend fun getUserInfo(githubKey: String) = callbackFlow {
         try {
             trySend(
-                DomainResult.Success(
+                Result.Success(
                     buildRetrofit(
                         userRetrofit,
                         githubKey,
                         GithubUserService::class.java
-                    ).getUserInfo().await()
+                    ).getUserInfo().await().toDomain()
                 )
             )
         } catch (exception: Exception) {
-            trySend(DomainResult.Fail(exception))
+            trySend(Result.Fail(exception))
         }
 
         awaitClose { close() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getAccessToken(requestCode: String) = callbackFlow {
+    override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
             trySend(
-                DomainResult.Success(
+                Result.Success(
                     buildRetrofit(
                         aouthRetrofit,
                         null,
                         GithubAouthService::class.java
-                    ).getAccessToken(
+                    ).requestAouthToken(
                         requestCode,
                         SecretConfig.GithubOauthClientId,
                         SecretConfig.GithubOauthClientSecret
-                    ).await()
+                    ).await().toDomain()
                 )
             )
         } catch (exception: Exception) {
-            trySend(DomainResult.Fail(exception))
+            trySend(Result.Fail(exception))
         }
 
         awaitClose { close() }
