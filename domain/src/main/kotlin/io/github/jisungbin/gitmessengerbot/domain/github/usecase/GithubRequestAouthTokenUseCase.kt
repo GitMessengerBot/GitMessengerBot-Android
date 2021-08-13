@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.BaseUseCase
+import io.github.jisungbin.gitmessengerbot.domain.Result
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.repository.GithubRepository
 import kotlinx.coroutines.flow.Flow

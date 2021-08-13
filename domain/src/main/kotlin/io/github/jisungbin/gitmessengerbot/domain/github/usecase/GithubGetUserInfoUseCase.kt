@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.BaseUseCase
+import io.github.jisungbin.gitmessengerbot.domain.Result
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 import io.github.jisungbin.gitmessengerbot.domain.github.repository.GithubRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,5 +20,6 @@ private typealias BaseGithubGetUserInfoUseCase = BaseUseCase<String, Flow<Result
 class GithubGetUserInfoUseCase(
     private val githubRepository: GithubRepository
 ) : BaseGithubGetUserInfoUseCase {
-    override suspend fun invoke(parameter: String) = githubRepository.getUserInfo(githubKey = parameter)
+    override suspend fun invoke(parameter: String) =
+        githubRepository.getUserInfo(githubKey = parameter)
 }
