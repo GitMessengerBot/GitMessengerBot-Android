@@ -2,11 +2,11 @@
   ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
   ~ GitMessengerBot license is under the GPL-3.0.
   ~
-  ~ [AndroidManifest.xml] created by Ji Sungbin on 21. 8. 2. 오후 7:21.
+  ~ [AndroidManifest.xml] created by Ji Sungbin on 21. 8. 13. 오후 7:30.
   ~
   ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
   -->
 
-<manifest package="io.github.jisungbin.gitmessengerbot.data">
+<manifest package="io.github.jisungbin.gitmessengerbot.data.local">
 
 </manifest>

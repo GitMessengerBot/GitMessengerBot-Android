@@ -15,7 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepoImpl
-import io.github.jisungbin.gitmessengerbot.domain.model.github.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.github.model.github.GithubUser
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig

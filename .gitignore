@@ -1,11 +1,12 @@
+local.properties
 /.idea
 /.gradle
+/build
 /buildSrc
-local.properties
 /presentation/release
 /presentation/build
 /data-remote/build
 /data-local/build
 /domain/build
-/build
+/core/build
 /data-remote/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/secret/

@@ -39,11 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":data-local"))
-    implementation(Dependencies.json)
     Dependencies.essential.forEach(::implementation)
-    Dependencies.network.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
-    Dependencies.compiler.forEach(::kapt)
+    Dependencies.bot.forEach(::implementation)
 }
