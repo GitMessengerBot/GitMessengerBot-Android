@@ -47,7 +47,7 @@
 6. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
 7. Room
 8. Clean architecture
-9. Multi-module
+9. multi-module
 
 # ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 - `import ordering` 프로젝트 단위 비활성화
