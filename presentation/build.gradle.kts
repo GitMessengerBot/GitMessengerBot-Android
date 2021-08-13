@@ -80,7 +80,8 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data-remote"))
+    implementation(project(":data"))
+    implementation(project(":core"))
     implementation(Dependencies.json)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")

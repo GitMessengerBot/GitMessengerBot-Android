@@ -10,15 +10,15 @@
 package io.github.jisungbin.gitmessengerbot.data.remote.github.api
 
 import io.github.jisungbin.gitmessengerbot.data.remote.github.model.GithubAouthResponse
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface GithubAouthService {
     @POST("/login/oauth/access_token")
-    fun requestAouthToken(
+    suspend fun requestAouthToken(
         @Query("code") requestCode: String,
         @Query("client_id") clientId: String,
         @Query("client_secret") clientSecret: String
-    ): Call<GithubAouthResponse>
+    ): Response<GithubAouthResponse>
 }

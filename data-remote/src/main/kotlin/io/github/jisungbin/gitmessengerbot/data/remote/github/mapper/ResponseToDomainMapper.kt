@@ -11,8 +11,8 @@ package io.github.jisungbin.gitmessengerbot.data.remote.github.mapper
 
 import io.github.jisungbin.gitmessengerbot.data.remote.github.model.GithubAouthResponse
 import io.github.jisungbin.gitmessengerbot.data.remote.github.model.GithubUserResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.model.github.GithubAouth
-import io.github.jisungbin.gitmessengerbot.domain.github.model.github.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 
 fun GithubAouthResponse.toDomain() = GithubAouth(accessToken = accessToken)
 

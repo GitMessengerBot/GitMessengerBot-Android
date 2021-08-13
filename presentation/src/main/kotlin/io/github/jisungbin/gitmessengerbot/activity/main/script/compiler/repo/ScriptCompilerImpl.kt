@@ -65,7 +65,7 @@ class ScriptCompilerImpl @Inject constructor(
                 Api(),
                 arrayOf("runRhino"),
                 arrayOf(
-                    arrayOf(String::class.java)
+                    arrayOf(String::class.kotlin)
                 )
             )
             v8.addApi(
@@ -73,8 +73,8 @@ class ScriptCompilerImpl @Inject constructor(
                 File(),
                 arrayOf("save", "read"),
                 arrayOf(
-                    arrayOf(String::class.java, String::class.java),
-                    arrayOf(String::class.java, String::class.java)
+                    arrayOf(String::class.kotlin, String::class.kotlin),
+                    arrayOf(String::class.kotlin, String::class.kotlin)
                 )
             )
             v8.addApi(
@@ -83,7 +83,7 @@ class ScriptCompilerImpl @Inject constructor(
                 arrayOf("getLastImage", "getProfileImage"),
                 arrayOf(
                     arrayOf(),
-                    arrayOf(String::class.java)
+                    arrayOf(String::class.kotlin)
                 )
             )
             v8.addApi(
@@ -91,10 +91,10 @@ class ScriptCompilerImpl @Inject constructor(
                 Log(),
                 arrayOf("test", "e", "d", "i"),
                 arrayOf(
-                    arrayOf(Any::class.java),
-                    arrayOf(String::class.java),
-                    arrayOf(String::class.java),
-                    arrayOf(String::class.java)
+                    arrayOf(Any::class.kotlin),
+                    arrayOf(String::class.kotlin),
+                    arrayOf(String::class.kotlin),
+                    arrayOf(String::class.kotlin)
                 )
             )
             v8.addApi(
@@ -102,8 +102,8 @@ class ScriptCompilerImpl @Inject constructor(
                 UI(),
                 arrayOf("toast", "notification"),
                 arrayOf(
-                    arrayOf(String::class.java),
-                    arrayOf(String::class.java, String::class.java, Int::class.java),
+                    arrayOf(String::class.kotlin),
+                    arrayOf(String::class.kotlin, String::class.kotlin, Int::class.kotlin),
                 )
             )*/
             v8.executeScript(code)

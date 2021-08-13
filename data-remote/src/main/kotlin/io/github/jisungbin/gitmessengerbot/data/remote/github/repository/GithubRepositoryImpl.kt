@@ -7,41 +7,15 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
- * [GithubRepositoryImpl.kt] created by Ji Sungbin on 21. 8. 13. 오후 7:32.
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
- * [GithubRepositoryImpl.kt] created by Ji Sungbin on 21. 8. 13. 오후 7:30.
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
- * [GithubRepoImpl.kt] created by Ji Sungbin on 21. 7. 8. 오후 9:15.
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
 package io.github.jisungbin.gitmessengerbot.data.remote.github.repository
 
 import io.github.jisungbin.gitmessengerbot.data.remote.github.api.GithubAouthService
 import io.github.jisungbin.gitmessengerbot.data.remote.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.remote.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.remote.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.Result
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.github.GithubRepository
+import io.github.jisungbin.gitmessengerbot.data.util.DataException
+import io.github.jisungbin.gitmessengerbot.domain.Result
+import io.github.jisungbin.gitmessengerbot.domain.github.repository.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -50,7 +24,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.await
 
 class GithubRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
@@ -88,14 +61,17 @@ class GithubRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getUserInfo(githubKey: String) = callbackFlow {
         try {
+            val request = buildRetrofit(
+                userRetrofit,
+                githubKey,
+                GithubUserService::class.java
+            ).getUserInfo()
             trySend(
-                Result.Success(
-                    buildRetrofit(
-                        userRetrofit,
-                        githubKey,
-                        GithubUserService::class.java
-                    ).getUserInfo().await().toDomain()
-                )
+                if (request.isSuccessful && request.body() != null) {
+                    Result.Success(request.body()!!.toDomain())
+                } else {
+                    Result.Fail(DataException("GithubRepository.getUserInfo"))
+                }
             )
         } catch (exception: Exception) {
             trySend(Result.Fail(exception))
@@ -107,18 +83,21 @@ class GithubRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
+            val request = buildRetrofit(
+                aouthRetrofit,
+                null,
+                GithubAouthService::class.java
+            ).requestAouthToken(
+                requestCode,
+                SecretConfig.GithubOauthClientId,
+                SecretConfig.GithubOauthClientSecret
+            )
             trySend(
-                Result.Success(
-                    buildRetrofit(
-                        aouthRetrofit,
-                        null,
-                        GithubAouthService::class.java
-                    ).requestAouthToken(
-                        requestCode,
-                        SecretConfig.GithubOauthClientId,
-                        SecretConfig.GithubOauthClientSecret
-                    ).await().toDomain()
-                )
+                if (request.isSuccessful && request.body() != null) {
+                    Result.Success(request.body()!!.toDomain())
+                } else {
+                    Result.Fail(DataException("GithubRepository.requestAouthToken"))
+                }
             )
         } catch (exception: Exception) {
             trySend(Result.Fail(exception))

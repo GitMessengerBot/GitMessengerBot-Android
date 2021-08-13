@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(project(":data-local"))
     implementation(Dependencies.json)
     Dependencies.essential.forEach(::implementation)

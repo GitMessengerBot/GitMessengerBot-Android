@@ -10,10 +10,10 @@
 package io.github.jisungbin.gitmessengerbot.data.remote.github.api
 
 import io.github.jisungbin.gitmessengerbot.data.remote.github.model.GithubUserResponse
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface GithubUserService {
     @GET("/user")
-    fun getUserInfo(): Call<GithubUserResponse>
+    suspend fun getUserInfo(): Response<GithubUserResponse>
 }

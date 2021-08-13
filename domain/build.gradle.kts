@@ -38,6 +38,5 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
     Dependencies.essential.forEach(::implementation)
 }

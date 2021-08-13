@@ -7,6 +7,7 @@ local.properties
 /presentation/build
 /data-remote/build
 /data-local/build
+/data/build
 /domain/build
 /core/build
 /data-remote/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/secret/
