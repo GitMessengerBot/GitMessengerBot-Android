@@ -12,7 +12,7 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import io.github.jisungbin.gitmessengerbot.util.Util
+import io.github.jisungbin.gitmessengerbot.util.core.Util
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot

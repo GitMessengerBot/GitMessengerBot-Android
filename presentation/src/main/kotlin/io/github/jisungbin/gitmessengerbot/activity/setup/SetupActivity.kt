@@ -61,10 +61,10 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.Wear
-import io.github.jisungbin.gitmessengerbot.util.Web
+import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.Wear
+import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.doDelay
 import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
@@ -91,7 +91,7 @@ class SetupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        wearAppInstalled = io.github.jisungbin.gitmessengerbot.util.Wear.checkInstalled(applicationContext)
+        wearAppInstalled = Wear.checkInstalled(applicationContext)
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
         setContent {
@@ -151,7 +151,7 @@ class SetupActivity : ComponentActivity() {
             ) {
                 PermissionView(
                     permission = Permission(
-                        permissions = if (io.github.jisungbin.gitmessengerbot.util.Storage.isScoped) {
+                        permissions = if (Storage.isScoped) {
                             listOf(PermissionType.ScopedStorage)
                         } else {
                             listOf(
@@ -213,9 +213,9 @@ class SetupActivity : ComponentActivity() {
                         .padding(8.dp)
                         .noRippleClickable {
                             if (notificationPermissionGranted && storagePermissionGranted) {
-                                io.github.jisungbin.gitmessengerbot.util.Web.open(
+                                Web.open(
                                     applicationContext,
-                                    io.github.jisungbin.gitmessengerbot.util.Web.Link.Custom(SecretConfig.GithubOauthAddress)
+                                    Web.Link.Custom(SecretConfig.GithubOauthAddress)
                                 )
                             } else {
                                 io.github.jisungbin.gitmessengerbot.util.toast(
@@ -300,17 +300,17 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                io.github.jisungbin.gitmessengerbot.util.NotificationUtil.requestReadPermission(this@SetupActivity)
+                NotificationUtil.requestReadPermission(this@SetupActivity)
                 io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
                     notificationPermissionGranted = true
                 }
             }
             PermissionType.Wear -> {
-                io.github.jisungbin.gitmessengerbot.util.Wear.install(applicationContext)
+                Wear.install(applicationContext)
                 io.github.jisungbin.gitmessengerbot.util.doDelay(1000) { wearAppInstalled = true }
             }
             PermissionType.ScopedStorage -> {
-                io.github.jisungbin.gitmessengerbot.util.Storage.requestStorageManagePermission(this@SetupActivity)
+                Storage.requestStorageManagePermission(this@SetupActivity)
                 io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
                     storagePermissionGranted = true
                 }
@@ -346,7 +346,7 @@ class SetupActivity : ComponentActivity() {
                                             profileImageUrl = user.avatarUrl
                                         )
 
-                                        io.github.jisungbin.gitmessengerbot.util.Storage.write(
+                                        Storage.write(
                                             io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData,
                                             io.github.jisungbin.gitmessengerbot.util.Json.toString(githubData)
                                         )

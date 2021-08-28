@@ -17,7 +17,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
-import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
 import io.github.sungbin.gitmessengerbot.core.R
 

@@ -9,6 +9,12 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script
 
+import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+
 private typealias ScriptItems = List<ScriptItem>
 
 data class ScriptItem(
@@ -18,7 +24,35 @@ data class ScriptItem(
     var power: Boolean,
     var compiled: Boolean,
     var lastRun: String,
-)
+) {
+    private fun getScriptDefaultCode(): String {
+        val scriptDefaultCode = ScriptDefaultCode()
+        return when (lang) {
+            ScriptLang.JavaScript -> scriptDefaultCode.js
+            ScriptLang.TypeScript -> scriptDefaultCode.ts
+            ScriptLang.Python -> scriptDefaultCode.py
+            ScriptLang.Simple -> scriptDefaultCode.sim
+            else -> throw IndexOutOfBoundsException()
+        }
+    }
+
+    fun add() {
+        Storage.write(
+            ScriptConfig.ScriptPath(name, lang),
+            getScriptDefaultCode()
+        )
+        Storage.write(ScriptConfig.ScriptDataPath(name, lang), toJsonString())
+    }
+
+    fun delete() {
+        Storage.delete(ScriptConfig.ScriptPath(name, lang))
+        Storage.delete(ScriptConfig.ScriptDataPath(name, lang))
+    }
+
+    fun getCode() =
+        Storage.read(ScriptConfig.ScriptPath(name, lang), getScriptDefaultCode())
+            ?: CoreException("The script's code cannot be null. (ScriptId: $id)")
+}
 
 fun ScriptItems.sorted() =
     sortedByDescending { it.name }.sortedByDescending { it.lang }.asReversed()

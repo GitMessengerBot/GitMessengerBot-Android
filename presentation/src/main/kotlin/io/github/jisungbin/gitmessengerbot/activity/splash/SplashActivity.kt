@@ -43,7 +43,7 @@ import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.doDelay
 import io.github.jisungbin.gitmessengerbot.util.toast
@@ -61,7 +61,7 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        val isSetupDone = io.github.jisungbin.gitmessengerbot.util.Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null) != null
+        val isSetupDone = Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null) != null
         val builtDate = Calendar.getInstance()
             .apply { timeInMillis = BuildConfig.TIMESTAMP }
         val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +

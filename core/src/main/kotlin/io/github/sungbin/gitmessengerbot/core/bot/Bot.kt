@@ -9,38 +9,43 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot
 
-import android.app.Notification
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.app.NotificationCompat
+import androidx.core.app.RemoteInput
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.edit
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.util.extension.toModel
+import io.github.jisungbin.gitmessengerbot.util.operator.minusAssign
+import io.github.jisungbin.gitmessengerbot.util.operator.plusAssign
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Sender
+import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 
+object Sender {
+    const val Bot = "Bot"
+}
+
 object Bot {
-    private val _scripts = MutableLiveData<List<ScriptItem>>().apply {
-        value = getList()
-    }
-    private val _scriptPowers: HashMap<Int, LiveData<Boolean>> = hashMapOf()
-    private val _compileStates: HashMap<Int, LiveData<Boolean>> = hashMapOf()
+    private val _scripts = MutableLiveData(getList())
+    private val scriptPowers: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
+    private val compileStates: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
 
     val scripts get(): LiveData<List<ScriptItem>> = _scripts
 
     /**
      * 스크립트 추가 및 json 정보 파일 저장
      */
-    fun saveAndUpdate(script: ScriptItem) {
+    fun scriptDataSaveAndUpdate(script: ScriptItem) {
         _scripts.edit {
             removeIf { it.id == script.id }
             add(script)
-            this
         }
         Storage.write(ScriptConfig.ScriptDataPath(script.name, script.lang), script.toJsonString())
     }
@@ -48,31 +53,25 @@ object Bot {
     /**
      * 스크립트 소스코드 저장
      */
-    fun saveAndUpdate(script: ScriptItem, code: String) {
+    fun scriptCodeSave(script: ScriptItem, code: String) {
         Storage.write(ScriptConfig.ScriptPath(script.name, script.lang), code)
     }
 
     fun addScript(script: ScriptItem) {
-        _scripts.add(script)
-        Storage.write(
-            StringConfig.Script(script.name, script.lang),
-            script.lang.getScriptDefaultCode()
-        )
-        Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
+        _scripts += script
     }
 
     fun removeScript(script: ScriptItem) {
-        _scripts.remove(script)
-        Storage.delete(StringConfig.Script(script.name, script.lang))
+        _scripts -= script
+        script.delete()
     }
 
     private fun getList(): List<ScriptItem> {
         val scripts = mutableListOf<ScriptItem>()
         repeat(4) { lang -> // 스크립트 코드파일이 아니라, 스크립트 정보 파일을 읽어와야함
-            Storage.fileList(StringConfig.ScriptPath(lang)).filter { it.path.endsWith(".json") }
+            Storage.fileList(ScriptConfig.ScriptListPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
-                    val script =
-                        Json.toModel(Storage.read(scriptDataFile.path, null)!!, ScriptItem::class)
+                    val script: ScriptItem = Storage.read(scriptDataFile.path, null)!!.toModel()
                     if (script.compiled) {
                         if (StackManager.v8[script.id] == null) {
                             script.compiled = false
@@ -84,23 +83,19 @@ object Bot {
         return scripts
     }
 
-    fun getScriptById(id: Int) = scripts.first { it.id == id }
-
-    fun getCode(script: ScriptItem) =
-        Storage.read(StringConfig.Script(script.name, script.lang), "")!!
-
-    fun replyToSession(context: Context, session: Notification.Action, message: String) {
+    fun replyToSession(context: Context, session: NotificationCompat.Action, message: String) {
         try {
             val sendIntent = Intent()
-            val msg = Bundle()
-            for (inputable in session.remoteInputs) msg.putCharSequence(
-                inputable.resultKey,
-                message
-            )
-            RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
+            val messageBundle = Bundle()
+            for (
+                inputable in session.remoteInputs ?: throw CoreException("remoteInputs cannot be null.")
+            ) {
+                messageBundle.putCharSequence(inputable.resultKey, message)
+            }
+            RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, messageBundle)
             session.actionIntent.send(context, 0, sendIntent)
         } catch (exception: Exception) {
-            Util.error(context, "메시지 답장 실패\n\n$exception")
+            throw CoreException(exception.message)
         }
     }
 
@@ -119,11 +114,11 @@ object Bot {
                 return
             }
             v8.locker.acquire()
-            if (script.id == StringConfig.ScriptEvalId) {
+            if (script.id == ScriptConfig.EvalId) {
                 val result = v8.executeScript(message).toString()
                 DebugStore.add(
                     createDebugItem(
-                        StringConfig.ScriptEvalId,
+                        ScriptConfig.EvalId,
                         result,
                         "null",
                         Sender.Bot
@@ -133,14 +128,14 @@ object Bot {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode) // todo
                 v8.executeJSFunction(
-                    app.value.scriptResponseFunctionName.value,
+                    ScriptConfig.DefaultResponseFunctionName,
                     *arguments.toTypedArray()
                 )
             }
             v8.locker.release()
             println("${script.name}: 실행됨")
         } catch (exception: Exception) {
-            Util.error(context, "js response 호출 실패\n\n${exception.message}")
+            throw CoreException(exception.message)
         }
     }
 }

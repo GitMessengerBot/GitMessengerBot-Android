@@ -30,10 +30,6 @@ fun createDebugItem(scriptId: Int, message: String, profileImageBase64: String, 
         sender = sender
     )
 
-object Sender {
-    const val Bot = "Bot"
-}
-
 fun DebugItems.sortedByTime() = sortedByDescending { it.time }.asReversed()
 
 fun DebugItems.getByScriptId(scriptId: Int) = filter { it.scriptId == scriptId }

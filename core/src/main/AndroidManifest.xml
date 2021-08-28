@@ -10,6 +10,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.github.sungbin.gitmessengerbot.core">
 
-    <application android:name=".Core" />
+    <application android:name=".CoreApplication" />
 
 </manifest>

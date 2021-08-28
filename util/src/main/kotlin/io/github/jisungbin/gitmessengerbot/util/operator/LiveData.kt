@@ -15,3 +15,8 @@ operator fun <T> MutableLiveData<List<T>>.plusAssign(item: T) {
     val value = this.value ?: emptyList()
     this.value = value + listOf(item)
 }
+
+operator fun <T> MutableLiveData<List<T>>.minusAssign(item: T) {
+    val value = this.value ?: emptyList()
+    this.value = value - listOf(item)
+}

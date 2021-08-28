@@ -16,6 +16,7 @@ import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.repo.Nothing
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.GitMessengerBotCoreException
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.api.BotApi
@@ -144,7 +145,7 @@ class ScriptCompilerImpl @Inject constructor(
         when (script.lang) {
             ScriptLang.TypeScript -> {
                 ts2Js
-                    .convert(Bot.getCode(script))
+                    .convert(script.getCode())
                     .collect { ts2JsResult ->
                         when (ts2JsResult) {
                             is RequestResult.Success -> {
@@ -161,18 +162,24 @@ class ScriptCompilerImpl @Inject constructor(
                     }
             }
             ScriptLang.JavaScript -> {
-                trySend(compileJavaScript(context, script, Bot.getCode(script)))
+                trySend(
+                    compileJavaScript(
+                        context = context,
+                        script = script,
+                        code = script.getCode()
+                    )
+                )
             }
             ScriptLang.Python -> { // todo
-                trySend(RequestResult.Fail(Exception("TODO")))
+                trySend(RequestResult.Fail(GitMessengerBotCoreException("TODO")))
             }
             ScriptLang.Simple -> { // todo
-                trySend(RequestResult.Fail(Exception("TODO")))
+                trySend(RequestResult.Fail(GitMessengerBotCoreException("TODO")))
             }
         }
 
         if (script.id != ScriptConfig.EvalId) {
-            Bot.saveAndUpdate(script)
+            Bot.scriptDataSaveAndUpdate(script)
         }
 
         awaitClose { close() }

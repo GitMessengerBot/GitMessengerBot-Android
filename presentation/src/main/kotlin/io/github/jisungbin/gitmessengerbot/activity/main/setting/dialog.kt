@@ -60,8 +60,8 @@ import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
-import io.github.jisungbin.gitmessengerbot.util.Util
-import io.github.jisungbin.gitmessengerbot.util.Web
+import io.github.jisungbin.gitmessengerbot.util.core.Util
+import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
 import io.github.jisungbin.gitmessengerbot.util.runIf
 import io.github.jisungbin.gitmessengerbot.util.toast
@@ -222,14 +222,14 @@ fun DonateDialog(visible: MutableState<Boolean>) {
             confirmButton = {
                 OutlinedButton(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.util.Web.open(context, io.github.jisungbin.gitmessengerbot.util.Web.Link.DonateOpenChat)
+                        Web.open(context, Web.Link.DonateOpenChat)
                     }
                 ) {
                     Text(text = stringResource(R.string.setting_dialog_button_direct_go))
                 }
                 OutlinedButton(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.util.Util.copy(context, context.getString(R.string.kakaotalk_id))
+                        Util.copy(context, context.getString(R.string.kakaotalk_id))
                     }
                 ) {
                     Text(text = stringResource(R.string.setting_dialog_button_copy_kakaotalk_id))
@@ -256,7 +256,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
             confirmButton = {
                 OutlinedButton(
                     onClick = {
-                        Bot.saveAndUpdate(
+                        Bot.scriptDataSaveAndUpdate(
                             Bot.app.value.copy(
                                 gitDefaultCommitMessage = mutableStateOf(
                                     commitMessageField.text
@@ -349,7 +349,7 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                                             Bot.app.value.kakaoTalkPackageNames.add(
                                                 newKakaoTalkPackage.text
                                             )
-                                            Bot.saveAndUpdate(Bot.app.value)
+                                            Bot.scriptDataSaveAndUpdate(Bot.app.value)
                                             newKakaoTalkPackage = TextFieldValue()
                                             focusManager.clearFocus()
                                         }
@@ -410,7 +410,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                                     .background(scriptLangItemBackgroundColor(scriptLang))
                                     .noRippleClickable {
                                         Bot.app.value.scriptDefaultLang.value = scriptLang
-                                        Bot.saveAndUpdate(Bot.app.value)
+                                        Bot.scriptDataSaveAndUpdate(Bot.app.value)
                                     },
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -517,7 +517,7 @@ private fun ScriptDefaultCodeSettingDialog(
                             2 -> Bot.app.value.scriptDefaultCode.value.py = newCode
                             3 -> Bot.app.value.scriptDefaultCode.value.sim = newCode
                         }
-                        Bot.saveAndUpdate(Bot.app.value)
+                        Bot.scriptDataSaveAndUpdate(Bot.app.value)
                         io.github.jisungbin.gitmessengerbot.util.toast(context,
                             context.getString(R.string.setting_toast_saved))
                         visible.value = false
@@ -573,7 +573,7 @@ private fun ApplicationItem(packageName: String) {
                 .size(20.dp)
                 .clickable {
                     Bot.app.value.kakaoTalkPackageNames.remove(packageName)
-                    Bot.saveAndUpdate(Bot.app.value)
+                    Bot.scriptDataSaveAndUpdate(Bot.app.value)
                 }
         )
     }

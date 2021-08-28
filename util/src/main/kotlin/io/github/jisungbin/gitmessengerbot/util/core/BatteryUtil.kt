@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.util
+package io.github.jisungbin.gitmessengerbot.util.core
 
 import android.annotation.SuppressLint
 import android.content.Context

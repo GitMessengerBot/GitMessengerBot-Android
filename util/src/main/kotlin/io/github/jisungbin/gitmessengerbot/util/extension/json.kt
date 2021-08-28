@@ -10,8 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.util.extension
 
 import com.google.gson.Gson
-import kotlin.reflect.KClass
 
-inline fun <reified T : Any> String.toModel(clazz: KClass<T>) = Gson().fromJson(this, clazz.java)!!
+inline fun <reified T : Any> String.toModel() = Gson().fromJson(this, T::class.java)!!
 
 fun Any.toJsonString() = Gson().toJson(this)!!

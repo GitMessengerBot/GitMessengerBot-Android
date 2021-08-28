@@ -13,10 +13,11 @@ import io.github.jisungbin.gitmessengerbot.util.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
 import kotlin.random.Random
 
+@Suppress("FunctionName")
 object ScriptConfig {
     const val DebugAllBot = -1
     const val EvalId = -2
-    const val ResponseFunctionName = "onMessage"
+    const val DefaultResponseFunctionName = "onMessage"
 
     const val DebugAllPath = "${PathConfig.AppStorage}/debug"
 

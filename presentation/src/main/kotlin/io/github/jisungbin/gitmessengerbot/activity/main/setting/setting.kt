@@ -43,9 +43,9 @@ import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.BatteryUtil
-import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.BatteryUtil
+import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.toast
 
 @Composable
@@ -112,7 +112,7 @@ private fun SettingContent(activity: Activity) {
             Switch(
                 checked = app.editorHorizontalScroll.value,
                 onCheckedChange = {
-                    Bot.saveAndUpdate(app.copy(editorHorizontalScroll = mutableStateOf(it)))
+                    Bot.scriptDataSaveAndUpdate(app.copy(editorHorizontalScroll = mutableStateOf(it)))
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
@@ -149,7 +149,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorFontSize.value.toString(),
                 onValueChange = {
                     try {
-                        Bot.saveAndUpdate(app.copy(editorFontSize = mutableStateOf(it.toInt())))
+                        Bot.scriptDataSaveAndUpdate(app.copy(editorFontSize = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -170,7 +170,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorAutoSave.value.toString(),
                 onValueChange = {
                     try {
-                        Bot.saveAndUpdate(app.copy(editorAutoSave = mutableStateOf(it.toInt())))
+                        Bot.scriptDataSaveAndUpdate(app.copy(editorAutoSave = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -217,7 +217,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.scriptResponseFunctionName.value,
                 onValueChange = {
                     if (!it.contains(" ")) {
-                        Bot.saveAndUpdate(app.copy(scriptResponseFunctionName = mutableStateOf(it)))
+                        Bot.scriptDataSaveAndUpdate(app.copy(scriptResponseFunctionName = mutableStateOf(it)))
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -242,7 +242,7 @@ private fun SettingContent(activity: Activity) {
             TextField(
                 value = app.gitDefaultBranch.value,
                 onValueChange = {
-                    Bot.saveAndUpdate(
+                    Bot.scriptDataSaveAndUpdate(
                         app.copy(
                             gitDefaultBranch = mutableStateOf(
                                 it.replace(
@@ -302,18 +302,18 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.NotificationUtil.requestReadPermission(activity) }) {
+            OutlinedButton(onClick = { NotificationUtil.requestReadPermission(activity) }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }
-        if (io.github.jisungbin.gitmessengerbot.util.Storage.isScoped) {
+        if (Storage.isScoped) {
             RowContent(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     text = stringResource(R.string.setting_app_access_storage_manager_permission),
                     fontSize = 15.sp,
                     color = Color.Black
                 )
-                OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.Storage.requestStorageManagePermission(activity) }) {
+                OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
                     Text(text = stringResource(R.string.setting_button_setting))
                 }
             }
@@ -324,7 +324,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
+            OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }

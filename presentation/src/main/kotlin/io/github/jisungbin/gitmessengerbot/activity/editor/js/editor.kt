@@ -61,9 +61,9 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.util.Util
-import io.github.jisungbin.gitmessengerbot.util.Web
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.core.Util
+import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.runIf
 import io.github.jisungbin.gitmessengerbot.util.toast
 import kotlinx.coroutines.Dispatchers
@@ -158,7 +158,7 @@ private fun DrawerLayout(
                                 context,
                                 context.getString(R.string.editor_toast_repo_create_success)
                             )
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_repo_create_error,
@@ -198,7 +198,7 @@ private fun DrawerLayout(
                                             context,
                                             context.getString(R.string.editor_toast_commit_success)
                                         )
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
                                             context,
                                             context.getString(
                                                 R.string.editor_toast_commit_error,
@@ -208,7 +208,7 @@ private fun DrawerLayout(
                                     }
                                 }
                             }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_content_get_error,
@@ -236,13 +236,13 @@ private fun DrawerLayout(
                             is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
                                 val contentDownloadUrl =
                                     (fileContentResult.response as FileContentResponse).downloadUrl
-                                codeField.value = TextFieldValue(io.github.jisungbin.gitmessengerbot.util.Web.parse(contentDownloadUrl))
+                                codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))
                                 io.github.jisungbin.gitmessengerbot.util.toast(
                                     context,
                                     context.getString(R.string.editor_toast_file_update_success)
                                 )
                             }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_content_get_error,
@@ -390,7 +390,7 @@ private fun ToolBar(
                 .clickable {
                     io.github.jisungbin.gitmessengerbot.util.toast(context,
                         context.getString(R.string.editor_toast_saved))
-                    Bot.saveAndUpdate(script, codeField.value.text)
+                    Bot.scriptCodeSave(script, codeField.value.text)
                 }
                 .constrainAs(save) {
                     end.linkTo(parent.end)

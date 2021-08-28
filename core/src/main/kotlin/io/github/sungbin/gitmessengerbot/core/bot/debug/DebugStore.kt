@@ -11,7 +11,7 @@ package io.github.sungbin.gitmessengerbot.core.bot.debug
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.util.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.clear
 import io.github.jisungbin.gitmessengerbot.util.extension.removeAll
@@ -21,16 +21,14 @@ import io.github.jisungbin.gitmessengerbot.util.operator.plusAssign
 
 @Suppress("ObjectPropertyName")
 object DebugStore {
-    private val _items = MutableLiveData<List<DebugItem>>().apply {
-        value = getList()
-    }
+    private val _items = MutableLiveData(getList())
     val items get(): LiveData<List<DebugItem>> = _items
 
     private fun getList(): List<DebugItem> {
         val debugs = mutableListOf<DebugItem>()
         Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
             Storage.fileList(debugFolder.path).forEach { debugFile ->
-                debugs.add(Storage.read(debugFile.path, null)!!.toModel(DebugItem::class))
+                debugs.add(Storage.read(debugFile.path, null)!!.toModel())
             }
         }
         return debugs

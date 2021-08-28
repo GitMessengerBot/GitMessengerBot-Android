@@ -13,4 +13,4 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class Core : Application()
+class CoreApplication : Application()

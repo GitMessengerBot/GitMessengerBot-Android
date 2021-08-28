@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.util.Web
+import io.github.jisungbin.gitmessengerbot.util.core.Web
 
 data class Project(val name: String, val link: String, val license: License)
 
@@ -65,7 +65,7 @@ private fun LicenserItem(project: Project) {
             painter = painterResource(R.drawable.ic_round_insert_link_24),
             contentDescription = null,
             tint = Color.Black,
-            modifier = Modifier.clickable { io.github.jisungbin.gitmessengerbot.util.Web.open(context, io.github.jisungbin.gitmessengerbot.util.Web.Link.Custom(project.link)) }
+            modifier = Modifier.clickable { Web.open(context, Web.Link.Custom(project.link)) }
         )
     }
 }

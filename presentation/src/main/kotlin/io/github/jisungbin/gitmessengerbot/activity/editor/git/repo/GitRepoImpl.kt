@@ -14,7 +14,7 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
 import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.toBase64
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class GitRepoImpl @Inject constructor(
 ) : GitRepo {
     private val buildRetrofit by lazy { retrofit.create(GitService::class.java) }
     private val gitUser by lazy {
-        io.github.jisungbin.gitmessengerbot.util.Json.toModel(io.github.jisungbin.gitmessengerbot.util.Storage.read(
+        io.github.jisungbin.gitmessengerbot.util.Json.toModel(Storage.read(
             io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null)!!, GithubData::class)
     }
 
