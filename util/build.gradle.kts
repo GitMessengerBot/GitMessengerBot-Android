@@ -42,5 +42,4 @@ dependencies {
     implementation(Dependencies.browser)
 
     Dependencies.essential.forEach(::implementation)
-    Dependencies.compose.forEach(::implementation)
 }
