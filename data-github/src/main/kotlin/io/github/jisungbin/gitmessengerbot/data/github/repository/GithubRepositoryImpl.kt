@@ -11,9 +11,11 @@ package io.github.jisungbin.gitmessengerbot.data.github.repository
 
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
+import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.data.util.DataException
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.GithubRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.RequestResult
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
+import io.github.jisungbin.gitmessengerbot.util.exception.DataGithubException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -26,7 +28,7 @@ import retrofit2.Retrofit
 class GithubRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
-    private val aouthRetrofit: Retrofit.Builder
+    private val aouthRetrofit: Retrofit.Builder,
 ) : GithubRepository {
 
     private class AuthInterceptor(private val token: String?) : Interceptor {
@@ -66,13 +68,13 @@ class GithubRepositoryImpl(
             ).getUserInfo()
             trySend(
                 if (request.isSuccessful && request.body() != null) {
-                    Result.Success(request.body()!!.toDomain())
+                    RequestResult.Success(request.body()!!.toDomain())
                 } else {
-                    Result.Fail(DataException("GithubRepository.getUserInfo"))
+                    RequestResult.Fail(DataGithubException("Github.getUserInfo() response is null."))
                 }
             )
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(RequestResult.Fail(DataGithubException(exception.message)))
         }
 
         awaitClose { close() }
@@ -92,13 +94,13 @@ class GithubRepositoryImpl(
             )
             trySend(
                 if (request.isSuccessful && request.body() != null) {
-                    Result.Success(request.body()!!.toDomain())
+                    RequestResult.Success(request.body()!!.toDomain())
                 } else {
-                    Result.Fail(DataException("GithubRepository.requestAouthToken"))
+                    RequestResult.Fail(DataGithubException("Github.requestAouthToken() response is null."))
                 }
             )
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(RequestResult.Fail(DataGithubException(exception.message)))
         }
 
         awaitClose { close() }

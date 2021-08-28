@@ -74,7 +74,6 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
     implementation(Dependencies.hilt)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")

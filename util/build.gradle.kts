@@ -38,7 +38,8 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
+    api(Dependencies.json)
+
     implementation(Dependencies.jsoup)
     implementation(Dependencies.livedata)
     implementation(Dependencies.browser)

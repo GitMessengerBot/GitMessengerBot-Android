@@ -14,7 +14,7 @@ import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.repo.Nothing
+import io.github.jisungbin.gitmessengerbot.util.Nothing
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.bot.Bot

@@ -19,6 +19,6 @@ interface GithubAouthService {
     suspend fun requestAouthToken(
         @Query("code") requestCode: String,
         @Query("client_id") clientId: String,
-        @Query("client_secret") clientSecret: String
+        @Query("client_secret") clientSecret: String,
     ): Response<GithubAouthResponse>
 }

@@ -45,7 +45,6 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
     implementation(Dependencies.jsoup)
     implementation(Dependencies.livedata)
     implementation(Dependencies.hilt)
