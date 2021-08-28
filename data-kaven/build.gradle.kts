@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(Dependencies.json)
 
+    implementation(project(":domain-kaven"))
+
     Dependencies.essential.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
     Dependencies.networkutil.forEach(::implementation)

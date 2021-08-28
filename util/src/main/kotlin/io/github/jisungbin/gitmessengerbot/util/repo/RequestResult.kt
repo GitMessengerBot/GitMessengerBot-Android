@@ -11,5 +11,5 @@ package io.github.jisungbin.gitmessengerbot.util.repo
 
 sealed class RequestResult<out T> {
     data class Success<out T>(val response: T) : RequestResult<T>()
-    data class Fail(val exception: Exception) : RequestResult<Nothing>()
+    data class Fail(val exception: Exception) : RequestResult<kotlin.Nothing>()
 }

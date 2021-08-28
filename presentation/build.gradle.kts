@@ -9,7 +9,6 @@
 
 plugins {
     id("com.android.application")
-    // id("com.chaquo.python")
     id("kotlin-android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
@@ -38,10 +37,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        /*ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
-        }*/
 
         buildConfigField("long", "TIMESTAMP", "${System.currentTimeMillis()}L")
     }
@@ -85,6 +80,13 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
+
+    implementation(project(":core"))
+    implementation(project(":data-github"))
+    implementation(project(":data-kaven"))
+    implementation(project(":domain-github"))
+    implementation(project(":domain-kaven"))
+    implementation(project(":util"))
 
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.bot.forEach(::implementation)

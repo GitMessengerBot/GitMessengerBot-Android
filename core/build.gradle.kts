@@ -11,6 +11,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("com.chaquo.python")
     id("dagger.hilt.android.plugin")
 }
 
@@ -21,6 +22,10 @@ android {
         minSdk = Application.minSdk
         targetSdk = Application.targetSdk
         multiDexEnabled = true
+
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+        }
     }
 
     sourceSets {

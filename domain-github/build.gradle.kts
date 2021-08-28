@@ -39,8 +39,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain-github"))
-    implementation(project(":domain-kaven"))
-
     Dependencies.essential.forEach(::implementation)
 }
