@@ -9,6 +9,7 @@
 ---
 
 # 프로젝트 죽기 일보직전
+# 안정 버전 커밋: https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b
 
 -----
 
