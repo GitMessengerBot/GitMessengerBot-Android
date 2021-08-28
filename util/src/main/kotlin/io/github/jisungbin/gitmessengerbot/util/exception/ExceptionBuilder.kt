@@ -10,9 +10,11 @@
 package io.github.jisungbin.gitmessengerbot.util.exception
 
 class CoreException(override val message: String?) : Exception()
+
 class DataGithubException(override val message: String?) : Exception()
+
 class DataKavenException(override val message: String?) : Exception()
-class DomainGithubException(override val message: String?) : Exception()
-class DomainKavenException(override val message: String?) : Exception()
+
 class PresentationException(override val message: String?) : Exception()
+
 class UtilException(override val message: String?) : Exception()

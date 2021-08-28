@@ -17,11 +17,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.jsoup.Connection
-import javax.inject.Inject
 
-class Ts2JsRepoImpl @Inject constructor(
-    private val jsoup: Connection,
-) : Ts2JsRepo {
+class Ts2JsRepoImpl(private val jsoup: Connection) : Ts2JsRepo {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun convert(js: String) = callbackFlow {
         try {

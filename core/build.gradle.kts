@@ -12,7 +12,6 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("com.chaquo.python")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -47,11 +46,9 @@ android {
 dependencies {
     implementation(Dependencies.jsoup)
     implementation(Dependencies.livedata)
-    implementation(Dependencies.hilt)
 
     implementation(project(":util"))
 
     Dependencies.essential.forEach(::implementation)
     Dependencies.bot.forEach(::implementation)
-    kapt(Dependencies.hiltCompiler)
 }

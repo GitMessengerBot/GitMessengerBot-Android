@@ -12,24 +12,20 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo.ScriptCompiler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class NotifiactionService : BroadcastReceiver() {
 
-    @Inject
-    lateinit var scriptCompiler: ScriptCompiler
+    private val scriptCompiler = Injection.Compiler.provide
 
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.getStringExtra(IntentConfig.NotificationAction)) {

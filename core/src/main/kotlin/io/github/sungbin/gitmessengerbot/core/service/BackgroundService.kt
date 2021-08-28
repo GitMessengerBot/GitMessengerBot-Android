@@ -39,7 +39,7 @@ class BackgroundService : Service() {
             channelId = getString(R.string.notification_channel_name),
             title = getString(R.string.app_name),
             content = getString(R.string.service_notification_bot_running),
-            icon = R.drawable.logo,
+            icon = R.drawable.ic_round_logo_512,
             isOnGoing = true,
             showTimestamp = true
         )

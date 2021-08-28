@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [ScriptCompilerImpl.kt] created by Ji Sungbin on 21. 7. 12. 오후 9:59.
+ * [ScriptCompilerImpl.kt] created by Ji Sungbin on 21. 8. 28. 오후 11:59
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
@@ -12,9 +12,9 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
+import io.github.jisungbin.gitmessengerbot.util.Nothing
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.Nothing
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -27,11 +27,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
 
-class ScriptCompilerImpl @Inject constructor(
-    private val ts2Js: Ts2JsRepo,
-) : ScriptCompiler {
+class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
 
     private fun compileJavaScript(
         context: Context,
