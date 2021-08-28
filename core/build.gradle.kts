@@ -11,6 +11,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -41,10 +42,12 @@ android {
 dependencies {
     implementation(Dependencies.json)
     implementation(Dependencies.jsoup)
+    implementation(Dependencies.livedata)
+    implementation(Dependencies.hilt)
 
     implementation(project(":util"))
 
     Dependencies.essential.forEach(::implementation)
-    Dependencies.lifecycle.forEach(::implementation)
     Dependencies.bot.forEach(::implementation)
+    kapt(Dependencies.hiltCompiler)
 }

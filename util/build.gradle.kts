@@ -39,8 +39,8 @@ android {
 
 dependencies {
     implementation(Dependencies.json)
+    implementation(Dependencies.livedata)
     implementation(Dependencies.browser)
 
     Dependencies.essential.forEach(::implementation)
-    Dependencies.lifecycle.forEach(::implementation)
 }

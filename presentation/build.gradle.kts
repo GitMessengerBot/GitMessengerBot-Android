@@ -80,6 +80,7 @@ android {
 
 dependencies {
     implementation(Dependencies.json)
+    implementation(Dependencies.hilt)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
@@ -93,7 +94,8 @@ dependencies {
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
-    Dependencies.hilt.forEach(::implementation)
     Dependencies.room.forEach(::implementation)
-    Dependencies.compiler.forEach(::kapt)
+
+    kapt(Dependencies.hiltCompiler)
+    kapt(Dependencies.roomCompiler)
 }
