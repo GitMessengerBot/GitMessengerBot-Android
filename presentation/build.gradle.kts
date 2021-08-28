@@ -88,7 +88,7 @@ dependencies {
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.bot.forEach(::implementation)
     Dependencies.essential.forEach(::implementation)
-    Dependencies.network.forEach(::implementation)
+    Dependencies.retrofit.forEach(::implementation)
     Dependencies.networkutil.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)

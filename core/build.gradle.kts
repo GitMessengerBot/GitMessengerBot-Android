@@ -39,6 +39,9 @@ android {
 }
 
 dependencies {
+    implementation(Dependencies.json)
+    implementation(Dependencies.jsoup)
+
     implementation(project(":util"))
 
     Dependencies.essential.forEach(::implementation)

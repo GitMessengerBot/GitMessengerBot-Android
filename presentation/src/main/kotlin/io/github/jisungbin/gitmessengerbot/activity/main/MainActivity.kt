@@ -103,11 +103,11 @@ class MainActivity : ComponentActivity() {
                     )
                 ).collect { result ->
                     when (result) {
-                        is Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
+                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                             this@MainActivity,
                             getString(R.string.main_toast_eval_loaded)
                         )
-                        is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.toast(
+                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.toast(
                             this@MainActivity,
                             getString(R.string.main_toast_eval_load_fail, result.exception.message)
                         )

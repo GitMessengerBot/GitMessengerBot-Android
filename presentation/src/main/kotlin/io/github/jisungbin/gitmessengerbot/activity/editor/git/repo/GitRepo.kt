@@ -20,8 +20,8 @@ interface GitRepo {
         repoName: String,
         path: String,
         branch: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultBranch
-    ): Flow<Result>
+    ): Flow<io.github.jisungbin.gitmessengerbot.repo.Result>
 
-    fun createRepo(repo: Repo): Flow<Result>
-    fun updateFile(repoName: String, path: String, gitFile: GitFile): Flow<Result>
+    fun createRepo(repo: Repo): Flow<io.github.jisungbin.gitmessengerbot.repo.Result>
+    fun updateFile(repoName: String, path: String, gitFile: GitFile): Flow<io.github.jisungbin.gitmessengerbot.repo.Result>
 }

@@ -22,8 +22,6 @@ object Application {
 }
 
 object Versions {
-    const val Gson = "2.8.7"
-
     object Essential {
         const val Python = "9.1.0"
         const val Kotlin = "1.5.30"
@@ -41,6 +39,7 @@ object Versions {
     }
 
     object Util {
+        const val Gson = "2.8.7"
         const val CrashReporter = "1.1.0"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
@@ -82,10 +81,20 @@ object Versions {
 }
 
 object Dependencies {
-    const val json = "com.google.code.gson:gson:${Versions.Gson}"
+    const val jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
+    const val json = "com.google.code.gson:gson:${Versions.Util.Gson}"
+
     const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
     const val LandscapistCoil =
         "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}"
+
+    const val hilt = "com.google.dagger:hilt-android:${Versions.Hilt.Master}"
+    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
+
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.Jetpack.Room}"
+
+    const val livedata =
+        "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Lifecycle.Master}"
 
     val bot = listOf(
         "org.mozilla:rhino:${Versions.Bot.RhinoEngine}",
@@ -96,8 +105,7 @@ object Dependencies {
         "com.squareup.leakcanary:leakcanary-android:${Versions.Debug.LeakCanary}"
     )
 
-    val network = listOf(
-        "org.jsoup:jsoup:${Versions.Network.Jsoup}",
+    val retrofit = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
     )
@@ -130,10 +138,6 @@ object Dependencies {
         "androidx.room:room-runtime:${Versions.Jetpack.Room}"
     )
 
-    val hilt = listOf(
-        "com.google.dagger:hilt-android:${Versions.Hilt.Master}",
-    )
-
     val compose = listOf(
         "androidx.compose.ui:ui:${Versions.Compose.Master}",
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
@@ -141,14 +145,5 @@ object Dependencies {
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}"
-    )
-
-    val compiler = listOf(
-        "androidx.room:room-compiler:${Versions.Jetpack.Room}",
-        "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
-    )
-
-    val lifecycle = listOf(
-        "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Lifecycle.Master}"
     )
 }

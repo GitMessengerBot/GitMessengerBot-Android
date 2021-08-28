@@ -15,7 +15,7 @@ import android.content.Intent
 import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
+import io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo.ScriptCompiler
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.toast

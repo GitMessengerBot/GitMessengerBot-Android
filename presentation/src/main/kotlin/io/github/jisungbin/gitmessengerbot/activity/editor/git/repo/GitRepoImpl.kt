@@ -13,7 +13,6 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.git.GitService
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
-import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
@@ -38,7 +37,7 @@ class GitRepoImpl @Inject constructor(
     override fun getFileContent(repoName: String, path: String, branch: String) = callbackFlow {
         try {
             trySend(
-                Result.Success(
+                io.github.jisungbin.gitmessengerbot.repo.Result.Success(
                     buildRetrofit.getFileContent(
                         gitUser.userName,
                         repoName,
@@ -48,7 +47,7 @@ class GitRepoImpl @Inject constructor(
                 )
             )
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(io.github.jisungbin.gitmessengerbot.repo.Result.Fail(exception))
         }
 
         awaitClose { close() }
@@ -57,9 +56,9 @@ class GitRepoImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun createRepo(repo: Repo) = callbackFlow {
         try {
-            trySend(Result.Success(buildRetrofit.createRepo(repo).await()))
+            trySend(io.github.jisungbin.gitmessengerbot.repo.Result.Success(buildRetrofit.createRepo(repo).await()))
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(io.github.jisungbin.gitmessengerbot.repo.Result.Fail(exception))
         }
 
         awaitClose { close() }
@@ -78,9 +77,9 @@ class GitRepoImpl @Inject constructor(
                 path = path,
                 body = gitFile.copy(content = gitFile.content.toBase64())
             ).await()
-            trySend(Result.Success(response))
+            trySend(io.github.jisungbin.gitmessengerbot.repo.Result.Success(response))
         } catch (exception: Exception) {
-            trySend(Result.Fail(exception))
+            trySend(io.github.jisungbin.gitmessengerbot.repo.Result.Fail(exception))
         }
 
         awaitClose { close() }

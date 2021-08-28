@@ -69,7 +69,6 @@ import io.github.jisungbin.gitmessengerbot.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.jsoup.Jsoup
@@ -155,11 +154,11 @@ private fun DrawerLayout(
                         )
                     ).collect { result ->
                         when (result) {
-                            is Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                                 context,
                                 context.getString(R.string.editor_toast_repo_create_success)
                             )
-                            is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_repo_create_error,
@@ -184,7 +183,7 @@ private fun DrawerLayout(
                         path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { commitResult ->
                         when (commitResult) {
-                            is Result.Success -> {
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
                                 gitRepo.updateFile(
                                     repoName = repoName,
                                     path = "script.${script.lang.getScriptSuffix()}",
@@ -195,11 +194,11 @@ private fun DrawerLayout(
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
-                                        is Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
+                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                                             context,
                                             context.getString(R.string.editor_toast_commit_success)
                                         )
-                                        is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
                                             context,
                                             context.getString(
                                                 R.string.editor_toast_commit_error,
@@ -209,7 +208,7 @@ private fun DrawerLayout(
                                     }
                                 }
                             }
-                            is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_content_get_error,
@@ -234,7 +233,7 @@ private fun DrawerLayout(
                         path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { fileContentResult ->
                         when (fileContentResult) {
-                            is Result.Success -> {
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
                                 val contentDownloadUrl =
                                     (fileContentResult.response as FileContentResponse).downloadUrl
                                 codeField.value = TextFieldValue(io.github.jisungbin.gitmessengerbot.util.Web.parse(contentDownloadUrl))
@@ -243,7 +242,7 @@ private fun DrawerLayout(
                                     context.getString(R.string.editor_toast_file_update_success)
                                 )
                             }
-                            is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
                                 context,
                                 context.getString(
                                     R.string.editor_toast_content_get_error,
