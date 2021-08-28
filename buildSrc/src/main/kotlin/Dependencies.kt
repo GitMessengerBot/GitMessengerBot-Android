@@ -30,8 +30,13 @@ object Versions {
         const val Gradle = "7.1.0-alpha05"
     }
 
+    object Bot {
+        const val J2V8 = "6.2.1@aar"
+        const val RhinoEngine = "1.7.13"
+    }
+
     object Ui {
-        const val LandscapistCoil = "1.2.8"
+        const val LandscapistCoil = "1.3.3"
         const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
         const val TimeLineView = "1.0.2"
@@ -43,7 +48,7 @@ object Versions {
         const val CrashReporter = "1.1.0"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
-        const val CheckDependencyUpdates = "1.4.1"
+        const val CheckDependencyUpdates = "1.5.0"
     }
 
     object Network {
@@ -57,22 +62,17 @@ object Versions {
     }
 
     object Hilt {
-        // https://stackoverflow.com/questions/68492472/hilt-field-injection-throwing-property-not-initialized-error
-        const val Master = "2.37" // todo: 2.38
+        // if error: https://stackoverflow.com/questions/68492472/hilt-field-injection-throwing-property-not-initialized-error
+        const val Master = "2.38.1"
     }
 
     object Compose {
-        const val Master = "1.0.0"
-        const val Activity = "1.3.0"
+        const val Master = "1.0.1"
+        const val Activity = "1.3.1"
     }
 
     object Debug {
         const val LeakCanary = "2.7"
-    }
-
-    object Bot {
-        const val J2V8 = "6.2.0@aar"
-        const val RhinoEngine = "1.7.13"
     }
 
     object Lifecycle {
@@ -143,7 +143,7 @@ object Dependencies {
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
         "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
-        "androidx.activity:activity-compose:${Versions.Compose.Activity}",
-        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}"
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
+        "androidx.activity:activity-compose:${Versions.Compose.Activity}"
     )
 }
