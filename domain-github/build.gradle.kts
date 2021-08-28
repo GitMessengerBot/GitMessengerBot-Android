@@ -39,9 +39,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":data-github"))
-    implementation(project(":data-kaven"))
+    implementation(project(":domain-github"))
+    implementation(project(":domain-kaven"))
 
     Dependencies.essential.forEach(::implementation)
+    Dependencies.room.forEach(::implementation)
+    Dependencies.compiler.forEach(::kapt)
 }
