@@ -27,12 +27,12 @@ fun <T> MutableLiveData<List<T>>.removeIf(predicate: (T) -> Boolean) {
     notifyDataSetChanged(value)
 }
 
+fun <T> MutableLiveData<List<T>>.notifyDataSetChanged(value: List<T>) {
+    this.value = value
+}
+
 inline fun <T> MutableLiveData<List<T>>.edit(action: MutableList<T>.() -> Unit) {
     val items = value?.toMutableList() ?: return
     action(items)
     notifyDataSetChanged(items)
-}
-
-fun <T> MutableLiveData<List<T>>.notifyDataSetChanged(value: List<T>) {
-    this.value = value
 }
