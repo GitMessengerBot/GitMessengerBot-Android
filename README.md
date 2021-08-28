@@ -9,7 +9,7 @@
 ---
 
 # 프로젝트 죽기 일보직전 -> 멱살잡고 살리는 중
-# 죽기 직전 브런치: [f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
+### 죽기 직전 브런치: [f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
 -----
 
