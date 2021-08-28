@@ -1,4 +1,4 @@
-// 268
+// 270
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
@@ -8,7 +8,8 @@
 
 ---
 
-# 프로젝트 죽기 일보직전
+# 프로젝트 죽기 일보직전 -> 멱살잡고 살리는 중
+### 죽기 직전 브런치: [f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
 -----
 
