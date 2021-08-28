@@ -26,8 +26,8 @@ class Ts2JsRepoImpl @Inject constructor(
     override fun convert(js: String) = callbackFlow {
         try {
             ioThread {
-                val result = jsoup.requestBody(js).post().text().toModel(Ts2JsResponse::class)
-                trySend(RequestResult.Success(result))
+                val ts2js: Ts2JsResponse = jsoup.requestBody(js).post().text().toModel()
+                trySend(RequestResult.Success(ts2js))
             }
         } catch (exception: Exception) {
             trySend(RequestResult.Fail(exception))

@@ -13,15 +13,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.util.config.Config
 import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo.ScriptCompiler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class NotifiactionService : BroadcastReceiver() {
     lateinit var scriptCompiler: ScriptCompiler
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.getStringExtra(Config.IntentNotificationAction)) {
+        when (intent?.getStringExtra(IntentConfig.NotificationAction)) {
             IntentConfig.BotPowerToggle -> {
                 // TODO
                 /*if (Bot.app.value.power.value) {
@@ -43,19 +43,30 @@ class NotifiactionService : BroadcastReceiver() {
                 Bot.scriptDataSaveAndUpdate(Bot.app.value.copy(power = mutableStateOf(!Bot.app.value.power.value)))*/
             }
             IntentConfig.BotAllRecompile -> {
-                toast(context!!, context.getString(R.string.service_toast_active_scripts_recompile))
                 CoroutineScope(Dispatchers.Default).launch {
-                    Bot.getPowerOnScripts().forEach { script ->
+                    toast(
+                        context!!,
+                        context.getString(R.string.service_toast_running_scripts_recompile)
+                    )
+                    Bot.getCompiledScripts().forEach { script ->
                         scriptCompiler.process(context, script).collect { result ->
-                            if (result is RequestResult.Fail) {
-                                toast(
-                                    context,
-                                    context.getString(
-                                        R.string.service_toast_compile_error,
-                                        script.name,
-                                        result.exception.message
+                            when (result) {
+                                is RequestResult.Fail -> {
+                                    toast(
+                                        context,
+                                        context.getString(
+                                            R.string.service_toast_compile_error,
+                                            script.name,
+                                            result.exception.message
+                                        )
                                     )
-                                )
+                                }
+                                is RequestResult.Success -> {
+                                    toast(
+                                        context,
+                                        context.getString(R.string.service_toast_recompile_done)
+                                    )
+                                }
                             }
                         }
                     }

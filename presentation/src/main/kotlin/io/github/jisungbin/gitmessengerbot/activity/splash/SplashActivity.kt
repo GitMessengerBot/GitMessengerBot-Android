@@ -105,7 +105,7 @@ class SplashActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_round_logo_512),
+                    painter = painterResource(R.drawable.logo),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(150.dp)
