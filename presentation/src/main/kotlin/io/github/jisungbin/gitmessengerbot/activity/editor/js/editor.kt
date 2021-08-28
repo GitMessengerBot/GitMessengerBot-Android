@@ -54,9 +54,9 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.FileContent
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptSuffix
+import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors

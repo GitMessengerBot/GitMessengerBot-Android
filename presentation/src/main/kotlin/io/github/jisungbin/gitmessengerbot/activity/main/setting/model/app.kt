@@ -13,7 +13,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 
 data class MutableApp(

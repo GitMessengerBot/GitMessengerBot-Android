@@ -85,10 +85,6 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
-    implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":core"))
-
     Dependencies.debug.forEach(::debugImplementation)
     Dependencies.bot.forEach(::implementation)
     Dependencies.essential.forEach(::implementation)

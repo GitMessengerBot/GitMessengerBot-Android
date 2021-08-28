@@ -51,9 +51,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptDefaultCode
-import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
+import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.script.getScriptDefaultCode
+import io.github.sungbin.gitmessengerbot.core.script.toScriptLangName
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors

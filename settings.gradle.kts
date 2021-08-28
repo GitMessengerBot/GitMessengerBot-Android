@@ -9,8 +9,8 @@
 
 include(
     ":presentation",
-    ":domain",
-    ":data",
+    ":domain-github",
+    ":domain-kaven",
     ":data-kaven",
     ":data-github",
     ":core",

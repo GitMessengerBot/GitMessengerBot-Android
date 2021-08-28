@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptContent
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
+import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
+import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.script.compiler.repo.ScriptCompiler
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
@@ -63,7 +63,6 @@ import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLineItem
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.toast
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
 import me.sungbin.fancybottombar.FancyBottomBar
 import me.sungbin.fancybottombar.FancyColors
 import me.sungbin.fancybottombar.FancyItem
