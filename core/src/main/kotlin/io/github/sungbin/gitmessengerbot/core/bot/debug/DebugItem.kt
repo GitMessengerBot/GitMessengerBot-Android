@@ -11,6 +11,8 @@ package io.github.sungbin.gitmessengerbot.core.bot.debug
 
 import java.util.Date
 
+private typealias DebugItems = List<DebugItem>
+
 data class DebugItem(
     val scriptId: Int,
     val message: String,
@@ -32,6 +34,6 @@ object Sender {
     const val Bot = "Bot"
 }
 
-fun List<DebugItem>.sortedByTime() = sortedByDescending { it.time }.asReversed()
+fun DebugItems.sortedByTime() = sortedByDescending { it.time }.asReversed()
 
-fun List<DebugItem>.getByScriptId(scriptId: Int) = filter { it.scriptId == scriptId }
+fun DebugItems.getByScriptId(scriptId: Int) = filter { it.scriptId == scriptId }

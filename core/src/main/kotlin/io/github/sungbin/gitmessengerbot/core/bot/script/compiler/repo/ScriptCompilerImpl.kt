@@ -174,6 +174,7 @@ class ScriptCompilerImpl @Inject constructor(
         if (script.id != ScriptConfig.EvalId) {
             Bot.saveAndUpdate(script)
         }
+
         awaitClose { close() }
     }
 }

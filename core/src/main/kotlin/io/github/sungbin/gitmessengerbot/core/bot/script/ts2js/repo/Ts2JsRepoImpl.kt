@@ -9,7 +9,10 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo
 
-import io.github.jisungbin.gitmessengerbot.util.Json
+import io.github.jisungbin.gitmessengerbot.util.extension.ioThread
+import io.github.jisungbin.gitmessengerbot.util.extension.toModel
+import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -21,21 +24,13 @@ class Ts2JsRepoImpl @Inject constructor(
 ) : Ts2JsRepo {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun convert(js: String) = callbackFlow {
-        runCatching {
-            try {
-                Thread {
-                    trySend(
-                        Result.Success(
-                            Json.toModel(
-                                jsoup.requestBody(js).post().text(),
-                                Ts2JsResponse::class
-                            )
-                        )
-                    )
-                }.start()
-            } catch (exception: Exception) {
-                trySend(Result.Fail(exception))
+        try {
+            ioThread {
+                val result = jsoup.requestBody(js).post().text().toModel(Ts2JsResponse::class)
+                trySend(RequestResult.Success(result))
             }
+        } catch (exception: Exception) {
+            trySend(RequestResult.Fail(exception))
         }
 
         awaitClose { close() }

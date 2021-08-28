@@ -9,11 +9,20 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script
 
+private typealias ScriptItems = List<ScriptItem>
+
 data class ScriptItem(
     val id: Int,
     val name: String,
     val lang: Int,
     var power: Boolean,
     var compiled: Boolean,
-    var lastRun: String
+    var lastRun: String,
 )
+
+fun ScriptItems.sorted() =
+    sortedByDescending { it.name }.sortedByDescending { it.lang }.asReversed()
+
+fun ScriptItems.getPowerOnScripts() = filter { it.power }
+
+fun ScriptItems.getCompiledScripts() = filter { it.power && it.compiled }

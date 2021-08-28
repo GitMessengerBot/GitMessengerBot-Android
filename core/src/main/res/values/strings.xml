@@ -1,0 +1,22 @@
+<!--
+  ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+  ~ GitMessengerBot license is under the GPL-3.0.
+  ~
+  ~ [strings.xml] created by Ji Sungbin on 21. 5. 21. 오후 4:40.
+  ~
+  ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+  -->
+
+<resources>
+    <string name="app_name">GitMessengerBot</string>
+
+    <string name="notification_channel_name">GitMessengerBot - BackgroundService</string>
+
+    <string name="service_notification_action_bot_power_toggle">봇 전원 On/Off</string>
+    <string name="service_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
+    <string name="service_notification_bot_running">봇이 작동중 입니다…</string>
+    <string name="service_message_bot_start">알림 읽기 서비스가 시작되었습니다.</string>
+    <string name="service_message_bot_stop">알림 읽기 서비스가 중지되었습니다.</string>
+    <string name="service_toast_active_scripts_recompile">전체 활성화 스크립트를 리컴파일 합니다.</string>
+    <string name="service_toast_compile_error">%s 컴파일 에러\n\n%s</string>
+</resources>

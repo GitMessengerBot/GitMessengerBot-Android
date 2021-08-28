@@ -13,7 +13,6 @@ import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -51,16 +50,11 @@ object NotificationUtil {
         activity.startActivity(intent)
     }
 
-    private fun getActivityPendingIntent(activity: Activity): PendingIntent {
-        val intent = Intent(activity, activity.javaClass)
-        return PendingIntent.getActivity(activity, 500, intent, PendingIntent.FLAG_IMMUTABLE)
-    }
-
     private fun getManager(context: Context) =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     fun showNormalNotification(
-        contentActivity: Activity,
+        context: Context,
         id: Int,
         channelId: String,
         title: String,
@@ -69,10 +63,10 @@ object NotificationUtil {
         isOnGoing: Boolean,
         showTimestamp: Boolean,
     ) {
-        getManager(contentActivity.applicationContext).notify(
+        getManager(context).notify(
             id,
             getNormalNotification(
-                contentActivity,
+                context,
                 channelId,
                 title,
                 content,
@@ -84,20 +78,19 @@ object NotificationUtil {
     }
 
     fun getNormalNotification(
-        contentActivity: Activity,
+        context: Context,
         channelId: String,
         title: String,
         content: String,
         @DrawableRes icon: Int,
         isOnGoing: Boolean,
         showTimestamp: Boolean,
-    ) = builder(contentActivity.applicationContext, channelId)
+    ) = builder(context, channelId)
         .setContentTitle(title)
         .setContentText(content)
         .setSmallIcon(icon)
         .setAutoCancel(true)
         .setOngoing(isOnGoing)
-        .setContentIntent(getActivityPendingIntent(contentActivity))
         .setWhen(System.currentTimeMillis())
         .setShowWhen(showTimestamp)
 }

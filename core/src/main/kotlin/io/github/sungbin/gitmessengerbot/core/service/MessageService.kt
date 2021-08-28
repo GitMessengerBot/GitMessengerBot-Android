@@ -12,9 +12,9 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager.sessions
 
@@ -50,9 +50,12 @@ class MessageService : NotificationListenerService() {
                         if (room == null) {
                             room = sender
                             isGroupChat = false
-                        } else isGroupChat = true
+                        } else {
+                            isGroupChat = true
+                        }
 
                         if (!sessions.containsKey(room)) sessions[room] = action
+
                         /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
                          sbn.notification.getLargeIcon().toBitmap(context)*/ // todo
 
@@ -61,7 +64,8 @@ class MessageService : NotificationListenerService() {
                     }
                 }
             }
-        } catch (ignored: Exception) {
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
@@ -69,7 +73,7 @@ class MessageService : NotificationListenerService() {
         room: String,
         message: String,
         sender: String,
-        isGroupChat: Boolean
+        isGroupChat: Boolean,
     ) {
         try {
             for (script in Bot.getCompiledScripts()) {

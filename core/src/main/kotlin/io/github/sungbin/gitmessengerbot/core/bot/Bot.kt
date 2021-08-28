@@ -12,50 +12,44 @@ package io.github.sungbin.gitmessengerbot.core.bot
 import android.app.Notification
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.Util
+import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.extension.edit
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 
 object Bot {
-    private val _scripts = SnapshotStateList<ScriptItem>()
-    private val _scriptPowers: HashMap<Int, MutableState<Boolean>> = hashMapOf()
-    private val _compileStates: HashMap<Int, MutableState<Boolean>> = hashMapOf()
-
-    val scripts
-        get() = _scripts
-            .sortedByDescending { it.name }
-            .sortedByDescending { it.lang }
-            .asReversed()
-    val app: State<MutableApp> get() = _app
-
-    init {
-        _scripts.addAll(getList())
+    private val _scripts = MutableLiveData<List<ScriptItem>>().apply {
+        value = getList()
     }
+    private val _scriptPowers: HashMap<Int, LiveData<Boolean>> = hashMapOf()
+    private val _compileStates: HashMap<Int, LiveData<Boolean>> = hashMapOf()
 
-    fun getPowerOnScripts() = scripts.filter { it.power }
-
-    fun getCompiledScripts() = scripts.filter { it.power && it.compiled }
+    val scripts get(): LiveData<List<ScriptItem>> = _scripts
 
     /**
      * 스크립트 추가 및 json 정보 파일 저장
      */
     fun saveAndUpdate(script: ScriptItem) {
-        _scripts.removeIf { it.id == script.id }
-        _scripts.add(script)
-        Storage.write(StringConfig.ScriptData(script.name, script.lang), Json.toString(script))
+        _scripts.edit {
+            removeIf { it.id == script.id }
+            add(script)
+            this
+        }
+        Storage.write(ScriptConfig.ScriptDataPath(script.name, script.lang), script.toJsonString())
     }
 
     /**
      * 스크립트 소스코드 저장
      */
     fun saveAndUpdate(script: ScriptItem, code: String) {
-        Storage.write(
-            StringConfig.Script(script.name, script.lang),
-            code
-        )
+        Storage.write(ScriptConfig.ScriptPath(script.name, script.lang), code)
     }
 
     fun addScript(script: ScriptItem) {

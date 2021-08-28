@@ -7,6 +7,9 @@
   ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
   -->
 
-<manifest package="io.github.sungbin.gitmessengerbot.core">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.sungbin.gitmessengerbot.core">
+
+    <application android:name=".Core" />
 
 </manifest>
