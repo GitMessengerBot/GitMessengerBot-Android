@@ -9,6 +9,8 @@
 
 package io.github.jisungbin.gitmessengerbot.util.script
 
+import io.github.jisungbin.gitmessengerbot.util.exception.UtilException
+
 object ScriptLang {
     const val TypeScript = 0
     const val JavaScript = 1
@@ -21,7 +23,7 @@ fun Int.toScriptLangName() = when (this) {
     ScriptLang.JavaScript -> "JavaScript"
     ScriptLang.Python -> "Python"
     ScriptLang.Simple -> "Simple"
-    else -> throw Error("Unknown script type.")
+    else -> throw UtilException("Unknown script type: $this")
 }
 
 fun Int.getScriptSuffix() = when (this) {
@@ -29,5 +31,5 @@ fun Int.getScriptSuffix() = when (this) {
     ScriptLang.JavaScript -> "js"
     ScriptLang.Python -> "py"
     ScriptLang.Simple -> "sim"
-    else -> throw Error("Unknown script type.")
+    else -> throw UtilException("Unknown script type: $this")
 }
