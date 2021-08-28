@@ -9,6 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.util.config
 
-object StringConfig {
+object Config {
     const val KakaoTalkDefaultPackageName = "com.kakao.talk"
 }

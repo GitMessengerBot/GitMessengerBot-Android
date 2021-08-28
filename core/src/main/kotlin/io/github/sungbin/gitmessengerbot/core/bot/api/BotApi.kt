@@ -10,19 +10,27 @@
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
 import android.content.Context
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 
 // todo: context <- 메모리 누수 발생; 어떻게 고치지??
 class BotApi(private val context: Context, private val scriptId: Int) {
     private val showAll = "\u200b".repeat(500)
 
+    private fun getReplySession(room: String) = StackManager.sessions[room]
+        ?: throw CoreException("There is no $scriptId key in StackManager.sessions.")
+
     fun reply(room: String, message: String, isDebugMode: Boolean) {
         if (!isDebugMode) {
-            Bot.replyToSession(context, StackManager.sessions[room]!!, message)
+            Bot.replyToSession(
+                context,
+                getReplySession(room),
+                message
+            )
         } else {
             DebugStore.add(createDebugItem(scriptId, message, "null", Sender.Bot))
         }
@@ -32,7 +40,11 @@ class BotApi(private val context: Context, private val scriptId: Int) {
         val content = "$message$showAll$message2"
 
         if (!isDebugMode) {
-            Bot.replyToSession(context, StackManager.sessions[room]!!, content)
+            Bot.replyToSession(
+                context,
+                getReplySession(room),
+                content
+            )
         } else {
             DebugStore.add(createDebugItem(scriptId, content, "null", Sender.Bot))
         }

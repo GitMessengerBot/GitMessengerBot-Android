@@ -51,7 +51,7 @@ data class ScriptItem(
 
     fun getCode() =
         Storage.read(ScriptConfig.ScriptPath(name, lang), getScriptDefaultCode())
-            ?: CoreException("The script's code cannot be null. (ScriptId: $id)")
+            ?: throw CoreException("The script's code cannot be null. (ScriptId: $id)")
 }
 
 fun ScriptItems.sorted() =

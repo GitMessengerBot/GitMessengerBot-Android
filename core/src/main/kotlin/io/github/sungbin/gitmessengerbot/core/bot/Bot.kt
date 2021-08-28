@@ -18,6 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.log
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.edit
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
@@ -27,6 +28,7 @@ import io.github.jisungbin.gitmessengerbot.util.operator.plusAssign
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.bot.script.getCompiledScripts
 
 object Sender {
     const val Bot = "Bot"
@@ -39,9 +41,16 @@ object Bot {
 
     val scripts get(): LiveData<List<ScriptItem>> = _scripts
 
-    /**
-     * 스크립트 추가 및 json 정보 파일 저장
-     */
+    fun getCompiledScripts() = _scripts.value?.getCompiledScripts() ?: emptyList()
+
+    fun getScriptPower(script: ScriptItem): LiveData<Boolean> =
+        scriptPowers[script.id]
+            ?: throw CoreException("There is no ${script.id} key in scriptPowers.")
+
+    fun getCompileState(script: ScriptItem): LiveData<Boolean> =
+        scriptPowers[script.id]
+            ?: throw CoreException("There is no ${script.id} key in compileStates.")
+
     fun scriptDataSaveAndUpdate(script: ScriptItem) {
         _scripts.edit {
             removeIf { it.id == script.id }
@@ -50,9 +59,6 @@ object Bot {
         Storage.write(ScriptConfig.ScriptDataPath(script.name, script.lang), script.toJsonString())
     }
 
-    /**
-     * 스크립트 소스코드 저장
-     */
     fun scriptCodeSave(script: ScriptItem, code: String) {
         Storage.write(ScriptConfig.ScriptPath(script.name, script.lang), code)
     }
@@ -71,7 +77,10 @@ object Bot {
         repeat(4) { lang -> // 스크립트 코드파일이 아니라, 스크립트 정보 파일을 읽어와야함
             Storage.fileList(ScriptConfig.ScriptListPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
-                    val script: ScriptItem = Storage.read(scriptDataFile.path, null)!!.toModel()
+                    val scriptData =
+                        Storage.read(scriptDataFile.path, null)
+                            ?: throw CoreException("$scriptDataFile file is null.")
+                    val script: ScriptItem = scriptData.toModel()
                     if (script.compiled) {
                         if (StackManager.v8[script.id] == null) {
                             script.compiled = false
@@ -87,9 +96,9 @@ object Bot {
         try {
             val sendIntent = Intent()
             val messageBundle = Bundle()
-            for (
-                inputable in session.remoteInputs ?: throw CoreException("remoteInputs cannot be null.")
-            ) {
+            val remoteInputs =
+                session.remoteInputs ?: throw CoreException("remoteInputs cannot be null.")
+            for (inputable in remoteInputs) {
                 messageBundle.putCharSequence(inputable.resultKey, message)
             }
             RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, messageBundle)
@@ -100,17 +109,16 @@ object Bot {
     }
 
     fun callJsResponder(
-        context: Context,
         script: ScriptItem,
         room: String,
         message: String,
         sender: String,
         isGroupChat: Boolean,
-        isDebugMode: Boolean,
+        isDebugMode: Boolean = false,
     ) {
         try {
             val v8 = StackManager.v8[script.id] ?: run {
-                println("${script.name} - v8 instance is null")
+                log("${script.name} v8 instance is null.")
                 return
             }
             v8.locker.acquire()
@@ -133,7 +141,7 @@ object Bot {
                 )
             }
             v8.locker.release()
-            println("${script.name}: 실행됨")
+            log("Run: ${script.name}")
         } catch (exception: Exception) {
             throw CoreException(exception.message)
         }

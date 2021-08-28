@@ -17,8 +17,8 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
-import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.sungbin.gitmessengerbot.core.R
 
 class BackgroundService : Service() {
@@ -64,7 +64,7 @@ class BackgroundService : Service() {
         )
 
         val botRecompileIntent = Intent(this, NotifiactionService::class.java).apply {
-            putExtra(IntentConfig.NotificationAction, IntentConfig.BotRecompile)
+            putExtra(IntentConfig.NotificationAction, IntentConfig.BotAllRecompile)
         }
 
         val botRecompilePendingIntent = PendingIntent.getBroadcast(

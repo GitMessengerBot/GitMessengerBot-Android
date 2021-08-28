@@ -13,10 +13,10 @@ import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.repo.Nothing
 import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.GitMessengerBotCoreException
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.api.BotApi
@@ -171,10 +171,10 @@ class ScriptCompilerImpl @Inject constructor(
                 )
             }
             ScriptLang.Python -> { // todo
-                trySend(RequestResult.Fail(GitMessengerBotCoreException("TODO")))
+                trySend(RequestResult.Fail(CoreException("Python build is TODO.")))
             }
             ScriptLang.Simple -> { // todo
-                trySend(RequestResult.Fail(GitMessengerBotCoreException("TODO")))
+                trySend(RequestResult.Fail(CoreException("SimpleLang build is TODO.")))
             }
         }
 

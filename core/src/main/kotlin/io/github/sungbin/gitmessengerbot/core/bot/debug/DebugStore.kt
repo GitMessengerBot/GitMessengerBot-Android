@@ -11,8 +11,9 @@ package io.github.sungbin.gitmessengerbot.core.bot.debug
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.clear
 import io.github.jisungbin.gitmessengerbot.util.extension.removeAll
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
@@ -28,7 +29,10 @@ object DebugStore {
         val debugs = mutableListOf<DebugItem>()
         Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
             Storage.fileList(debugFolder.path).forEach { debugFile ->
-                debugs.add(Storage.read(debugFile.path, null)!!.toModel())
+                debugs.add(
+                    Storage.read(debugFile.path, null)?.toModel()
+                        ?: throw CoreException("$debugFile file is null.")
+                )
             }
         }
         return debugs

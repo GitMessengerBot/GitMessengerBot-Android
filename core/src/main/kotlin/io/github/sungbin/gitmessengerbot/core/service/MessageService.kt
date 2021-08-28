@@ -9,10 +9,11 @@
 
 package io.github.sungbin.gitmessengerbot.core.service
 
-import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import io.github.jisungbin.gitmessengerbot.util.core.Util
+import androidx.core.app.NotificationCompat
+import io.github.jisungbin.gitmessengerbot.util.config.Config
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -33,10 +34,12 @@ class MessageService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         try {
-            if (!Bot.app.value.kakaoTalkPackageNames.contains(sbn.packageName)) return
-            val wExt = Notification.WearableExtender(sbn.notification)
+            // TODO: supported other package names.
+            if (sbn.packageName != Config.KakaoTalkDefaultPackageName) return
+            val wExt = NotificationCompat.WearableExtender(sbn.notification)
             for (action in wExt.actions) {
-                if (action.remoteInputs.isNotEmpty()) {
+                val remoteInputs = action.remoteInputs ?: return
+                if (remoteInputs.isNotEmpty()) {
                     if (action.title.toString().lowercase().contains("reply") ||
                         action.title.toString().contains("답장")
                     ) {
@@ -78,17 +81,15 @@ class MessageService : NotificationListenerService() {
         try {
             for (script in Bot.getCompiledScripts()) {
                 Bot.callJsResponder(
-                    context = applicationContext,
                     script = script,
                     room = room,
                     message = message,
                     sender = sender,
-                    isGroupChat = isGroupChat,
-                    isDebugMode = false
+                    isGroupChat = isGroupChat
                 )
             }
         } catch (exception: Exception) {
-            Util.error(applicationContext, "chatHook 에러\n\n$exception")
+            throw CoreException(exception.message)
         }
     }
 }
