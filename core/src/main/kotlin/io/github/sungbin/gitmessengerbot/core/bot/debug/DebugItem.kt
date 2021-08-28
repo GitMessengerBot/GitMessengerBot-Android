@@ -11,6 +11,14 @@ package io.github.sungbin.gitmessengerbot.core.bot.debug
 
 import java.util.Date
 
+data class DebugItem(
+    val scriptId: Int,
+    val message: String,
+    val time: Long,
+    val profileImageBase64: String,
+    val sender: String,
+)
+
 fun createDebugItem(scriptId: Int, message: String, profileImageBase64: String, sender: String) =
     DebugItem(
         scriptId = scriptId,
@@ -20,14 +28,10 @@ fun createDebugItem(scriptId: Int, message: String, profileImageBase64: String, 
         sender = sender
     )
 
-data class DebugItem(
-    val scriptId: Int,
-    val message: String,
-    val time: Long,
-    val profileImageBase64: String,
-    val sender: String
-)
-
 object Sender {
     const val Bot = "Bot"
 }
+
+fun List<DebugItem>.sortedByTime() = sortedByDescending { it.time }.asReversed()
+
+fun List<DebugItem>.getByScriptId(scriptId: Int) = filter { it.scriptId == scriptId }

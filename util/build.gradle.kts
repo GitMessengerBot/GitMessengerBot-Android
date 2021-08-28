@@ -42,4 +42,5 @@ dependencies {
     implementation(Dependencies.browser)
 
     Dependencies.essential.forEach(::implementation)
+    Dependencies.lifecycle.forEach(::implementation)
 }

@@ -40,10 +40,6 @@ android {
 
 dependencies {
     implementation(Dependencies.json)
-    implementation(project(":domain-github"))
-
-    implementation(project(":domain-kaven"))
-    implementation(project(":domain-kaven-github"))
 
     Dependencies.essential.forEach(::implementation)
     Dependencies.network.forEach(::implementation)

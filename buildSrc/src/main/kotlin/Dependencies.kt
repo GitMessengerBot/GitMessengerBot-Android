@@ -26,7 +26,7 @@ object Versions {
 
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.5.21"
+        const val Kotlin = "1.5.30"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
         const val Gradle = "7.1.0-alpha05"
@@ -74,6 +74,10 @@ object Versions {
     object Bot {
         const val J2V8 = "6.2.0@aar"
         const val RhinoEngine = "1.7.13"
+    }
+
+    object Lifecycle {
+        const val Master = "2.3.1"
     }
 }
 
@@ -142,5 +146,9 @@ object Dependencies {
     val compiler = listOf(
         "androidx.room:room-compiler:${Versions.Jetpack.Room}",
         "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
+    )
+
+    val lifecycle = listOf(
+        "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Lifecycle.Master}"
     )
 }

@@ -39,6 +39,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":util"))
+
     Dependencies.essential.forEach(::implementation)
+    Dependencies.lifecycle.forEach(::implementation)
     Dependencies.bot.forEach(::implementation)
 }

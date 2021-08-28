@@ -9,54 +9,54 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.debug
 
-import androidx.compose.runtime.mutableStateListOf
-import io.github.jisungbin.gitmessengerbot.util.Json
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.util.extension.clear
+import io.github.jisungbin.gitmessengerbot.util.extension.removeAll
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.util.extension.toModel
+import io.github.jisungbin.gitmessengerbot.util.operator.plusAssign
 
 @Suppress("ObjectPropertyName")
 object DebugStore {
-    private val _items = mutableStateListOf<DebugItem>()
-
-    val items get() = _items.sortedByDescending { it.time }.asReversed()
-
-    init {
-        _items.addAll(getList())
+    private val _items = MutableLiveData<List<DebugItem>>().apply {
+        value = getList()
     }
+    val items get(): LiveData<List<DebugItem>> = _items
 
     private fun getList(): List<DebugItem> {
         val debugs = mutableListOf<DebugItem>()
-        Storage.fileList(StringConfig.DebugPath()).forEach { debugFolder ->
+        Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
             Storage.fileList(debugFolder.path).forEach { debugFile ->
-                debugs.add(Json.toModel(Storage.read(debugFile.path, null)!!, DebugItem::class))
+                debugs.add(Storage.read(debugFile.path, null)!!.toModel(DebugItem::class))
             }
         }
         return debugs
     }
 
-    fun getByScriptId(scriptId: Int) = items.filter { it.scriptId == scriptId }
-
     fun add(item: DebugItem) {
-        _items.add(item)
-        Storage.write(StringConfig.Debug(item.scriptId), Json.toString(item))
+        _items += item
+        Storage.write(ScriptConfig.DebugDataPath(item.scriptId), item.toJsonString())
     }
 
     fun removeAll() {
         _items.clear()
-        Storage.deleteAll(StringConfig.DebugPath())
+        Storage.deleteAll(ScriptConfig.DebugAllPath)
     }
 
     fun removeAll(scriptId: Int) {
-        if (scriptId == StringConfig.DebugAllBot) {
-            _items.removeAll { it.scriptId != StringConfig.ScriptEvalId }
-            Storage.fileList(StringConfig.DebugPath()).forEach { debugFolder ->
-                if (debugFolder.path != StringConfig.Debug(StringConfig.ScriptEvalId)) {
+        if (scriptId == ScriptConfig.DebugAllBot) {
+            _items.removeAll { it.scriptId != ScriptConfig.EvalId }
+            Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
+                if (debugFolder.path != ScriptConfig.DebugDataPath(ScriptConfig.EvalId)) {
                     debugFolder.deleteRecursively()
                 }
             }
         } else {
             _items.removeAll { it.scriptId == scriptId }
-            Storage.deleteAll(StringConfig.Debug(scriptId))
+            Storage.deleteAll(ScriptConfig.DebugDataPath(scriptId))
         }
     }
 }

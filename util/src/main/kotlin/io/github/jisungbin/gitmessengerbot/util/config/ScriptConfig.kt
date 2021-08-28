@@ -18,10 +18,10 @@ object ScriptConfig {
     const val EvalId = -2
     const val ResponseFunctionName = "onMessage"
 
+    const val DebugAllPath = "${PathConfig.AppStorage}/debug"
+
     fun DebugDataPath(scriptId: Int) =
         "${PathConfig.AppStorage}/debug/$scriptId/${Random.nextInt()}.json"
-
-    fun DebugAllPath() = "${PathConfig.AppStorage}/debug"
 
     fun ScriptPath(name: String, lang: Int) =
         "${PathConfig.AppStorage}/scripts/${lang.toScriptLangName()}/$name.${lang.getScriptSuffix()}"
