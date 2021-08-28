@@ -11,9 +11,10 @@ include(
     ":presentation",
     ":domain",
     ":data",
-    ":data-remote",
-    ":data-local",
-    ":core"
+    ":data-kaven",
+    ":data-github",
+    ":core",
+    ":util"
 )
 
 rootProject.name = "GitMessengerBot"

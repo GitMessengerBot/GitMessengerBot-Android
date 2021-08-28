@@ -12,14 +12,14 @@ package io.github.jisungbin.gitmessengerbot.activity.editor.git.repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import kotlinx.coroutines.flow.Flow
 
 interface GitRepo {
     fun getFileContent(
         repoName: String,
         path: String,
-        branch: String = StringConfig.GitDefaultBranch
+        branch: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultBranch
     ): Flow<Result>
 
     fun createRepo(repo: Repo): Flow<Result>

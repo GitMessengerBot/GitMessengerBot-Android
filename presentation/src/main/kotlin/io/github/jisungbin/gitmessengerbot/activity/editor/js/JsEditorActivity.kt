@@ -17,11 +17,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -41,7 +41,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(StringConfig.IntentScriptId, -1)
+        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentScriptId, -1)
 
         setContent {
             MaterialTheme {

@@ -12,7 +12,6 @@ package io.github.jisungbin.gitmessengerbot.activity.main.setting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,7 +54,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.activity.main.script.getScriptDefaultCode
 import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
@@ -63,9 +62,9 @@ import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.util.Util
 import io.github.jisungbin.gitmessengerbot.util.Web
-import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.extension.runIf
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.runIf
+import io.github.jisungbin.gitmessengerbot.util.toast
 
 @Composable
 fun OpenSourceDialog(visible: MutableState<Boolean>) {
@@ -223,14 +222,14 @@ fun DonateDialog(visible: MutableState<Boolean>) {
             confirmButton = {
                 OutlinedButton(
                     onClick = {
-                        Web.open(context, Web.Link.DonateOpenChat)
+                        io.github.jisungbin.gitmessengerbot.util.Web.open(context, io.github.jisungbin.gitmessengerbot.util.Web.Link.DonateOpenChat)
                     }
                 ) {
                     Text(text = stringResource(R.string.setting_dialog_button_direct_go))
                 }
                 OutlinedButton(
                     onClick = {
-                        Util.copy(context, context.getString(R.string.kakaotalk_id))
+                        io.github.jisungbin.gitmessengerbot.util.Util.copy(context, context.getString(R.string.kakaotalk_id))
                     }
                 ) {
                     Text(text = stringResource(R.string.setting_dialog_button_copy_kakaotalk_id))
@@ -519,7 +518,8 @@ private fun ScriptDefaultCodeSettingDialog(
                             3 -> Bot.app.value.scriptDefaultCode.value.sim = newCode
                         }
                         Bot.saveAndUpdate(Bot.app.value)
-                        toast(context, context.getString(R.string.setting_toast_saved))
+                        io.github.jisungbin.gitmessengerbot.util.toast(context,
+                            context.getString(R.string.setting_toast_saved))
                         visible.value = false
                         innerVisible.value = false
                     }

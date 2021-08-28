@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.script
 
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 
 object ScriptLang {
     const val TypeScript = 0

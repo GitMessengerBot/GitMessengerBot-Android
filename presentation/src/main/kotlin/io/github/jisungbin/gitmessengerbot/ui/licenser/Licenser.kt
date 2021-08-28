@@ -65,7 +65,7 @@ private fun LicenserItem(project: Project) {
             painter = painterResource(R.drawable.ic_round_insert_link_24),
             contentDescription = null,
             tint = Color.Black,
-            modifier = Modifier.clickable { Web.open(context, Web.Link.Custom(project.link)) }
+            modifier = Modifier.clickable { io.github.jisungbin.gitmessengerbot.util.Web.open(context, io.github.jisungbin.gitmessengerbot.util.Web.Link.Custom(project.link)) }
         )
     }
 }

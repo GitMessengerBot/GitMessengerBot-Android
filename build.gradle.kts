@@ -13,11 +13,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        // maven { setUrl("https://chaquo.com/maven") }
+        maven { setUrl("https://chaquo.com/maven") }
     }
 
     dependencies {
-        // classpath("com.chaquo.python:gradle:${Versions.Essential.Python}")
+        classpath("com.chaquo.python:gradle:${Versions.Essential.Python}")
         classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30-RC")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.Master}")
@@ -29,7 +29,7 @@ allprojects {
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }
-        // maven { setUrl("https://chaquo.com/maven") }
+        maven { setUrl("https://chaquo.com/maven") }
         maven { setUrl("https://oss.jfrog.org/libs-snapshot") }
         maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") }
     }

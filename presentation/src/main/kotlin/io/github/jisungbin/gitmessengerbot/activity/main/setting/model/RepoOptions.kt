@@ -11,4 +11,4 @@ package io.github.jisungbin.gitmessengerbot.activity.main.setting.model
 
 import io.github.jisungbin.gitmessengerbot.util.Nothing
 
-data class RepoOptions(var todo: Nothing = Nothing())
+data class RepoOptions(var todo: io.github.jisungbin.gitmessengerbot.util.Nothing = io.github.jisungbin.gitmessengerbot.util.Nothing())

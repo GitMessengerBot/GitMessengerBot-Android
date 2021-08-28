@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 
 data class MutableApp(
     val power: MutableState<Boolean> = mutableStateOf(false),
@@ -25,11 +25,11 @@ data class MutableApp(
     val editorAutoSave: MutableState<Int> = mutableStateOf(5),
     val scriptDefaultCode: MutableState<ScriptDefaultCode> = mutableStateOf(ScriptDefaultCode()),
     val scriptDefaultLang: MutableState<Int> = mutableStateOf(ScriptLang.TypeScript),
-    val scriptResponseFunctionName: MutableState<String> = mutableStateOf(StringConfig.ScriptResponseFunctionName),
-    val gitDefaultBranch: MutableState<String> = mutableStateOf(StringConfig.GitDefaultBranch),
-    val gitDefaultCommitMessage: MutableState<String> = mutableStateOf(StringConfig.GitDefaultCommitMessage),
+    val scriptResponseFunctionName: MutableState<String> = mutableStateOf(io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptResponseFunctionName),
+    val gitDefaultBranch: MutableState<String> = mutableStateOf(io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultBranch),
+    val gitDefaultCommitMessage: MutableState<String> = mutableStateOf(io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage),
     val gitDefaultRepoOptions: MutableState<RepoOptions> = mutableStateOf(RepoOptions()),
-    val kakaoTalkPackageNames: SnapshotStateList<String> = mutableStateListOf(StringConfig.KakaoTalkDefaultPackageName),
+    val kakaoTalkPackageNames: SnapshotStateList<String> = mutableStateListOf(io.github.jisungbin.gitmessengerbot.util.StringConfig.KakaoTalkDefaultPackageName),
 )
 
 data class App(
@@ -41,9 +41,9 @@ data class App(
     val editorAutoSave: Int = 5,
     val scriptDefaultCode: ScriptDefaultCode = ScriptDefaultCode(),
     val scriptDefaultLang: Int = ScriptLang.TypeScript,
-    val scriptResponseFunctionName: String = StringConfig.ScriptResponseFunctionName,
-    val gitDefaultBranch: String = StringConfig.GitDefaultBranch,
-    val gitDefaultCommitMessage: String = StringConfig.GitDefaultCommitMessage,
+    val scriptResponseFunctionName: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptResponseFunctionName,
+    val gitDefaultBranch: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultBranch,
+    val gitDefaultCommitMessage: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage,
     val gitDefaultRepoOptions: RepoOptions = RepoOptions(),
-    val kakaoTalkPackageNames: List<String> = listOf(StringConfig.KakaoTalkDefaultPackageName),
+    val kakaoTalkPackageNames: List<String> = listOf(io.github.jisungbin.gitmessengerbot.util.StringConfig.KakaoTalkDefaultPackageName),
 )

@@ -41,13 +41,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.script.toScriptLangName
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.toast
 
 @Composable
 fun Setting(activity: Activity) {
@@ -131,7 +130,7 @@ private fun SettingContent(activity: Activity) {
             )
             OutlinedButton(
                 onClick = {
-                    toast(
+                    io.github.jisungbin.gitmessengerbot.util.toast(
                         context,
                         context.getString(R.string.setting_toast_todo_dev)
                     )
@@ -303,18 +302,18 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { NotificationUtil.requestReadPermission(activity) }) {
+            OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.NotificationUtil.requestReadPermission(activity) }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }
-        if (Storage.isScoped) {
+        if (io.github.jisungbin.gitmessengerbot.util.Storage.isScoped) {
             RowContent(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     text = stringResource(R.string.setting_app_access_storage_manager_permission),
                     fontSize = 15.sp,
                     color = Color.Black
                 )
-                OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
+                OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.Storage.requestStorageManagePermission(activity) }) {
                     Text(text = stringResource(R.string.setting_button_setting))
                 }
             }
@@ -325,7 +324,7 @@ private fun SettingContent(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
+            OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.util.BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
                 Text(text = stringResource(R.string.setting_button_setting))
             }
         }

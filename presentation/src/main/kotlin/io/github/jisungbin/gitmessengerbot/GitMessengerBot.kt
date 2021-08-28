@@ -17,7 +17,7 @@ import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
 class GitMessengerBot : Application() {
     override fun onCreate() {
         super.onCreate()
-        NotificationUtil.createChannel(
+        io.github.jisungbin.gitmessengerbot.util.NotificationUtil.createChannel(
             context = applicationContext,
             name = getString(R.string.notification_channel_name),
             description = getString(R.string.notification_channel_name)

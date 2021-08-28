@@ -25,8 +25,8 @@ object Versions {
     const val Gson = "2.8.7"
 
     object Essential {
-        // const val Python = "9.1.0"
-        const val Kotlin = "1.5.10" // todo: 1.5.20
+        const val Python = "9.1.0"
+        const val Kotlin = "1.5.21"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
         const val Gradle = "7.1.0-alpha05"
@@ -79,6 +79,7 @@ object Versions {
 
 object Dependencies {
     const val json = "com.google.code.gson:gson:${Versions.Gson}"
+    const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
     const val LandscapistCoil =
         "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}"
 
@@ -110,7 +111,6 @@ object Dependencies {
 
     val ui = listOf(
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
-        "androidx.browser:browser:${Versions.Ui.Browser}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )

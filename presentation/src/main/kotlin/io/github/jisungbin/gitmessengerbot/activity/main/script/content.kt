@@ -75,14 +75,14 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
 import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
-import io.github.jisungbin.gitmessengerbot.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.isEnglish
-import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.isEnglish
+import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.toast
 import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -209,7 +209,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
             .clip(shape)
             .noRippleClickable {
                 val intent = Intent(context, JsEditorActivity::class.java).apply {
-                    putExtra(StringConfig.IntentScriptId, script.id)
+                    putExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentScriptId, script.id)
                 }
                 context.startActivity(intent)
             }
@@ -283,7 +283,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                     .size(20.dp)
                     .clickable {
                         val intent = Intent(context, DebugActivty::class.java).apply {
-                            putExtra(StringConfig.IntentDebugScriptId, script.id)
+                            putExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentDebugScriptId, script.id)
                         }
                         context.startActivity(intent)
                     }
@@ -321,7 +321,7 @@ private fun ScriptView(compiler: ScriptCompiler, script: ScriptItem) {
                                         }
                                     }
                                     isRotated = false
-                                    toast(context, message)
+                                    io.github.jisungbin.gitmessengerbot.util.toast(context, message)
                                 }
                         }
                     }
@@ -464,7 +464,7 @@ fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                     )
                                     .noRippleClickable {
                                         if (scriptLang == ScriptLang.Python) {
-                                            toast(
+                                            io.github.jisungbin.gitmessengerbot.util.toast(
                                                 context,
                                                 context.getString(R.string.script_toast_cant_use_python)
                                             )
@@ -532,7 +532,7 @@ fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                 visible.value = false
                                 scriptNameField = TextFieldValue()
                             } else {
-                                toast(
+                                io.github.jisungbin.gitmessengerbot.util.toast(
                                     context,
                                     context.getString(R.string.script_add_input_name)
                                 )

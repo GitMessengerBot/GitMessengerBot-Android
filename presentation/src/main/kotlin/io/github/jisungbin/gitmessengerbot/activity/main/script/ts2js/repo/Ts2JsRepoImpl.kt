@@ -9,8 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.script.ts2js.repo
 
-import io.github.jisungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResponse
-import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.util.Json
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi

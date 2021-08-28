@@ -76,7 +76,7 @@
         <activity android:name=".activity.debug.DebugActivty" />
 
         <service
-            android:name=".service.MessageService"
+            android:name="io.github.sungbin.gitmessengerbot.core.service.MessageService"
             android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -84,9 +84,9 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <service android:name=".service.BackgroundService" />
+        <service android:name="io.github.sungbin.gitmessengerbot.core.service.BackgroundService" />
 
-        <receiver android:name=".service.NotifiactionService" />
+        <receiver android:name="io.github.sungbin.gitmessengerbot.core.service.NotifiactionService" />
 
     </application>
 

@@ -51,17 +51,17 @@ import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.activity.main.script.compiler.repo.ScriptCompiler
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
-import io.github.jisungbin.gitmessengerbot.bot.Bot
-import io.github.jisungbin.gitmessengerbot.bot.StackManager
-import io.github.jisungbin.gitmessengerbot.bot.debug.Debug
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.StackManager
+import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
 import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.jisungbin.gitmessengerbot.service.BackgroundService
+import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLine
 import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLineItem
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.toast
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import me.sungbin.fancybottombar.FancyBottomBar
@@ -91,11 +91,11 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
-            if (StackManager.v8[StringConfig.ScriptEvalId] == null) {
+            if (StackManager.v8[io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId] == null) {
                 scriptCompiler.process(
                     applicationContext,
                     ScriptItem(
-                        id = StringConfig.ScriptEvalId,
+                        id = io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,
@@ -104,11 +104,11 @@ class MainActivity : ComponentActivity() {
                     )
                 ).collect { result ->
                     when (result) {
-                        is Result.Success -> toast(
+                        is Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                             this@MainActivity,
                             getString(R.string.main_toast_eval_loaded)
                         )
-                        is Result.Fail -> toast(
+                        is Result.Fail -> io.github.jisungbin.gitmessengerbot.util.toast(
                             this@MainActivity,
                             getString(R.string.main_toast_eval_load_fail, result.exception.message)
                         )
@@ -248,7 +248,8 @@ class MainActivity : ComponentActivity() {
         val now = System.currentTimeMillis()
         if (now - onBackPressedTime >= 3000) {
             onBackPressedTime = now
-            toast(this, getString(R.string.main_toast_confirm_finish))
+            io.github.jisungbin.gitmessengerbot.util.toast(this,
+                getString(R.string.main_toast_confirm_finish))
         } else {
             super.onBackPressed()
         }

@@ -16,13 +16,12 @@ import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptItem
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ts2js.Ts2JsResponse
 import io.github.jisungbin.gitmessengerbot.activity.main.script.ts2js.repo.Ts2JsRepo
-import io.github.jisungbin.gitmessengerbot.bot.Bot
-import io.github.jisungbin.gitmessengerbot.bot.StackManager
-import io.github.jisungbin.gitmessengerbot.bot.api.BotApi
-import io.github.jisungbin.gitmessengerbot.bot.api.Log
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.StackManager
+import io.github.sungbin.gitmessengerbot.core.bot.api.BotApi
+import io.github.sungbin.gitmessengerbot.core.bot.api.Log
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.util.Nothing
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -110,7 +109,7 @@ class ScriptCompilerImpl @Inject constructor(
             StackManager.v8[script.id] = v8
             script.compiled = true
             v8.locker.release()
-            Result.Success(Nothing())
+            Result.Success(io.github.jisungbin.gitmessengerbot.util.Nothing())
         } catch (exception: Exception) {
             script.power = false
             script.compiled = false
@@ -172,7 +171,7 @@ class ScriptCompilerImpl @Inject constructor(
             }
         }
 
-        if (script.id != StringConfig.ScriptEvalId) {
+        if (script.id != io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId) {
             Bot.saveAndUpdate(script)
         }
         awaitClose { close() }

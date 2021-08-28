@@ -31,7 +31,7 @@ import com.mindorks.`interface`.OnImageLoaded
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 
 class ImageViewActivity : ComponentActivity() {
     private var onBackPressed by mutableStateOf(false)
@@ -41,7 +41,7 @@ class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageUrl = intent.getStringExtra(StringConfig.IntentImageUrl)!!
+        val imageUrl = intent.getStringExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentImageUrl)!!
         ViewColorGenerator().load(
             imageUrl,
             object : OnImageLoaded {

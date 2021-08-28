@@ -44,9 +44,9 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.doDelay
+import io.github.jisungbin.gitmessengerbot.util.toast
 import java.util.Calendar
 
 class SplashActivity : ComponentActivity() {
@@ -61,15 +61,17 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        val isSetupDone = Storage.read(StringConfig.GithubData, null) != null
+        val isSetupDone = io.github.jisungbin.gitmessengerbot.util.Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null) != null
         val builtDate = Calendar.getInstance()
             .apply { timeInMillis = BuildConfig.TIMESTAMP }
         val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
             " ${builtDate.get(Calendar.MINUTE)}m " +
             "${builtDate.get(Calendar.SECOND)}s"
-        toast(this, "Built at: $builtTime", Toast.LENGTH_LONG)
+        io.github.jisungbin.gitmessengerbot.util.toast(this,
+            "Built at: $builtTime",
+            Toast.LENGTH_LONG)
 
-        doDelay(2000) {
+        io.github.jisungbin.gitmessengerbot.util.doDelay(2000) {
             finish()
             startActivity(
                 Intent(

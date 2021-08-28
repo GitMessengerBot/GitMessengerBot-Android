@@ -61,15 +61,15 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.setup.github.model.GithubData
-import io.github.jisungbin.gitmessengerbot.bot.Bot
-import io.github.jisungbin.gitmessengerbot.service.BackgroundService
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
 
 @Composable
 private fun MenuBox(
@@ -112,8 +112,8 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val focusManager = LocalFocusManager.current
 
     val backgroundService = Intent(context, BackgroundService::class.java)
-    val githubJson = Storage.read(StringConfig.GithubData, "")!!
-    val githubData = Json.toModel(githubJson, GithubData::class)
+    val githubJson = io.github.jisungbin.gitmessengerbot.util.Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, "")!!
+    val githubData = io.github.jisungbin.gitmessengerbot.util.Json.toModel(githubJson, GithubData::class)
     var searching by remember { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -131,7 +131,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                 .clip(CircleShape)
                 .noRippleClickable {
                     val intent = Intent(activity, ImageViewActivity::class.java).apply {
-                        putExtra(StringConfig.IntentImageUrl, githubData.profileImageUrl)
+                        putExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentImageUrl, githubData.profileImageUrl)
                     }
                     activity.startActivity(
                         intent,

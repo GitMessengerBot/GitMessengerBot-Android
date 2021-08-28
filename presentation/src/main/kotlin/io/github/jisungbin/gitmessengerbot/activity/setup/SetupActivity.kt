@@ -65,12 +65,11 @@ import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.Storage
 import io.github.jisungbin.gitmessengerbot.util.Wear
 import io.github.jisungbin.gitmessengerbot.util.Web
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
-import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.doDelay
+import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.toast
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
@@ -92,7 +91,7 @@ class SetupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        wearAppInstalled = Wear.checkInstalled(applicationContext)
+        wearAppInstalled = io.github.jisungbin.gitmessengerbot.util.Wear.checkInstalled(applicationContext)
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
         setContent {
@@ -152,7 +151,7 @@ class SetupActivity : ComponentActivity() {
             ) {
                 PermissionView(
                     permission = Permission(
-                        permissions = if (Storage.isScoped) {
+                        permissions = if (io.github.jisungbin.gitmessengerbot.util.Storage.isScoped) {
                             listOf(PermissionType.ScopedStorage)
                         } else {
                             listOf(
@@ -214,12 +213,12 @@ class SetupActivity : ComponentActivity() {
                         .padding(8.dp)
                         .noRippleClickable {
                             if (notificationPermissionGranted && storagePermissionGranted) {
-                                Web.open(
+                                io.github.jisungbin.gitmessengerbot.util.Web.open(
                                     applicationContext,
-                                    Web.Link.Custom(SecretConfig.GithubOauthAddress)
+                                    io.github.jisungbin.gitmessengerbot.util.Web.Link.Custom(SecretConfig.GithubOauthAddress)
                                 )
                             } else {
-                                toast(
+                                io.github.jisungbin.gitmessengerbot.util.toast(
                                     activity,
                                     getString(R.string.setup_need_manage_permission)
                                 )
@@ -301,16 +300,20 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                NotificationUtil.requestReadPermission(this@SetupActivity)
-                doDelay(1000) { notificationPermissionGranted = true }
+                io.github.jisungbin.gitmessengerbot.util.NotificationUtil.requestReadPermission(this@SetupActivity)
+                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
+                    notificationPermissionGranted = true
+                }
             }
             PermissionType.Wear -> {
-                Wear.install(applicationContext)
-                doDelay(1000) { wearAppInstalled = true }
+                io.github.jisungbin.gitmessengerbot.util.Wear.install(applicationContext)
+                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) { wearAppInstalled = true }
             }
             PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(this@SetupActivity)
-                doDelay(1000) { storagePermissionGranted = true }
+                io.github.jisungbin.gitmessengerbot.util.Storage.requestStorageManagePermission(this@SetupActivity)
+                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
+                    storagePermissionGranted = true
+                }
             }
             else -> {
                 permissionsContracts.launch(this.permissions.toTypedArray())
@@ -343,9 +346,9 @@ class SetupActivity : ComponentActivity() {
                                             profileImageUrl = user.avatarUrl
                                         )
 
-                                        Storage.write(
-                                            StringConfig.GithubData,
-                                            Json.toString(githubData)
+                                        io.github.jisungbin.gitmessengerbot.util.Storage.write(
+                                            io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData,
+                                            io.github.jisungbin.gitmessengerbot.util.Json.toString(githubData)
                                         )
 
                                         finish()
@@ -356,7 +359,7 @@ class SetupActivity : ComponentActivity() {
                                             )
                                         )
 
-                                        toast(
+                                        io.github.jisungbin.gitmessengerbot.util.toast(
                                             activity,
                                             getString(
                                                 R.string.setup_toast_welcome_start,
@@ -365,7 +368,7 @@ class SetupActivity : ComponentActivity() {
                                         )
                                     }
                                     is DomainResult.Fail -> {
-                                        toast(
+                                        io.github.jisungbin.gitmessengerbot.util.toast(
                                             activity,
                                             getString(
                                                 R.string.setup_toast_github_connect_error,
@@ -379,7 +382,7 @@ class SetupActivity : ComponentActivity() {
                             }
                     }
                     is DomainResult.Fail -> {
-                        toast(
+                        io.github.jisungbin.gitmessengerbot.util.toast(
                             activity,
                             activity.getString(
                                 R.string.setup_toast_github_authorize_error,
