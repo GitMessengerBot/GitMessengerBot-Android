@@ -12,12 +12,12 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
-import io.github.jisungbin.gitmessengerbot.util.config.Config
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager.sessions
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 class MessageService : NotificationListenerService() {
 
@@ -34,8 +34,8 @@ class MessageService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         try {
-            // TODO: supported other package names.
-            if (sbn.packageName != Config.KakaoTalkDefaultPackageName) return
+            val app = AppConfig.app.value ?: throw CoreException("AppConfig.app value is null.")
+            if (!app.kakaoTalkPackageNames.contains(sbn.packageName)) return
             val wExt = NotificationCompat.WearableExtender(sbn.notification)
             for (action in wExt.actions) {
                 val remoteInputs = action.remoteInputs ?: return
@@ -59,8 +59,9 @@ class MessageService : NotificationListenerService() {
 
                         if (!sessions.containsKey(room)) sessions[room] = action
 
+                        // TODO
                         /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
-                         sbn.notification.getLargeIcon().toBitmap(context)*/ // todo
+                         sbn.notification.getLargeIcon().toBitmap(context)*/
 
                         println(listOf(room, message, sender, isGroupChat))
                         chatHook(room, message, sender, isGroupChat)

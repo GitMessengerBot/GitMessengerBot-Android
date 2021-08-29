@@ -5,5 +5,5 @@ object GithubConfig {
 
     const val DefaultBranch = "main"
     const val DefaultRepoDescription = "Created by GitMessengerBot"
-    const val DefaultCommitMessage = "Commited by GitMessengerBot"
+    const val DefaultCommitMessage = "Commited by GitMessengerBot" // TODO: pattern
 }

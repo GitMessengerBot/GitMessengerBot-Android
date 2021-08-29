@@ -9,7 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 
-import android.app.Activity
+import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
 import io.github.jisungbin.gitmessengerbot.util.Nothing
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.collect
 internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
 
     private fun compileJavaScript(
-        activity: Activity,
+        context: Context,
         script: ScriptItem,
         code: String,
     ): CoreResult<Nothing> {
@@ -40,7 +40,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
             val v8 = V8.createV8Runtime()
             v8.addApi(
                 apiName = "Bot",
-                apiClass = BotApi(context = activity.applicationContext, scriptId = script.id),
+                apiClass = BotApi(context = context, scriptId = script.id),
                 methodNames = listOf("reply", "replyShowAll"),
                 argumentsList = listOf(
                     listOf(String::class.java, String::class.java, Boolean::class.java),
@@ -60,7 +60,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
             )
             v8.addApi(
                 apiName = "UI",
-                apiClass = UI(activity),
+                apiClass = UI(context),
                 methodNames = listOf("toast"),
                 argumentsList = listOf(listOf(String::class.java))
             )
@@ -136,7 +136,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun process(activity: Activity, script: ScriptItem) = callbackFlow {
+    override fun process(context: Context, script: ScriptItem) = callbackFlow {
         when (script.lang) {
             ScriptLang.TypeScript -> {
                 ts2Js
@@ -146,7 +146,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
                             is CoreResult.Success -> {
                                 val jsCode = ts2JsResult.response.jsCode
                                 println(jsCode)
-                                trySend(compileJavaScript(activity, script, jsCode))
+                                trySend(compileJavaScript(context, script, jsCode))
                             }
                             is CoreResult.Fail -> {
                                 script.power = false
@@ -157,7 +157,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
                     }
             }
             ScriptLang.JavaScript -> {
-                trySend(compileJavaScript(activity, script, script.getCode()))
+                trySend(compileJavaScript(context, script, script.getCode()))
             }
             ScriptLang.Python -> { // todo
                 trySend(CoreResult.Fail(CoreException("Python build is TODO.")))

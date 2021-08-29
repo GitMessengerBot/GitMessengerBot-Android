@@ -9,10 +9,11 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-import android.app.Activity
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import android.content.Context
 
 // TODO: activity 메모리 누수 해결
-internal class UI(private val activity: Activity) { // TODO
-    fun toast(message: String) = activity.toast(message)
+internal class UI(private val context: Context) { // TODO
+    fun toast(message: String) {
+        io.github.jisungbin.gitmessengerbot.util.extension.toast(context, message)
+    }
 }

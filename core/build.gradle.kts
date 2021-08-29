@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(Dependencies.jsoup)
     implementation(Dependencies.livedata)
+
     implementation(project(":common"))
 
     Dependencies.essential.forEach(::implementation)

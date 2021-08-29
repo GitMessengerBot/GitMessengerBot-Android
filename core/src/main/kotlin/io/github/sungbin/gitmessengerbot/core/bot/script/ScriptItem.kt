@@ -14,6 +14,7 @@ import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.setting.model.ScriptDefaultCode
 
 private typealias ScriptItems = List<ScriptItem>
 
