@@ -51,31 +51,27 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.github.GithubRepository
-import io.github.jisungbin.gitmessengerbot.data.remote.github.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.data.github.model.GithubUserResponse
+import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubTokenResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUserResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.repository.DomainResult
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.Json
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.core.Wear
 import io.github.jisungbin.gitmessengerbot.util.core.Web
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.doDelay
-import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.toast
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var githubRepository: GithubRepository
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -103,8 +99,6 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun Setup() {
-        val activity = this@SetupActivity
-
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -218,10 +212,7 @@ class SetupActivity : ComponentActivity() {
                                     Web.Link.Custom(SecretConfig.GithubOauthAddress)
                                 )
                             } else {
-                                io.github.jisungbin.gitmessengerbot.util.toast(
-                                    activity,
-                                    getString(R.string.setup_need_manage_permission)
-                                )
+                                toast(getString(R.string.setup_need_manage_permission))
                             }
                         },
                     text = stringResource(R.string.setup_start_with_github_login),
@@ -237,7 +228,7 @@ class SetupActivity : ComponentActivity() {
     private fun PermissionView(
         permission: Permission,
         permissionGranted: Boolean,
-        padding: PermissionViewPadding
+        padding: PermissionViewPadding,
     ) {
         Column(
             modifier = Modifier
@@ -301,17 +292,17 @@ class SetupActivity : ComponentActivity() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
                 NotificationUtil.requestReadPermission(this@SetupActivity)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
+                doDelay(1000) {
                     notificationPermissionGranted = true
                 }
             }
             PermissionType.Wear -> {
                 Wear.install(applicationContext)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) { wearAppInstalled = true }
+                doDelay(1000) { wearAppInstalled = true }
             }
             PermissionType.ScopedStorage -> {
                 Storage.requestStorageManagePermission(this@SetupActivity)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
+                doDelay(1000) {
                     storagePermissionGranted = true
                 }
             }
@@ -348,7 +339,9 @@ class SetupActivity : ComponentActivity() {
 
                                         Storage.write(
                                             io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData,
-                                            io.github.jisungbin.gitmessengerbot.util.Json.toString(githubData)
+                                            io.github.jisungbin.gitmessengerbot.util.Json.toString(
+                                                githubData
+                                            )
                                         )
 
                                         finish()

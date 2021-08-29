@@ -13,7 +13,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.github.RequestResult
+import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
 import io.github.jisungbin.gitmessengerbot.util.exception.DataGithubException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,13 +68,13 @@ class GithubRepositoryImpl(
             ).getUserInfo()
             trySend(
                 if (request.isSuccessful && request.body() != null) {
-                    RequestResult.Success(request.body()!!.toDomain())
+                    GithubResult.Success(request.body()!!.toDomain())
                 } else {
-                    RequestResult.Fail(DataGithubException("Github.getUserInfo() response is null."))
+                    GithubResult.Fail(DataGithubException("Github.getUserInfo() response is null."))
                 }
             )
         } catch (exception: Exception) {
-            trySend(RequestResult.Fail(DataGithubException(exception.message)))
+            trySend(GithubResult.Fail(DataGithubException(exception.message)))
         }
 
         awaitClose { close() }
@@ -94,13 +94,13 @@ class GithubRepositoryImpl(
             )
             trySend(
                 if (request.isSuccessful && request.body() != null) {
-                    RequestResult.Success(request.body()!!.toDomain())
+                    GithubResult.Success(request.body()!!.toDomain())
                 } else {
-                    RequestResult.Fail(DataGithubException("Github.requestAouthToken() response is null."))
+                    GithubResult.Fail(DataGithubException("Github.requestAouthToken() response is null."))
                 }
             )
         } catch (exception: Exception) {
-            trySend(RequestResult.Fail(DataGithubException(exception.message)))
+            trySend(GithubResult.Fail(DataGithubException(exception.message)))
         }
 
         awaitClose { close() }

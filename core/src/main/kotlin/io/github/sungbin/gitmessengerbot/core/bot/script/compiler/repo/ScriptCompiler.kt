@@ -11,10 +11,10 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 
 import android.content.Context
 import io.github.jisungbin.gitmessengerbot.util.Nothing
-import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import kotlinx.coroutines.flow.Flow
 
 interface ScriptCompiler {
-    fun process(context: Context, script: ScriptItem): Flow<RequestResult<Nothing>>
+    fun process(context: Context, script: ScriptItem): Flow<CoreResult<Nothing>>
 }

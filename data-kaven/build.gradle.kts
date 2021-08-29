@@ -44,7 +44,7 @@ dependencies {
 
     Dependencies.essential.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
+    Dependencies.retrofitutil.forEach(::implementation)
     Dependencies.room.forEach(::implementation)
 
     kapt(Dependencies.roomCompiler)

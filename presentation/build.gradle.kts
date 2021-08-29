@@ -83,6 +83,8 @@ dependencies {
     Dependencies.essential.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
+    Dependencies.retrofit.forEach(::implementation)
+    Dependencies.retrofitutil.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
 
     kapt(Dependencies.hiltCompiler)

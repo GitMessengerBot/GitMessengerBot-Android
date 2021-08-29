@@ -110,7 +110,7 @@ object Dependencies {
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
     )
 
-    val networkutil = listOf(
+    val retrofitutil = listOf(
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
     )

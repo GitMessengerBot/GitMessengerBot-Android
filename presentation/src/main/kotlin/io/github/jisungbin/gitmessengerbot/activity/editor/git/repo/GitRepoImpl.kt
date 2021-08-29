@@ -12,7 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.editor.git.repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.GitService
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
-import io.github.jisungbin.gitmessengerbot.activity.setup.module.model.GithubData
+import io.github.jisungbin.gitmessengerbot.activity.setup.repo.module.model.GithubData
 import io.github.jisungbin.gitmessengerbot.util.Json
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.StringConfig

@@ -9,10 +9,10 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo
 
-import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlinx.coroutines.flow.Flow
 
 interface Ts2JsRepo {
-    fun convert(js: String): Flow<RequestResult<Ts2JsResponse>>
+    fun convert(js: String): Flow<CoreResult<Ts2JsResponse>>
 }

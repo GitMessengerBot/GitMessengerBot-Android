@@ -10,7 +10,10 @@
 package io.github.jisungbin.gitmessengerbot.activity.setup
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 object PermissionType {
     const val NotificationRead = "notification-read"
@@ -22,7 +25,20 @@ data class Permission(
     val permissions: List<String>,
     val name: String,
     val description: String,
-    @DrawableRes val icon: Int
+    @DrawableRes val icon: Int,
 )
 
-data class PermissionViewPadding(val top: Dp, val bottom: Dp)
+@Immutable
+interface PermissionViewPadding {
+    @Stable
+    val top: Dp
+
+    @Stable
+    val bottom: Dp
+}
+
+private class PermissionViewPaddingImpl(override val top: Dp, override val bottom: Dp) :
+    PermissionViewPadding
+
+fun PermissionViewPadding(top: Dp = 0.dp, bottom: Dp = 0.dp): PermissionViewPadding =
+    PermissionViewPaddingImpl(top, bottom)

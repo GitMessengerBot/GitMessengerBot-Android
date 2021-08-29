@@ -15,8 +15,8 @@ import com.eclipsesource.v8.V8Object
 import io.github.jisungbin.gitmessengerbot.util.Nothing
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.api.BotApi
@@ -34,7 +34,7 @@ class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
         context: Context,
         script: ScriptItem,
         code: String,
-    ): RequestResult<Nothing> {
+    ): CoreResult<Nothing> {
         return try {
             val v8 = V8.createV8Runtime()
             v8.addApi(
@@ -107,11 +107,11 @@ class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
             StackManager.v8[script.id] = v8
             script.compiled = true
             v8.locker.release()
-            RequestResult.Success(Nothing())
+            CoreResult.Success(Nothing())
         } catch (exception: Exception) {
             script.power = false
             script.compiled = false
-            RequestResult.Fail(exception)
+            CoreResult.Fail(exception)
         }
     }
 
@@ -145,15 +145,15 @@ class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
                     .convert(script.getCode())
                     .collect { ts2JsResult ->
                         when (ts2JsResult) {
-                            is RequestResult.Success -> {
+                            is CoreResult.Success -> {
                                 val jsCode = ts2JsResult.response.jsCode
                                 println(jsCode)
                                 trySend(compileJavaScript(context, script, jsCode))
                             }
-                            is RequestResult.Fail -> {
+                            is CoreResult.Fail -> {
                                 script.power = false
                                 script.compiled = false
-                                trySend(RequestResult.Fail(ts2JsResult.exception))
+                                trySend(CoreResult.Fail(ts2JsResult.exception))
                             }
                         }
                     }
@@ -168,10 +168,10 @@ class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
                 )
             }
             ScriptLang.Python -> { // todo
-                trySend(RequestResult.Fail(CoreException("Python build is TODO.")))
+                trySend(CoreResult.Fail(CoreException("Python build is TODO.")))
             }
             ScriptLang.Simple -> { // todo
-                trySend(RequestResult.Fail(CoreException("SimpleLang build is TODO.")))
+                trySend(CoreResult.Fail(CoreException("SimpleLang build is TODO.")))
             }
         }
 

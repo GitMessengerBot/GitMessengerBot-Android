@@ -14,5 +14,5 @@ import kotlinx.coroutines.flow.Flow
 interface BaseUseCase<in Parameter, out ResultType> {
     suspend operator fun invoke(
         parameter: Parameter,
-    ): Flow<RequestResult<ResultType>>
+    ): Flow<GithubResult<ResultType>>
 }
