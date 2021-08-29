@@ -38,7 +38,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.BuildConfig
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.activity.home.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController

@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.main.fragment.setting
+package io.github.jisungbin.gitmessengerbot.activity.home.setting
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -112,7 +112,7 @@ private fun SettingContent(activity: Activity) {
             Switch(
                 checked = app.editorHorizontalScroll.value,
                 onCheckedChange = {
-                    Bot.scriptDataSaveAndUpdate(app.copy(editorHorizontalScroll = mutableStateOf(it)))
+                    Bot.scriptDataSave(app.copy(editorHorizontalScroll = mutableStateOf(it)))
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
@@ -149,7 +149,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorFontSize.value.toString(),
                 onValueChange = {
                     try {
-                        Bot.scriptDataSaveAndUpdate(app.copy(editorFontSize = mutableStateOf(it.toInt())))
+                        Bot.scriptDataSave(app.copy(editorFontSize = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -170,7 +170,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.editorAutoSave.value.toString(),
                 onValueChange = {
                     try {
-                        Bot.scriptDataSaveAndUpdate(app.copy(editorAutoSave = mutableStateOf(it.toInt())))
+                        Bot.scriptDataSave(app.copy(editorAutoSave = mutableStateOf(it.toInt())))
                     } catch (ignored: Exception) {
                     }
                 },
@@ -217,7 +217,7 @@ private fun SettingContent(activity: Activity) {
                 value = app.scriptResponseFunctionName.value,
                 onValueChange = {
                     if (!it.contains(" ")) {
-                        Bot.scriptDataSaveAndUpdate(app.copy(scriptResponseFunctionName = mutableStateOf(it)))
+                        Bot.scriptDataSave(app.copy(scriptResponseFunctionName = mutableStateOf(it)))
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -242,7 +242,7 @@ private fun SettingContent(activity: Activity) {
             TextField(
                 value = app.gitDefaultBranch.value,
                 onValueChange = {
-                    Bot.scriptDataSaveAndUpdate(
+                    Bot.scriptDataSave(
                         app.copy(
                             gitDefaultBranch = mutableStateOf(
                                 it.replace(

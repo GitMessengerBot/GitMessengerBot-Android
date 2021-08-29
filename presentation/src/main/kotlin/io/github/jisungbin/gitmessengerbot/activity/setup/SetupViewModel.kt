@@ -14,7 +14,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.activity.home.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase

@@ -29,7 +29,6 @@ import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.bot.script.getCompiledScripts
 
 internal object Sender {
     const val Bot = "Bot"
@@ -46,7 +45,7 @@ object Bot {
     fun compileScript(context: Context, script: ScriptItem) =
         scriptCompiler.process(context, script)
 
-    fun getCompiledScripts() = _scripts.value?.getCompiledScripts() ?: emptyList()
+    fun getRunnableScripts() = _scripts.value?.filter { it.isRunnable } ?: emptyList()
 
     fun getScriptPower(script: ScriptItem): LiveData<Boolean> =
         scriptPowers[script.id]
@@ -56,7 +55,7 @@ object Bot {
         scriptPowers[script.id]
             ?: throw CoreException("There is no ${script.id} key in compileStates.")
 
-    fun scriptDataSaveAndUpdate(script: ScriptItem) {
+    fun scriptDataSave(script: ScriptItem) {
         _scripts.edit {
             removeIf { it.id == script.id }
             add(script)

@@ -168,7 +168,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
         }
 
         if (script.id != ScriptConfig.EvalId) {
-            Bot.scriptDataSaveAndUpdate(script)
+            Bot.scriptDataSave(script)
         }
 
         awaitClose { close() }

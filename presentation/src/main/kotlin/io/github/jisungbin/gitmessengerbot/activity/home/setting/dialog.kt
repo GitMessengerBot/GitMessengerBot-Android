@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.main.fragment.setting
+package io.github.jisungbin.gitmessengerbot.activity.home.setting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,10 +51,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.script.getScriptDefaultCode
-import io.github.sungbin.gitmessengerbot.core.script.toScriptLangName
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
@@ -64,7 +60,12 @@ import io.github.jisungbin.gitmessengerbot.util.core.Util
 import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
 import io.github.jisungbin.gitmessengerbot.util.runIf
+import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.script.getScriptDefaultCode
+import io.github.sungbin.gitmessengerbot.core.script.toScriptLangName
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
 fun OpenSourceDialog(visible: MutableState<Boolean>) {
@@ -74,7 +75,7 @@ fun OpenSourceDialog(visible: MutableState<Boolean>) {
             buttons = {},
             title = {
                 Text(
-                    text = stringResource(R.string.setting_dialog_opensource_license),
+                    text = stringResource(R.string.composable_setting_dialog_opensource_license),
                     fontSize = 20.sp
                 )
             },
@@ -225,19 +226,19 @@ fun DonateDialog(visible: MutableState<Boolean>) {
                         Web.open(context, Web.Link.DonateOpenChat)
                     }
                 ) {
-                    Text(text = stringResource(R.string.setting_dialog_button_direct_go))
+                    Text(text = stringResource(R.string.composable_setting_dialog_button_direct_go))
                 }
                 OutlinedButton(
                     onClick = {
                         Util.copy(context, context.getString(R.string.kakaotalk_id))
                     }
                 ) {
-                    Text(text = stringResource(R.string.setting_dialog_button_copy_kakaotalk_id))
+                    Text(text = stringResource(R.string.composable_setting_dialog_button_copy_kakaotalk_id))
                 }
             },
             title = {
                 Text(
-                    text = stringResource(R.string.setting_dialog_donate),
+                    text = stringResource(R.string.composable_setting_dialog_donate),
                     modifier = Modifier.padding(bottom = 30.dp)
                 )
             }
@@ -248,24 +249,20 @@ fun DonateDialog(visible: MutableState<Boolean>) {
 @Composable
 fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
-        var commitMessageField by remember { mutableStateOf(TextFieldValue(Bot.app.value.gitDefaultCommitMessage.value)) }
+        var commitMessageField by remember { mutableStateOf(TextFieldValue(AppConfig.appValue.gitDefaultCommitMessage)) }
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.setting_git_default_commit_message)) },
+            title = { Text(text = stringResource(R.string.composable_setting_git_default_commit_message)) },
             confirmButton = {
                 OutlinedButton(
                     onClick = {
-                        Bot.scriptDataSaveAndUpdate(
-                            Bot.app.value.copy(
-                                gitDefaultCommitMessage = mutableStateOf(
-                                    commitMessageField.text
-                                )
-                            )
-                        )
+                        AppConfig.copyAndUpdate { app ->
+                            app.copy(gitDefaultCommitMessage = commitMessageField.text)
+                        }
                     }
                 ) {
-                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
                 }
             },
             text = {
@@ -296,10 +293,10 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.setting_git_default_new_repo_options)) },
+            title = { Text(text = stringResource(R.string.composable_setting_git_default_new_repo_options)) },
             confirmButton = {
                 OutlinedButton(onClick = { /*TODO*/ }) {
-                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
                 }
             },
             text = {
@@ -324,7 +321,7 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.setting_app_kakaotak_package_names)) },
+            title = { Text(text = stringResource(R.string.composable_setting_app_kakaotak_package_names)) },
             buttons = {},
             text = {
                 LazyColumn(
@@ -346,10 +343,12 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                                     contentDescription = null,
                                     modifier = Modifier.clickable {
                                         if (newKakaoTalkPackage.text.isNotBlank()) {
-                                            Bot.app.value.kakaoTalkPackageNames.add(
-                                                newKakaoTalkPackage.text
-                                            )
-                                            Bot.scriptDataSaveAndUpdate(Bot.app.value)
+                                            AppConfig.copyAndUpdate { app ->
+                                                val mutableValue =
+                                                    app.kakaoTalkPackageNames.toMutableList()
+                                                mutableValue.add(newKakaoTalkPackage.text)
+                                                app.copy(kakaoTalkPackageNames = mutableValue)
+                                            }
                                             newKakaoTalkPackage = TextFieldValue()
                                             focusManager.clearFocus()
                                         }
@@ -386,7 +385,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
             onDismissRequest = { visible.value = false },
             buttons = {},
             title = {
-                Text(text = stringResource(R.string.setting_script_default_add_lang))
+                Text(text = stringResource(R.string.composable_setting_script_default_add_lang))
             },
             text = {
                 Column(
@@ -410,7 +409,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                                     .background(scriptLangItemBackgroundColor(scriptLang))
                                     .noRippleClickable {
                                         Bot.app.value.scriptDefaultLang.value = scriptLang
-                                        Bot.scriptDataSaveAndUpdate(Bot.app.value)
+                                        Bot.scriptDataSave(Bot.app.value)
                                     },
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -444,7 +443,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.setting_script_add_default_code)) },
+            title = { Text(text = stringResource(R.string.composable_setting_script_add_default_code)) },
             buttons = {},
             text = {
                 Column(
@@ -491,7 +490,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
 private fun ScriptDefaultCodeSettingDialog(
     visible: MutableState<Boolean>,
     innerVisible: MutableState<Boolean>,
-    scriptLang: Int
+    scriptLang: Int,
 ) {
     if (visible.value) {
         val context = LocalContext.current
@@ -502,7 +501,7 @@ private fun ScriptDefaultCodeSettingDialog(
             title = {
                 Text(
                     text = stringResource(
-                        R.string.setting_dialog_edit_default_code,
+                        R.string.composable_setting_dialog_edit_default_code,
                         scriptLang.toScriptLangName()
                     )
                 )
@@ -517,14 +516,16 @@ private fun ScriptDefaultCodeSettingDialog(
                             2 -> Bot.app.value.scriptDefaultCode.value.py = newCode
                             3 -> Bot.app.value.scriptDefaultCode.value.sim = newCode
                         }
-                        Bot.scriptDataSaveAndUpdate(Bot.app.value)
-                        io.github.jisungbin.gitmessengerbot.util.toast(context,
-                            context.getString(R.string.setting_toast_saved))
+                        Bot.scriptDataSave(Bot.app.value)
+                        io.github.jisungbin.gitmessengerbot.util.toast(
+                            context,
+                            context.getString(R.string.composable_setting_toast_saved)
+                        )
                         visible.value = false
                         innerVisible.value = false
                     }
                 ) {
-                    Text(text = stringResource(R.string.setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
                 }
             },
             text = {
@@ -573,7 +574,7 @@ private fun ApplicationItem(packageName: String) {
                 .size(20.dp)
                 .clickable {
                     Bot.app.value.kakaoTalkPackageNames.remove(packageName)
-                    Bot.scriptDataSaveAndUpdate(Bot.app.value)
+                    Bot.scriptDataSave(Bot.app.value)
                 }
         )
     }

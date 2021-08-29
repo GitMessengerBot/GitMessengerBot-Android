@@ -37,11 +37,10 @@ data class ScriptItem(
         }
     }
 
+    val isRunnable = power && compiled
+
     fun add() {
-        Storage.write(
-            ScriptConfig.ScriptPath(name, lang),
-            getScriptDefaultCode()
-        )
+        Storage.write(ScriptConfig.ScriptPath(name, lang), getScriptDefaultCode())
         Storage.write(ScriptConfig.ScriptDataPath(name, lang), toJsonString())
     }
 
@@ -58,6 +57,4 @@ data class ScriptItem(
 fun ScriptItems.sorted() =
     sortedByDescending { it.name }.sortedByDescending { it.lang }.asReversed()
 
-fun ScriptItems.getPowerOnScripts() = filter { it.power }
-
-fun ScriptItems.getCompiledScripts() = filter { it.power && it.compiled }
+fun ScriptItems.search(scriptName: String) = filter { it.name.contains(scriptName) }

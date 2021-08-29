@@ -79,7 +79,7 @@ class MessageService : NotificationListenerService() {
         isGroupChat: Boolean,
     ) {
         try {
-            for (script in Bot.getCompiledScripts()) {
+            for (script in Bot.getRunnableScripts()) {
                 Bot.callJsResponder(
                     script = script,
                     room = room,

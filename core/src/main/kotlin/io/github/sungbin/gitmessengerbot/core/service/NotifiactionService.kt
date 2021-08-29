@@ -44,7 +44,7 @@ class NotifiactionService : BroadcastReceiver() {
                         context!!,
                         context.getString(R.string.service_notification_toast_running_scripts_recompile)
                     )
-                    Bot.getCompiledScripts().forEach { script ->
+                    Bot.getRunnableScripts().forEach { script ->
                         scriptCompiler.process(context, script).collect { result ->
                             when (result) {
                                 is CoreResult.Fail -> {
