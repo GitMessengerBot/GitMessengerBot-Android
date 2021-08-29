@@ -23,12 +23,12 @@ class MessageService : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        toast(applicationContext, getString(R.string.service_message_bot_start))
+        toast(applicationContext, getString(R.string.service_message_toast_bot_start))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        toast(applicationContext, getString(R.string.service_message_bot_stop))
+        toast(applicationContext, getString(R.string.service_message_toast_bot_stop))
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {

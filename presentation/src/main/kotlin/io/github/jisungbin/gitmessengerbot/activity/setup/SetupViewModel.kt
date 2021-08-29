@@ -67,7 +67,7 @@ class SetupViewModel @Inject constructor(
                                 toast(
                                     activity,
                                     activity.getString(
-                                        R.string.setup_toast_welcome_start,
+                                        R.string.vm_setup_toast_welcome_start,
                                         user.login
                                     )
                                 )
@@ -79,7 +79,7 @@ class SetupViewModel @Inject constructor(
                                     RequestResult.Fail(
                                         CoreException(
                                             activity.getString(
-                                                R.string.setup_toast_github_connect_error,
+                                                R.string.vm_setup_exception_github_connect,
                                                 exception.message
                                             )
                                         )
@@ -94,7 +94,7 @@ class SetupViewModel @Inject constructor(
                         RequestResult.Fail(
                             CoreException(
                                 activity.getString(
-                                    R.string.setup_toast_github_authorize_error,
+                                    R.string.vm_setup_exception_github_authorize,
                                     exception.message
                                 )
                             )

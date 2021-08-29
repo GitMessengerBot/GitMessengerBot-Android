@@ -38,7 +38,7 @@ class BackgroundService : Service() {
             context = applicationContext,
             channelId = getString(R.string.notification_channel_name),
             title = getString(R.string.app_name),
-            content = getString(R.string.service_notification_bot_running),
+            content = getString(R.string.service_background_notification_bot_running),
             icon = R.drawable.ic_round_logo_512,
             isOnGoing = true,
             showTimestamp = true
@@ -58,7 +58,7 @@ class BackgroundService : Service() {
         notification = notification.addAction(
             NotificationCompat.Action.Builder(
                 0,
-                getString(R.string.service_notification_action_bot_power_toggle),
+                getString(R.string.service_background_notification_action_bot_power_toggle),
                 botPowerTogglePendingIntent
             ).build()
         )
@@ -77,7 +77,7 @@ class BackgroundService : Service() {
         notification = notification.addAction(
             NotificationCompat.Action.Builder(
                 0,
-                getString(R.string.service_notification_action_bot_all_recompile),
+                getString(R.string.service_background_notification_action_bot_all_recompile),
                 botRecompilePendingIntent
             ).build()
         )

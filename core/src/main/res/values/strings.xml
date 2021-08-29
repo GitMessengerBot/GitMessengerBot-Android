@@ -12,12 +12,14 @@
 
     <string name="notification_channel_name">GitMessengerBot - BackgroundService</string>
 
-    <string name="service_notification_action_bot_power_toggle">봇 전원 On/Off</string>
-    <string name="service_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
-    <string name="service_notification_bot_running">봇이 작동중 입니다…</string>
-    <string name="service_message_bot_start">알림 읽기 서비스가 시작되었습니다.</string>
-    <string name="service_message_bot_stop">알림 읽기 서비스가 중지되었습니다.</string>
-    <string name="service_toast_running_scripts_recompile">실행중인 스크립트를 리컴파일 합니다.</string>
-    <string name="service_toast_compile_error">%s 컴파일 에러\n\n%s</string>
-    <string name="service_toast_recompile_done">리컴파일 완료</string>
+    <string name="service_background_notification_action_bot_power_toggle">봇 전원 On/Off</string>
+    <string name="service_background_notification_action_bot_all_recompile">봇 전체 스크립트 리컴파일</string>
+    <string name="service_background_notification_bot_running">봇이 작동중 입니다…</string>
+
+    <string name="service_message_toast_bot_start">알림 읽기 서비스가 시작되었습니다.</string>
+    <string name="service_message_toast_bot_stop">알림 읽기 서비스가 중지되었습니다.</string>
+
+    <string name="service_notification_toast_running_scripts_recompile">실행중인 스크립트를 리컴파일 합니다.</string>
+    <string name="service_notification_toast_compile_error">%s 컴파일 에러\n\n%s</string>
+    <string name="service_notification_toast_recompile_done">리컴파일 완료</string>
 </resources>

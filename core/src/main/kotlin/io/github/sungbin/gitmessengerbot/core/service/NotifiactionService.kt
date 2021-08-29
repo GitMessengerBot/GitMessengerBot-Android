@@ -14,7 +14,7 @@ import android.content.Context
 import android.content.Intent
 import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.repo.RequestResult
+import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -42,25 +42,25 @@ class NotifiactionService : BroadcastReceiver() {
                 CoroutineScope(Dispatchers.Default).launch {
                     toast(
                         context!!,
-                        context.getString(R.string.service_toast_running_scripts_recompile)
+                        context.getString(R.string.service_notification_toast_running_scripts_recompile)
                     )
                     Bot.getCompiledScripts().forEach { script ->
                         scriptCompiler.process(context, script).collect { result ->
                             when (result) {
-                                is RequestResult.Fail -> {
+                                is CoreResult.Fail -> {
                                     toast(
                                         context,
                                         context.getString(
-                                            R.string.service_toast_compile_error,
+                                            R.string.service_notification_toast_compile_error,
                                             script.name,
                                             result.exception.message
                                         )
                                     )
                                 }
-                                is RequestResult.Success -> {
+                                is CoreResult.Success -> {
                                     toast(
                                         context,
-                                        context.getString(R.string.service_toast_recompile_done)
+                                        context.getString(R.string.service_notification_toast_recompile_done)
                                     )
                                 }
                             }

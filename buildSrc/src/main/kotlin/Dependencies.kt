@@ -36,6 +36,7 @@ object Versions {
     }
 
     object Ui {
+        const val LottieCompose = "4.1.0"
         const val LandscapistCoil = "1.3.3"
         const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
@@ -76,6 +77,7 @@ object Versions {
     }
 
     object Lifecycle {
+        const val Compose = "1.0.0-alpha07"
         const val Master = "2.3.1"
     }
 }
@@ -123,6 +125,7 @@ object Dependencies {
     val ui = listOf(
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
+        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 
@@ -143,6 +146,7 @@ object Dependencies {
         "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
-        "androidx.activity:activity-compose:${Versions.Compose.Activity}"
+        "androidx.activity:activity-compose:${Versions.Compose.Activity}",
+        "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Lifecycle.Compose}"
     )
 }

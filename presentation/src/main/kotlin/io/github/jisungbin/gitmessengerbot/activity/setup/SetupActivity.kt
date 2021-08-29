@@ -16,6 +16,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,12 +58,17 @@ import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.core.Wear
 import io.github.jisungbin.gitmessengerbot.util.core.Web
+import io.github.jisungbin.gitmessengerbot.util.doWhen
+import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
+
+    private val vm: SetupViewModel by viewModels()
 
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -306,11 +312,18 @@ class SetupActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val activity = this@SetupActivity
-        val requestCode = intent!!.data!!.getQueryParameter("code")!!
+        val requestCode = intent?.data?.getQueryParameter("code")
+            ?: throw PresentationException("Github aouth request code intent data is null.")
 
         lifecycleScope.launchWhenCreated {
-
+            vm.login(requestCode, this@SetupActivity).collect { loginResult ->
+                loginResult.doWhen(
+                    onSuccess = {},
+                    onFail = { exception ->
+                        // todo: ErrorDialog
+                    }
+                )
+            }
         }
     }
 }
