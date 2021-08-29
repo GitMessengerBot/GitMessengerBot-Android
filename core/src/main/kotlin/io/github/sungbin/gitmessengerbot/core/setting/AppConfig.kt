@@ -27,7 +27,7 @@ object AppConfig {
 
     val canUseEval: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
 
-    fun copyAndUpdate(update: (App) -> App) {
+    fun update(update: (App) -> App) {
         val value = _app.value ?: throw CoreException("AppConfig.app value is null.")
         _app.value = update(value)
     }

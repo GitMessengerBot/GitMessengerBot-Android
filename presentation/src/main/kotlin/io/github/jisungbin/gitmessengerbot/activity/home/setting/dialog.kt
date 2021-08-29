@@ -58,13 +58,13 @@ import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.util.core.Util
 import io.github.jisungbin.gitmessengerbot.util.core.Web
-import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import io.github.jisungbin.gitmessengerbot.util.runIf
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.util.toast
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.script.getScriptDefaultCode
-import io.github.sungbin.gitmessengerbot.core.script.toScriptLangName
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
@@ -257,7 +257,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
             confirmButton = {
                 OutlinedButton(
                     onClick = {
-                        AppConfig.copyAndUpdate { app ->
+                        AppConfig.update { app ->
                             app.copy(gitDefaultCommitMessage = commitMessageField.text)
                         }
                     }
@@ -274,9 +274,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
                     Spacer()
                     TextField(
                         value = commitMessageField,
-                        onValueChange = {
-                            commitMessageField = it
-                        },
+                        onValueChange = { commitMessageField = it },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp),
@@ -343,11 +341,11 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                                     contentDescription = null,
                                     modifier = Modifier.clickable {
                                         if (newKakaoTalkPackage.text.isNotBlank()) {
-                                            AppConfig.copyAndUpdate { app ->
-                                                val mutableValue =
+                                            AppConfig.update { app ->
+                                                val kakaoTalkPackageNames =
                                                     app.kakaoTalkPackageNames.toMutableList()
-                                                mutableValue.add(newKakaoTalkPackage.text)
-                                                app.copy(kakaoTalkPackageNames = mutableValue)
+                                                kakaoTalkPackageNames.add(newKakaoTalkPackage.text)
+                                                app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
                                             }
                                             newKakaoTalkPackage = TextFieldValue()
                                             focusManager.clearFocus()
@@ -361,7 +359,7 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                         )
                     }
                     items(
-                        items = Bot.app.value.kakaoTalkPackageNames,
+                        items = AppConfig.appValue.kakaoTalkPackageNames,
                         key = { it }
                     ) { packageName ->
                         ApplicationItem(packageName = packageName)
@@ -376,10 +374,6 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
 fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         val scriptLangItemShape = RoundedCornerShape(10.dp)
-        val scriptLangItemBackgroundColor =
-            { lang: Int -> if (Bot.app.value.scriptDefaultLang.value == lang) colors.secondary else Color.White }
-        val scriptLangItemTextColor =
-            { lang: Int -> if (Bot.app.value.scriptDefaultLang.value == lang) Color.White else colors.secondary }
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
@@ -402,15 +396,24 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                             .border(1.dp, colors.secondary, scriptLangItemShape)
                     ) {
                         repeat(4) { scriptLang ->
+                            @Composable
+                            fun scriptLangItemBackgroundColor(lang: Int) =
+                                if (AppConfig.appValue.scriptDefaultLang == lang) colors.secondary else Color.White
+
+                            @Composable
+                            fun scriptLangItemTextColor(lang: Int) =
+                                if (AppConfig.appValue.scriptDefaultLang == lang) Color.White else colors.secondary
+
                             Column(
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxHeight()
                                     .background(scriptLangItemBackgroundColor(scriptLang))
-                                    .noRippleClickable {
-                                        Bot.app.value.scriptDefaultLang.value = scriptLang
-                                        Bot.scriptDataSave(Bot.app.value)
-                                    },
+                                    .noRippleClickable(onClick = {
+                                        AppConfig.update { app ->
+                                            app.copy(scriptDefaultLang = scriptLang)
+                                        }
+                                    }),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
