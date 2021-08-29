@@ -37,9 +37,9 @@
     <string name="main_menu_all_script_count">총 스크립트 수</string>
     <string name="main_menu_running_script_count">실행중인\n스크립트 수</string>
     <string name="main_menu_script_search">스크립트 검색</string>
-    <string name="main_toast_eval_loaded">eval 준비 완료</string>
-    <string name="main_toast_confirm_finish">정말 종료하실려면 뒤로가기를 한 번 더 눌러주세요.</string>
-    <string name="main_toast_eval_load_fail">eval 준비 실패\n\n%s</string>
+    <string name="activity_main_toast_eval_loaded">eval 준비 완료</string>
+    <string name="activity_main_toast_confirm_finish">정말 종료하실려면 뒤로가기를 한 번 더 눌러주세요.</string>
+    <string name="activity_main_toast_eval_load_fail">eval 준비 실패\n\n%s</string>
     <string name="main_header_script_search">스크립트 검색</string>
 
     <string name="script_label">SCRIPT</string>

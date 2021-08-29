@@ -9,7 +9,6 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -44,8 +43,8 @@ object Bot {
 
     val scripts get(): LiveData<List<ScriptItem>> = _scripts
 
-    fun compileScript(activity: Activity, script: ScriptItem) =
-        scriptCompiler.process(activity, script)
+    fun compileScript(context: Context, script: ScriptItem) =
+        scriptCompiler.process(context, script)
 
     fun getCompiledScripts() = _scripts.value?.getCompiledScripts() ?: emptyList()
 

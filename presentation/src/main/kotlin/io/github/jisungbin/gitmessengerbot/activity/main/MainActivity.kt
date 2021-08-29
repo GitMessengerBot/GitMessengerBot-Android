@@ -9,7 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main
 
-import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -43,23 +41,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.fragment.setting.Setting
-import io.github.jisungbin.gitmessengerbot.repo.Result
+import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLine
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.util.toast
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.doWhen
 import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
+import kotlinx.coroutines.flow.collect
 import me.sungbin.fancybottombar.FancyBottomBar
 import me.sungbin.fancybottombar.FancyColors
 import me.sungbin.fancybottombar.FancyItem
@@ -72,8 +70,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Bot.app.value.power.value) {
-            startService(Intent(this, BackgroundService::class.java))
+        AppConfig.app.observe(this) { app ->
+            val botCoreService = Intent(this, BackgroundService::class.java)
+            if (app.power) {
+                startService(botCoreService)
+            } else {
+                stopService(botCoreService)
+            }
         }
 
         SystemUiController(window).run {
@@ -82,87 +85,45 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
-            if (StackManager.v8[io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId] == null) {
-                scriptCompiler.process(
+            if (AppConfig.canUseEval) {
+                Bot.compileScript(
                     applicationContext,
                     ScriptItem(
-                        id = io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId,
+                        id = ScriptConfig.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,
                         compiled = false,
                         lastRun = ""
                     )
-                ).collect { result ->
-                    when (result) {
-                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                            this@MainActivity,
-                            getString(R.string.main_toast_eval_loaded)
-                        )
-                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.toast(
-                            this@MainActivity,
-                            getString(R.string.main_toast_eval_load_fail, result.exception.message)
-                        )
-                    }
+                ).collect { compileResult ->
+                    compileResult.doWhen(
+                        onSuccess = {
+                            toast(getString(R.string.activity_main_toast_eval_loaded))
+                        },
+                        onFail = { exception ->
+                            toast(
+                                getString(
+                                    R.string.activity_main_toast_eval_load_fail,
+                                    exception.message
+                                )
+                            )
+                        }
+                    )
                 }
             }
         }
 
         setContent {
-            /*MaterialTheme {
-                Main()
-            }*/
-
-            TimeLine(
-                items = listOf(
-                    ClipData.Item(1),
-                    ClipData.Item(1),
-                    ClipData.Item(1),
-                    ClipData.Item(1),
-                    ClipData.Item(1),
-                    ClipData.Item(1),
-                    ClipData.Item(2),
-                    ClipData.Item(3),
-                    ClipData.Item(4),
-                    ClipData.Item(4),
-                    ClipData.Item(4),
-                    ClipData.Item(4),
-                    ClipData.Item(5),
-                    ClipData.Item(5),
-                    ClipData.Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                ),
-                modifier = Modifier.background(Color.White)
-            ) { modifier, item ->
-                Surface(
-                    modifier = modifier,
-                    elevation = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(30.dp)) {
-                        Text(
-                            text = item.key.toString(),
-                            fontSize = 15.sp,
-                            color = Color.White
-                        )
-                    }
-                }
+            MaterialTheme {
+                Content()
             }
         }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
-    private fun Main() {
+    private fun Content() {
         val scriptAddDialogVisible = remember { mutableStateOf(false) }
 
         Box(
@@ -239,10 +200,7 @@ class MainActivity : ComponentActivity() {
         val now = System.currentTimeMillis()
         if (now - onBackPressedTime >= 3000) {
             onBackPressedTime = now
-            io.github.jisungbin.gitmessengerbot.util.toast(
-                this,
-                getString(R.string.main_toast_confirm_finish)
-            )
+            toast(getString(R.string.activity_main_toast_confirm_finish))
         } else {
             super.onBackPressed()
         }

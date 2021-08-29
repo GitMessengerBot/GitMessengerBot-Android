@@ -34,8 +34,7 @@ class MessageService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         try {
-            val app = AppConfig.app.value ?: throw CoreException("AppConfig.app value is null.")
-            if (!app.kakaoTalkPackageNames.contains(sbn.packageName)) return
+            if (!AppConfig.appValue.kakaoTalkPackageNames.contains(sbn.packageName)) return
             val wExt = NotificationCompat.WearableExtender(sbn.notification)
             for (action in wExt.actions) {
                 val remoteInputs = action.remoteInputs ?: return

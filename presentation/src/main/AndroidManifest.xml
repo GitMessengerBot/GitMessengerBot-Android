@@ -84,6 +84,7 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
         <service android:name="io.github.sungbin.gitmessengerbot.core.service.BackgroundService" />
 
         <receiver android:name="io.github.sungbin.gitmessengerbot.core.service.NotifiactionService" />
