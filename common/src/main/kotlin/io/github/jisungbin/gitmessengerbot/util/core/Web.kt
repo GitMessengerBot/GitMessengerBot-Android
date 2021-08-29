@@ -35,7 +35,7 @@ object Web {
         class Custom(address: String) : Link(address)
     }
 
-    suspend fun parse(address: String) = coroutineScope {
+    suspend fun parse(address: String): String = coroutineScope {
         return@coroutineScope async(Dispatchers.IO) {
             Jsoup.connect(address).get().wholeText()
         }

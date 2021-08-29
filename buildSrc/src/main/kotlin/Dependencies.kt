@@ -117,7 +117,6 @@ object Dependencies {
 
     val essential = listOf(
         "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
-        "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Essential.Kotlin}",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Essential.Coroutines}"
     )
 

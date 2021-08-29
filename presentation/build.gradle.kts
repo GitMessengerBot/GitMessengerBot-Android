@@ -26,14 +26,6 @@ android {
         multiDexEnabled = true
         setProperty("archivesBaseName", "$versionName ($versionCode)")
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-
-            correctErrorTypes = true
-        }
-
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -85,18 +77,13 @@ dependencies {
     implementation(project(":data-kaven"))
     implementation(project(":domain-github"))
     implementation(project(":domain-kaven"))
-    implementation(project(":util"))
+    implementation(project(":common"))
 
     Dependencies.debug.forEach(::debugImplementation)
-    Dependencies.bot.forEach(::implementation)
     Dependencies.essential.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
-    Dependencies.room.forEach(::implementation)
 
     kapt(Dependencies.hiltCompiler)
-    kapt(Dependencies.roomCompiler)
 }

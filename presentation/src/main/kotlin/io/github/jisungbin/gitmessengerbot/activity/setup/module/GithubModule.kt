@@ -7,14 +7,14 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup.github
+package io.github.jisungbin.gitmessengerbot.activity.setup.module
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.qualifier.AouthRetrofit
-import io.github.jisungbin.gitmessengerbot.activity.setup.github.qualifier.UserRetrofit
+import io.github.jisungbin.gitmessengerbot.activity.setup.module.qualifier.AouthRetrofit
+import io.github.jisungbin.gitmessengerbot.activity.setup.module.qualifier.UserRetrofit
 import io.github.jisungbin.gitmessengerbot.domain.github.repository.github.GithubRepository
 import io.github.jisungbin.gitmessengerbot.data.remote.github.repository.GithubRepositoryImpl
 import javax.inject.Singleton

@@ -28,10 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mindorks.ViewColorGenerator
 import com.mindorks.`interface`.OnImageLoaded
+import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
 
 class ImageViewActivity : ComponentActivity() {
     private var onBackPressed by mutableStateOf(false)
@@ -41,7 +43,8 @@ class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageUrl = intent.getStringExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentImageUrl)!!
+        val imageUrl = intent.getStringExtra(IntentConfig.ImageUrl)
+            ?: throw PresentationException("'${IntentConfig.ImageUrl}' intent extra value is null.")
         ViewColorGenerator().load(
             imageUrl,
             object : OnImageLoaded {
@@ -52,11 +55,9 @@ class ImageViewActivity : ComponentActivity() {
                     mutedColor: String,
                     mutedLightColor: String,
                     mutedDarkColor: String,
-                    dominantColor: String
+                    dominantColor: String,
                 ) {
-                    @Suppress("LocalVariableName")
-                    val _dominantColor = android.graphics.Color.parseColor(dominantColor)
-                    dominantComposeColor = Color(_dominantColor)
+                    dominantComposeColor = Color(android.graphics.Color.parseColor(dominantColor))
                 }
             }
         )
@@ -78,7 +79,7 @@ class ImageViewActivity : ComponentActivity() {
                         CoilImage(
                             imageModel = imageUrl,
                             modifier = Modifier.wrapContentSize(),
-                            circularRevealedEnabled = true
+                            circularReveal = CircularReveal()
                         )
                     }
                 }

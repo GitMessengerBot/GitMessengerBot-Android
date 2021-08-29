@@ -43,10 +43,10 @@ import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.util.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.doDelay
-import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import java.util.Calendar
 
 class SplashActivity : ComponentActivity() {
@@ -61,17 +61,15 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        val isSetupDone = Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null) != null
-        val builtDate = Calendar.getInstance()
-            .apply { timeInMillis = BuildConfig.TIMESTAMP }
+        val isSetupDone = Storage.read(GithubConfig.DataPath, null) != null
+        val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
         val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
             " ${builtDate.get(Calendar.MINUTE)}m " +
             "${builtDate.get(Calendar.SECOND)}s"
-        io.github.jisungbin.gitmessengerbot.util.toast(this,
-            "Built at: $builtTime",
-            Toast.LENGTH_LONG)
 
-        io.github.jisungbin.gitmessengerbot.util.doDelay(2000) {
+        toast("Built at: $builtTime", Toast.LENGTH_LONG)
+
+        doDelay(2000) {
             finish()
             startActivity(
                 Intent(
@@ -105,7 +103,7 @@ class SplashActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.logo),
+                    painter = painterResource(R.drawable.ic_round_logo_512),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(150.dp)

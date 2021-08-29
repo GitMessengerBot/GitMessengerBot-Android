@@ -9,4 +9,5 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.model
 
-data class GithubAouth(val accessToken: String)
+@JvmInline
+value class GithubAouth(val accessToken: String)

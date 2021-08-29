@@ -12,6 +12,6 @@ package io.github.jisungbin.gitmessengerbot.util.extension
 import android.os.Handler
 import android.os.Looper
 
-fun doDelay(ms: Long, action: () -> Unit) {
+inline fun doDelay(ms: Long, crossinline action: () -> Unit) {
     Handler(Looper.getMainLooper()).postDelayed({ action() }, ms)
 }

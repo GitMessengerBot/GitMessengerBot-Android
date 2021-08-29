@@ -14,7 +14,7 @@ include(
     ":data-kaven",
     ":data-github",
     ":core",
-    ":util"
+    ":common"
 )
 
 rootProject.name = "GitMessengerBot"
