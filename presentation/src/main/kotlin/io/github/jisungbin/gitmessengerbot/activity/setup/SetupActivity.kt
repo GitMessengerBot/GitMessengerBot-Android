@@ -13,7 +13,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,17 +49,10 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.data.github.model.GithubUserResponse
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubData
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubTokenResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.DomainResult
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.core.Wear
@@ -68,7 +60,6 @@ import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.toast
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
@@ -319,73 +310,7 @@ class SetupActivity : ComponentActivity() {
         val requestCode = intent!!.data!!.getQueryParameter("code")!!
 
         lifecycleScope.launchWhenCreated {
-            githubRepository.getAccessToken(requestCode).collect { accessKeyResult ->
-                when (accessKeyResult) {
-                    is DomainResult.Success -> {
-                        var githubData = GithubData(
-                            token = (accessKeyResult.response as GithubTokenResponse).accessToken
-                        )
-                        githubRepository
-                            .getUserInfo(githubData.token)
-                            .collect { userResult ->
-                                when (userResult) {
-                                    is DomainResult.Success -> {
-                                        val user = userResult.response as GithubUserResponse
 
-                                        githubData = githubData.copy(
-                                            userName = user.login,
-                                            profileImageUrl = user.avatarUrl
-                                        )
-
-                                        Storage.write(
-                                            io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData,
-                                            io.github.jisungbin.gitmessengerbot.util.Json.toString(
-                                                githubData
-                                            )
-                                        )
-
-                                        finish()
-                                        startActivity(
-                                            Intent(
-                                                activity,
-                                                MainActivity::class.java
-                                            )
-                                        )
-
-                                        io.github.jisungbin.gitmessengerbot.util.toast(
-                                            activity,
-                                            getString(
-                                                R.string.setup_toast_welcome_start,
-                                                user.login
-                                            )
-                                        )
-                                    }
-                                    is DomainResult.Fail -> {
-                                        io.github.jisungbin.gitmessengerbot.util.toast(
-                                            activity,
-                                            getString(
-                                                R.string.setup_toast_github_connect_error,
-                                                userResult.exception.message
-                                            ),
-                                            Toast.LENGTH_LONG
-                                        )
-                                        userResult.exception.printStackTrace()
-                                    }
-                                }
-                            }
-                    }
-                    is DomainResult.Fail -> {
-                        io.github.jisungbin.gitmessengerbot.util.toast(
-                            activity,
-                            activity.getString(
-                                R.string.setup_toast_github_authorize_error,
-                                accessKeyResult.exception.message
-                            )
-                        )
-                        accessKeyResult.exception.printStackTrace()
-                    }
-                }
-            }
         }
     }
 }

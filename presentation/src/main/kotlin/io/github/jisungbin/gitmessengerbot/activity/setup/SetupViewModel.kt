@@ -9,12 +9,26 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.setup
 
+import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
+import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
-import kotlinx.coroutines.launch
+import io.github.jisungbin.gitmessengerbot.util.Nothing
+import io.github.jisungbin.gitmessengerbot.util.RequestResult
+import io.github.jisungbin.gitmessengerbot.util.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,11 +37,73 @@ class SetupViewModel @Inject constructor(
     private val githubRequestAouthTokenUseCase: GithubRequestAouthTokenUseCase,
 ) : ViewModel() {
 
-    fun githubRequestAouthToken(requestCode: String) = viewModelScope.launch {
-        githubRequestAouthTokenUseCase.invoke(requestCode)
-    }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun login(requestCode: String, activity: Activity) = callbackFlow<RequestResult<Nothing>> {
+        githubRequestAouthTokenUseCase.invoke(requestCode).collect { aouthTokenResult ->
+            aouthTokenResult.doWhen(
+                onSuccess = { aouth ->
+                    var githubData = GithubData(token = aouth.accessToken)
+                    githubGetUserInfoUseCase.invoke(githubData.token).collect { userInfoResult ->
+                        userInfoResult.doWhen(
+                            onSuccess = { user ->
+                                githubData = githubData.copy(
+                                    userName = user.login,
+                                    profileImageUrl = user.avatarUrl
+                                )
 
-    fun githubGetUserInfo(githubKey: String) = viewModelScope.launch {
-        return@launch githubGetUserInfoUseCase.invoke(githubKey)
+                                Storage.write(
+                                    GithubConfig.DataPath,
+                                    githubData.toJsonString()
+                                )
+
+                                activity.finish()
+                                startActivity(
+                                    Intent(
+                                        activity,
+                                        MainActivity::class.java
+                                    )
+                                )
+
+                                toast(
+                                    activity,
+                                    activity.getString(
+                                        R.string.setup_toast_welcome_start,
+                                        user.login
+                                    )
+                                )
+
+                                trySned(RequestResult.Success(Nothing()))
+                            },
+                            onFail = { exception ->
+                                trySend(
+                                    RequestResult.Fail(
+                                        CoreException(
+                                            activity.getString(
+                                                R.string.setup_toast_github_connect_error,
+                                                exception.message
+                                            )
+                                        )
+                                    )
+                                )
+                            }
+                        )
+                    }
+                },
+                onFail = { exception ->
+                    trySend(
+                        RequestResult.Fail(
+                            CoreException(
+                                activity.getString(
+                                    R.string.setup_toast_github_authorize_error,
+                                    exception.message
+                                )
+                            )
+                        )
+                    )
+                }
+            )
+        }
+
+        awaitClose { close() }
     }
 }
