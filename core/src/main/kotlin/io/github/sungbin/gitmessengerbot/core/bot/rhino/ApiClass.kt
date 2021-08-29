@@ -12,7 +12,7 @@ package io.github.sungbin.gitmessengerbot.core.bot.rhino
 import org.mozilla.javascript.ScriptableObject
 import org.mozilla.javascript.annotations.JSStaticFunction
 
-object ApiClass {
+internal object ApiClass {
     class App : ScriptableObject() {
         override fun getClassName() = "Api"
 

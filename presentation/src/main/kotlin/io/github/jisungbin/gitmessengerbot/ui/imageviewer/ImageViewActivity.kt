@@ -36,6 +36,7 @@ import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
 
 class ImageViewActivity : ComponentActivity() {
+
     private var onBackPressed by mutableStateOf(false)
     private var dominantComposeColor by mutableStateOf(Color.White)
 

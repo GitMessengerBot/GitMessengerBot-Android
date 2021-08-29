@@ -10,5 +10,5 @@ local.properties
 /domain-github/build
 /domain-kaven/build
 /core/build
-/util/build
+/common/build
 /data-github/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/github/secret

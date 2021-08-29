@@ -12,7 +12,7 @@ package io.github.sungbin.gitmessengerbot.core.bot
 import androidx.core.app.NotificationCompat
 import com.eclipsesource.v8.V8
 
-object StackManager {
+internal object StackManager {
     val sessions: HashMap<String, NotificationCompat.Action> = hashMapOf()
     val v8: HashMap<Int, V8> = hashMapOf()
 }

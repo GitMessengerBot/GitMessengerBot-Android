@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.main.setting.model
+package io.github.jisungbin.gitmessengerbot.activity.main.fragment.setting.model
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf

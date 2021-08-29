@@ -17,8 +17,8 @@ import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 
-// todo: context <- 메모리 누수 발생; 어떻게 고치지??
-class BotApi(private val context: Context, private val scriptId: Int) {
+// TODO: context 메모리 누수 해결
+internal class BotApi(private val context: Context, private val scriptId: Int) {
     private val showAll = "\u200b".repeat(500)
 
     private fun getReplySession(room: String) = StackManager.sessions[room]

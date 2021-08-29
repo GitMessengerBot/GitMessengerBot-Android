@@ -13,6 +13,6 @@ import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlinx.coroutines.flow.Flow
 
-interface Ts2JsRepo {
+internal interface Ts2JsRepo {
     fun convert(js: String): Flow<CoreResult<Ts2JsResponse>>
 }

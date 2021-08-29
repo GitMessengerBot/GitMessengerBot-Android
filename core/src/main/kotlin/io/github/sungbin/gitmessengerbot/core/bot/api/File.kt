@@ -11,7 +11,7 @@ package io.github.sungbin.gitmessengerbot.core.bot.api
 
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 
-class File {
+internal class File {
     fun save(path: String, content: String) = Storage.write(path, content)
     fun read(path: String, _null: String? = null) = Storage.read(path, _null)
     fun append(path: String, content: String, appendPrefix: String) =

@@ -9,29 +9,10 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-class UI {
-    /*companion object {
-        private lateinit var context: Context
+import android.app.Activity
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 
-        fun init(context: Context) {
-            Companion.context = context
-        }
-    }
-
-    fun toast(message: String) = Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-
-    fun notification(title: String, message: String, id: Int) {
-        NotificationUtil.showNormalNotification(
-            context,
-            id,
-            title,
-            message,
-            R.mipmap.ic_launcher,
-            false
-        )
-    }
-
-    fun snackbar(view: View, message: String) {
-        UiUtil.snackbar(view, message)
-    }*/
+// TODO: activity 메모리 누수 해결
+internal class UI(private val activity: Activity) { // TODO
+    fun toast(message: String) = activity.toast(message)
 }

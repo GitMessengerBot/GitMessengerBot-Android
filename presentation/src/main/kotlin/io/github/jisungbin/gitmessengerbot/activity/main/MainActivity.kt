@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main
 
+import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -44,36 +45,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
-import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.script.compiler.repo.ScriptCompiler
-import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.StackManager
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
+import io.github.jisungbin.gitmessengerbot.activity.main.fragment.setting.Setting
 import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLine
-import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLineItem
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.util.toast
-import javax.inject.Inject
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.StackManager
+import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
+import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
+import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import me.sungbin.fancybottombar.FancyBottomBar
 import me.sungbin.fancybottombar.FancyColors
 import me.sungbin.fancybottombar.FancyItem
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private data class Item(override val key: Int) : TimeLineItem<Int>
-
-    @Inject
-    lateinit var scriptCompiler: ScriptCompiler
     private var onBackPressedTime = 0L
     private var tab by mutableStateOf(Tab.Script)
 
@@ -123,16 +115,16 @@ class MainActivity : ComponentActivity() {
 
             TimeLine(
                 items = listOf(
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(2),
-                    Item(3),
-                    Item(4),
-                    Item(4),
+                    ClipData.Item(1),
+                    ClipData.Item(1),
+                    ClipData.Item(1),
+                    ClipData.Item(1),
+                    ClipData.Item(1),
+                    ClipData.Item(1),
+                    ClipData.Item(2),
+                    ClipData.Item(3),
+                    ClipData.Item(4),
+                    ClipData.Item(4),
                     Item(4),
                     Item(4),
                     Item(5),
@@ -247,8 +239,10 @@ class MainActivity : ComponentActivity() {
         val now = System.currentTimeMillis()
         if (now - onBackPressedTime >= 3000) {
             onBackPressedTime = now
-            io.github.jisungbin.gitmessengerbot.util.toast(this,
-                getString(R.string.main_toast_confirm_finish))
+            io.github.jisungbin.gitmessengerbot.util.toast(
+                this,
+                getString(R.string.main_toast_confirm_finish)
+            )
         } else {
             super.onBackPressed()
         }

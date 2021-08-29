@@ -11,7 +11,7 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.ts2js
 
 import com.google.gson.annotations.SerializedName
 
-data class Ts2JsResponse(
+internal data class Ts2JsResponse(
     @SerializedName("diagnostics")
     val diagnostics: List<Any>,
 

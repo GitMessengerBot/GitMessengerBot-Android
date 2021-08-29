@@ -17,12 +17,14 @@ import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
 class GitMessengerBot : Application() {
     override fun onCreate() {
         super.onCreate()
+
         NotificationUtil.createChannel(
             context = applicationContext,
             name = getString(R.string.notification_channel_name),
             description = getString(R.string.notification_channel_name)
         )
 
+        // TODO: catch unhandle expection
         /*Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             Util.error(applicationContext, "알 수 없는 에러 발생\n\n$throwable")
             exitProcess(0)

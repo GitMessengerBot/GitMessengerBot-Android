@@ -9,7 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-class Image {
+internal class Image { // TODO
     /*fun getLastImage() = PictureManager.getKakaoTalkLastPictureBase64()
     fun getProfileImage(sender: String) = PictureManager.profileImage[sender].toBase64String()*/
 }

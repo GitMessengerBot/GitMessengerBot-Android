@@ -23,20 +23,8 @@ import io.github.jisungbin.gitmessengerbot.util.operator.plusAssign
 @Suppress("ObjectPropertyName")
 object DebugStore {
     private val _items = MutableLiveData(getList())
-    val items get(): LiveData<List<DebugItem>> = _items
 
-    private fun getList(): List<DebugItem> {
-        val debugs = mutableListOf<DebugItem>()
-        Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
-            Storage.fileList(debugFolder.path).forEach { debugFile ->
-                debugs.add(
-                    Storage.read(debugFile.path, null)?.toModel()
-                        ?: throw CoreException("$debugFile file is null.")
-                )
-            }
-        }
-        return debugs
-    }
+    val items get(): LiveData<List<DebugItem>> = _items
 
     fun add(item: DebugItem) {
         _items += item
@@ -60,5 +48,18 @@ object DebugStore {
             _items.removeAll { it.scriptId == scriptId }
             Storage.deleteAll(ScriptConfig.DebugDataPath(scriptId))
         }
+    }
+
+    private fun getList(): List<DebugItem> {
+        val debugs = mutableListOf<DebugItem>()
+        Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
+            Storage.fileList(debugFolder.path).forEach { debugFile ->
+                debugs.add(
+                    Storage.read(debugFile.path, null)?.toModel()
+                        ?: throw CoreException("$debugFile file is null.")
+                )
+            }
+        }
+        return debugs
     }
 }

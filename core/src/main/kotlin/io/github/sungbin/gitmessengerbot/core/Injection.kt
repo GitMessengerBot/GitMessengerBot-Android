@@ -15,7 +15,7 @@ import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepo
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepoImpl
 import org.jsoup.Jsoup
 
-object Injection {
+internal object Injection {
     object Ts2Js {
         private const val BaseUrl = "https://api.extendsclass.com/convert/typescript/javascript"
         private val jsoup = Jsoup.connect(BaseUrl)
