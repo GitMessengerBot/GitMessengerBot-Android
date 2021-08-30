@@ -11,9 +11,11 @@ package io.github.jisungbin.gitmessengerbot.common.config
 
 object IntentConfig {
     const val ScriptId = "intent-script-id"
-    const val NotificationAction = "intent-notifiaction-action"
+    const val DebugScriptId = "intent-debug-script-id"
+
     const val BotPowerToggle = "intent-bot-power-onoff"
     const val BotAllRecompile = "intent-bot-recompile"
+
     const val ImageUrl = "intent-image-url"
-    const val DebugScriptId = "intent-debug-script-id"
+    const val NotificationAction = "intent-notifiaction-action"
 }

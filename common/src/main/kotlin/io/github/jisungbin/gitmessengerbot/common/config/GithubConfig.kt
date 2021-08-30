@@ -10,6 +10,9 @@
 package io.github.jisungbin.gitmessengerbot.common.config
 
 object GithubConfig {
+    const val BaseUrl = "https://github.com"
+    const val BaseApiUrl = "https://api.github.com"
+
     const val DataPath = "${PathConfig.AppStorage}/github-data.json"
 
     const val DefaultBranch = "main"

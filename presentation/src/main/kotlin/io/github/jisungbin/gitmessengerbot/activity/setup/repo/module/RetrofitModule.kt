@@ -16,6 +16,7 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
 import io.github.jisungbin.gitmessengerbot.activity.setup.repo.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.activity.setup.repo.qualifier.UserRetrofit
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -29,10 +30,10 @@ object RetrofitModule {
     @Provides
     @UserRetrofit
     @ActivityScoped
-    fun provideUserRetrofit() = buildRetrofit("https://api.github.com")
+    fun provideUserRetrofit() = buildRetrofit(GithubConfig.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @ActivityScoped
-    fun provideAouthRetrofit() = buildRetrofit("https://github.com")
+    fun provideAouthRetrofit() = buildRetrofit(GithubConfig.BaseUrl)
 }

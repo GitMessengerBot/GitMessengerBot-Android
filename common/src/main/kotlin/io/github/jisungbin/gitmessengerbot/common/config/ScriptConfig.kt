@@ -17,8 +17,8 @@ import kotlin.random.Random
 object ScriptConfig {
     const val DebugAllBot = -1
     const val EvalId = -2
-    const val DefaultResponseFunctionName = "onMessage"
 
+    const val DefaultResponseFunctionName = "onMessage"
     const val DebugAllPath = "${PathConfig.AppStorage}/debug"
 
     fun DebugDataPath(scriptId: Int) =
