@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup.repo.qualifier
+package io.github.jisungbin.gitmessengerbot.di.qualifier
 
 import javax.inject.Qualifier
 

@@ -17,10 +17,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -53,9 +54,14 @@ class JsEditorActivity : ComponentActivity() {
                     }
                 }
 
+                val script = try {
+                    Bot.getAllScripts().first { it.id == scriptId }
+                } catch (exception: Exception) {
+                    throw PresentationException("Script it not exist. (${exception.message})")
+                }
+
                 Editor(
-                    script = Bot.getScriptById(scriptId),
-                    githubRepo = G,
+                    script = script,
                     scaffoldState = scaffoldState
                 )
             }

@@ -7,32 +7,46 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.editor.js.module
+package io.github.jisungbin.gitmessengerbot.di.module
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubCreateRepoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileContentUseCase
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubUpdateFileUseCase
 
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(ViewModelComponent::class)
 object UseCaseModule {
     @Provides
-    @ActivityScoped
+    @ViewModelScoped
     fun provideGithubGetFileContentUseCase(githubRepoRepository: GithubRepoRepository) =
         GithubGetFileContentUseCase(githubRepoRepository)
 
     @Provides
-    @ActivityScoped
+    @ViewModelScoped
     fun provideGithubUpdateFileUseCase(githubRepoRepository: GithubRepoRepository) =
-        GithubUpdateFileUsecase(githubRepoRepository)
+        GithubUpdateFileUseCase(githubRepoRepository)
 
     @Provides
-    @ActivityScoped
+    @ViewModelScoped
     fun provideGithubCreateRepoUseCase(githubRepoRepository: GithubRepoRepository) =
         GithubCreateRepoUseCase(githubRepoRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideRequestAouthTokenUseCase(githubUserRepository: GithubUserRepository) =
+        GithubRequestAouthTokenUseCase(githubUserRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetUserInfoUseCase(githubUserRepository: GithubUserRepository) =
+        GithubGetUserInfoUseCase(githubUserRepository)
 }

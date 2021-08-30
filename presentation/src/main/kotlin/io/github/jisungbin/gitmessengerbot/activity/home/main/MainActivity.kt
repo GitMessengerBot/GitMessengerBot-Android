@@ -45,19 +45,15 @@ import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
-import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
-import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
-import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
+import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
+import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.doWhen
-import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.flow.collect
@@ -141,11 +137,11 @@ class MainActivity : ComponentActivity() {
                     .padding(bottom = 60.dp)
             ) { index ->
                 when (index) {
-                    Tab.Script -> ScriptContent(
+                    Tab.Script -> /*ScriptContent(
                         activity = this@MainActivity,
                         compiler = scriptCompiler,
                         scriptAddDialogVisible = scriptAddDialogVisible
-                    )
+                    )*/ Text("")
                     Tab.Debug -> Debug(activity = this@MainActivity)
                     Tab.Setting -> Setting(this@MainActivity)
                     else -> Text(text = "TODO")

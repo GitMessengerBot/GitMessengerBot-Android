@@ -7,18 +7,21 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.editor.js.module
+package io.github.jisungbin.gitmessengerbot.di.module
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
+import io.github.jisungbin.gitmessengerbot.di.qualifier.AouthRetrofit
+import io.github.jisungbin.gitmessengerbot.di.qualifier.SignedRetrofit
+import io.github.jisungbin.gitmessengerbot.di.qualifier.UserRetrofit
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -26,8 +29,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@Suppress("HasPlatformType")
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(ViewModelComponent::class)
 object RetrofitModule {
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -47,11 +51,26 @@ object RetrofitModule {
         return builder.build()
     }
 
+    private fun buildRetrofit(baseUrl: String) = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+
     @Provides
-    @ActivityScoped
-    fun provideRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
+    @SignedRetrofit
+    @ViewModelScoped
+    fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(getInterceptor(loggingInterceptor, AuthInterceptor()))
         .baseUrl(GithubConfig.BaseApiUrl)
         .build()
+
+    @Provides
+    @UserRetrofit
+    @ViewModelScoped
+    fun provideUserRetrofit() = buildRetrofit(GithubConfig.BaseApiUrl)
+
+    @Provides
+    @AouthRetrofit
+    @ViewModelScoped
+    fun provideAouthRetrofit() = buildRetrofit(GithubConfig.BaseUrl)
 }
