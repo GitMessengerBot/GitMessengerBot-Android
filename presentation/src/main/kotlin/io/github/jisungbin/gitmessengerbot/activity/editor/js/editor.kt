@@ -51,7 +51,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.sungbin.gitmessengerbot.core.script.ScriptItem

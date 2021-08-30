@@ -13,7 +13,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileCreateResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.RepoCreateResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

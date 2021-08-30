@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.domain.github.repo
+package io.github.jisungbin.gitmessengerbot.domain.github.model
 
 data class GithubFile(
     val message: String,

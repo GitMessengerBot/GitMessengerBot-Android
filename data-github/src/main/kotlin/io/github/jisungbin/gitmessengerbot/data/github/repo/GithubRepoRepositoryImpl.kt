@@ -19,7 +19,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
