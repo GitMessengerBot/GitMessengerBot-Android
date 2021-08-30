@@ -94,7 +94,7 @@
     <string name="composable_setting_editor_font_size">폰트 사이즈</string>
     <string name="composable_setting_editor_auto_save">자동 저장 (분 단위, 0: 비활성화)</string>
     <string name="composable_setting_script_each_language_option">언어별 설정</string>
-    <string name="composable_dialog_script_add_default_code">추가시 기본 코드</string>
+    <string name="composable_setting_script_add_default_code">추가시 기본 코드</string>
     <string name="composable_setting_script_default_response_function_name">기본 리스폰스 함수명</string>
     <string name="composable_setting_script_default_add_lang">추가 기본 언어</string>
     <string name="composable_setting_git_default_branch">기본 브런치</string>

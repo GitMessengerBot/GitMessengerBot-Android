@@ -446,7 +446,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_dialog_script_add_default_code)) },
+            title = { Text(text = stringResource(R.string.composable_setting_script_add_default_code)) },
             buttons = {},
             text = {
                 Column(
