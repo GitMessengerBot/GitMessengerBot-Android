@@ -14,7 +14,7 @@ import io.github.jisungbin.gitmessengerbot.common.exception.CommonException
 object ScriptLang {
     const val TypeScript = 0
     const val JavaScript = 1
-    const val Python = 2 // todo
+    const val Python = 2 // TOOD
     const val Simple = 3 // 단자응
 }
 

@@ -24,7 +24,7 @@ object Application {
 object Versions {
     object Essential {
         const val Python = "9.1.0"
-        const val Kotlin = "1.5.30"
+        const val Kotlin = "1.5.21"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
         const val Gradle = "7.1.0-alpha05"
@@ -37,7 +37,7 @@ object Versions {
 
     object Ui {
         const val LottieCompose = "4.1.0"
-        const val LandscapistCoil = "1.3.3"
+        const val LandscapistCoil = "1.3.4"
         const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
         const val TimeLineView = "1.0.2"
