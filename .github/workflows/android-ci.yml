@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main, dev, refactoring ]
 
 jobs:
   apk:
@@ -14,7 +14,7 @@ jobs:
         run: touch local.properties
 
       - name: Create local properties
-        run: echo "" >> local.properties
+        run: echo "hi=\"world\"" >> local.properties
         
       - uses: actions/checkout@v1
       - name: set up JDK 11
