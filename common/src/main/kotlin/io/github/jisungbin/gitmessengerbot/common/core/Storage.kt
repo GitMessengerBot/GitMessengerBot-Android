@@ -75,7 +75,7 @@ object Storage {
     fun requestStorageManagePermission(activity: Activity) {
         val intent = Intent(
             Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-            "package: ${activity.packageName}".toUri()
+            "package:${activity.packageName}".toUri()
         )
         activity.startActivity(intent)
     }

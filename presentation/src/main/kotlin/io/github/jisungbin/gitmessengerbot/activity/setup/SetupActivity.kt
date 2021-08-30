@@ -50,6 +50,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.home.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Wear
@@ -70,9 +71,9 @@ class SetupActivity : ComponentActivity() {
 
     private val vm: SetupViewModel by viewModels()
 
+    private var wearAppInstalled by mutableStateOf(false)
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
-    private var wearAppInstalled by mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -81,10 +82,15 @@ class SetupActivity : ComponentActivity() {
             }
         }
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         wearAppInstalled = Wear.checkInstalled(applicationContext)
+        storagePermissionGranted = Storage.isStorageManagerPermissionGranted()
+        notificationPermissionGranted =
+            NotificationUtil.isNotificationListenerPermissionGranted(applicationContext)
+
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
         setContent {
@@ -140,7 +146,7 @@ class SetupActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
                         permissions = if (Storage.isScoped) {
                             listOf(PermissionType.ScopedStorage)
@@ -157,7 +163,7 @@ class SetupActivity : ComponentActivity() {
                     permissionGranted = storagePermissionGranted,
                     padding = PermissionViewPadding(0.dp, 16.dp)
                 )
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.NotificationRead),
                         name = stringResource(R.string.setup_permission_notification_label),
@@ -167,7 +173,7 @@ class SetupActivity : ComponentActivity() {
                     permissionGranted = notificationPermissionGranted,
                     padding = PermissionViewPadding(16.dp, 16.dp)
                 )
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.Wear),
                         name = stringResource(R.string.setup_app_wear_label),
@@ -222,7 +228,7 @@ class SetupActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun PermissionView(
+    private fun PermissionDisplay(
         permission: Permission,
         permissionGranted: Boolean,
         padding: PermissionViewPadding,
@@ -237,7 +243,7 @@ class SetupActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .height(40.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(15.dp))
-                    .clickable { permission.requestAllPermissions() }
+                    .clickable { permission.requestPermission() }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
             ) {
                 val (icon, name, granted) = createRefs()
@@ -285,7 +291,7 @@ class SetupActivity : ComponentActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun Permission.requestAllPermissions() {
+    private fun Permission.requestPermission() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
                 NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
@@ -295,7 +301,9 @@ class SetupActivity : ComponentActivity() {
             }
             PermissionType.Wear -> {
                 Wear.install(applicationContext)
-                doDelay(1000) { wearAppInstalled = true }
+                doDelay(1000) {
+                    wearAppInstalled = true
+                }
             }
             PermissionType.ScopedStorage -> {
                 Storage.requestStorageManagePermission(this@SetupActivity)
@@ -316,10 +324,15 @@ class SetupActivity : ComponentActivity() {
             ?: throw PresentationException("Github aouth request code intent data is null.")
 
         lifecycleScope.launchWhenCreated {
-            vm.login(requestCode, this@SetupActivity).collect { loginResult ->
+            vm.login(requestCode).collect { loginResult ->
                 loginResult.doWhen(
-                    onSuccess = {},
+                    onSuccess = { githubData ->
+                        finish()
+                        startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+                        toast(getString(R.string.vm_setup_toast_welcome_start, githubData.userName))
+                    },
                     onFail = { exception ->
+                        println(exception.message)
                         // todo: ErrorDialog
                     }
                 )

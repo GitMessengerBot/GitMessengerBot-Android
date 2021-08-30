@@ -7,34 +7,27 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
+@file:Suppress("UnnecessaryComposedModifier")
+
 package io.github.jisungbin.gitmessengerbot.util.extension
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.InspectorValueInfo
-import androidx.compose.ui.platform.NoInspectorInfo
+import androidx.compose.ui.composed
 
-// https://stackoverflow.com/a/66839858/14299073
+// https://stackoverflow.com/a/66839858/14299073s
 @OptIn(ExperimentalFoundationApi::class)
 inline fun Modifier.noRippleClickable(
     crossinline onClick: () -> Unit,
     crossinline onLongClick: (() -> Unit) = {},
-) = then(
-    ComposedModifier {
-        combinedClickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() },
-            onClick = { onClick() },
-            onLongClick = { onLongClick() }
-        )
-    }
-)
-
-@PublishedApi
-internal class ComposedModifier(
-    val factory: @Composable Modifier.() -> Modifier,
-) : Modifier.Element, InspectorValueInfo(NoInspectorInfo)
+) = composed {
+    combinedClickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() },
+        onClick = { onClick() },
+        onLongClick = { onLongClick() }
+    )
+}

@@ -57,7 +57,7 @@ class SplashActivity : ComponentActivity() {
         SystemUiController(window).setSystemBarsColor(colors.primary)
         setContent {
             MaterialTheme {
-                Splash()
+                Content()
             }
         }
 
@@ -81,7 +81,7 @@ class SplashActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun Splash() {
+    private fun Content() {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()

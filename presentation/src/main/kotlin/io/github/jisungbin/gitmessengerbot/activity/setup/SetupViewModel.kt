@@ -9,18 +9,13 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.setup
 
-import android.app.Activity
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.home.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
-import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
@@ -38,60 +33,29 @@ class SetupViewModel @Inject constructor(
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun login(requestCode: String, activity: Activity) = callbackFlow<RequestResult<Unit>> {
-        githubRequestAouthTokenUseCase.invoke(requestCode).collect { aouthTokenResult ->
+    fun login(requestCode: String) = callbackFlow {
+        githubRequestAouthTokenUseCase(requestCode).collect { aouthTokenResult ->
             aouthTokenResult.doWhen(
                 onSuccess = { aouth ->
                     var githubData = GithubData(token = aouth.accessToken)
-                    githubGetUserInfoUseCase.invoke(githubData.token).collect { userInfoResult ->
+                    githubGetUserInfoUseCase(githubData.token).collect { userInfoResult ->
                         userInfoResult.doWhen(
                             onSuccess = { user ->
                                 githubData = githubData.copy(
                                     userName = user.userName,
                                     profileImageUrl = user.profileImageUrl
                                 )
-
                                 Storage.write(GithubConfig.DataPath, githubData.toJsonString())
-
-                                activity.finish()
-                                activity.startActivity(Intent(activity, MainActivity::class.java))
-
-                                toast(
-                                    activity,
-                                    activity.getString(
-                                        R.string.vm_setup_toast_welcome_start,
-                                        user.userName
-                                    )
-                                )
-
-                                trySend(RequestResult.Success(Unit))
+                                trySend(RequestResult.Success(githubData))
                             },
                             onFail = { exception ->
-                                trySend(
-                                    RequestResult.Fail(
-                                        CoreException(
-                                            activity.getString(
-                                                R.string.vm_setup_exception_github_connect,
-                                                exception.message
-                                            )
-                                        )
-                                    )
-                                )
+                                trySend(RequestResult.Fail(CoreException(exception.message)))
                             }
                         )
                     }
                 },
                 onFail = { exception ->
-                    trySend(
-                        RequestResult.Fail(
-                            CoreException(
-                                activity.getString(
-                                    R.string.vm_setup_exception_github_authorize,
-                                    exception.message
-                                )
-                            )
-                        )
-                    )
+                    trySend(RequestResult.Fail(CoreException(exception.message)))
                 }
             )
         }
