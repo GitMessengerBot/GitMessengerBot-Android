@@ -60,7 +60,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -282,12 +281,14 @@ private fun DebugContent(
 
         when {
             evalMode -> {
-                items = DebugStore.getByScriptId(ScriptConfig.EvalId)
-                debugId = ScriptConfig.EvalId
+                items =
+                    DebugStore.getByScriptId(io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.EvalId)
+                debugId = io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.EvalId
             }
             script == null -> {
-                items = DebugStore.itemsValue.filterNot { it.scriptId == ScriptConfig.EvalId }
-                debugId = ScriptConfig.DebugAllBot
+                items =
+                    DebugStore.itemsValue.filterNot { it.scriptId == io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.EvalId }
+                debugId = io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.DebugAllBot
             }
             else -> {
                 items = DebugStore.getByScriptId(script.id)
@@ -352,7 +353,7 @@ private fun DebugContent(
                             evalMode -> {
                                 Bot.callJsResponder(
                                     script = ScriptItem(
-                                        id = ScriptConfig.EvalId,
+                                        id = io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.EvalId,
                                         name = "",
                                         lang = 0,
                                         power = false,

@@ -9,18 +9,22 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase3
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
-import kotlinx.coroutines.flow.Flow
 
-private typealias BaseGithubGetFileContentUseCase = BaseUseCase<String, GithubFileContent>
+private typealias BaseGithubGetFileContentUseCase = BaseUseCase3<String, String, String, GithubFileContent>
 
 class GithubGetFileContentUseCase(
     private val githubRepoRepository: GithubRepoRepository,
 ) : BaseGithubGetFileContentUseCase {
-    override suspend fun invoke(parameter: String): Flow<GithubResult<GithubFileContent>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun invoke(
+        parameter: String,
+        parameter2: String,
+        parameter3: String,
+    ) = githubRepoRepository.getFileContent(
+        repoName = parameter,
+        path = parameter2,
+        branch = parameter3
+    )
 }

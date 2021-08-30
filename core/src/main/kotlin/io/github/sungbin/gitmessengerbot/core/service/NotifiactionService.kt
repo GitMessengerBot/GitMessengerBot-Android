@@ -14,10 +14,10 @@ import android.content.Context
 import android.content.Intent
 import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
-import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.doWhen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -45,25 +45,25 @@ class NotifiactionService : BroadcastReceiver() {
                         context.getString(R.string.service_notification_toast_running_scripts_recompile)
                     )
                     Bot.getRunnableScripts().forEach { script ->
-                        scriptCompiler.process(context, script).collect { result ->
-                            when (result) {
-                                is CoreResult.Fail -> {
+                        scriptCompiler.process(context, script).collect { compileResult ->
+                            compileResult.doWhen(
+                                onSuccess = {
+                                    toast(
+                                        context,
+                                        context.getString(R.string.service_notification_toast_recompile_done)
+                                    )
+                                },
+                                onFail = { exception ->
                                     toast(
                                         context,
                                         context.getString(
                                             R.string.service_notification_toast_compile_error,
                                             script.name,
-                                            result.exception.message
+                                            exception.message
                                         )
                                     )
                                 }
-                                is CoreResult.Success -> {
-                                    toast(
-                                        context,
-                                        context.getString(R.string.service_notification_toast_recompile_done)
-                                    )
-                                }
-                            }
+                            )
                         }
                     }
                 }

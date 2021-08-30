@@ -19,12 +19,11 @@ import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
-import io.github.jisungbin.gitmessengerbot.common.Nothing
-import io.github.jisungbin.gitmessengerbot.common.RequestResult
+import io.github.jisungbin.gitmessengerbot.util.RequestResult
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
-import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -52,7 +51,7 @@ class SetupViewModel @Inject constructor(
                                 )
 
                                 Storage.write(
-                                    GithubConfig.DataPath,
+                                    io.github.jisungbin.gitmessengerbot.common.config.GithubConfig.DataPath,
                                     githubData.toJsonString()
                                 )
 

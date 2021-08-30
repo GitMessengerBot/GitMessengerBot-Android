@@ -115,14 +115,7 @@ object Bot {
             v8.locker.acquire()
             if (script.id == ScriptConfig.EvalId) {
                 val result = v8.executeScript(message).toString()
-                DebugStore.add(
-                    createDebugItem(
-                        ScriptConfig.EvalId,
-                        result,
-                        "null",
-                        Sender.Bot
-                    )
-                )
+                DebugStore.add(createDebugItem(ScriptConfig.EvalId, result, "null", Sender.Bot))
             } else {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode)

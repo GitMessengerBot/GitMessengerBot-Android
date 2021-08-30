@@ -33,7 +33,7 @@ import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
 
 class ImageViewActivity : ComponentActivity() {
 
@@ -44,8 +44,8 @@ class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageUrl = intent.getStringExtra(IntentConfig.ImageUrl)
-            ?: throw PresentationException("'${IntentConfig.ImageUrl}' intent extra value is null.")
+        val imageUrl = intent.getStringExtra(io.github.jisungbin.gitmessengerbot.common.config.IntentConfig.ImageUrl)
+            ?: throw PresentationException("'${io.github.jisungbin.gitmessengerbot.common.config.IntentConfig.ImageUrl}' intent extra value is null.")
         ViewColorGenerator().load(
             imageUrl,
             object : OnImageLoaded {

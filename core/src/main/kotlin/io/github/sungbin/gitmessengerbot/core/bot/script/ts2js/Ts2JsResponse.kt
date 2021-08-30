@@ -16,5 +16,5 @@ internal data class Ts2JsResponse(
     val diagnostics: List<Any>,
 
     @SerializedName("outputText")
-    val jsCode: String
+    val jsCode: String,
 )

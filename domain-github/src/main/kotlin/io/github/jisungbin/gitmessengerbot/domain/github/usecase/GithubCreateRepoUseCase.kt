@@ -10,16 +10,14 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
-import kotlinx.coroutines.flow.Flow
 
-private typealias BaseGithubCreateRepoUseCase = BaseUseCase<String, Unit>
+private typealias BaseGithubCreateRepoUseCase = BaseUseCase<GithubRepo, Unit>
 
 class GithubCreateRepoUseCase(
     private val githubRepoRepository: GithubRepoRepository,
 ) : BaseGithubCreateRepoUseCase {
-    override suspend fun invoke(parameter: String): Flow<GithubResult<Unit>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun invoke(parameter: GithubRepo) =
+        githubRepoRepository.createRepo(githubRepo = parameter)
 }

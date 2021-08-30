@@ -50,22 +50,23 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
+import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.Repo
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
-import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.common.StringConfig
-import io.github.jisungbin.gitmessengerbot.common.core.Util
-import io.github.jisungbin.gitmessengerbot.common.core.Web
-import io.github.jisungbin.gitmessengerbot.common.runIf
-import io.github.jisungbin.gitmessengerbot.common.toast
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.core.Util
+import io.github.jisungbin.gitmessengerbot.util.runIf
+import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
@@ -74,8 +75,8 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 
 @Composable
-fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
-    val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
+fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
+    val codeField = remember { mutableStateOf(TextFieldValue(script.getCode())) }
     val undoStack = remember { mutableStateOf("") }
 
     Scaffold(
@@ -91,7 +92,7 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
         scaffoldState = scaffoldState,
         drawerContent = {
             DrawerLayout(
-                gitRepo = gitRepo,
+                gitRepo = githubRepo,
                 script = script,
                 codeField = codeField,
                 undoStack = undoStack
@@ -119,7 +120,7 @@ private fun DrawerLayout(
     gitRepo: GitRepo,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>,
-    undoStack: MutableState<String>
+    undoStack: MutableState<String>,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -150,11 +151,11 @@ private fun DrawerLayout(
                     gitRepo.createRepo(
                         repo = Repo(
                             name = repoName,
-                            description = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultRepoDescription
+                            description = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultRepoDescription
                         )
                     ).collect { result ->
                         when (result) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.common.toast(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                                 context,
                                 context.getString(R.string.editor_toast_repo_create_success)
                             )
@@ -188,13 +189,13 @@ private fun DrawerLayout(
                                     repoName = repoName,
                                     path = "script.${script.lang.getScriptSuffix()}",
                                     gitFile = GithubFile(
-                                        message = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultCommitMessage,
+                                        message = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
                                         sha = (commitResult.response as FileContentResponse).sha
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.common.toast(
+                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
                                             context,
                                             context.getString(R.string.editor_toast_commit_success)
                                         )
@@ -237,7 +238,7 @@ private fun DrawerLayout(
                                 val contentDownloadUrl =
                                     (fileContentResult.response as FileContentResponse).downloadUrl
                                 codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))
-                                io.github.jisungbin.gitmessengerbot.common.toast(
+                                io.github.jisungbin.gitmessengerbot.util.toast(
                                     context,
                                     context.getString(R.string.editor_toast_file_update_success)
                                 )
@@ -341,7 +342,7 @@ private fun ToolBar(
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>,
     scaffoldState: ScaffoldState,
-    undoStack: MutableState<String>
+    undoStack: MutableState<String>,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -388,8 +389,10 @@ private fun ToolBar(
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    io.github.jisungbin.gitmessengerbot.common.toast(context,
-                        context.getString(R.string.editor_toast_saved))
+                    io.github.jisungbin.gitmessengerbot.util.toast(
+                        context,
+                        context.getString(R.string.editor_toast_saved)
+                    )
                     Bot.scriptCodeSave(script, codeField.value.text)
                 }
                 .constrainAs(save) {
@@ -402,7 +405,7 @@ private fun ToolBar(
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.common.toast(
+                        io.github.jisungbin.gitmessengerbot.util.toast(
                             context,
                             context.getString(R.string.editor_toast_confirm_undo_beautify)
                         )

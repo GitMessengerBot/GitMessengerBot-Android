@@ -9,17 +9,22 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase3
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
-import kotlinx.coroutines.flow.Flow
 
-private typealias BaseGithubUpdateFileUseCase = BaseUseCase<String, Unit>
+private typealias BaseGithubUpdateFileUseCase = BaseUseCase3<String, String, GithubFile, Unit>
 
 class GithubUpdateFileUseCase(
     private val githubRepoRepository: GithubRepoRepository,
 ) : BaseGithubUpdateFileUseCase {
-    override suspend fun invoke(parameter: String): Flow<GithubResult<Unit>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun invoke(
+        parameter: String,
+        parameter2: String,
+        parameter3: GithubFile,
+    ) = githubRepoRepository.updateFile(
+        repoName = parameter,
+        path = parameter2,
+        githubFile = parameter3
+    )
 }

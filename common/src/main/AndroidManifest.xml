@@ -7,6 +7,6 @@
   ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
   -->
 
-<manifest package="io.github.jisungbin.gitmessengerbot.common">
+<manifest package="io.github.jisungbin.gitmessengerbot.util">
 
 </manifest>

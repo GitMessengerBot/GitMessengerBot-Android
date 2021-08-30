@@ -55,14 +55,14 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.core.Wear
-import io.github.jisungbin.gitmessengerbot.common.core.Web
-import io.github.jisungbin.gitmessengerbot.common.doWhen
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
-import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
-import io.github.jisungbin.gitmessengerbot.common.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.util.core.Wear
+import io.github.jisungbin.gitmessengerbot.util.core.Web
+import io.github.jisungbin.gitmessengerbot.util.doWhen
+import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -288,7 +288,7 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
+                io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
                 doDelay(1000) {
                     notificationPermissionGranted = true
                 }

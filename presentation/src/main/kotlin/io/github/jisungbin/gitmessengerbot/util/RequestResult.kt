@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common
+package io.github.jisungbin.gitmessengerbot.util
 
 sealed class RequestResult<out T> {
     data class Success<out T>(val response: T) : RequestResult<T>()

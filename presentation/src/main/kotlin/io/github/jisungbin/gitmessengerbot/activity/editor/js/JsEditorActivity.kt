@@ -21,7 +21,7 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.common.StringConfig
+import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -41,7 +41,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.common.StringConfig.IntentScriptId, -1)
+        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentScriptId, -1)
 
         setContent {
             MaterialTheme {
@@ -60,7 +60,7 @@ class JsEditorActivity : ComponentActivity() {
 
                 Editor(
                     script = Bot.getScriptById(scriptId),
-                    gitRepo = gitRepo,
+                    githubRepo = gitRepo,
                     scaffoldState = scaffoldState
                 )
             }

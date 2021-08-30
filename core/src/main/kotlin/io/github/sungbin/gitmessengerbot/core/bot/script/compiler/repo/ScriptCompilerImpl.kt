@@ -12,7 +12,6 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
-import io.github.jisungbin.gitmessengerbot.common.Nothing
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
@@ -35,82 +34,80 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
         context: Context,
         script: ScriptItem,
         code: String,
-    ): CoreResult<Nothing> {
-        return try {
-            val v8 = V8.createV8Runtime()
-            v8.addApi(
-                apiName = "Bot",
-                apiClass = BotApi(context = context, scriptId = script.id),
-                methodNames = listOf("reply", "replyShowAll"),
-                argumentsList = listOf(
-                    listOf(String::class.java, String::class.java, Boolean::class.java),
-                    listOf(
-                        String::class.java,
-                        String::class.java,
-                        String::class.java,
-                        Boolean::class.java
-                    )
+    ) = try {
+        val v8 = V8.createV8Runtime()
+        v8.addApi(
+            apiName = "Bot",
+            apiClass = BotApi(context = context, scriptId = script.id),
+            methodNames = listOf("reply", "replyShowAll"),
+            argumentsList = listOf(
+                listOf(String::class.java, String::class.java, Boolean::class.java),
+                listOf(
+                    String::class.java,
+                    String::class.java,
+                    String::class.java,
+                    Boolean::class.java
                 )
             )
-            v8.addApi(
-                apiName = "Log",
-                apiClass = Log(),
-                methodNames = listOf("print"),
-                argumentsList = listOf(listOf(Any::class.java))
+        )
+        v8.addApi(
+            apiName = "Log",
+            apiClass = Log(),
+            methodNames = listOf("print"),
+            argumentsList = listOf(listOf(Any::class.java))
+        )
+        v8.addApi(
+            apiName = "UI",
+            apiClass = UI(context),
+            methodNames = listOf("toast"),
+            argumentsList = listOf(listOf(String::class.java))
+        )
+        /*v8.addApi(
+            "Api",
+            Api(),
+            arrayOf("runRhino"),
+            arrayOf(
+                arrayOf(String::class.java)
             )
-            v8.addApi(
-                apiName = "UI",
-                apiClass = UI(context),
-                methodNames = listOf("toast"),
-                argumentsList = listOf(listOf(String::class.java))
+        )
+        v8.addApi(
+            "File",
+            File(),
+            arrayOf("save", "read"),
+            arrayOf(
+                arrayOf(String::class.java, String::class.java),
+                arrayOf(String::class.java, String::class.java)
             )
-            /*v8.addApi(
-                "Api",
-                Api(),
-                arrayOf("runRhino"),
-                arrayOf(
-                    arrayOf(String::class.java)
-                )
+        )
+        v8.addApi(
+            "Image",
+            Image(),
+            arrayOf("getLastImage", "getProfileImage"),
+            arrayOf(
+                arrayOf(),
+                arrayOf(String::class.java)
             )
-            v8.addApi(
-                "File",
-                File(),
-                arrayOf("save", "read"),
-                arrayOf(
-                    arrayOf(String::class.java, String::class.java),
-                    arrayOf(String::class.java, String::class.java)
-                )
+        )
+        v8.addApi(
+            "Log",
+            Log(),
+            arrayOf("test", "e", "d", "i"),
+            arrayOf(
+                arrayOf(Any::class.java),
+                arrayOf(String::class.java),
+                arrayOf(String::class.java),
+                arrayOf(String::class.java)
             )
-            v8.addApi(
-                "Image",
-                Image(),
-                arrayOf("getLastImage", "getProfileImage"),
-                arrayOf(
-                    arrayOf(),
-                    arrayOf(String::class.java)
-                )
-            )
-            v8.addApi(
-                "Log",
-                Log(),
-                arrayOf("test", "e", "d", "i"),
-                arrayOf(
-                    arrayOf(Any::class.java),
-                    arrayOf(String::class.java),
-                    arrayOf(String::class.java),
-                    arrayOf(String::class.java)
-                )
-            )*/
-            v8.executeScript(code)
-            StackManager.v8[script.id] = v8
-            script.compiled = true
-            v8.locker.release()
-            CoreResult.Success(Nothing())
-        } catch (exception: Exception) {
-            script.power = false
-            script.compiled = false
-            CoreResult.Fail(exception)
-        }
+        )*/
+        v8.executeScript(code)
+        StackManager.v8[script.id] = v8
+        script.compiled = true
+        v8.locker.release()
+        CoreResult.Success(Unit)
+    } catch (exception: Exception) {
+        script.power = false
+        script.compiled = false
+        CoreResult.Fail(exception)
     }
 
     @Suppress("DEPRECATION")

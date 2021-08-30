@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Web.kt] created by Ji Sungbin on 21. 8. 28. 오후 10:14
+ * [Web.kt] created by Ji Sungbin on 21. 8. 30. 오후 5:05
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
@@ -14,8 +14,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
-import io.github.jisungbin.gitmessengerbot.common.R
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.util.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

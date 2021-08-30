@@ -9,7 +9,5 @@
 
 package io.github.sungbin.gitmessengerbot.core.setting.model
 
-import io.github.jisungbin.gitmessengerbot.common.Nothing
-
 // TODO
-data class RepoOptions(var todo: Nothing = Nothing())
+data class RepoOptions(var todo: Unit = Unit)

@@ -16,3 +16,11 @@ interface BaseUseCase<in Parameter, out ResultType> {
         parameter: Parameter,
     ): Flow<GithubResult<ResultType>>
 }
+
+interface BaseUseCase3<in Parameter, in Parameter2, in Parameter3, out ResultType> {
+    suspend operator fun invoke(
+        parameter: Parameter,
+        parameter2: Parameter2,
+        parameter3: Parameter3,
+    ): Flow<GithubResult<ResultType>>
+}
