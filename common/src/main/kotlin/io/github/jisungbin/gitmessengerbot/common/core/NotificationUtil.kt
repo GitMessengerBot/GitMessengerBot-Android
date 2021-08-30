@@ -51,7 +51,7 @@ object NotificationUtil {
         activity.startActivity(intent)
     }
 
-    fun checkNotificationListenerPermissionGranted(context: Context) =
+    fun isNotificationListenerPermissionGranted(context: Context) =
         NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
 
     private fun getManager(context: Context) =

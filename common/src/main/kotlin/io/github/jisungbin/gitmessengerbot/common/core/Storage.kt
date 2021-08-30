@@ -69,6 +69,9 @@ object Storage {
     fun fileList(path: String) = File(path.parsePath()).listFiles()?.toList() ?: emptyList()
 
     @RequiresApi(Build.VERSION_CODES.R)
+    fun isStorageManagerPermissionGranted() = Environment.isExternalStorageManager()
+
+    @RequiresApi(Build.VERSION_CODES.R)
     fun requestStorageManagePermission(activity: Activity) {
         val intent = Intent(
             Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,

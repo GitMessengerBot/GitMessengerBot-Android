@@ -117,5 +117,5 @@
     <string name="composable_setting_editor_font_name">폰트 설정</string>
     <string name="composable_setting_toast_todo_dev">개발 예정</string>
     <string name="composable_setting_button_granted">부여됨</string>
-    <string name="composable_setting_button_denied">거절됨</string>
+    <string name="composable_setting_button_denied">거부됨</string>
 </resources>

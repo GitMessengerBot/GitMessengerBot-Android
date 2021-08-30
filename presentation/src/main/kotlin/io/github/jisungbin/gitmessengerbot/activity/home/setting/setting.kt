@@ -51,7 +51,6 @@ import io.github.jisungbin.gitmessengerbot.activity.home.setting.KakaoTalkPackag
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.OpenSourceDialog
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultCodeDialog
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultLanguageDialog
-import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.common.config.Config
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
@@ -59,6 +58,7 @@ import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
+import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
@@ -330,7 +330,7 @@ private fun Content(activity: Activity) {
                 NotificationUtil.requestNotificationListenerPermission(activity)
             }) {
                 val isPermissionGranted =
-                    NotificationUtil.checkNotificationListenerPermissionGranted(context)
+                    NotificationUtil.isNotificationListenerPermissionGranted(context)
                 val message =
                     if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
                     else stringResource(R.string.composable_setting_button_denied)
@@ -345,7 +345,11 @@ private fun Content(activity: Activity) {
                     color = Color.Black
                 )
                 OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
-                    Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+                    val isPermissionGranted = Storage.isStorageManagerPermissionGranted()
+                    val message =
+                        if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
+                        else stringResource(R.string.composable_setting_button_denied)
+                    Text(text = message)
                 }
             }
         }
@@ -356,7 +360,11 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
-                Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+                val isOptimization = BatteryUtil.isIgnoringBatteryOptimization(context)
+                val message =
+                    if (isOptimization) stringResource(R.string.composable_setting_button_granted)
+                    else stringResource(R.string.composable_setting_button_denied)
+                Text(text = message)
             }
         }
         Text(
@@ -388,7 +396,7 @@ private fun Content(activity: Activity) {
         Text(
             text = stringResource(
                 R.string.composable_setting_etc_lovers,
-                "클라이드님" // todo: firebase realtime update
+                "클라이드님" // TODO: firebase realtime update
             ),
             modifier = Modifier.padding(top = 15.dp),
             color = colors.primary
