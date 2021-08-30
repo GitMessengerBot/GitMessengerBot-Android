@@ -16,9 +16,9 @@ import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepoImpl
 import io.github.jisungbin.gitmessengerbot.domain.github.model.github.GithubUser
-import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.Json
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.StringConfig
 import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -36,8 +36,8 @@ object GitModule {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
             return try {
-                val githubJson = Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null)!!
-                val githubData = io.github.jisungbin.gitmessengerbot.util.Json.toModel(githubJson, GithubUser::class)
+                val githubJson = Storage.read(io.github.jisungbin.gitmessengerbot.common.StringConfig.GithubData, null)!!
+                val githubData = io.github.jisungbin.gitmessengerbot.common.Json.toModel(githubJson, GithubUser::class)
                 builder = builder
                     .addHeader("Authorization", "token ${githubData.token}")
                     .addHeader("Accept", "application/json")

@@ -47,9 +47,9 @@ import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem

@@ -11,7 +11,7 @@ package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {

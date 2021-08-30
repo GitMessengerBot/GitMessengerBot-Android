@@ -9,11 +9,11 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script
 
-import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 private typealias ScriptItems = List<ScriptItem>

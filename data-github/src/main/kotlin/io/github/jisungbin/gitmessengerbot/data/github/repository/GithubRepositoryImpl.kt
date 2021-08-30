@@ -15,7 +15,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
-import io.github.jisungbin.gitmessengerbot.util.exception.DataGithubException
+import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow

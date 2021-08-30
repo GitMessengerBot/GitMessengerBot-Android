@@ -52,13 +52,13 @@ import io.github.jisungbin.gitmessengerbot.activity.home.setting.OpenSourceDialo
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultCodeDialog
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultLanguageDialog
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.core.BatteryUtil
-import io.github.jisungbin.gitmessengerbot.util.core.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.jisungbin.gitmessengerbot.common.config.Config
+import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
+import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
@@ -264,18 +264,13 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             TextField(
-                value = app.gitDefaultBranch.value,
-                onValueChange = {
-                    Bot.scriptDataSave(
-                        app.copy(
-                            gitDefaultBranch = mutableStateOf(
-                                it.replace(
-                                    " ",
-                                    "-"
-                                )
-                            )
-                        )
-                    )
+                value = app.gitDefaultBranch,
+                onValueChange = { gitDefaultBranch ->
+                    if (!gitDefaultBranch.contains(" ")) {
+                        AppConfig.update { app ->
+                            app.copy(gitDefaultBranch = gitDefaultBranch)
+                        }
+                    }
                 },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 modifier = Modifier
@@ -291,7 +286,7 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { gitDefaultCommitMessageDialogVisible.value = true }) {
-                Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+                Text(text = app.gitDefaultCommitMessage)
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
@@ -301,7 +296,7 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { gitDefaultCreateRepoOptionsDialogVisible.value = true }) {
-                Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+                Text(text = "TODO") // TODO
             }
         }
         Text(
@@ -317,7 +312,12 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
-                Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+                val kakaoTalkPackageNames =
+                    app.kakaoTalkPackageNames.sortedBy { it == Config.KakaoTalkDefaultPackageName }
+                val message =
+                    if (kakaoTalkPackageNames.size == 1) Config.KakaoTalkDefaultPackageName
+                    else "${kakaoTalkPackageNames.first()} 외 ${kakaoTalkPackageNames.size - 1}개 추가됨"
+                Text(text = message)
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
@@ -326,8 +326,15 @@ private fun Content(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { NotificationUtil.requestReadPermission(activity) }) {
-                Text(text = stringResource(R.string.composable_setting_button_composable_setting))
+            OutlinedButton(onClick = {
+                NotificationUtil.requestNotificationListenerPermission(activity)
+            }) {
+                val isPermissionGranted =
+                    NotificationUtil.checkNotificationListenerPermissionGranted(context)
+                val message =
+                    if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
+                    else stringResource(R.string.composable_setting_button_denied)
+                Text(text = message)
             }
         }
         if (Storage.isScoped) {

@@ -13,10 +13,10 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.git.GitService
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.setup.repo.module.model.GithubData
-import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.toBase64
+import io.github.jisungbin.gitmessengerbot.common.Json
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.toBase64
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -29,8 +29,8 @@ class GitRepoImpl @Inject constructor(
 ) : GitRepo {
     private val buildRetrofit by lazy { retrofit.create(GitService::class.java) }
     private val gitUser by lazy {
-        io.github.jisungbin.gitmessengerbot.util.Json.toModel(Storage.read(
-            io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null)!!, GithubData::class)
+        io.github.jisungbin.gitmessengerbot.common.Json.toModel(Storage.read(
+            io.github.jisungbin.gitmessengerbot.common.StringConfig.GithubData, null)!!, GithubData::class)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

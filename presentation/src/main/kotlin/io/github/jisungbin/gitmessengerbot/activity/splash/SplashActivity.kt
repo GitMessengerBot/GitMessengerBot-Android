@@ -43,10 +43,10 @@ import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import java.util.Calendar
 
 class SplashActivity : ComponentActivity() {

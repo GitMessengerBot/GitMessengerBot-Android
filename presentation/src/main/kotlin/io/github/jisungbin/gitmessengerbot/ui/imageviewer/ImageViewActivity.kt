@@ -32,8 +32,8 @@ import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
-import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
-import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 
 class ImageViewActivity : ComponentActivity() {
 

@@ -9,7 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
 
 internal class File {
     fun save(path: String, content: String) = Storage.write(path, content)

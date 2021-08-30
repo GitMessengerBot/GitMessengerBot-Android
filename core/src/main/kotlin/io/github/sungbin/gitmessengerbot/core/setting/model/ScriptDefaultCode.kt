@@ -9,7 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.setting.model
 
-import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 
 // TODO: sim
 data class ScriptDefaultCode(

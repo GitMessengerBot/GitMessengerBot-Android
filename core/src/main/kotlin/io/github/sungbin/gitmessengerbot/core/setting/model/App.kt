@@ -9,11 +9,11 @@
 
 package io.github.sungbin.gitmessengerbot.core.setting.model
 
-import io.github.jisungbin.gitmessengerbot.util.config.Config
-import io.github.jisungbin.gitmessengerbot.util.config.EditorConfig
-import io.github.jisungbin.gitmessengerbot.util.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.config.Config
+import io.github.jisungbin.gitmessengerbot.common.config.EditorConfig
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 
 data class App(
     val power: Boolean = false,

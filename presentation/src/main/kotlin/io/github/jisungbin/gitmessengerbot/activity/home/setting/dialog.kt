@@ -57,13 +57,13 @@ import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.licenser.License
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
 import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
-import io.github.jisungbin.gitmessengerbot.util.core.Util
-import io.github.jisungbin.gitmessengerbot.util.core.Web
-import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.extension.runIf
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
+import io.github.jisungbin.gitmessengerbot.common.core.Util
+import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.extension.noRippleClickable
+import io.github.jisungbin.gitmessengerbot.common.extension.runIf
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.sungbin.gitmessengerbot.core.bot.script.getScriptDefaultCode
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
@@ -253,7 +253,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_dialog_git_default_commit_message)) },
+            title = { Text(text = stringResource(R.string.composable_setting_git_default_commit_message)) },
             confirmButton = {
                 OutlinedButton(
                     onClick = {
@@ -291,7 +291,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_dialog_git_default_new_repo_options)) },
+            title = { Text(text = stringResource(R.string.composable_setting_git_default_new_repo_options)) },
             confirmButton = {
                 OutlinedButton(onClick = { /*TODO*/ }) {
                     Text(text = stringResource(R.string.composable_dialog_button_save))

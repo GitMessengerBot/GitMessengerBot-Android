@@ -18,13 +18,13 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.StringConfig
 
 class DebugActivty : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentDebugScriptId, -1)
+        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.common.StringConfig.IntentDebugScriptId, -1)
         val script = Bot.getScriptById(scriptId)
 
         SystemUiController(window).run {

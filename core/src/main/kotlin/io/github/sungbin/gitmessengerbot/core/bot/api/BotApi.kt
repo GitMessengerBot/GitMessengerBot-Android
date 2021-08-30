@@ -10,7 +10,7 @@
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
 import android.content.Context
-import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager

@@ -12,8 +12,8 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.github.jisungbin.gitmessengerbot.util.config.IntentConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.R

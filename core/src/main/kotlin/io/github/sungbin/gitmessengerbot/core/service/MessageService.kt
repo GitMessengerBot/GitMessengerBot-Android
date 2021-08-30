@@ -12,8 +12,8 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
-import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager.sessions

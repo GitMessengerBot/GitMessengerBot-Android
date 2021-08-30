@@ -98,8 +98,8 @@
     <string name="composable_setting_script_default_response_function_name">기본 리스폰스 함수명</string>
     <string name="composable_setting_script_default_add_lang">추가 기본 언어</string>
     <string name="composable_setting_git_default_branch">기본 브런치</string>
-    <string name="composable_dialog_git_default_commit_message">커밋 기본 메시지</string>
-    <string name="composable_dialog_git_default_new_repo_options">레포 생성 기본 옵션</string>
+    <string name="composable_setting_git_default_commit_message">커밋 기본 메시지</string>
+    <string name="composable_setting_git_default_new_repo_options">레포 생성 기본 옵션</string>
     <string name="composable_setting_app_kakaotak_package_names">카톡 패키지명</string>
     <string name="composable_setting_app_notification_read_permission">알림 읽기 권한</string>
     <string name="composable_setting_app_access_storage_manager_permission">전체 저장소 접근 권한</string>
@@ -116,4 +116,6 @@
     <string name="composable_dialog_button_save">저장</string>
     <string name="composable_setting_editor_font_name">폰트 설정</string>
     <string name="composable_setting_toast_todo_dev">개발 예정</string>
+    <string name="composable_setting_button_granted">부여됨</string>
+    <string name="composable_setting_button_denied">거절됨</string>
 </resources>

@@ -9,8 +9,8 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo
 
-import io.github.jisungbin.gitmessengerbot.util.extension.ioThread
-import io.github.jisungbin.gitmessengerbot.util.extension.toModel
+import io.github.jisungbin.gitmessengerbot.common.extension.ioThread
+import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi

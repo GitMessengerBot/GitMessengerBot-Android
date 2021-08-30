@@ -61,11 +61,11 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.core.Util
-import io.github.jisungbin.gitmessengerbot.util.core.Web
-import io.github.jisungbin.gitmessengerbot.util.runIf
-import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.jisungbin.gitmessengerbot.common.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.core.Util
+import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.runIf
+import io.github.jisungbin.gitmessengerbot.common.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
@@ -150,11 +150,11 @@ private fun DrawerLayout(
                     gitRepo.createRepo(
                         repo = Repo(
                             name = repoName,
-                            description = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultRepoDescription
+                            description = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultRepoDescription
                         )
                     ).collect { result ->
                         when (result) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
+                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.common.toast(
                                 context,
                                 context.getString(R.string.editor_toast_repo_create_success)
                             )
@@ -188,13 +188,13 @@ private fun DrawerLayout(
                                     repoName = repoName,
                                     path = "script.${script.lang.getScriptSuffix()}",
                                     gitFile = GitFile(
-                                        message = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage,
+                                        message = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
                                         sha = (commitResult.response as FileContentResponse).sha
                                     )
                                 ).collect { updateResult ->
                                     when (updateResult) {
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
+                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.common.toast(
                                             context,
                                             context.getString(R.string.editor_toast_commit_success)
                                         )
@@ -237,7 +237,7 @@ private fun DrawerLayout(
                                 val contentDownloadUrl =
                                     (fileContentResult.response as FileContentResponse).downloadUrl
                                 codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))
-                                io.github.jisungbin.gitmessengerbot.util.toast(
+                                io.github.jisungbin.gitmessengerbot.common.toast(
                                     context,
                                     context.getString(R.string.editor_toast_file_update_success)
                                 )
@@ -388,7 +388,7 @@ private fun ToolBar(
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    io.github.jisungbin.gitmessengerbot.util.toast(context,
+                    io.github.jisungbin.gitmessengerbot.common.toast(context,
                         context.getString(R.string.editor_toast_saved))
                     Bot.scriptCodeSave(script, codeField.value.text)
                 }
@@ -402,7 +402,7 @@ private fun ToolBar(
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.util.toast(
+                        io.github.jisungbin.gitmessengerbot.common.toast(
                             context,
                             context.getString(R.string.editor_toast_confirm_undo_beautify)
                         )

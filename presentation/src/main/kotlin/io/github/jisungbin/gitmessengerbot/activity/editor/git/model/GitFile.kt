@@ -9,11 +9,11 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.editor.git.model
 
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.StringConfig
 
 data class GitFile(
     val message: String,
     val content: String,
     val sha: String,
-    val branch: String = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultBranch
+    val branch: String = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultBranch
 )

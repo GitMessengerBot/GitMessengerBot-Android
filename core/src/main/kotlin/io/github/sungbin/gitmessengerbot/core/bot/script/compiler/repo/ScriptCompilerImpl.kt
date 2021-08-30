@@ -12,10 +12,10 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
-import io.github.jisungbin.gitmessengerbot.util.Nothing
-import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
-import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.Nothing
+import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
