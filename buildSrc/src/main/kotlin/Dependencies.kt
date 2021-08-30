@@ -13,7 +13,7 @@ object Application {
     const val minSdk = 24
     const val targetSdk = 30
     const val compileSdk = 30
-    const val jvmTarget = "1.8"
+    const val jvmTarget = "11"
     const val versionCode = 1
     const val versionName = "please_die_fucking_covid"
 
@@ -63,7 +63,6 @@ object Versions {
     }
 
     object Hilt {
-        // if error: https://stackoverflow.com/questions/68492472/hilt-field-injection-throwing-property-not-initialized-error
         const val Master = "2.38.1"
     }
 

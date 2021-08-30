@@ -40,8 +40,8 @@ allprojects {
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xopt-in=kotlin.RequiresOptIn",
                     "-Xopt-in=kotlin.OptIn",
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+ /*                   "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"*/
                 )
             }
         }
