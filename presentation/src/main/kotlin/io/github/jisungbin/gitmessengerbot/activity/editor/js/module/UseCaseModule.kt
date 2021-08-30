@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.debug.module
+package io.github.jisungbin.gitmessengerbot.activity.editor.js.module
 
 import dagger.Module
 import dagger.Provides

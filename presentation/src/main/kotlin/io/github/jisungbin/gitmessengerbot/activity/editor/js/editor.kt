@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [editor.kt] created by Ji Sungbin on 21. 7. 10. 오전 4:41.
+ * [composable_editor.kt] created by Ji Sungbin on 21. 7. 10. 오전 4:41.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
@@ -50,33 +50,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
-import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
+import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
-import io.github.jisungbin.gitmessengerbot.domain.github.model.Repo
-import io.github.jisungbin.gitmessengerbot.repo.Result
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.core.Util
-import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.jisungbin.gitmessengerbot.util.doWhen
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import org.jsoup.Jsoup
 
 @Composable
-fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
+fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     val codeField = remember { mutableStateOf(TextFieldValue(script.getCode())) }
     val undoStack = remember { mutableStateOf("") }
 
@@ -93,7 +88,6 @@ fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldSt
         scaffoldState = scaffoldState,
         drawerContent = {
             DrawerLayout(
-                githubRepo = githubRepo,
                 script = script,
                 codeField = codeField,
                 undoStack = undoStack
@@ -122,9 +116,17 @@ private fun DrawerLayout(
     codeField: MutableState<TextFieldValue>,
     undoStack: MutableState<String>,
 ) {
+    val vm: JsEditorViewModel = viewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
     val repoName = script.name
+    val repoPath = "script.${script.lang.getScriptSuffix()}"
+    val repoDescription = GithubConfig.DefaultRepoDescription // TODO
+    val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
+    val repo = GithubRepo(repoName, repoDescription)
+
+    val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
 
     Column(
         modifier = Modifier
@@ -137,7 +139,7 @@ private fun DrawerLayout(
                 contentDescription = null
             )
             Text(
-                text = stringResource(R.string.editor_drawer_git),
+                text = stringResource(R.string.composable_editor_drawer_git),
                 fontSize = 30.sp,
                 modifier = Modifier.padding(start = 10.dp)
             )
@@ -148,80 +150,30 @@ private fun DrawerLayout(
                 .padding(top = 10.dp),
             onClick = {
                 coroutineScope.launch {
-                    githubRepo.createRepo(
-                        repo = Repo(
-                            name = repoName,
-                            description = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultRepoDescription
-                        )
-                    ).collect { result ->
-                        when (result) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                                context,
-                                context.getString(R.string.editor_toast_repo_create_success)
-                            )
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_repo_create_error,
-                                    result.exception
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        ) {
-            Text(text = stringResource(R.string.editor_drawer_create_repo, script.name))
-        }
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            onClick = {
-                coroutineScope.launch {
-                    githubRepo.getFileContent(
-                        repoName = repoName,
-                        path = "script.${script.lang.getScriptSuffix()}"
-                    ).collect { commitResult ->
-                        when (commitResult) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
-                                githubRepo.updateFile(
-                                    repoName = repoName,
-                                    path = "script.${script.lang.getScriptSuffix()}",
-                                    gitFile = GithubFile(
-                                        message = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage,
-                                        content = codeField.value.text,
-                                        sha = (commitResult.response as FileContentResponse).sha
+                    vm.githubCreateRepo(githubRepo = repo)
+                        .collect { createRepoResult ->
+                            createRepoResult.doWhen(
+                                onSuccess = {
+                                    toast(
+                                        context,
+                                        context.getString(R.string.composable_editor_toast_repo_create_success)
                                     )
-                                ).collect { updateResult ->
-                                    when (updateResult) {
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                                            context,
-                                            context.getString(R.string.editor_toast_commit_success)
+                                },
+                                onFail = { exception ->
+                                    toast(
+                                        context,
+                                        context.getString(
+                                            R.string.composable_editor_toast_repo_create_error,
+                                            exception.message
                                         )
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
-                                            context,
-                                            context.getString(
-                                                R.string.editor_toast_commit_error,
-                                                updateResult.exception
-                                            )
-                                        )
-                                    }
+                                    )
                                 }
-                            }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_content_get_error,
-                                    commitResult.exception
-                                )
                             )
                         }
-                    }
                 }
             }
         ) {
-            Text(text = stringResource(R.string.editor_drawer_commit_and_push))
+            Text(text = stringResource(R.string.composable_editor_drawer_create_repo, script.name))
         }
         OutlinedButton(
             modifier = Modifier
@@ -229,43 +181,102 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    githubRepo.getFileContent(
+                    vm.githubGetFileContent(
                         repoName = repoName,
-                        path = "script.${script.lang.getScriptSuffix()}"
+                        path = repoPath,
+                        branch = repoBranch
                     ).collect { fileContentResult ->
-                        when (fileContentResult) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
-                                val contentDownloadUrl =
-                                    (fileContentResult.response as FileContentResponse).downloadUrl
-                                codeField.value = TextFieldValue(Web.parse(contentDownloadUrl))
-                                io.github.jisungbin.gitmessengerbot.util.toast(
+                        fileContentResult.doWhen(
+                            onSuccess = { fileContent ->
+                                vm.githubUpdateFile(
+                                    repoName = repoName,
+                                    path = repoPath,
+                                    githubFile = GithubFile(
+                                        message = commitMessage,
+                                        content = codeField.value.text,
+                                        sha = fileContent.sha,
+                                        branch = repoBranch
+                                    )
+                                ).collect { updateFileResult ->
+                                    updateFileResult.doWhen(
+                                        onSuccess = {
+                                            toast(
+                                                context,
+                                                context.getString(R.string.composable_editor_toast_commit_success)
+                                            )
+                                        },
+                                        onFail = { exception ->
+                                            toast(
+                                                context,
+                                                context.getString(
+                                                    R.string.composable_editor_toast_commit_error,
+                                                    exception.message
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            },
+                            onFail = { exception ->
+                                toast(
                                     context,
-                                    context.getString(R.string.editor_toast_file_update_success)
+                                    context.getString(
+                                        R.string.composable_editor_toast_content_get_error,
+                                        exception.message
+                                    )
                                 )
                             }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_content_get_error,
-                                    fileContentResult.exception
-                                )
-                            )
-                        }
+                        )
                     }
                 }
             }
         ) {
-            Text(text = stringResource(R.string.editor_drawer_update_project))
+            Text(text = stringResource(R.string.composable_editor_drawer_commit_and_push))
         }
         OutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                // todo
+                coroutineScope.launch {
+                    vm.githubGetFileContent(
+                        repoName = repoName,
+                        path = repoPath,
+                        branch = repoBranch
+                    ).collect { fileContentResult ->
+                        fileContentResult.doWhen(
+                            onSuccess = { fileContent ->
+                                codeField.value = TextFieldValue(Web.parse(fileContent.downloadUrl))
+                                toast(
+                                    context,
+                                    context.getString(R.string.composable_editor_toast_file_update_success)
+                                )
+                            },
+                            onFail = { exception ->
+                                toast(
+                                    context,
+                                    context.getString(
+                                        R.string.composable_editor_toast_content_get_error,
+                                        exception.message
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             }
         ) {
-            Text(text = stringResource(R.string.editor_drawer_commit_history))
+            Text(text = stringResource(R.string.composable_editor_drawer_update_project))
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = {
+                // TODO: connect with timeline-view
+            }
+        ) {
+            Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
         }
         if (script.lang == ScriptLang.JavaScript) {
             Row(
@@ -277,7 +288,7 @@ private fun DrawerLayout(
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource(R.string.editor_drawer_beautify),
+                    text = stringResource(R.string.composable_editor_drawer_beautify),
                     modifier = Modifier.padding(start = 10.dp),
                     fontSize = 30.sp
                 )
@@ -291,45 +302,27 @@ private fun DrawerLayout(
                     onClick = {
                         undoStack.value = codeField.value.text
                         coroutineScope.launch {
-                            val minify = async(Dispatchers.IO) {
-                                Jsoup.connect("https://javascript-minifier.com/raw")
-                                    .ignoreContentType(true)
-                                    .ignoreHttpErrors(true)
-                                    .data("input", codeField.value.text)
-                                    .post()
-                                    .wholeText()
-                            }
-                            codeField.value = TextFieldValue(minify.await())
+                            // TODO
                         }
                     },
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp)
                 ) {
-                    Text(text = stringResource(R.string.editor_drawer_minify))
+                    Text(text = stringResource(R.string.composable_editor_drawer_minify))
                 }
                 OutlinedButton(
                     onClick = {
                         undoStack.value = codeField.value.text
                         coroutineScope.launch {
-                            val beautify = async(Dispatchers.IO) {
-                                JSONObject(
-                                    Jsoup.connect("https://amp.prettifyjs.net")
-                                        .ignoreContentType(true)
-                                        .ignoreHttpErrors(true)
-                                        .data("input", codeField.value.text)
-                                        .post()
-                                        .wholeText()
-                                ).getString("output")
-                            }
-                            codeField.value = TextFieldValue(beautify.await())
+                            // TODO
                         }
                     },
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp)
                 ) {
-                    Text(text = stringResource(R.string.editor_drawer_pretty))
+                    Text(text = stringResource(R.string.composable_editor_drawer_pretty))
                 }
             }
         }
@@ -389,9 +382,9 @@ private fun ToolBar(
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    io.github.jisungbin.gitmessengerbot.util.toast(
+                    toast(
                         context,
-                        context.getString(R.string.editor_toast_saved)
+                        context.getString(R.string.composable_editor_toast_saved)
                     )
                     Bot.scriptCodeSave(script, codeField.value.text)
                 }
@@ -405,9 +398,9 @@ private fun ToolBar(
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.util.toast(
+                        toast(
                             context,
-                            context.getString(R.string.editor_toast_confirm_undo_beautify)
+                            context.getString(R.string.composable_editor_toast_confirm_undo_beautify)
                         )
                     },
                     onLongClick = {

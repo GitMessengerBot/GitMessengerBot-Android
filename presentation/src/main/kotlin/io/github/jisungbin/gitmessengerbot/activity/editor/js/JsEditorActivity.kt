@@ -16,20 +16,15 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
+import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class JsEditorActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var gitRepo: GitRepo
 
     private lateinit var onBackPressedAction: () -> Unit
 
@@ -41,7 +36,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentScriptId, -1)
+        val scriptId = intent.getIntExtra(IntentConfig.ScriptId, -1)
 
         setContent {
             MaterialTheme {
@@ -60,7 +55,7 @@ class JsEditorActivity : ComponentActivity() {
 
                 Editor(
                     script = Bot.getScriptById(scriptId),
-                    githubRepo = gitRepo,
+                    githubRepo = G,
                     scaffoldState = scaffoldState
                 )
             }
