@@ -27,7 +27,8 @@ fun <T> MutableLiveData<List<T>>.removeIf(predicate: (T) -> Boolean) {
     notifyDataSetChanged(value)
 }
 
-fun <T> MutableLiveData<List<T>>.notifyDataSetChanged(value: List<T>) {
+@PublishedApi
+internal fun <T> MutableLiveData<List<T>>.notifyDataSetChanged(value: List<T>) {
     this.value = value
 }
 

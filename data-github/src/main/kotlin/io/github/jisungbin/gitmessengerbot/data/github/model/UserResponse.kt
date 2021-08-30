@@ -11,7 +11,7 @@ package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.google.gson.annotations.SerializedName
 
-data class GithubUserResponse(
+data class UserResponse(
     @SerializedName("gists_url")
     val gistsUrl: String,
 
@@ -127,19 +127,5 @@ data class GithubUserResponse(
     val location: String,
 
     @SerializedName("node_id")
-    val nodeId: String
-) {
-    data class Plan(
-        @SerializedName("private_repos")
-        val privateRepos: Int,
-
-        @SerializedName("name")
-        val name: String,
-
-        @SerializedName("collaborators")
-        val collaborators: Int,
-
-        @SerializedName("space")
-        val space: Int
-    )
-}
+    val nodeId: String,
+)

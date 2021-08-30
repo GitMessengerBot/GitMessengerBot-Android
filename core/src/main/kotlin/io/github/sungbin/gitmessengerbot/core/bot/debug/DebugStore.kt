@@ -26,6 +26,10 @@ object DebugStore {
 
     val items get(): LiveData<List<DebugItem>> = _items
 
+    val itemsValue get(): List<DebugItem> = items.value ?: emptyList()
+
+    fun getByScriptId(id: Int) = items.value?.filter { id == id } ?: emptyList()
+
     fun add(item: DebugItem) {
         _items += item
         Storage.write(ScriptConfig.DebugDataPath(item.scriptId), item.toJsonString())

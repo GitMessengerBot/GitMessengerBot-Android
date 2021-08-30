@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.composable_setting
+package io.github.jisungbin.gitmessengerbot.activity.home.setting
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -44,13 +44,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.DonateDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.GitDefaultCommitMessageDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.GitDefaultCreateRepoOptionsDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.KakaoTalkPackageNamesDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.OpenSourceDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultCodeDialog
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.ScriptAddDefaultLanguageDialog
 import io.github.jisungbin.gitmessengerbot.common.config.Config
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil

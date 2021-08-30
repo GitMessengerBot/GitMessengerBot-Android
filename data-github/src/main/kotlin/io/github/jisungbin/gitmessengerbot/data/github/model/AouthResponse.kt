@@ -11,13 +11,13 @@ package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.google.gson.annotations.SerializedName
 
-data class GithubAouthResponse(
-    @field:SerializedName("access_token")
+data class AouthResponse(
+    @SerializedName("access_token")
     val accessToken: String,
 
-    @field:SerializedName("scope")
+    @SerializedName("scope")
     val scope: String,
 
-    @field:SerializedName("token_type")
-    val tokenType: String
+    @SerializedName("token_type")
+    val tokenType: String,
 )

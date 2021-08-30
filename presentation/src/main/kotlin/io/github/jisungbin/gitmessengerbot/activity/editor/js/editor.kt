@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
+import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.GitFile
+import io.github.jisungbin.gitmessengerbot.data.github.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.script.ScriptLang

@@ -52,11 +52,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.ui.licenser.License
-import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
-import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.extension.noRippleClickable
@@ -64,6 +59,11 @@ import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
+import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
+import io.github.jisungbin.gitmessengerbot.ui.licenser.License
+import io.github.jisungbin.gitmessengerbot.ui.licenser.Licenser
+import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.sungbin.gitmessengerbot.core.bot.script.getScriptDefaultCode
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 

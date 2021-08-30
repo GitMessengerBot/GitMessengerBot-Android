@@ -73,12 +73,12 @@
     <string name="editor_drawer_minify">Minify</string>
     <string name="editor_drawer_pretty">Pretty</string>
 
-    <string name="debug_title">DebugRoom</string>
-    <string name="debug_eval_mode">eval mode</string>
-    <string name="debug_composable_setting_title">디버그 설정</string>
-    <string name="debug_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
-    <string name="debug_toast_removed">삭제되었습니다.</string>
-    <string name="debug_remove_all_history">디버그 기록 전체 삭제</string>
+    <string name="composable_debug_title">DebugRoom</string>
+    <string name="composable_debug_eval_mode">eval mode</string>
+    <string name="composable_debug_setting">디버그 설정</string>
+    <string name="composable_debug_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
+    <string name="composable_debug_toast_removed">삭제되었습니다.</string>
+    <string name="composable_debug_remove_all_history">디버그 기록 전체 삭제</string>
 
     <string name="composable_setting_appbar_title">앱 설정</string>
     <string name="composable_dialog_toast_saved">저장되었습니다.</string>

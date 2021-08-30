@@ -9,11 +9,11 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.mapper
 
-import io.github.jisungbin.gitmessengerbot.data.github.model.GithubAouthResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.GithubUserResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.AouthResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.UserResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 
-fun GithubAouthResponse.toDomain() = GithubAouth(accessToken = accessToken)
+fun AouthResponse.toDomain() = GithubAouth(accessToken = accessToken)
 
-fun GithubUserResponse.toDomain() = GithubUser(userName = login, profileImageUrl = avatarUrl)
+fun UserResponse.toDomain() = GithubUser(userName = login, profileImageUrl = avatarUrl)

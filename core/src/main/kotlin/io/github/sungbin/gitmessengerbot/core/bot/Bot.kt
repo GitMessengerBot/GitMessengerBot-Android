@@ -30,8 +30,10 @@ import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 
-internal object Sender {
+@Suppress("FunctionName")
+object Sender {
     const val Bot = "Bot"
+    fun User(name: String = "User") = name
 }
 
 object Bot {
@@ -44,6 +46,10 @@ object Bot {
 
     fun compileScript(context: Context, script: ScriptItem) =
         scriptCompiler.process(context, script)
+
+    fun getAllScripts() = scripts.value ?: emptyList()
+
+    fun getCompiledScripts() = _scripts.value?.filter { it.compiled } ?: emptyList()
 
     fun getRunnableScripts() = _scripts.value?.filter { it.isRunnable } ?: emptyList()
 
