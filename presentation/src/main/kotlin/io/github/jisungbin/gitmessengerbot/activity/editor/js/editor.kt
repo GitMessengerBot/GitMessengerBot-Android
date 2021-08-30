@@ -15,6 +15,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,8 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
@@ -62,11 +63,11 @@ import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.util.StringConfig
 import io.github.jisungbin.gitmessengerbot.util.core.Util
-import io.github.jisungbin.gitmessengerbot.util.runIf
 import io.github.jisungbin.gitmessengerbot.util.toast
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
@@ -92,7 +93,7 @@ fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldSt
         scaffoldState = scaffoldState,
         drawerContent = {
             DrawerLayout(
-                gitRepo = githubRepo,
+                githubRepo = githubRepo,
                 script = script,
                 codeField = codeField,
                 undoStack = undoStack
@@ -105,7 +106,7 @@ fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldSt
             onValueChange = { codeField.value = it },
             modifier = Modifier
                 .fillMaxSize()
-                .runIf(Bot.app.value.editorHorizontalScroll.value) {
+                .runIf(AppConfig.appValue.editorHorizontalScroll) {
                     horizontalScroll(rememberScrollState())
                 },
             colors = transparentTextFieldColors(backgroundColor = Color.White),
@@ -117,7 +118,6 @@ fun Editor(githubRepo: GithubRepo, script: ScriptItem, scaffoldState: ScaffoldSt
 @OptIn(InternalCoroutinesApi::class)
 @Composable
 private fun DrawerLayout(
-    gitRepo: GitRepo,
     script: ScriptItem,
     codeField: MutableState<TextFieldValue>,
     undoStack: MutableState<String>,
@@ -148,7 +148,7 @@ private fun DrawerLayout(
                 .padding(top = 10.dp),
             onClick = {
                 coroutineScope.launch {
-                    gitRepo.createRepo(
+                    githubRepo.createRepo(
                         repo = Repo(
                             name = repoName,
                             description = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultRepoDescription
@@ -179,13 +179,13 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    gitRepo.getFileContent(
+                    githubRepo.getFileContent(
                         repoName = repoName,
                         path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { commitResult ->
                         when (commitResult) {
                             is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
-                                gitRepo.updateFile(
+                                githubRepo.updateFile(
                                     repoName = repoName,
                                     path = "script.${script.lang.getScriptSuffix()}",
                                     gitFile = GithubFile(
@@ -229,7 +229,7 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    gitRepo.getFileContent(
+                    githubRepo.getFileContent(
                         repoName = repoName,
                         path = "script.${script.lang.getScriptSuffix()}"
                     ).collect { fileContentResult ->

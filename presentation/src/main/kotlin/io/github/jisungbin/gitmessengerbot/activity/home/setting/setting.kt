@@ -47,10 +47,10 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.config.Config
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
@@ -306,9 +306,9 @@ private fun Content(activity: Activity) {
             )
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
                 val kakaoTalkPackageNames =
-                    app.kakaoTalkPackageNames.sortedBy { it == io.github.jisungbin.gitmessengerbot.common.config.Config.KakaoTalkDefaultPackageName }
+                    app.kakaoTalkPackageNames.sortedBy { it == Config.KakaoTalkDefaultPackageName }
                 val message =
-                    if (kakaoTalkPackageNames.size == 1) io.github.jisungbin.gitmessengerbot.common.config.Config.KakaoTalkDefaultPackageName
+                    if (kakaoTalkPackageNames.size == 1) Config.KakaoTalkDefaultPackageName
                     else "${kakaoTalkPackageNames.first()} 외 ${kakaoTalkPackageNames.size - 1}개 추가됨"
                 Text(text = message)
             }
@@ -320,10 +320,10 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = {
-                io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil.requestNotificationListenerPermission(activity)
+                NotificationUtil.requestNotificationListenerPermission(activity)
             }) {
                 val isPermissionGranted =
-                    io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil.isNotificationListenerPermissionGranted(context)
+                    NotificationUtil.isNotificationListenerPermissionGranted(context)
                 val message =
                     if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
                     else stringResource(R.string.composable_setting_button_denied)
@@ -352,8 +352,8 @@ private fun Content(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
-                val isOptimization = io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil.isIgnoringBatteryOptimization(context)
+            OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
+                val isOptimization = BatteryUtil.isIgnoringBatteryOptimization(context)
                 val message =
                     if (isOptimization) stringResource(R.string.composable_setting_button_granted)
                     else stringResource(R.string.composable_setting_button_denied)

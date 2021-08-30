@@ -50,19 +50,19 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.core.Wear
+import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.core.Storage
-import io.github.jisungbin.gitmessengerbot.util.core.Wear
-import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.doWhen
-import io.github.jisungbin.gitmessengerbot.util.exception.PresentationException
-import io.github.jisungbin.gitmessengerbot.util.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -89,13 +89,13 @@ class SetupActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Setup()
+                Content()
             }
         }
     }
 
     @Composable
-    private fun Setup() {
+    private fun Content() {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -202,7 +202,7 @@ class SetupActivity : ComponentActivity() {
                             shape = shape
                         )
                         .padding(8.dp)
-                        .noRippleClickable {
+                        .noRippleClickable(onClick = {
                             if (notificationPermissionGranted && storagePermissionGranted) {
                                 Web.open(
                                     applicationContext,
@@ -211,7 +211,7 @@ class SetupActivity : ComponentActivity() {
                             } else {
                                 toast(getString(R.string.setup_need_manage_permission))
                             }
-                        },
+                        }),
                     text = stringResource(R.string.setup_start_with_github_login),
                     color = Color.White,
                     textAlign = TextAlign.Center,
@@ -288,7 +288,7 @@ class SetupActivity : ComponentActivity() {
     private fun Permission.requestAllPermissions() {
         when (permissions.first()) {
             PermissionType.NotificationRead -> {
-                io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
+                NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
                 doDelay(1000) {
                     notificationPermissionGranted = true
                 }

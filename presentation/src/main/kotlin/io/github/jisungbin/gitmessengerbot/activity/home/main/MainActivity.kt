@@ -43,11 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -89,7 +92,7 @@ class MainActivity : ComponentActivity() {
                 Bot.compileScript(
                     applicationContext,
                     ScriptItem(
-                        id = io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig.EvalId,
+                        id = ScriptConfig.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,

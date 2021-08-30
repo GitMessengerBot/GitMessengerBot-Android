@@ -16,11 +16,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.home.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
 import io.github.jisungbin.gitmessengerbot.util.RequestResult
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.util.extension.toast
@@ -37,7 +37,7 @@ class SetupViewModel @Inject constructor(
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun login(requestCode: String, activity: Activity) = callbackFlow<RequestResult<Nothing>> {
+    fun login(requestCode: String, activity: Activity) = callbackFlow<RequestResult<Unit>> {
         githubRequestAouthTokenUseCase.invoke(requestCode).collect { aouthTokenResult ->
             aouthTokenResult.doWhen(
                 onSuccess = { aouth ->
@@ -50,18 +50,10 @@ class SetupViewModel @Inject constructor(
                                     profileImageUrl = user.avatarUrl
                                 )
 
-                                Storage.write(
-                                    io.github.jisungbin.gitmessengerbot.common.config.GithubConfig.DataPath,
-                                    githubData.toJsonString()
-                                )
+                                Storage.write(GithubConfig.DataPath, githubData.toJsonString())
 
                                 activity.finish()
-                                startActivity(
-                                    Intent(
-                                        activity,
-                                        MainActivity::class.java
-                                    )
-                                )
+                                startActivity(Intent(activity, MainActivity::class.java))
 
                                 toast(
                                     activity,
@@ -71,7 +63,7 @@ class SetupViewModel @Inject constructor(
                                     )
                                 )
 
-                                trySned(RequestResult.Success(Nothing()))
+                                trySned(RequestResult.Success(Unit))
                             },
                             onFail = { exception ->
                                 trySend(

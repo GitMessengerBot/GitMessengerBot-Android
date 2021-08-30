@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.util.core.Web
+import io.github.jisungbin.gitmessengerbot.common.core.Web
 
 data class Project(val name: String, val link: String, val license: License)
 
