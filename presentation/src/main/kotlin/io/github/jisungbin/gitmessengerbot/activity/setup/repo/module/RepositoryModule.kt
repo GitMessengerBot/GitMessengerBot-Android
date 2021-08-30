@@ -16,8 +16,8 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
 import io.github.jisungbin.gitmessengerbot.activity.setup.repo.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.activity.setup.repo.qualifier.UserRetrofit
-import io.github.jisungbin.gitmessengerbot.data.github.repository.GithubRepositoryImpl
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
+import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubUserRepositoryImpl
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
@@ -30,5 +30,5 @@ object RepositoryModule {
         httpLoggingInterceptor: HttpLoggingInterceptor,
         @UserRetrofit userRetrofit: Retrofit.Builder,
         @AouthRetrofit aouthRetrofit: Retrofit.Builder,
-    ): GithubRepository = GithubRepositoryImpl(httpLoggingInterceptor, userRetrofit, aouthRetrofit)
+    ): GithubUserRepository = GithubUserRepositoryImpl(httpLoggingInterceptor, userRetrofit, aouthRetrofit)
 }

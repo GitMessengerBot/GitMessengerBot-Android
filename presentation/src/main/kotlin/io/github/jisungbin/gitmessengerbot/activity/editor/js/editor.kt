@@ -51,8 +51,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.GitFile
-import io.github.jisungbin.gitmessengerbot.data.github.model.Repo
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.Repo
 import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
 import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
@@ -187,7 +187,7 @@ private fun DrawerLayout(
                                 gitRepo.updateFile(
                                     repoName = repoName,
                                     path = "script.${script.lang.getScriptSuffix()}",
-                                    gitFile = GitFile(
+                                    gitFile = GithubFile(
                                         message = io.github.jisungbin.gitmessengerbot.common.StringConfig.GitDefaultCommitMessage,
                                         content = codeField.value.text,
                                         sha = (commitResult.response as FileContentResponse).sha

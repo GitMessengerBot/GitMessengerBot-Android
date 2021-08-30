@@ -11,13 +11,13 @@ package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 
 private typealias BaseGithubGetUserInfoUseCase = BaseUseCase<String, GithubUser>
 
 class GithubGetUserInfoUseCase(
-    private val githubRepository: GithubRepository,
+    private val githubUserRepository: GithubUserRepository,
 ) : BaseGithubGetUserInfoUseCase {
     override suspend fun invoke(parameter: String) =
-        githubRepository.getUserInfo(githubKey = parameter)
+        githubUserRepository.getUserInfo(githubKey = parameter)
 }

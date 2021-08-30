@@ -11,13 +11,13 @@ package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 
 private typealias BaseGithubRequestAouthTokenUseCase = BaseUseCase<String, GithubAouth>
 
 class GithubRequestAouthTokenUseCase(
-    private val githubRepository: GithubRepository,
+    private val githubUserRepository: GithubUserRepository,
 ) : BaseGithubRequestAouthTokenUseCase {
     override suspend fun invoke(parameter: String) =
-        githubRepository.requestAouthToken(requestCode = parameter)
+        githubUserRepository.requestAouthToken(requestCode = parameter)
 }

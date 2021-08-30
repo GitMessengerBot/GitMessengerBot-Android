@@ -7,15 +7,15 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.repository
+package io.github.jisungbin.gitmessengerbot.data.github.repo
 
-import io.github.jisungbin.gitmessengerbot.data.github.api.GithubAouthService
+import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
-import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -25,20 +25,18 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class GithubRepositoryImpl(
+class GithubUserRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
     private val aouthRetrofit: Retrofit.Builder,
-) : GithubRepository {
+) : GithubUserRepository {
 
     private class AuthInterceptor(private val token: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
             return try {
                 builder = builder.addHeader("Accept", "application/json")
-                if (token != null) {
-                    builder = builder.addHeader("Authorization", "token $token")
-                }
+                if (token != null) builder = builder.addHeader("Authorization", "token $token")
                 chain.proceed(builder.build())
             } catch (ignored: Exception) {
                 chain.proceed(builder.build())
@@ -52,22 +50,17 @@ class GithubRepositoryImpl(
         return builder.build()
     }
 
-    private fun <T> buildRetrofit(retrofit: Retrofit.Builder, token: String?, service: Class<T>) =
-        retrofit
-            .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(token)))
-            .build()
-            .create(service)
+    private fun buildRetrofit(retrofit: Retrofit.Builder, token: String?) = retrofit
+        .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(token)))
+        .build()
+        .create(GithubUserService::class.java)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getUserInfo(githubKey: String) = callbackFlow {
         try {
-            val request = buildRetrofit(
-                userRetrofit,
-                githubKey,
-                GithubUserService::class.java
-            ).getUserInfo()
+            val request = buildRetrofit(userRetrofit, githubKey).getUserInfo()
             trySend(
-                if (request.isSuccessful && request.body() != null) {
+                if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
                 } else {
                     GithubResult.Fail(DataGithubException("Github.getUserInfo() response is null."))
@@ -83,17 +76,13 @@ class GithubRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
-            val request = buildRetrofit(
-                aouthRetrofit,
-                null,
-                GithubAouthService::class.java
-            ).requestAouthToken(
+            val request = buildRetrofit(userRetrofit, null).requestAouthToken(
                 requestCode,
                 SecretConfig.GithubOauthClientId,
                 SecretConfig.GithubOauthClientSecret
             )
             trySend(
-                if (request.isSuccessful && request.body() != null) {
+                if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
                 } else {
                     GithubResult.Fail(DataGithubException("Github.requestAouthToken() response is null."))

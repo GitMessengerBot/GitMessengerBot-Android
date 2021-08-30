@@ -14,7 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
-import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
 
@@ -23,11 +23,11 @@ import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAo
 object UseCaseModule {
     @Provides
     @ActivityScoped
-    fun provideRequestAouthTokenUseCase(githubRepository: GithubRepository) =
-        GithubRequestAouthTokenUseCase(githubRepository)
+    fun provideRequestAouthTokenUseCase(githubUserRepository: GithubUserRepository) =
+        GithubRequestAouthTokenUseCase(githubUserRepository)
 
     @Provides
     @ActivityScoped
-    fun provideGetUserInfoUseCase(githubRepository: GithubRepository) =
-        GithubGetUserInfoUseCase(githubRepository)
+    fun provideGetUserInfoUseCase(githubUserRepository: GithubUserRepository) =
+        GithubGetUserInfoUseCase(githubUserRepository)
 }

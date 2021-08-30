@@ -14,7 +14,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 import kotlinx.coroutines.flow.Flow
 
-interface GithubRepository {
+interface GithubUserRepository {
     suspend fun requestAouthToken(requestCode: String): Flow<GithubResult<GithubAouth>>
     suspend fun getUserInfo(githubKey: String): Flow<GithubResult<GithubUser>>
 }

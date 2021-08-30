@@ -10,10 +10,14 @@
 package io.github.jisungbin.gitmessengerbot.data.github.mapper
 
 import io.github.jisungbin.gitmessengerbot.data.github.model.AouthResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.UserResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
+import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 
 fun AouthResponse.toDomain() = GithubAouth(accessToken = accessToken)
 
 fun UserResponse.toDomain() = GithubUser(userName = login, profileImageUrl = avatarUrl)
+
+fun FileContentResponse.toDomain() = GithubFileContent(downloadUrl = downloadUrl, sha = sha)
