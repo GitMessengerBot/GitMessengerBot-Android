@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.util.script
 
-import io.github.jisungbin.gitmessengerbot.util.exception.UtilException
+import io.github.jisungbin.gitmessengerbot.util.exception.CommonException
 
 object ScriptLang {
     const val TypeScript = 0
@@ -23,7 +23,7 @@ fun Int.toScriptLangName() = when (this) {
     ScriptLang.JavaScript -> "JavaScript"
     ScriptLang.Python -> "Python"
     ScriptLang.Simple -> "Simple"
-    else -> throw UtilException("Unknown script type: $this")
+    else -> throw CommonException("Unknown script type: $this")
 }
 
 fun Int.getScriptSuffix() = when (this) {
@@ -31,5 +31,5 @@ fun Int.getScriptSuffix() = when (this) {
     ScriptLang.JavaScript -> "js"
     ScriptLang.Python -> "py"
     ScriptLang.Simple -> "sim"
-    else -> throw UtilException("Unknown script type: $this")
+    else -> throw CommonException("Unknown script type: $this")
 }

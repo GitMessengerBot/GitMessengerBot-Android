@@ -12,6 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.home.setting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,12 +60,11 @@ import io.github.jisungbin.gitmessengerbot.ui.licenser.Project
 import io.github.jisungbin.gitmessengerbot.util.core.Util
 import io.github.jisungbin.gitmessengerbot.util.core.Web
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.runIf
+import io.github.jisungbin.gitmessengerbot.util.extension.runIf
+import io.github.jisungbin.gitmessengerbot.util.extension.toast
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.util.script.toScriptLangName
-import io.github.jisungbin.gitmessengerbot.util.toast
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.script.getScriptDefaultCode
+import io.github.sungbin.gitmessengerbot.core.bot.script.getScriptDefaultCode
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
@@ -75,7 +75,7 @@ fun OpenSourceDialog(visible: MutableState<Boolean>) {
             buttons = {},
             title = {
                 Text(
-                    text = stringResource(R.string.composable_setting_dialog_opensource_license),
+                    text = stringResource(R.string.composable_dialog_opensource_license),
                     fontSize = 20.sp
                 )
             },
@@ -226,19 +226,19 @@ fun DonateDialog(visible: MutableState<Boolean>) {
                         Web.open(context, Web.Link.DonateOpenChat)
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_setting_dialog_button_direct_go))
+                    Text(text = stringResource(R.string.composable_dialog_button_direct_go))
                 }
                 OutlinedButton(
                     onClick = {
                         Util.copy(context, context.getString(R.string.kakaotalk_id))
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_setting_dialog_button_copy_kakaotalk_id))
+                    Text(text = stringResource(R.string.composable_dialog_button_copy_kakaotalk_id))
                 }
             },
             title = {
                 Text(
-                    text = stringResource(R.string.composable_setting_dialog_donate),
+                    text = stringResource(R.string.composable_dialog_donate),
                     modifier = Modifier.padding(bottom = 30.dp)
                 )
             }
@@ -253,7 +253,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_git_default_commit_message)) },
+            title = { Text(text = stringResource(R.string.composable_dialog_git_default_commit_message)) },
             confirmButton = {
                 OutlinedButton(
                     onClick = {
@@ -262,7 +262,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
                         }
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_dialog_button_save))
                 }
             },
             text = {
@@ -291,10 +291,10 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_git_default_new_repo_options)) },
+            title = { Text(text = stringResource(R.string.composable_dialog_git_default_new_repo_options)) },
             confirmButton = {
                 OutlinedButton(onClick = { /*TODO*/ }) {
-                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_dialog_button_save))
                 }
             },
             text = {
@@ -304,7 +304,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
                         .wrapContentHeight()
                 ) {
                     Spacer()
-                    // todo
+                    // TODO
                 }
             }
         )
@@ -446,7 +446,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_script_add_default_code)) },
+            title = { Text(text = stringResource(R.string.composable_dialog_script_add_default_code)) },
             buttons = {},
             text = {
                 Column(
@@ -468,10 +468,10 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                                     .weight(1f)
                                     .fillMaxHeight()
                                     .background(Color.White)
-                                    .noRippleClickable {
+                                    .noRippleClickable(onClick = {
                                         scriptDefaultCodeLang.value = scriptLang
                                         scriptDefaultCodeSettingDialogVisible.value = true
-                                    },
+                                    }),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
@@ -504,7 +504,7 @@ private fun ScriptDefaultCodeSettingDialog(
             title = {
                 Text(
                     text = stringResource(
-                        R.string.composable_setting_dialog_edit_default_code,
+                        R.string.composable_dialog_edit_default_code,
                         scriptLang.toScriptLangName()
                     )
                 )
@@ -513,22 +513,22 @@ private fun ScriptDefaultCodeSettingDialog(
                 OutlinedButton(
                     onClick = {
                         val newCode = scriptDefaultCodeField.text
+                        val scriptDefaultCode = AppConfig.appValue.scriptDefaultCode
                         when (scriptLang) {
-                            0 -> Bot.app.value.scriptDefaultCode.value.ts = newCode
-                            1 -> Bot.app.value.scriptDefaultCode.value.js = newCode
-                            2 -> Bot.app.value.scriptDefaultCode.value.py = newCode
-                            3 -> Bot.app.value.scriptDefaultCode.value.sim = newCode
+                            ScriptLang.TypeScript -> scriptDefaultCode.ts = newCode
+                            ScriptLang.JavaScript -> scriptDefaultCode.js = newCode
+                            ScriptLang.Python -> scriptDefaultCode.py = newCode
+                            ScriptLang.Simple -> scriptDefaultCode.sim = newCode
                         }
-                        Bot.scriptDataSave(Bot.app.value)
-                        io.github.jisungbin.gitmessengerbot.util.toast(
-                            context,
-                            context.getString(R.string.composable_setting_toast_saved)
-                        )
+                        AppConfig.update { app ->
+                            app.copy(scriptDefaultCode = scriptDefaultCode)
+                        }
+                        toast(context, context.getString(R.string.composable_dialog_toast_saved))
                         visible.value = false
                         innerVisible.value = false
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_setting_dialog_button_save))
+                    Text(text = stringResource(R.string.composable_dialog_button_save))
                 }
             },
             text = {
@@ -544,7 +544,7 @@ private fun ScriptDefaultCodeSettingDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .runIf(Bot.app.value.editorHorizontalScroll.value) {
+                            .runIf(AppConfig.appValue.editorHorizontalScroll) {
                                 horizontalScroll(rememberScrollState())
                             },
                         colors = transparentTextFieldColors(backgroundColor = Color.White),
@@ -576,8 +576,11 @@ private fun ApplicationItem(packageName: String) {
             modifier = Modifier
                 .size(20.dp)
                 .clickable {
-                    Bot.app.value.kakaoTalkPackageNames.remove(packageName)
-                    Bot.scriptDataSave(Bot.app.value)
+                    AppConfig.update { app ->
+                        val kakaoTalkPackageNames = app.kakaoTalkPackageNames.toMutableList()
+                        kakaoTalkPackageNames.remove(packageName)
+                        app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
+                    }
                 }
         )
     }

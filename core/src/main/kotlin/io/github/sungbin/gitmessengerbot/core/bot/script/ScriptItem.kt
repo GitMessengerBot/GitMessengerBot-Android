@@ -14,7 +14,7 @@ import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.util.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.setting.model.ScriptDefaultCode
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 private typealias ScriptItems = List<ScriptItem>
 
@@ -26,21 +26,11 @@ data class ScriptItem(
     var compiled: Boolean,
     var lastRun: String,
 ) {
-    private fun getScriptDefaultCode(): String {
-        val scriptDefaultCode = ScriptDefaultCode()
-        return when (lang) {
-            ScriptLang.JavaScript -> scriptDefaultCode.js
-            ScriptLang.TypeScript -> scriptDefaultCode.ts
-            ScriptLang.Python -> scriptDefaultCode.py
-            ScriptLang.Simple -> scriptDefaultCode.sim
-            else -> throw IndexOutOfBoundsException()
-        }
-    }
-
     val isRunnable = power && compiled
+    private val defaultCode = lang.getScriptDefaultCode()
 
     fun add() {
-        Storage.write(ScriptConfig.ScriptPath(name, lang), getScriptDefaultCode())
+        Storage.write(ScriptConfig.ScriptPath(name, lang), defaultCode)
         Storage.write(ScriptConfig.ScriptDataPath(name, lang), toJsonString())
     }
 
@@ -50,7 +40,7 @@ data class ScriptItem(
     }
 
     fun getCode() =
-        Storage.read(ScriptConfig.ScriptPath(name, lang), getScriptDefaultCode())
+        Storage.read(ScriptConfig.ScriptPath(name, lang), defaultCode)
             ?: throw CoreException("The script's code cannot be null. (ScriptId: $id)")
 }
 
@@ -58,3 +48,14 @@ fun ScriptItems.sorted() =
     sortedByDescending { it.name }.sortedByDescending { it.lang }.asReversed()
 
 fun ScriptItems.search(scriptName: String) = filter { it.name.contains(scriptName) }
+
+fun Int.getScriptDefaultCode(): String {
+    val scriptDefaultCode = AppConfig.appValue.scriptDefaultCode
+    return when (this) {
+        ScriptLang.JavaScript -> scriptDefaultCode.js
+        ScriptLang.TypeScript -> scriptDefaultCode.ts
+        ScriptLang.Python -> scriptDefaultCode.py
+        ScriptLang.Simple -> scriptDefaultCode.sim
+        else -> throw CoreException("Unknown script type: $this")
+    }
+}

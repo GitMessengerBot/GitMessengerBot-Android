@@ -10,7 +10,9 @@
 package io.github.jisungbin.gitmessengerbot.util.extension
 
 import com.google.gson.Gson
+import io.github.jisungbin.gitmessengerbot.util.exception.CommonException
 
 inline fun <reified T : Any> String.toModel() = Gson().fromJson(this, T::class.java)!!
 
-fun Any.toJsonString() = Gson().toJson(this)!!
+fun Any.toJsonString() = Gson().toJson(this)
+    ?: throw CommonException("Error occur when convert json-object to string. ($this)")

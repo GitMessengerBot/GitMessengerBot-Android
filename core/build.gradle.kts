@@ -49,6 +49,5 @@ dependencies {
 
     implementation(project(":common"))
 
-    Dependencies.essential.forEach(::implementation)
     Dependencies.bot.forEach(::implementation)
 }

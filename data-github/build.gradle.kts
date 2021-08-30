@@ -42,7 +42,6 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":domain-github"))
 
-    Dependencies.essential.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
     Dependencies.retrofitutil.forEach(::implementation)
 }

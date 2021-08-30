@@ -44,5 +44,5 @@ dependencies {
     implementation(Dependencies.livedata)
     implementation(Dependencies.browser)
 
-    Dependencies.essential.forEach(::implementation)
+    Dependencies.essential.forEach(::api)
 }

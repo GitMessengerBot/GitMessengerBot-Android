@@ -15,6 +15,7 @@ import io.github.jisungbin.gitmessengerbot.util.config.PathConfig
 import io.github.jisungbin.gitmessengerbot.util.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.util.core.Storage
 import io.github.jisungbin.gitmessengerbot.util.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.util.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.util.extension.toModel
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.setting.model.App
@@ -28,8 +29,10 @@ object AppConfig {
     val canUseEval: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
 
     fun update(update: (App) -> App) {
-        val value = _app.value ?: throw CoreException("AppConfig.app value is null.")
-        _app.value = update(value)
+        var value = _app.value ?: throw CoreException("AppConfig.app value is null.")
+        value = update(value)
+        Storage.write(PathConfig.AppData, value.toJsonString())
+        _app.value = value
     }
 
     private fun loadApp() = Storage.read(PathConfig.AppData, null)?.toModel() ?: App()

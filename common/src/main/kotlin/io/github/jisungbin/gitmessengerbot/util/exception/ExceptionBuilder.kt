@@ -17,4 +17,4 @@ class DataKavenException(override val message: String?) : Exception()
 
 class PresentationException(override val message: String?) : Exception()
 
-class UtilException(override val message: String?) : Exception()
+class CommonException(override val message: String?) : Exception()

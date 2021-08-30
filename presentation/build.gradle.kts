@@ -80,7 +80,6 @@ dependencies {
     implementation(project(":common"))
 
     Dependencies.debug.forEach(::debugImplementation)
-    Dependencies.essential.forEach(::implementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
