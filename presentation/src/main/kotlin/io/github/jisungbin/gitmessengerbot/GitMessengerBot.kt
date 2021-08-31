@@ -10,8 +10,15 @@
 package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
+import com.mocklets.pluto.Pluto
+import com.mocklets.pluto.PlutoLog
+import com.mocklets.pluto.modules.exceptions.ANRException
+import com.mocklets.pluto.modules.exceptions.ANRListener
 import dagger.hilt.android.HiltAndroidApp
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
@@ -24,10 +31,16 @@ class GitMessengerBot : Application() {
             description = getString(R.string.notification_channel_name)
         )
 
-        // TODO: catch unhandle expection
-        /*Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-            Util.error(applicationContext, "알 수 없는 에러 발생\n\n$throwable")
-            exitProcess(0)
-        }*/
+        Bot.scripts
+        AppConfig.app
+        DebugStore.items
+
+        Pluto.initialize(applicationContext)
+        Pluto.setANRListener(object : ANRListener {
+            override fun onAppNotResponding(exception: ANRException) {
+                exception.printStackTrace()
+                PlutoLog.e("ANR", exception.threadStateMap)
+            }
+        })
     }
 }

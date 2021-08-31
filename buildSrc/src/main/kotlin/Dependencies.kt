@@ -36,6 +36,7 @@ object Versions {
     }
 
     object Ui {
+        const val Material = "1.4.0"
         const val LottieCompose = "4.1.0"
         const val LandscapistCoil = "1.3.4"
         const val FancyBottomBar = "1.0.1"
@@ -124,6 +125,7 @@ object Dependencies {
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
+        "com.google.android.material:material:${Versions.Ui.Material}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
     )
 

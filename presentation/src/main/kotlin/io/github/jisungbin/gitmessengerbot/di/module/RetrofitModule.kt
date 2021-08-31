@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.di.module
 
+import com.mocklets.pluto.PlutoInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,14 +55,15 @@ object RetrofitModule {
     private fun buildRetrofit(baseUrl: String) = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(getInterceptor(PlutoInterceptor()))
 
     @Provides
     @SignedRetrofit
     @Singleton
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(getInterceptor(loggingInterceptor, AuthInterceptor()))
         .baseUrl(GithubConfig.BaseApiUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
         .build()
 
     @Provides

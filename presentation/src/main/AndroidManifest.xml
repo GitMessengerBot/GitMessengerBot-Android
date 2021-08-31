@@ -42,6 +42,7 @@
 
         <activity
             android:name=".activity.splash.SplashActivity"
+            android:theme="@style/Theme.GitMessengerBot.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -72,6 +72,9 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
+    debugImplementation("com.mocklets:pluto:1.0.6")
+    releaseImplementation("com.mocklets:pluto-no-op:1.0.6")
+
     implementation(project(":core"))
     implementation(project(":data-github"))
     implementation(project(":data-kaven"))
