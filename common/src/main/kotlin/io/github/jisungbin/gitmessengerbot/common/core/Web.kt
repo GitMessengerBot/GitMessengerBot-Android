@@ -66,7 +66,7 @@ object Web {
             val customTabIntent = builder.build()
             customTabIntent.launchUrl(context, link.url.toUri())
         } catch (exception: Exception) {
-            println(exception)
+            exception.printStackTrace()
             toast(context, context.getString(R.string.web_toast_non_install_browser))
         }
     }

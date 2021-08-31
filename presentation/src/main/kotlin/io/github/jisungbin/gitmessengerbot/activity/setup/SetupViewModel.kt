@@ -38,9 +38,7 @@ class SetupViewModel @Inject constructor(
             githubAouthResult.doWhen(
                 onSuccess = { githubAouth ->
                     var githubData = GithubData(aouthToken = githubAouth.token)
-                    println("githubData: $githubData")
                     githubGetUserInfoUseCase(githubData.aouthToken).collect { userInfoResult ->
-                        println("userInfoResult: $userInfoResult")
                         userInfoResult.doWhen(
                             onSuccess = { userInfo ->
                                 githubData = githubData.copy(

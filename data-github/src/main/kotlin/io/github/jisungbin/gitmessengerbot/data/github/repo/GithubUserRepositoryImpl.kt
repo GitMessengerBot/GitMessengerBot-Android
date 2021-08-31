@@ -32,11 +32,11 @@ class GithubUserRepositoryImpl(
     private val aouthRetrofit: Retrofit.Builder,
 ) : GithubUserRepository {
 
-    private class AuthInterceptor(private val token: String) : Interceptor {
+    private class AuthInterceptor(private val aouthToken: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder = chain.request().newBuilder()
                 .addHeader("Accept", "application/json")
-                .addHeader("Authorization", "token $token")
+                .runIf(aouthToken != null) { addHeader("Authorization", "token $aouthToken") }
             return chain.proceed(builder.build())
         }
     }
@@ -48,9 +48,7 @@ class GithubUserRepositoryImpl(
     }
 
     private fun buildRetrofit(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
-        .runIf(aouthToken != null) {
-            client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(aouthToken!!)))
-        }
+        .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(aouthToken)))
         .build()
         .create(GithubUserService::class.java)
 
@@ -76,11 +74,12 @@ class GithubUserRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
-            val request = buildRetrofit(aouthRetrofit, null).requestAouthToken(
-                requestCode = requestCode,
-                clientId = SecretConfig.GithubOauthClientId,
-                clientSecret = SecretConfig.GithubOauthClientSecret
-            )
+            val request =
+                buildRetrofit(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
+                    requestCode = requestCode,
+                    clientId = SecretConfig.GithubOauthClientId,
+                    clientSecret = SecretConfig.GithubOauthClientSecret
+                )
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())

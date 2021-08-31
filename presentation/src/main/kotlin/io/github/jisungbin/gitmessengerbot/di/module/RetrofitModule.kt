@@ -52,11 +52,9 @@ object RetrofitModule {
         return builder.build()
     }
 
-    private fun buildRetrofit(loggingInterceptor: HttpLoggingInterceptor, baseUrl: String) =
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(getInterceptor(loggingInterceptor, PlutoInterceptor()))
+    private fun buildRetrofitWithoutClient(baseUrl: String) = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
 
     @Provides
     @SignedRetrofit
@@ -70,12 +68,10 @@ object RetrofitModule {
     @Provides
     @UserRetrofit
     @Singleton
-    fun provideUserRetrofit(loggingInterceptor: HttpLoggingInterceptor) =
-        buildRetrofit(loggingInterceptor = loggingInterceptor, baseUrl = GithubConfig.BaseApiUrl)
+    fun provideUserRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @Singleton
-    fun provideAouthRetrofit(loggingInterceptor: HttpLoggingInterceptor) =
-        buildRetrofit(loggingInterceptor = loggingInterceptor, baseUrl = GithubConfig.BaseUrl)
+    fun provideAouthRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseUrl)
 }
