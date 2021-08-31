@@ -16,5 +16,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GithubUserRepository {
     suspend fun requestAouthToken(requestCode: String): Flow<GithubResult<GithubAouth>>
-    suspend fun getUserInfo(githubKey: String): Flow<GithubResult<GithubUser>>
+    suspend fun getUserInfo(aouthToken: String): Flow<GithubResult<GithubUser>>
 }

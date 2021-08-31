@@ -10,7 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.activity.setup.model
 
 data class GithubData(
-    val token: String,
+    val aouthToken: String,
     val userName: String = "",
     val profileImageUrl: String = "",
 )

@@ -16,7 +16,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 
-fun AouthResponse.toDomain() = GithubAouth(accessToken = accessToken)
+fun AouthResponse.toDomain() = GithubAouth(token = accessToken)
 
 fun UserResponse.toDomain() = GithubUser(userName = login, profileImageUrl = avatarUrl)
 

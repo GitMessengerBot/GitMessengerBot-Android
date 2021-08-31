@@ -28,22 +28,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
-    private val githubGetUserInfoUseCase: GithubGetUserInfoUseCase,
     private val githubRequestAouthTokenUseCase: GithubRequestAouthTokenUseCase,
+    private val githubGetUserInfoUseCase: GithubGetUserInfoUseCase,
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun login(requestCode: String) = callbackFlow {
-        githubRequestAouthTokenUseCase(requestCode).collect { aouthTokenResult ->
-            aouthTokenResult.doWhen(
-                onSuccess = { aouth ->
-                    var githubData = GithubData(token = aouth.accessToken)
-                    githubGetUserInfoUseCase(githubData.token).collect { userInfoResult ->
+    suspend fun login(requestCode: String) = callbackFlow {
+        githubRequestAouthTokenUseCase(requestCode).collect { githubAouthResult ->
+            githubAouthResult.doWhen(
+                onSuccess = { githubAouth ->
+                    var githubData = GithubData(aouthToken = githubAouth.token)
+                    println("githubData: $githubData")
+                    githubGetUserInfoUseCase(githubData.aouthToken).collect { userInfoResult ->
+                        println("userInfoResult: $userInfoResult")
                         userInfoResult.doWhen(
-                            onSuccess = { user ->
+                            onSuccess = { userInfo ->
                                 githubData = githubData.copy(
-                                    userName = user.userName,
-                                    profileImageUrl = user.profileImageUrl
+                                    userName = userInfo.userName,
+                                    profileImageUrl = userInfo.profileImageUrl
                                 )
                                 Storage.write(GithubConfig.DataPath, githubData.toJsonString())
                                 trySend(RequestResult.Success(githubData))

@@ -30,7 +30,7 @@ object RepoModule {
     @Provides
     @Singleton
     fun provideGithubRepoRepository(@SignedRetrofit retrofit: Retrofit): GithubRepoRepository =
-        GithubRepoRepositoryImpl(retrofit)
+        GithubRepoRepositoryImpl(retrofit = retrofit)
 
     @Provides
     @Singleton
@@ -38,6 +38,9 @@ object RepoModule {
         httpLoggingInterceptor: HttpLoggingInterceptor,
         @UserRetrofit userRetrofit: Retrofit.Builder,
         @AouthRetrofit aouthRetrofit: Retrofit.Builder,
-    ): GithubUserRepository =
-        GithubUserRepositoryImpl(httpLoggingInterceptor, userRetrofit, aouthRetrofit)
+    ): GithubUserRepository = GithubUserRepositoryImpl(
+        httpLoggingInterceptor = httpLoggingInterceptor,
+        userRetrofit = userRetrofit,
+        aouthRetrofit = aouthRetrofit
+    )
 }

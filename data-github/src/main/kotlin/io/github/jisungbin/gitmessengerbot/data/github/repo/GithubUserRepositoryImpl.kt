@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.data.github.repo
 
 import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
+import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
@@ -31,16 +32,12 @@ class GithubUserRepositoryImpl(
     private val aouthRetrofit: Retrofit.Builder,
 ) : GithubUserRepository {
 
-    private class AuthInterceptor(private val token: String?) : Interceptor {
+    private class AuthInterceptor(private val token: String) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
-            var builder = chain.request().newBuilder()
-            return try {
-                builder = builder.addHeader("Accept", "application/json")
-                if (token != null) builder = builder.addHeader("Authorization", "token $token")
-                chain.proceed(builder.build())
-            } catch (ignored: Exception) {
-                chain.proceed(builder.build())
-            }
+            val builder = chain.request().newBuilder()
+                .addHeader("Accept", "application/json")
+                .addHeader("Authorization", "token $token")
+            return chain.proceed(builder.build())
         }
     }
 
@@ -50,15 +47,18 @@ class GithubUserRepositoryImpl(
         return builder.build()
     }
 
-    private fun buildRetrofit(retrofit: Retrofit.Builder, token: String?) = retrofit
-        .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(token)))
+    private fun buildRetrofit(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
+        .runIf(aouthToken != null) {
+            client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(aouthToken!!)))
+        }
         .build()
         .create(GithubUserService::class.java)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getUserInfo(githubKey: String) = callbackFlow {
+    override suspend fun getUserInfo(aouthToken: String) = callbackFlow {
         try {
-            val request = buildRetrofit(userRetrofit, githubKey).getUserInfo()
+            val request =
+                buildRetrofit(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
@@ -76,10 +76,10 @@ class GithubUserRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
-            val request = buildRetrofit(userRetrofit, null).requestAouthToken(
-                requestCode,
-                SecretConfig.GithubOauthClientId,
-                SecretConfig.GithubOauthClientSecret
+            val request = buildRetrofit(aouthRetrofit, null).requestAouthToken(
+                requestCode = requestCode,
+                clientId = SecretConfig.GithubOauthClientId,
+                clientSecret = SecretConfig.GithubOauthClientSecret
             )
             trySend(
                 if (request.isValid()) {

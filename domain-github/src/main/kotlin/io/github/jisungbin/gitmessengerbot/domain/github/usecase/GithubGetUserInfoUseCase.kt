@@ -19,5 +19,5 @@ class GithubGetUserInfoUseCase(
     private val githubUserRepository: GithubUserRepository,
 ) : BaseGithubGetUserInfoUseCase {
     override suspend fun invoke(parameter: String) =
-        githubUserRepository.getUserInfo(githubKey = parameter)
+        githubUserRepository.getUserInfo(aouthToken = parameter)
 }

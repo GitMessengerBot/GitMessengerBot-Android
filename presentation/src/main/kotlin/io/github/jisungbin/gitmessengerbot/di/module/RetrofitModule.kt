@@ -40,7 +40,7 @@ object RetrofitModule {
             val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
                 ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
             builder = builder
-                .addHeader("Authorization", "token ${githubData.token}")
+                .addHeader("Authorization", "token ${githubData.aouthToken}")
                 .addHeader("Accept", "application/json")
             return chain.proceed(builder.build())
         }
@@ -52,10 +52,11 @@ object RetrofitModule {
         return builder.build()
     }
 
-    private fun buildRetrofit(baseUrl: String) = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(getInterceptor(PlutoInterceptor()))
+    private fun buildRetrofit(loggingInterceptor: HttpLoggingInterceptor, baseUrl: String) =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(getInterceptor(loggingInterceptor, PlutoInterceptor()))
 
     @Provides
     @SignedRetrofit
@@ -69,10 +70,12 @@ object RetrofitModule {
     @Provides
     @UserRetrofit
     @Singleton
-    fun provideUserRetrofit() = buildRetrofit(GithubConfig.BaseApiUrl)
+    fun provideUserRetrofit(loggingInterceptor: HttpLoggingInterceptor) =
+        buildRetrofit(loggingInterceptor = loggingInterceptor, baseUrl = GithubConfig.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @Singleton
-    fun provideAouthRetrofit() = buildRetrofit(GithubConfig.BaseUrl)
+    fun provideAouthRetrofit(loggingInterceptor: HttpLoggingInterceptor) =
+        buildRetrofit(loggingInterceptor = loggingInterceptor, baseUrl = GithubConfig.BaseUrl)
 }

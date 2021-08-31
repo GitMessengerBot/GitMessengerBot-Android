@@ -345,7 +345,7 @@ class SetupActivity : ComponentActivity() {
                         toast(getString(R.string.vm_setup_toast_welcome_start, githubData.userName))
                     },
                     onFail = { exception ->
-                        println(exception.message)
+                        exception.printStackTrace()
                         // todo: ErrorDialog
                     }
                 )
