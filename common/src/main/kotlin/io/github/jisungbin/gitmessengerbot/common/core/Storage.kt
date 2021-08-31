@@ -25,8 +25,8 @@ object Storage {
     @Suppress("DEPRECATION")
     val sdcard: String = Environment.getExternalStorageDirectory().absolutePath
 
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
-    val isScoped = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+    val isScoped = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
     private fun String.parsePath() = if (contains(sdcard)) this else "$sdcard/$this"
 

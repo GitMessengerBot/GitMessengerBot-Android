@@ -12,6 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
@@ -87,9 +89,20 @@ class SetupActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         wearAppInstalled = Wear.checkInstalled(applicationContext)
-        storagePermissionGranted = Storage.isStorageManagerPermissionGranted()
         notificationPermissionGranted =
             NotificationUtil.isNotificationListenerPermissionGranted(applicationContext)
+
+        storagePermissionGranted = if (Storage.isScoped) {
+            Storage.isStorageManagerPermissionGranted()
+        } else {
+            ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
 
