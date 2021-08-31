@@ -12,8 +12,7 @@ package io.github.jisungbin.gitmessengerbot.di.module
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubRepoRepositoryImpl
 import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubUserRepositoryImpl
 import io.github.jisungbin.gitmessengerbot.di.qualifier.AouthRetrofit
@@ -23,17 +22,18 @@ import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoReposito
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object RepoModule {
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideGithubRepoRepository(@SignedRetrofit retrofit: Retrofit): GithubRepoRepository =
         GithubRepoRepositoryImpl(retrofit)
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideGithubUserRepository(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         @UserRetrofit userRetrofit: Retrofit.Builder,

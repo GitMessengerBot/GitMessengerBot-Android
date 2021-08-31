@@ -12,8 +12,7 @@ package io.github.jisungbin.gitmessengerbot.di.module
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -28,10 +27,11 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Suppress("HasPlatformType")
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object RetrofitModule {
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -57,7 +57,7 @@ object RetrofitModule {
 
     @Provides
     @SignedRetrofit
-    @ViewModelScoped
+    @Singleton
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(getInterceptor(loggingInterceptor, AuthInterceptor()))
@@ -66,11 +66,11 @@ object RetrofitModule {
 
     @Provides
     @UserRetrofit
-    @ViewModelScoped
+    @Singleton
     fun provideUserRetrofit() = buildRetrofit(GithubConfig.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
-    @ViewModelScoped
+    @Singleton
     fun provideAouthRetrofit() = buildRetrofit(GithubConfig.BaseUrl)
 }
