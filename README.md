@@ -1,7 +1,7 @@
 // 288
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
 
-# GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
+# GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
 > 9월 말까지 완성

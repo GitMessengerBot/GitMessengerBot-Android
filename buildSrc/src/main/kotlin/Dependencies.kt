@@ -46,7 +46,6 @@ object Versions {
 
     object Util {
         const val Gson = "2.8.7"
-        const val CrashReporter = "1.1.0"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.5.0"
@@ -130,7 +129,6 @@ object Dependencies {
 
     val util = listOf(
         "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}",
-        "com.balsikandar.android:crashreporter:${Versions.Util.CrashReporter}",
         "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
     )
 
