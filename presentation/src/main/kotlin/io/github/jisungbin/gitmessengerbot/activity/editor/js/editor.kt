@@ -55,9 +55,11 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
+import io.github.jisungbin.gitmessengerbot.common.extension.toBase64
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
+import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -127,6 +129,12 @@ private fun DrawerLayout(
     val repo = GithubRepo(repoName, repoDescription)
 
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
+    val githubFile = GithubFile(
+        message = commitMessage,
+        content = codeField.value.text.toBase64(),
+        sha = "",
+        branch = repoBranch
+    )
 
     Column(
         modifier = Modifier
@@ -150,26 +158,25 @@ private fun DrawerLayout(
                 .padding(top = 10.dp),
             onClick = {
                 coroutineScope.launch {
-                    vm.githubCreateRepo(githubRepo = repo)
-                        .collect { createRepoResult ->
-                            createRepoResult.doWhen(
-                                onSuccess = {
-                                    toast(
-                                        context,
-                                        context.getString(R.string.composable_editor_toast_repo_create_success)
+                    vm.githubCreateRepo(githubRepo = repo).collect { createRepoResult ->
+                        createRepoResult.doWhen(
+                            onSuccess = {
+                                toast(
+                                    context,
+                                    context.getString(R.string.composable_editor_toast_repo_create_success)
+                                )
+                            },
+                            onFail = { exception ->
+                                toast(
+                                    context,
+                                    context.getString(
+                                        R.string.composable_editor_toast_repo_create_error,
+                                        exception.message
                                     )
-                                },
-                                onFail = { exception ->
-                                    toast(
-                                        context,
-                                        context.getString(
-                                            R.string.composable_editor_toast_repo_create_error,
-                                            exception.message
-                                        )
-                                    )
-                                }
-                            )
-                        }
+                                )
+                            }
+                        )
+                    }
                 }
             }
         ) {
@@ -181,47 +188,19 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    vm.githubGetFileContent(
-                        repoName = repoName,
-                        path = repoPath,
-                        branch = repoBranch
-                    ).collect { fileContentResult ->
-                        fileContentResult.doWhen(
-                            onSuccess = { fileContent ->
-                                vm.githubUpdateFile(
-                                    repoName = repoName,
-                                    path = repoPath,
-                                    githubFile = GithubFile(
-                                        message = commitMessage,
-                                        content = codeField.value.text,
-                                        sha = fileContent.sha,
-                                        branch = repoBranch
-                                    )
-                                ).collect { updateFileResult ->
-                                    updateFileResult.doWhen(
-                                        onSuccess = {
-                                            toast(
-                                                context,
-                                                context.getString(R.string.composable_editor_toast_commit_success)
-                                            )
-                                        },
-                                        onFail = { exception ->
-                                            toast(
-                                                context,
-                                                context.getString(
-                                                    R.string.composable_editor_toast_commit_error,
-                                                    exception.message
-                                                )
-                                            )
-                                        }
-                                    )
-                                }
+                    vm.githubCommitAndPush(repoName, repoPath, githubFile).collect { pushResult ->
+                        pushResult.doWhen(
+                            onSuccess = {
+                                toast(
+                                    context,
+                                    context.getString(R.string.composable_editor_toast_commit_success)
+                                )
                             },
                             onFail = { exception ->
                                 toast(
                                     context,
                                     context.getString(
-                                        R.string.composable_editor_toast_content_get_error,
+                                        R.string.composable_editor_toast_commit_error,
                                         exception.message
                                     )
                                 )

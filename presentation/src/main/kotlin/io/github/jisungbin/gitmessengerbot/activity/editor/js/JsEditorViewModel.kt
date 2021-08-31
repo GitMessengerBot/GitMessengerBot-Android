@@ -31,44 +31,34 @@ class JsEditorViewModel @Inject constructor(
     private val githubCreateRepoUseCase: GithubCreateRepoUseCase,
 ) : ViewModel() {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun githubCreateRepo(githubRepo: GithubRepo) = callbackFlow {
-        githubCreateRepoUseCase(githubRepo).collect { githubCreateRepoResult ->
-            githubCreateRepoResult.doWhen(
-                onSuccess = {
-                    trySend(RequestResult.Success(Unit))
-                },
-                onFail = { exception ->
-                    trySend(RequestResult.Fail(exception))
-                }
-            )
-        }
+    suspend fun githubCreateRepo(githubRepo: GithubRepo) = githubCreateRepoUseCase(githubRepo)
 
-        awaitClose { close() }
-    }
+    suspend fun githubGetFileContent(repoName: String, path: String, branch: String) =
+        githubGetFileContentUseCase(repoName, path, branch)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun githubGetFileContent(repoName: String, path: String, branch: String) = callbackFlow {
-        githubGetFileContentUseCase(repoName, path, branch).collect { githubGetFileContentResult ->
-            githubGetFileContentResult.doWhen(
+    fun githubCommitAndPush(repoName: String, path: String, githubFile: GithubFile) = callbackFlow {
+        githubGetFileContent(
+            repoName = repoName,
+            path = path,
+            branch = githubFile.branch
+        ).collect { fileContentResult ->
+            fileContentResult.doWhen(
                 onSuccess = { fileContent ->
-                    trySend(RequestResult.Success(fileContent))
-                },
-                onFail = { exception ->
-                    trySend(RequestResult.Fail(exception))
-                }
-            )
-        }
-
-        awaitClose { close() }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun githubUpdateFile(repoName: String, path: String, githubFile: GithubFile) = callbackFlow {
-        githubUpdateFileUseCase(repoName, path, githubFile).collect { githubUpdateFileResult ->
-            githubUpdateFileResult.doWhen(
-                onSuccess = {
-                    trySend(RequestResult.Success(Unit))
+                    githubUpdateFileUseCase(
+                        repoName,
+                        path,
+                        githubFile.copy(sha = fileContent.sha)
+                    ).collect { updateFileResult ->
+                        updateFileResult.doWhen(
+                            onSuccess = {
+                                trySend(RequestResult.Success(Unit))
+                            },
+                            onFail = { exception ->
+                                trySend(RequestResult.Fail(exception))
+                            }
+                        )
+                    }
                 },
                 onFail = { exception ->
                     trySend(RequestResult.Fail(exception))
