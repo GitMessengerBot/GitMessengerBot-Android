@@ -188,8 +188,12 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    vm.githubCommitAndPush(repoName, repoPath, githubFile).collect { pushResult ->
-                        pushResult.doWhen(
+                    vm.githubCommitAndPush(
+                        repoName = repoName,
+                        path = repoPath,
+                        githubFile = githubFile
+                    ).collect { commitAndPushResult ->
+                        commitAndPushResult.doWhen(
                             onSuccess = {
                                 toast(
                                     context,
@@ -281,7 +285,8 @@ private fun DrawerLayout(
                     onClick = {
                         undoStack.value = codeField.value.text
                         coroutineScope.launch {
-                            // TODO
+                            val minifyCode = vm.codeMinify(codeField.value.text)
+                            codeField.value = TextFieldValue(minifyCode)
                         }
                     },
                     modifier = Modifier
@@ -294,7 +299,8 @@ private fun DrawerLayout(
                     onClick = {
                         undoStack.value = codeField.value.text
                         coroutineScope.launch {
-                            // TODO
+                            val prettyCode = vm.codePretty(codeField.value.text)
+                            codeField.value = TextFieldValue(prettyCode)
                         }
                     },
                     modifier = Modifier

@@ -67,6 +67,7 @@ android {
 
 dependencies {
     implementation(Dependencies.hilt)
+    implementation(Dependencies.jsoup)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
