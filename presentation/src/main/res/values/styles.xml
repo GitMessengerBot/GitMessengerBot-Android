@@ -9,9 +9,5 @@
 
 <resources>
 
-    <style name="Theme.GitMessengerBot" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
+    <style name="Theme.GitMessengerBot" parent="Theme.MaterialComponents.Light.DarkActionBar"/>
 </resources>
