@@ -42,8 +42,8 @@
 
         <activity
             android:name=".activity.splash.SplashActivity"
-            android:theme="@style/Theme.GitMessengerBot.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.GitMessengerBot.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name="io.github.jisungbin.gitmessengerbot.activity.main.MainActivity"
+            android:name=".activity.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".activity.editor.js.JsEditorActivity" />
