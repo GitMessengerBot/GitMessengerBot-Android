@@ -13,34 +13,34 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CommitContentResponse(
     @field:JsonProperty("committer")
-    val committer: Committer,
+    val committer: Committer?,
 
     @field:JsonProperty("stats")
-    val stats: Stats,
+    val stats: Stats?,
 
     @field:JsonProperty("author")
-    val author: Author,
+    val author: Author?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("commit")
-    val commit: Commit,
+    val commit: Commit?,
 
     @field:JsonProperty("comments_url")
-    val commentsUrl: String,
+    val commentsUrl: String?,
 
     @field:JsonProperty("files")
-    val files: List<FilesItem>,
+    val files: List<FilesItem>?,
 
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 
     @field:JsonProperty("node_id")
-    val nodeId: String,
+    val nodeId: String?,
 
     @field:JsonProperty("parents")
     val parents: List<ParentsItem>

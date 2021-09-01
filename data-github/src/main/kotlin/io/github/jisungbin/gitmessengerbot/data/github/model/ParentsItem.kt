@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class ParentsItem(
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 )

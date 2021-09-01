@@ -13,14 +13,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Plan(
     @field:JsonProperty("private_repos")
-    val privateRepos: Int,
+    val privateRepos: Int?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("collaborators")
-    val collaborators: Int,
+    val collaborators: Int?,
 
     @field:JsonProperty("space")
-    val space: Int,
+    val space: Int?,
 )

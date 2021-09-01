@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Links(
     @field:JsonProperty("git")
-    val git: String,
+    val git: String?,
 
     @field:JsonProperty("self")
-    val self: String,
+    val self: String?,
 
     @field:JsonProperty("html")
     val html: String

@@ -32,7 +32,7 @@ object Versions {
 
     object Bot {
         const val J2V8 = "6.2.1@aar"
-        const val RhinoEngine = "1.7.13"
+        const val Rhino = "1.7.13"
     }
 
     object Ui {
@@ -101,8 +101,8 @@ object Dependencies {
         "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.Jackson.Master}"
 
     val bot = listOf(
-        "org.mozilla:rhino:${Versions.Bot.RhinoEngine}",
-        // "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
+        "org.mozilla:rhino:${Versions.Bot.Rhino}",
+        "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
     )
 
     val debug = listOf(

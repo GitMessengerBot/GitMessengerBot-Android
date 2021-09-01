@@ -13,11 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Author(
     @field:JsonProperty("date")
-    val date: String,
+    val date: String?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("email")
-    val email: String,
+    val email: String?,
 )

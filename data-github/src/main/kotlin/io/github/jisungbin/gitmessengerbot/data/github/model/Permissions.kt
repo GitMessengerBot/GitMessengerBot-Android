@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Permissions(
     @field:JsonProperty("pull")
-    val pull: Boolean,
+    val pull: Boolean?,
 
     @field:JsonProperty("admin")
-    val admin: Boolean,
+    val admin: Boolean?,
 
     @field:JsonProperty("push")
     val push: Boolean

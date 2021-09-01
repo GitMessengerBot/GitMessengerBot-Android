@@ -13,55 +13,55 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Owner(
     @field:JsonProperty("gists_url")
-    val gistsUrl: String,
+    val gistsUrl: String?,
 
     @field:JsonProperty("repos_url")
-    val reposUrl: String,
+    val reposUrl: String?,
 
     @field:JsonProperty("following_url")
-    val followingUrl: String,
+    val followingUrl: String?,
 
     @field:JsonProperty("starred_url")
-    val starredUrl: String,
+    val starredUrl: String?,
 
     @field:JsonProperty("login")
-    val login: String,
+    val login: String?,
 
     @field:JsonProperty("followers_url")
-    val followersUrl: String,
+    val followersUrl: String?,
 
     @field:JsonProperty("type")
-    val type: String,
+    val type: String?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 
     @field:JsonProperty("subscriptions_url")
-    val subscriptionsUrl: String,
+    val subscriptionsUrl: String?,
 
     @field:JsonProperty("received_events_url")
-    val receivedEventsUrl: String,
+    val receivedEventsUrl: String?,
 
     @field:JsonProperty("avatar_url")
-    val avatarUrl: String,
+    val avatarUrl: String?,
 
     @field:JsonProperty("events_url")
-    val eventsUrl: String,
+    val eventsUrl: String?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("site_admin")
-    val siteAdmin: Boolean,
+    val siteAdmin: Boolean?,
 
     @field:JsonProperty("id")
-    val id: Int,
+    val id: Int?,
 
     @field:JsonProperty("gravatar_id")
-    val gravatarId: String,
+    val gravatarId: String?,
 
     @field:JsonProperty("node_id")
-    val nodeId: String,
+    val nodeId: String?,
 
     @field:JsonProperty("organizations_url")
     val organizationsUrl: String

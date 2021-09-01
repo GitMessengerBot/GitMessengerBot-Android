@@ -13,31 +13,31 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Content(
     @field:JsonProperty("path")
-    val path: String,
+    val path: String?,
 
     @field:JsonProperty("size")
-    val size: Int,
+    val size: Int?,
 
     @field:JsonProperty("_links")
-    val links: Links,
+    val links: Links?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("download_url")
-    val downloadUrl: String,
+    val downloadUrl: String?,
 
     @field:JsonProperty("git_url")
-    val gitUrl: String,
+    val gitUrl: String?,
 
     @field:JsonProperty("type")
-    val type: String,
+    val type: String?,
 
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("url")
     val url: String

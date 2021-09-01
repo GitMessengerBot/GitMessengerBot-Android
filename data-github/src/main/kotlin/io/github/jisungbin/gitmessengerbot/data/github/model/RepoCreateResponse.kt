@@ -13,242 +13,242 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class RepoCreateResponse(
     @field:JsonProperty("stargazers_count")
-    val stargazersCount: Int,
+    val stargazersCount: Int?,
 
     @field:JsonProperty("pushed_at")
-    val pushedAt: String,
+    val pushedAt: String?,
 
     @field:JsonProperty("subscription_url")
-    val subscriptionUrl: String,
+    val subscriptionUrl: String?,
 
     @field:JsonProperty("language")
-    val language: Any,
+    val language: Any?,
 
     @field:JsonProperty("branches_url")
-    val branchesUrl: String,
+    val branchesUrl: String?,
 
     @field:JsonProperty("issue_comment_url")
-    val issueCommentUrl: String,
+    val issueCommentUrl: String?,
 
     @field:JsonProperty("allow_rebase_merge")
-    val allowRebaseMerge: Boolean,
+    val allowRebaseMerge: Boolean?,
 
     @field:JsonProperty("labels_url")
-    val labelsUrl: String,
+    val labelsUrl: String?,
 
     @field:JsonProperty("subscribers_url")
-    val subscribersUrl: String,
+    val subscribersUrl: String?,
 
     @field:JsonProperty("permissions")
-    val permissions: Permissions,
+    val permissions: Permissions?,
 
     @field:JsonProperty("releases_url")
-    val releasesUrl: String,
+    val releasesUrl: String?,
 
     @field:JsonProperty("svn_url")
-    val svnUrl: String,
+    val svnUrl: String?,
 
     @field:JsonProperty("subscribers_count")
-    val subscribersCount: Int,
+    val subscribersCount: Int?,
 
     @field:JsonProperty("id")
-    val id: Int,
+    val id: Int?,
 
     @field:JsonProperty("forks")
-    val forks: Int,
+    val forks: Int?,
 
     @field:JsonProperty("archive_url")
-    val archiveUrl: String,
+    val archiveUrl: String?,
 
     @field:JsonProperty("allow_merge_commit")
-    val allowMergeCommit: Boolean,
+    val allowMergeCommit: Boolean?,
 
     @field:JsonProperty("git_refs_url")
-    val gitRefsUrl: String,
+    val gitRefsUrl: String?,
 
     @field:JsonProperty("forks_url")
-    val forksUrl: String,
+    val forksUrl: String?,
 
     @field:JsonProperty("statuses_url")
-    val statusesUrl: String,
+    val statusesUrl: String?,
 
     @field:JsonProperty("network_count")
-    val networkCount: Int,
+    val networkCount: Int?,
 
     @field:JsonProperty("ssh_url")
-    val sshUrl: String,
+    val sshUrl: String?,
 
     @field:JsonProperty("license")
-    val license: Any,
+    val license: Any?,
 
     @field:JsonProperty("full_name")
-    val fullName: String,
+    val fullName: String?,
 
     @field:JsonProperty("size")
-    val size: Int,
+    val size: Int?,
 
     @field:JsonProperty("languages_url")
-    val languagesUrl: String,
+    val languagesUrl: String?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("collaborators_url")
-    val collaboratorsUrl: String,
+    val collaboratorsUrl: String?,
 
     @field:JsonProperty("clone_url")
-    val cloneUrl: String,
+    val cloneUrl: String?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("pulls_url")
-    val pullsUrl: String,
+    val pullsUrl: String?,
 
     @field:JsonProperty("default_branch")
-    val defaultBranch: String,
+    val defaultBranch: String?,
 
     @field:JsonProperty("hooks_url")
-    val hooksUrl: String,
+    val hooksUrl: String?,
 
     @field:JsonProperty("trees_url")
-    val treesUrl: String,
+    val treesUrl: String?,
 
     @field:JsonProperty("tags_url")
-    val tagsUrl: String,
+    val tagsUrl: String?,
 
     @field:JsonProperty("private")
-    val jsonMemberPrivate: Boolean,
+    val jsonMemberPrivate: Boolean?,
 
     @field:JsonProperty("contributors_url")
-    val contributorsUrl: String,
+    val contributorsUrl: String?,
 
     @field:JsonProperty("has_downloads")
-    val hasDownloads: Boolean,
+    val hasDownloads: Boolean?,
 
     @field:JsonProperty("notifications_url")
-    val notificationsUrl: String,
+    val notificationsUrl: String?,
 
     @field:JsonProperty("open_issues_count")
-    val openIssuesCount: Int,
+    val openIssuesCount: Int?,
 
     @field:JsonProperty("description")
-    val description: String,
+    val description: String?,
 
     @field:JsonProperty("created_at")
-    val createdAt: String,
+    val createdAt: String?,
 
     @field:JsonProperty("watchers")
-    val watchers: Int,
+    val watchers: Int?,
 
     @field:JsonProperty("keys_url")
-    val keysUrl: String,
+    val keysUrl: String?,
 
     @field:JsonProperty("deployments_url")
-    val deploymentsUrl: String,
+    val deploymentsUrl: String?,
 
     @field:JsonProperty("has_projects")
-    val hasProjects: Boolean,
+    val hasProjects: Boolean?,
 
     @field:JsonProperty("archived")
-    val archived: Boolean,
+    val archived: Boolean?,
 
     @field:JsonProperty("has_wiki")
-    val hasWiki: Boolean,
+    val hasWiki: Boolean?,
 
     @field:JsonProperty("updated_at")
-    val updatedAt: String,
+    val updatedAt: String?,
 
     @field:JsonProperty("comments_url")
-    val commentsUrl: String,
+    val commentsUrl: String?,
 
     @field:JsonProperty("stargazers_url")
-    val stargazersUrl: String,
+    val stargazersUrl: String?,
 
     @field:JsonProperty("disabled")
-    val disabled: Boolean,
+    val disabled: Boolean?,
 
     @field:JsonProperty("delete_branch_on_merge")
-    val deleteBranchOnMerge: Boolean,
+    val deleteBranchOnMerge: Boolean?,
 
     @field:JsonProperty("git_url")
-    val gitUrl: String,
+    val gitUrl: String?,
 
     @field:JsonProperty("has_pages")
-    val hasPages: Boolean,
+    val hasPages: Boolean?,
 
     @field:JsonProperty("owner")
-    val owner: Owner,
+    val owner: Owner?,
 
     @field:JsonProperty("allow_squash_merge")
-    val allowSquashMerge: Boolean,
+    val allowSquashMerge: Boolean?,
 
     @field:JsonProperty("commits_url")
-    val commitsUrl: String,
+    val commitsUrl: String?,
 
     @field:JsonProperty("compare_url")
-    val compareUrl: String,
+    val compareUrl: String?,
 
     @field:JsonProperty("git_commits_url")
-    val gitCommitsUrl: String,
+    val gitCommitsUrl: String?,
 
     @field:JsonProperty("blobs_url")
-    val blobsUrl: String,
+    val blobsUrl: String?,
 
     @field:JsonProperty("git_tags_url")
-    val gitTagsUrl: String,
+    val gitTagsUrl: String?,
 
     @field:JsonProperty("merges_url")
-    val mergesUrl: String,
+    val mergesUrl: String?,
 
     @field:JsonProperty("downloads_url")
-    val downloadsUrl: String,
+    val downloadsUrl: String?,
 
     @field:JsonProperty("has_issues")
-    val hasIssues: Boolean,
+    val hasIssues: Boolean?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 
     @field:JsonProperty("contents_url")
-    val contentsUrl: String,
+    val contentsUrl: String?,
 
     @field:JsonProperty("mirror_url")
-    val mirrorUrl: Any,
+    val mirrorUrl: Any?,
 
     @field:JsonProperty("milestones_url")
-    val milestonesUrl: String,
+    val milestonesUrl: String?,
 
     @field:JsonProperty("teams_url")
-    val teamsUrl: String,
+    val teamsUrl: String?,
 
     @field:JsonProperty("fork")
-    val fork: Boolean,
+    val fork: Boolean?,
 
     @field:JsonProperty("issues_url")
-    val issuesUrl: String,
+    val issuesUrl: String?,
 
     @field:JsonProperty("events_url")
-    val eventsUrl: String,
+    val eventsUrl: String?,
 
     @field:JsonProperty("issue_events_url")
-    val issueEventsUrl: String,
+    val issueEventsUrl: String?,
 
     @field:JsonProperty("assignees_url")
-    val assigneesUrl: String,
+    val assigneesUrl: String?,
 
     @field:JsonProperty("open_issues")
-    val openIssues: Int,
+    val openIssues: Int?,
 
     @field:JsonProperty("watchers_count")
-    val watchersCount: Int,
+    val watchersCount: Int?,
 
     @field:JsonProperty("node_id")
-    val nodeId: String,
+    val nodeId: String?,
 
     @field:JsonProperty("homepage")
-    val homepage: Any,
+    val homepage: Any?,
 
     @field:JsonProperty("forks_count")
-    val forksCount: Int,
+    val forksCount: Int?,
 )

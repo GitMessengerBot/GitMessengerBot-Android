@@ -14,32 +14,32 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class FilesItem(
 
     @field:JsonProperty("patch")
-    val patch: String,
+    val patch: String?,
 
     @field:JsonProperty("filename")
-    val filename: String,
+    val filename: String?,
 
     @field:JsonProperty("additions")
-    val additions: Int,
+    val additions: Int?,
 
     @field:JsonProperty("deletions")
-    val deletions: Int,
+    val deletions: Int?,
 
     @field:JsonProperty("changes")
-    val changes: Int,
+    val changes: Int?,
 
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("blob_url")
-    val blobUrl: String,
+    val blobUrl: String?,
 
     @field:JsonProperty("raw_url")
-    val rawUrl: String,
+    val rawUrl: String?,
 
     @field:JsonProperty("status")
-    val status: String,
+    val status: String?,
 
     @field:JsonProperty("contents_url")
-    val contentsUrl: String,
+    val contentsUrl: String?,
 )

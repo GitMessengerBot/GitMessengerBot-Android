@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Committer(
     @field:JsonProperty("date")
-    val date: String,
+    val date: String?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("email")
     val email: String

@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Tree(
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 )

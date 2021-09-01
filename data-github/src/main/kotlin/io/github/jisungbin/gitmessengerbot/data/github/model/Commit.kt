@@ -13,32 +13,32 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Commit(
     @field:JsonProperty("committer")
-    val committer: Committer,
+    val committer: Committer?,
 
     @field:JsonProperty("author")
-    val author: Author,
+    val author: Author?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("tree")
-    val tree: Tree,
+    val tree: Tree?,
 
     @field:JsonProperty("message")
-    val message: String,
+    val message: String?,
 
     @field:JsonProperty("sha")
-    val sha: String,
+    val sha: String?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 
     @field:JsonProperty("verification")
-    val verification: Verification,
+    val verification: Verification?,
 
     @field:JsonProperty("node_id")
-    val nodeId: String,
+    val nodeId: String?,
 
     @field:JsonProperty("parents")
-    val parents: List<Any>,
+    val parents: List<Any>?,
 )

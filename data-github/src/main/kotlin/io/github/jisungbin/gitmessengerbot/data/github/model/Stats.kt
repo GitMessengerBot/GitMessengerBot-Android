@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class Stats(
 
     @field:JsonProperty("total")
-    val total: Int,
+    val total: Int?,
 
     @field:JsonProperty("additions")
-    val additions: Int,
+    val additions: Int?,
 
     @field:JsonProperty("deletions")
-    val deletions: Int,
+    val deletions: Int?,
 )

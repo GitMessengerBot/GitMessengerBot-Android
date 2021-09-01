@@ -13,14 +13,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Verification(
     @field:JsonProperty("reason")
-    val reason: String,
+    val reason: String?,
 
     @field:JsonProperty("signature")
-    val signature: Any,
+    val signature: Any?,
 
     @field:JsonProperty("payload")
-    val payload: Any,
+    val payload: Any?,
 
     @field:JsonProperty("verified")
-    val verified: Boolean,
+    val verified: Boolean?,
 )

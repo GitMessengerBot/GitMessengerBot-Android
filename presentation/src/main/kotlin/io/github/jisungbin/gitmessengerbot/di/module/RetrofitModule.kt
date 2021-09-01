@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.di.module
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.mocklets.pluto.PlutoInterceptor
 import dagger.Module
 import dagger.Provides
@@ -35,7 +36,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-    private val mapper by lazy { ObjectMapper().registerModule(KotlinModule()) }
+    private val mapper by lazy { ObjectMapper().registerKotlinModule() }
 
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -57,14 +58,14 @@ object RetrofitModule {
 
     private fun buildRetrofitWithoutClient(baseUrl: String) = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(JacksonConverterFactory.create())
+        .addConverterFactory(JacksonConverterFactory.create(mapper))
 
     @Provides
     @SignedRetrofit
     @Singleton
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .baseUrl(GithubConfig.BaseApiUrl)
-        .addConverterFactory(JacksonConverterFactory.create())
+        .addConverterFactory(JacksonConverterFactory.create(mapper))
         .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
         .build()
 

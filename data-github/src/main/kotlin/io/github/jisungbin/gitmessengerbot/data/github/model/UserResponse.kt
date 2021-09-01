@@ -13,119 +13,119 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UserResponse(
     @field:JsonProperty("gists_url")
-    val gistsUrl: String,
+    val gistsUrl: String?,
 
     @field:JsonProperty("repos_url")
-    val reposUrl: String,
+    val reposUrl: String?,
 
     @field:JsonProperty("two_factor_authentication")
-    val twoFactorAuthentication: Boolean,
+    val twoFactorAuthentication: Boolean?,
 
     @field:JsonProperty("following_url")
-    val followingUrl: String,
+    val followingUrl: String?,
 
     @field:JsonProperty("twitter_username")
-    val twitterUsername: String,
+    val twitterUsername: String?,
 
     @field:JsonProperty("bio")
-    val bio: String,
+    val bio: String?,
 
     @field:JsonProperty("created_at")
-    val createdAt: String,
+    val createdAt: String?,
 
     @field:JsonProperty("login")
-    val login: String,
+    val login: String?,
 
     @field:JsonProperty("type")
-    val type: String,
+    val type: String?,
 
     @field:JsonProperty("blog")
-    val blog: String,
+    val blog: String?,
 
     @field:JsonProperty("private_gists")
-    val privateGists: Int,
+    val privateGists: Int?,
 
     @field:JsonProperty("total_private_repos")
-    val totalPrivateRepos: Int,
+    val totalPrivateRepos: Int?,
 
     @field:JsonProperty("subscriptions_url")
-    val subscriptionsUrl: String,
+    val subscriptionsUrl: String?,
 
     @field:JsonProperty("updated_at")
-    val updatedAt: String,
+    val updatedAt: String?,
 
     @field:JsonProperty("site_admin")
-    val siteAdmin: Boolean,
+    val siteAdmin: Boolean?,
 
     @field:JsonProperty("disk_usage")
-    val diskUsage: Int,
+    val diskUsage: Int?,
 
     @field:JsonProperty("collaborators")
-    val collaborators: Int,
+    val collaborators: Int?,
 
     @field:JsonProperty("company")
-    val company: String,
+    val company: String?,
 
     @field:JsonProperty("owned_private_repos")
-    val ownedPrivateRepos: Int,
+    val ownedPrivateRepos: Int?,
 
     @field:JsonProperty("id")
-    val id: Int,
+    val id: Int?,
 
     @field:JsonProperty("public_repos")
-    val publicRepos: Int,
+    val publicRepos: Int?,
 
     @field:JsonProperty("gravatar_id")
-    val gravatarId: String,
+    val gravatarId: String?,
 
     @field:JsonProperty("plan")
-    val plan: Plan,
+    val plan: Plan?,
 
     @field:JsonProperty("email")
-    val email: String,
+    val email: String?,
 
     @field:JsonProperty("organizations_url")
-    val organizationsUrl: String,
+    val organizationsUrl: String?,
 
     @field:JsonProperty("hireable")
-    val hireable: Boolean,
+    val hireable: Boolean?,
 
     @field:JsonProperty("starred_url")
-    val starredUrl: String,
+    val starredUrl: String?,
 
     @field:JsonProperty("followers_url")
-    val followersUrl: String,
+    val followersUrl: String?,
 
     @field:JsonProperty("public_gists")
-    val publicGists: Int,
+    val publicGists: Int?,
 
     @field:JsonProperty("url")
-    val url: String,
+    val url: String?,
 
     @field:JsonProperty("received_events_url")
-    val receivedEventsUrl: String,
+    val receivedEventsUrl: String?,
 
     @field:JsonProperty("followers")
-    val followers: Int,
+    val followers: Int?,
 
     @field:JsonProperty("avatar_url")
-    val avatarUrl: String,
+    val avatarUrl: String?,
 
     @field:JsonProperty("events_url")
-    val eventsUrl: String,
+    val eventsUrl: String?,
 
     @field:JsonProperty("html_url")
-    val htmlUrl: String,
+    val htmlUrl: String?,
 
     @field:JsonProperty("following")
-    val following: Int,
+    val following: Int?,
 
     @field:JsonProperty("name")
-    val name: String,
+    val name: String?,
 
     @field:JsonProperty("location")
-    val location: String,
+    val location: String?,
 
     @field:JsonProperty("node_id")
-    val nodeId: String,
+    val nodeId: String?,
 )

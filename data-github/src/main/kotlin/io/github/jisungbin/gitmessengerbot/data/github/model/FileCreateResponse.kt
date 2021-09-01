@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FileCreateResponse(
     @field:JsonProperty("commit")
-    val commit: Commit,
+    val commit: Commit?,
 
     @field:JsonProperty("content")
-    val content: Content,
+    val content: Content?,
 )

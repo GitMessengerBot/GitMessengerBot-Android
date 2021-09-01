@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.mapper
 
+import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.data.github.model.AouthResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.UserResponse
@@ -16,8 +17,17 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
 
-fun AouthResponse.toDomain() = GithubAouth(token = accessToken)
+private fun exception(field: String) =
+    DataGithubException("Github response required field is null. $field")
 
-fun UserResponse.toDomain() = GithubUser(userName = login, profileImageUrl = avatarUrl)
+fun AouthResponse.toDomain() = GithubAouth(token = accessToken ?: throw exception("token"))
 
-fun FileContentResponse.toDomain() = GithubFileContent(downloadUrl = downloadUrl, sha = sha)
+fun UserResponse.toDomain() = GithubUser(
+    userName = login ?: throw exception("userName"),
+    profileImageUrl = avatarUrl ?: throw exception("profileImageUrl")
+)
+
+fun FileContentResponse.toDomain() = GithubFileContent(
+    downloadUrl = downloadUrl ?: throw exception("downloadUrl"),
+    sha = sha ?: throw exception("sha")
+)

@@ -13,11 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class AouthResponse(
     @field:JsonProperty("access_token")
-    val accessToken: String,
+    val accessToken: String?,
 
     @field:JsonProperty("scope")
-    val scope: String,
+    val scope: String?,
 
     @field:JsonProperty("token_type")
-    val tokenType: String,
+    val tokenType: String?,
 )

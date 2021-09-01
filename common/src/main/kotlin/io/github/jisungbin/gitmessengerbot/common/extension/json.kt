@@ -10,11 +10,11 @@
 package io.github.jisungbin.gitmessengerbot.common.extension
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.github.jisungbin.gitmessengerbot.common.exception.CommonException
 
 @PublishedApi
-internal val mapper by lazy { ObjectMapper().registerModule(KotlinModule()) }
+internal val mapper by lazy { ObjectMapper().registerKotlinModule() }
 
 inline fun <reified T> String.toModel(): T = mapper.readValue(this, T::class.java)
     ?: throw CommonException("Error occur when convert string to json-object. ($this)")
