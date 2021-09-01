@@ -20,9 +20,9 @@ import io.github.jisungbin.gitmessengerbot.di.qualifier.SignedRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.UserRetrofit
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
+import javax.inject.Singleton
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

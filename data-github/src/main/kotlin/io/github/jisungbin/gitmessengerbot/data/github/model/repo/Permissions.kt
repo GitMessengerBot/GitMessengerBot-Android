@@ -19,5 +19,11 @@ data class Permissions(
     val admin: Boolean?,
 
     @field:JsonProperty("push")
-    val push: Boolean
+    val push: Boolean?,
+
+    @field:JsonProperty("maintain")
+    val maintain: Boolean?,
+
+    @field:JsonProperty("triage")
+    val triage: Boolean?,
 )

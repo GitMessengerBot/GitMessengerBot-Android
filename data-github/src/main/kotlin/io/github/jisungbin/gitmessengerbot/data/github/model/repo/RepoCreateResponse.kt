@@ -171,6 +171,9 @@ data class RepoCreateResponse(
     @field:JsonProperty("delete_branch_on_merge")
     val deleteBranchOnMerge: Boolean?,
 
+    @field:JsonProperty("allow_auto_merge")
+    val allowAutoMerge: Boolean?,
+
     @field:JsonProperty("git_url")
     val gitUrl: String?,
 

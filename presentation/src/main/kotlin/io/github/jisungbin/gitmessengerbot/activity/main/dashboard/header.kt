@@ -63,7 +63,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage

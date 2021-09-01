@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.di.module
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.mocklets.pluto.PlutoInterceptor
@@ -16,7 +17,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.jisungbin.gitmessengerbot.activity.setup.model.GithubData
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
@@ -24,19 +24,23 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.di.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.SignedRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.UserRetrofit
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
+import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
-import javax.inject.Singleton
 
 @Suppress("HasPlatformType")
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-    private val mapper by lazy { ObjectMapper().registerKotlinModule() }
+    private val mapper by lazy {
+        ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerKotlinModule()
+    }
 
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {

@@ -18,6 +18,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubCreateRep
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileContentUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubUpdateFileUseCase
 import io.github.jisungbin.gitmessengerbot.util.RequestResult
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import org.json.JSONObject
 import org.jsoup.Jsoup
-import javax.inject.Inject
 
 @HiltViewModel
 class JsEditorViewModel @Inject constructor(
@@ -41,7 +41,7 @@ class JsEditorViewModel @Inject constructor(
         object Pretty : BeautifyType()
     }
 
-    private fun provideJsoup(beautifyType: BeautifyType, code: String) =
+    private fun codeBeautify(beautifyType: BeautifyType, code: String) =
         Jsoup.connect(if (beautifyType == BeautifyType.Minify) "https://javascript-minifier.com/raw" else "https://amp.prettifyjs.net")
             .ignoreContentType(true)
             .ignoreHttpErrors(true)
@@ -49,7 +49,38 @@ class JsEditorViewModel @Inject constructor(
             .post()
             .wholeText()
 
-    suspend fun githubCreateRepo(githubRepo: GithubRepo) = githubCreateRepoUseCase(githubRepo)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun githubCreateRepo(
+        path: String,
+        githubRepo: GithubRepo,
+        githubFile: GithubFile,
+    ) = callbackFlow {
+        githubCreateRepoUseCase(githubRepo).collect { repoCreateResult ->
+            repoCreateResult.doWhen(
+                onSuccess = {
+                    githubUpdateFileUseCase(
+                        githubRepo.name,
+                        path,
+                        githubFile
+                    ).collect { updateFileResult ->
+                        updateFileResult.doWhen(
+                            onSuccess = {
+                                trySend(RequestResult.Success(Unit))
+                            },
+                            onFail = { exception ->
+                                trySend(RequestResult.Fail(exception))
+                            }
+                        )
+                    }
+                },
+                onFail = { exception ->
+                    trySend(RequestResult.Fail(exception))
+                }
+            )
+        }
+
+        awaitClose { close() }
+    }
 
     suspend fun githubGetFileContent(repoName: String, path: String, branch: String) =
         githubGetFileContentUseCase(repoName, path, branch)
@@ -89,12 +120,12 @@ class JsEditorViewModel @Inject constructor(
         }
 
     suspend fun codeMinify(code: String): String = coroutineScope {
-        async(Dispatchers.IO) { provideJsoup(BeautifyType.Minify, code) }
+        async(Dispatchers.IO) { codeBeautify(BeautifyType.Minify, code) }
     }.await()
 
     suspend fun codePretty(code: String): String = coroutineScope {
         async(Dispatchers.IO) {
-            JSONObject(provideJsoup(BeautifyType.Pretty, code)).getString("output")
+            JSONObject(codeBeautify(BeautifyType.Pretty, code)).getString("output")
         }
     }.await()
 }

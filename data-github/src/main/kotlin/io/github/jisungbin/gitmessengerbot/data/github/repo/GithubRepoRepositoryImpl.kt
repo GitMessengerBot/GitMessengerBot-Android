@@ -16,10 +16,11 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubRepoService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
+import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -28,18 +29,20 @@ import retrofit2.Retrofit
 
 class GithubRepoRepositoryImpl constructor(private val retrofit: Retrofit) : GithubRepoRepository {
     private val buildRetrofit by lazy { retrofit.create(GithubRepoService::class.java) }
-    private val githubUser: GithubUser = Storage.read(GithubConfig.DataPath, null)?.toModel()
+    private val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
         ?: throw DataGithubException("GithubConfig.DataPath data is null.")
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFileContent(repoName: String, path: String, branch: String) = callbackFlow {
         try {
-            val request = buildRetrofit.getFileContent(githubUser.userName, repoName, path, branch)
-            if (request.isValid()) {
-                trySend(GithubResult.Success(request.body()!!.toDomain()))
-            } else {
-                trySend(GithubResult.Fail(DataGithubException("Github.getFileContent response is null.")))
-            }
+            val request = buildRetrofit.getFileContent(githubData.userName, repoName, path, branch)
+            trySend(
+                if (request.isValid()) {
+                    GithubResult.Success(request.body()!!.toDomain())
+                } else {
+                    request.toFailResult("getFileContent")
+                }
+            )
         } catch (exception: Exception) {
             trySend(GithubResult.Fail(exception))
         }
@@ -51,11 +54,13 @@ class GithubRepoRepositoryImpl constructor(private val retrofit: Retrofit) : Git
     override fun createRepo(githubRepo: GithubRepo) = callbackFlow {
         try {
             val request = buildRetrofit.createRepo(githubRepo)
-            if (request.isValid()) {
-                trySend(GithubResult.Success(Unit))
-            } else {
-                trySend(GithubResult.Fail(DataGithubException("Github.createRepo response is null.")))
-            }
+            trySend(
+                if (request.isValid()) {
+                    GithubResult.Success(Unit)
+                } else {
+                    request.toFailResult("createRepo")
+                }
+            )
         } catch (exception: Exception) {
             trySend(GithubResult.Fail(exception))
         }
@@ -71,16 +76,18 @@ class GithubRepoRepositoryImpl constructor(private val retrofit: Retrofit) : Git
     ) = callbackFlow {
         try {
             val request = buildRetrofit.updateFile(
-                owner = githubUser.userName,
+                owner = githubData.userName,
                 repoName = repoName,
                 path = path,
                 githubFile = githubFile
             )
-            if (request.isValid()) {
-                trySend(GithubResult.Success(Unit))
-            } else {
-                trySend(GithubResult.Fail(DataGithubException("Github.updateFile response is null.")))
-            }
+            trySend(
+                if (request.isValid()) {
+                    GithubResult.Success(Unit)
+                } else {
+                    request.toFailResult("updateFile")
+                }
+            )
         } catch (exception: Exception) {
             trySend(GithubResult.Fail(exception))
         }

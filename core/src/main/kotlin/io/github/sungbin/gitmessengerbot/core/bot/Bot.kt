@@ -75,6 +75,7 @@ object Bot {
 
     fun addScript(script: ScriptItem) {
         _scripts += script
+        script.add()
     }
 
     fun removeScript(script: ScriptItem) {
@@ -136,9 +137,8 @@ object Bot {
         repeat(4) { lang -> // 스크립트 코드파일이 아니라, 스크립트 정보 파일을 읽어와야함
             Storage.fileList(ScriptConfig.ScriptListPath(lang)).filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
-                    val scriptData =
-                        Storage.read(scriptDataFile.path, null)
-                            ?: throw CoreException("$scriptDataFile file is null.")
+                    val scriptData = Storage.read(scriptDataFile.path, null)
+                        ?: throw CoreException("$scriptDataFile file is null.")
                     val script: ScriptItem = scriptData.toModel()
                     if (script.compiled) {
                         if (StackManager.v8[script.id] == null) {

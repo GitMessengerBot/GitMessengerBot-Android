@@ -126,7 +126,7 @@ private fun DrawerLayout(
     val repoPath = "script.${script.lang.getScriptSuffix()}"
     val repoDescription = GithubConfig.DefaultRepoDescription // TODO
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
-    val repo = GithubRepo(repoName, repoDescription)
+    val repo = GithubRepo(name = repoName, description = repoDescription)
 
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
     val githubFile = GithubFile(
@@ -158,7 +158,11 @@ private fun DrawerLayout(
                 .padding(top = 10.dp),
             onClick = {
                 coroutineScope.launch {
-                    vm.githubCreateRepo(githubRepo = repo).collect { createRepoResult ->
+                    vm.githubCreateRepo(
+                        path = repoPath,
+                        githubRepo = repo,
+                        githubFile = githubFile
+                    ).collect { createRepoResult ->
                         createRepoResult.doWhen(
                             onSuccess = {
                                 toast(
@@ -167,6 +171,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
+                                println(exception)
                                 toast(
                                     context,
                                     context.getString(

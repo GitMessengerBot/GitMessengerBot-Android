@@ -92,9 +92,9 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.search
 import io.github.sungbin.gitmessengerbot.core.doWhen
+import kotlin.random.Random
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 @Composable
 fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boolean>) {

@@ -39,9 +39,8 @@ data class ScriptItem(
         Storage.delete(ScriptConfig.ScriptDataPath(name, lang))
     }
 
-    fun getCode() =
-        Storage.read(ScriptConfig.ScriptPath(name, lang), defaultCode)
-            ?: throw CoreException("The script's code cannot be null. (ScriptId: $id)")
+    fun getCode() = Storage.read(ScriptConfig.ScriptPath(name, lang), defaultCode)
+        ?: throw CoreException("The script's code cannot be null. (ScriptId: $id)")
 }
 
 fun ScriptItems.sorted() =

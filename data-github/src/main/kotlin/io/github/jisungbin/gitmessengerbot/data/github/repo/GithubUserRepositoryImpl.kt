@@ -15,6 +15,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
+import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,7 +32,6 @@ class GithubUserRepositoryImpl(
     private val userRetrofit: Retrofit.Builder,
     private val aouthRetrofit: Retrofit.Builder,
 ) : GithubUserRepository {
-
     private class AuthInterceptor(private val aouthToken: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder = chain.request().newBuilder()
@@ -61,7 +61,7 @@ class GithubUserRepositoryImpl(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
                 } else {
-                    GithubResult.Fail(DataGithubException("Github.getUserInfo() response is null."))
+                    request.toFailResult("getUserInfo")
                 }
             )
         } catch (exception: Exception) {
@@ -84,7 +84,7 @@ class GithubUserRepositoryImpl(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
                 } else {
-                    GithubResult.Fail(DataGithubException("Github.requestAouthToken() response is null."))
+                    request.toFailResult("requestAouthToken")
                 }
             )
         } catch (exception: Exception) {
