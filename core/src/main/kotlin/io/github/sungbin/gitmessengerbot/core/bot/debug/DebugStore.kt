@@ -24,11 +24,11 @@ import io.github.jisungbin.gitmessengerbot.common.operator.plusAssign
 object DebugStore {
     private val _items = MutableLiveData(getList())
 
-    val items get(): LiveData<List<DebugItem>> = _items
+    val items: LiveData<List<DebugItem>> get() = _items
 
     val itemsValue get(): List<DebugItem> = items.value ?: emptyList()
 
-    fun getByScriptId(id: Int) = items.value?.filter { id == id } ?: emptyList()
+    fun getByScriptId(id: Int) = itemsValue.filter { id == id }
 
     fun add(item: DebugItem) {
         _items += item

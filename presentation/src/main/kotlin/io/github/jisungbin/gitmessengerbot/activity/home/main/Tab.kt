@@ -9,9 +9,12 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.home.main
 
-object Tab {
-    const val Script = 0
-    const val Debug = 1
-    const val Github = 2
-    const val Setting = 3
+sealed class Tab(private val index: Int) {
+    object Script : Tab(0)
+    object Debug : Tab(1)
+    object Kaven : Tab(2)
+    object Setting : Tab(3)
+
+    @Suppress("ClassName")
+    class from(index: Int) : Tab(index)
 }

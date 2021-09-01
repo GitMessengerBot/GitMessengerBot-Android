@@ -44,8 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
+import io.github.jisungbin.gitmessengerbot.activity.home.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
@@ -64,7 +66,7 @@ import me.sungbin.fancybottombar.FancyItem
 class MainActivity : ComponentActivity() {
 
     private var onBackPressedTime = 0L
-    private var tab by mutableStateOf(Tab.Script)
+    private var tab by mutableStateOf<Tab>(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,14 +139,14 @@ class MainActivity : ComponentActivity() {
                     .padding(bottom = 60.dp)
             ) { index ->
                 when (index) {
-                    Tab.Script -> /*ScriptContent(
+                    Tab.Script -> ScriptContent(
                         activity = this@MainActivity,
-                        compiler = scriptCompiler,
                         scriptAddDialogVisible = scriptAddDialogVisible
-                    )*/ Text("")
+                    )
                     Tab.Debug -> Debug(activity = this@MainActivity)
+                    Tab.Kaven -> Text(text = "TODO")
                     Tab.Setting -> Setting(this@MainActivity)
-                    else -> Text(text = "TODO")
+                    else -> throw PresentationException("Unknown tab index: $index")
                 }
             }
             Footer(scriptAddDialogVisible)
@@ -165,7 +167,7 @@ class MainActivity : ComponentActivity() {
             FancyBottomBar(
                 fancyColors = FancyColors(primary = colors.primary),
                 items = items
-            ) { tab = id }
+            ) { tab = Tab.from(id) }
             AnimatedVisibility(
                 visible = tab == Tab.Script,
                 enter = fadeIn(),

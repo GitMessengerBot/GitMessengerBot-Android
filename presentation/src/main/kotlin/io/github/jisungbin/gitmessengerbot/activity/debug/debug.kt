@@ -41,6 +41,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -72,6 +73,8 @@ import io.github.sungbin.gitmessengerbot.core.bot.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
+import io.github.sungbin.gitmessengerbot.core.bot.debug.getByScriptId
+import io.github.sungbin.gitmessengerbot.core.bot.debug.sortedByTime
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.launch
@@ -277,20 +280,20 @@ private fun DebugContent(
         val coroutineScope = rememberCoroutineScope()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
-        val items: List<DebugItem>
+        var items = DebugStore.items.observeAsState(DebugStore.itemsValue).value
         val debugId: Int
 
         when {
             evalMode -> {
-                items = DebugStore.getByScriptId(ScriptConfig.EvalId)
+                items = items.getByScriptId(ScriptConfig.EvalId)
                 debugId = ScriptConfig.EvalId
             }
             script == null -> {
-                items = DebugStore.itemsValue.filterNot { it.scriptId == ScriptConfig.EvalId }
+                items = items.filterNot { it.scriptId == ScriptConfig.EvalId }
                 debugId = ScriptConfig.DebugAllBot
             }
             else -> {
-                items = DebugStore.getByScriptId(script.id)
+                items = items.getByScriptId(script.id)
                 debugId = script.id
             }
         }
@@ -322,7 +325,7 @@ private fun DebugContent(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            itemsIndexed(items = items) { index, _ ->
+            itemsIndexed(items = items.sortedByTime()) { index, _ ->
                 ChatBubble(
                     prevItem = items.getOrNull(index - 1),
                     item = items[index],

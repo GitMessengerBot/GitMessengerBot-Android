@@ -33,7 +33,6 @@ class GitMessengerBot : Application() {
 
         Bot.scripts
         AppConfig.app
-        DebugStore.items
 
         Pluto.initialize(applicationContext)
         Pluto.setANRListener(object : ANRListener {
