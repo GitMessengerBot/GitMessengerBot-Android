@@ -18,7 +18,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 
 private fun exception(field: String) =
-    DataGithubException("Github response required field is null. $field")
+    DataGithubException("Github response required field is null. ($field)")
 
 fun AouthResponse.toDomain() = GithubAouth(token = accessToken ?: throw exception("token"))
 
