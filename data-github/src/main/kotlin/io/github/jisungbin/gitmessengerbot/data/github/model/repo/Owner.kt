@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.model
+package io.github.jisungbin.gitmessengerbot.data.github.model.repo
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -64,5 +64,5 @@ data class Owner(
     val nodeId: String?,
 
     @field:JsonProperty("organizations_url")
-    val organizationsUrl: String
+    val organizationsUrl: String,
 )

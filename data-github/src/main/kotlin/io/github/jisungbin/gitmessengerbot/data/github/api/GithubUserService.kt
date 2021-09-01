@@ -9,8 +9,8 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.api
 
-import io.github.jisungbin.gitmessengerbot.data.github.model.AouthResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.UserResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.user.AouthResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.user.UserResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST

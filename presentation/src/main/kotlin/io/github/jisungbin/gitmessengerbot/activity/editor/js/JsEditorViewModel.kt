@@ -12,8 +12,8 @@ package io.github.jisungbin.gitmessengerbot.activity.editor.js
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubCreateRepoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileContentUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubUpdateFileUseCase

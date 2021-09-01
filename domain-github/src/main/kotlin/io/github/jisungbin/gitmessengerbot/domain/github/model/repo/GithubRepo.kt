@@ -2,12 +2,14 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [GithubTokenResponse.kt] created by Ji Sungbin on 21. 7. 16. 오후 4:01.
+ * [Repo.kt] created by Ji Sungbin on 21. 7. 13. 오전 1:21.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.domain.github.model
+package io.github.jisungbin.gitmessengerbot.domain.github.model.repo
 
-@JvmInline
-value class GithubAouth(val token: String)
+data class GithubRepo(
+    val name: String,
+    val description: String
+)

@@ -2,16 +2,16 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Content.kt] created by Ji Sungbin on 21. 7. 13. 오전 1:45.
+ * [FileContentResponse.kt] created by Ji Sungbin on 21. 7. 16. 오후 4:03.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.model
+package io.github.jisungbin.gitmessengerbot.data.github.model.repo
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Content(
+data class FileContentResponse(
     @field:JsonProperty("path")
     val path: String?,
 
@@ -36,9 +36,15 @@ data class Content(
     @field:JsonProperty("type")
     val type: String?,
 
+    @field:JsonProperty("encoding")
+    val encoding: String?,
+
     @field:JsonProperty("sha")
     val sha: String?,
 
     @field:JsonProperty("url")
-    val url: String
+    val url: String?,
+
+    @field:JsonProperty("content")
+    val content: String?,
 )

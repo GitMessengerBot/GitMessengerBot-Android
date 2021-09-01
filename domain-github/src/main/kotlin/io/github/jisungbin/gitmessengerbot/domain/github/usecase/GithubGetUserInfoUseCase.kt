@@ -10,7 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 
 private typealias BaseGithubGetUserInfoUseCase = BaseUseCase<String, GithubUser>

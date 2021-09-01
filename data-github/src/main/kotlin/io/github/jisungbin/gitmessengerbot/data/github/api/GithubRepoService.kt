@@ -9,12 +9,11 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.api
 
-import io.github.jisungbin.gitmessengerbot.data.github.model.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.FileCreateResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.RepoCreateResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
-import okhttp3.ResponseBody
+import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileContentResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileCreateResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.repo.RepoCreateResponse
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

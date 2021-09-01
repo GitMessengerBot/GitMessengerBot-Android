@@ -10,7 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
 import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 
 private typealias BaseGithubCreateRepoUseCase = BaseUseCase<GithubRepo, Unit>

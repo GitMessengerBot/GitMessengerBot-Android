@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.model
+package io.github.jisungbin.gitmessengerbot.data.github.model.repo
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -19,5 +19,5 @@ data class Links(
     val self: String?,
 
     @field:JsonProperty("html")
-    val html: String
+    val html: String,
 )

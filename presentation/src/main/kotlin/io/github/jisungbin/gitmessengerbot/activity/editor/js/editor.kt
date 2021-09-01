@@ -60,8 +60,8 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.util.doWhen

@@ -10,8 +10,8 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.repo
 
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubAouth
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUser
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 import kotlinx.coroutines.flow.Flow
 
 interface GithubUserRepository {

@@ -7,9 +7,12 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.model
+package io.github.jisungbin.gitmessengerbot.data.github.model.repo
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Author
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Committer
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Tree
 
 data class Commit(
     @field:JsonProperty("committer")

@@ -7,9 +7,10 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.data.github.model
+package io.github.jisungbin.gitmessengerbot.data.github.model.commit
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.github.jisungbin.gitmessengerbot.data.github.model.repo.Commit
 
 data class CommitContentResponse(
     @field:JsonProperty("committer")
@@ -43,5 +44,5 @@ data class CommitContentResponse(
     val nodeId: String?,
 
     @field:JsonProperty("parents")
-    val parents: List<ParentsItem>
+    val parents: List<ParentsItem>,
 )

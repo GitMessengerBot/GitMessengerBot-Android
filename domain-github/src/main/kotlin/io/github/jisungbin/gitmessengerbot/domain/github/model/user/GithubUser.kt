@@ -7,6 +7,6 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.domain.github.model
+package io.github.jisungbin.gitmessengerbot.domain.github.model.user
 
 data class GithubUser(val userName: String, val profileImageUrl: String)
