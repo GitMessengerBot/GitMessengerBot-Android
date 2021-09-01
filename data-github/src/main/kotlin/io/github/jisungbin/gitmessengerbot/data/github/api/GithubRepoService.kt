@@ -10,10 +10,9 @@
 package io.github.jisungbin.gitmessengerbot.data.github.api
 
 import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileCreateResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.repo.RepoCreateResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,10 +28,10 @@ interface GithubRepoService {
         @Path("repoName") repoName: String,
         @Path("path") path: String,
         @Body githubFile: GithubFile,
-    ): Response<FileCreateResponse>
+    ): Response<ResponseBody>
 
     @POST("/user/repos")
-    suspend fun createRepo(@Body githubRepo: GithubRepo): Response<RepoCreateResponse>
+    suspend fun createRepo(@Body githubRepo: GithubRepo): Response<ResponseBody>
 
     @GET("/repos/{owner}/{repoName}/contents/{path}")
     suspend fun getFileContent(

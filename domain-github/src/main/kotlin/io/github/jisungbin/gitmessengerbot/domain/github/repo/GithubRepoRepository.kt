@@ -23,5 +23,6 @@ interface GithubRepoRepository {
     ): Flow<GithubResult<GithubFileContent>>
 
     fun createRepo(githubRepo: GithubRepo): Flow<GithubResult<Unit>>
+
     fun updateFile(repoName: String, path: String, githubFile: GithubFile): Flow<GithubResult<Unit>>
 }
