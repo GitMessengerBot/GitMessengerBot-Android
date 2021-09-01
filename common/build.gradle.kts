@@ -42,6 +42,6 @@ dependencies {
     implementation(Dependencies.livedata)
     implementation(Dependencies.browser)
 
-    Dependencies.jackson.forEach(::api)
+    Dependencies.jackson.forEach(::implementation)
     Dependencies.essential.forEach(::api)
 }

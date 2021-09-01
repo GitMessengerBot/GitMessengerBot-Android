@@ -27,7 +27,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 import javax.inject.Singleton
 
 @Suppress("HasPlatformType")
@@ -54,14 +54,14 @@ object RetrofitModule {
 
     private fun buildRetrofitWithoutClient(baseUrl: String) = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(JacksonConverterFactory.create())
 
     @Provides
     @SignedRetrofit
     @Singleton
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .baseUrl(GithubConfig.BaseApiUrl)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(JacksonConverterFactory.create())
         .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
         .build()
 

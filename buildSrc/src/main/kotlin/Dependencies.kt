@@ -111,6 +111,7 @@ object Dependencies {
     val jackson = listOf(
         "com.fasterxml.jackson.core:jackson-core:${Versions.Jackson.Master}",
         "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}",
+        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}",
     )
 
     val retrofit = listOf(

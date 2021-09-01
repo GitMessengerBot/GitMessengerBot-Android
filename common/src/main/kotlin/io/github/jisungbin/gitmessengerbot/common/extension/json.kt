@@ -9,10 +9,14 @@
 
 package io.github.jisungbin.gitmessengerbot.common.extension
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.jisungbin.gitmessengerbot.common.exception.CommonException
 
-inline fun <reified T : Any> String.toModel() = Gson().fromJson(this, T::class.java)!!
+@PublishedApi
+internal val mapper by lazy { ObjectMapper() }
 
-fun Any.toJsonString() = Gson().toJson(this)
+inline fun <reified T> String.toModel(): T = mapper.readValue(this, T::class.java)
+    ?: throw CommonException("Error occur when convert string to json-object. ($this)")
+
+fun Any.toJsonString() = mapper.writeValueAsString(this)
     ?: throw CommonException("Error occur when convert json-object to string. ($this)")

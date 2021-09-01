@@ -50,4 +50,5 @@ dependencies {
     implementation(project(":common"))
 
     Dependencies.bot.forEach(::implementation)
+    Dependencies.jackson.forEach(::implementation)
 }
