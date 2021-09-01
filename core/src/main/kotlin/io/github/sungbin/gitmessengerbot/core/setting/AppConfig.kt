@@ -24,7 +24,7 @@ object AppConfig {
     private val _app = MutableLiveData(loadApp())
 
     val app: LiveData<App> get() = _app
-    val appValue = app.value ?: throw CoreException("AppConfig.app value is null.")
+    val appValue: App get() = app.value ?: throw CoreException("AppConfig.app value is null.")
 
     val canUseEval: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
 

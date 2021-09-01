@@ -73,6 +73,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
@@ -150,6 +154,8 @@ private fun LazyScript(modifier: Modifier, search: String) {
             }
         }
     } else {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.scripts_empty))
+
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -157,8 +163,15 @@ private fun LazyScript(modifier: Modifier, search: String) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // TODO: Lottie
-            Text(text = stringResource(R.string.script_empty), color = Color.Gray)
+            LottieAnimation(
+                modifier = Modifier.size(250.dp),
+                iterations = LottieConstants.IterateForever,
+                composition = composition,
+            )
+            Text(
+                text = stringResource(R.string.script_empty),
+                color = Color.Gray
+            )
         }
     }
 }

@@ -25,7 +25,6 @@ object DebugStore {
     private val _items = MutableLiveData(getList())
 
     val items: LiveData<List<DebugItem>> get() = _items
-
     val itemsValue get(): List<DebugItem> = items.value ?: emptyList()
 
     fun getByScriptId(id: Int) = itemsValue.filter { id == id }

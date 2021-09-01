@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
@@ -48,7 +50,6 @@ import io.github.jisungbin.gitmessengerbot.common.config.Config
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -86,8 +87,7 @@ private fun Content(activity: Activity) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        val app = AppConfig.app.observeAsState().value
-            ?: throw PresentationException("AppConfig.app is not loaded. (AppConfig.app value is null)")
+        val app = AppConfig.app.observeAsState(AppConfig.appValue).value
 
         val context = LocalContext.current
 
@@ -279,7 +279,12 @@ private fun Content(activity: Activity) {
                 color = Color.Black
             )
             OutlinedButton(onClick = { gitDefaultCommitMessageDialogVisible.value = true }) {
-                Text(text = app.gitDefaultCommitMessage)
+                Text(
+                    modifier = Modifier.requiredSizeIn(maxHeight = 30.dp, maxWidth = 150.dp),
+                    text = app.gitDefaultCommitMessage,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
@@ -307,8 +312,9 @@ private fun Content(activity: Activity) {
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
                 val kakaoTalkPackageNames =
                     app.kakaoTalkPackageNames.sortedBy { it == Config.KakaoTalkDefaultPackageName }
+                        .asReversed()
                 val message =
-                    if (kakaoTalkPackageNames.size == 1) Config.KakaoTalkDefaultPackageName
+                    if (kakaoTalkPackageNames.size == 1) kakaoTalkPackageNames.first()
                     else "${kakaoTalkPackageNames.first()} 외 ${kakaoTalkPackageNames.size - 1}개 추가됨"
                 Text(text = message)
             }

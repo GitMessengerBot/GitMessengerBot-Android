@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.home.setting
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -311,9 +312,11 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     }
 }
 
+// TODO: items state 처리, 마지막 한 아이템은 삭제 못하게
 @Composable
 fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
+        val context = LocalContext.current
         var newKakaoTalkPackage by remember { mutableStateOf(TextFieldValue()) }
         val focusManager = LocalFocusManager.current
 
@@ -340,13 +343,9 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                                     painter = painterResource(R.drawable.ic_round_add_24),
                                     contentDescription = null,
                                     modifier = Modifier.clickable {
-                                        if (newKakaoTalkPackage.text.isNotBlank()) {
-                                            AppConfig.update { app ->
-                                                val kakaoTalkPackageNames =
-                                                    app.kakaoTalkPackageNames.toMutableList()
-                                                kakaoTalkPackageNames.add(newKakaoTalkPackage.text)
-                                                app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
-                                            }
+                                        val packageName = newKakaoTalkPackage.text
+                                        if (packageName.isNotBlank()) {
+                                            updateKakaoTalkPackageNames(context, packageName)
                                             newKakaoTalkPackage = TextFieldValue()
                                             focusManager.clearFocus()
                                         }
@@ -367,6 +366,25 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                 }
             }
         )
+    }
+}
+
+private fun updateKakaoTalkPackageNames(context: Context, packageName: String) {
+    AppConfig.update { app ->
+        val kakaoTalkPackageNames = app.kakaoTalkPackageNames.toMutableList()
+        return@update if (!kakaoTalkPackageNames.contains(packageName)) {
+            kakaoTalkPackageNames.add(packageName)
+            app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
+        } else {
+            toast(
+                context,
+                context.getString(
+                    R.string.composable_setting_dialog_toast_already_added_package_name,
+                    packageName
+                )
+            )
+            app
+        }
     }
 }
 

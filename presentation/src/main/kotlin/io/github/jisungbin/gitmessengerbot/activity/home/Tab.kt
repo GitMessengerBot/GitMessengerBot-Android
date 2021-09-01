@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.main
+package io.github.jisungbin.gitmessengerbot.activity.home
 
 object Tab {
     const val Script = 0

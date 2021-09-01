@@ -41,7 +41,7 @@
     <string name="main_header_script_search">스크립트 검색</string>
 
     <string name="composable_script_label">SCRIPT</string>
-    <string name="script_empty">스크립트가 비었어요 😢</string>
+    <string name="script_empty">스크립트가 비었어요</string>
     <string name="composable_script_compile">컴파일</string>
     <string name="script_add_create_new">스크립트 추가</string>
     <string name="script_add_input_name">스크립트 이름을 입력해 주세요.</string>
@@ -52,6 +52,7 @@
     <string name="script_toast_compile_success">컴파일 성공!</string>
     <string name="script_toast_compile_failed">컴파일 실패\n\n%s</string>
     <string name="composable_script_dialog_compile_error">스크립트 컴파일 에러</string>
+    <string name="composable_setting_dialog_toast_already_added_package_name">%s은 이미 추가돼 있습니다.</string>
 
     <string name="composable_editor_toast_saved">저장되었습니다.</string>
     <string name="composable_editor_toast_repo_create_success">레포 생성 성공</string>

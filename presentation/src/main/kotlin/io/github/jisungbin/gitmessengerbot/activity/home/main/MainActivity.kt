@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
+import io.github.jisungbin.gitmessengerbot.activity.home.Tab
 import io.github.jisungbin.gitmessengerbot.activity.home.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig

@@ -30,9 +30,7 @@ val colors = lightColors().copy(
     secondary = Color(0xFF9e4dd7)
 )
 
-private val typography = Typography(
-    defaultFontFamily = defaultFontFamily
-)
+private val typography = Typography(defaultFontFamily = defaultFontFamily)
 
 @Composable
 fun MaterialTheme(content: @Composable () -> Unit) {
@@ -47,7 +45,7 @@ fun MaterialTheme(content: @Composable () -> Unit) {
 @Composable
 fun transparentTextFieldColors(
     backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.BackgroundOpacity),
-    textColor: Color = Color.Black
+    textColor: Color = Color.Black,
 ) = TextFieldDefaults.textFieldColors(
     disabledIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent,
