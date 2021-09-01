@@ -11,8 +11,11 @@ package io.github.jisungbin.gitmessengerbot.data.github.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+// Status Note
+// 삭제됨: removed
+// 수정됨: modified
+// 추가됨: added
 data class FilesItem(
-
     @field:JsonProperty("patch")
     val patch: String?,
 

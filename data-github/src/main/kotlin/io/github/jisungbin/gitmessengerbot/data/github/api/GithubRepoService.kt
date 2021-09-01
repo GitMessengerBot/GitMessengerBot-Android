@@ -42,20 +42,4 @@ interface GithubRepoService {
         @Path("path") path: String,
         @Query("ref") branch: String,
     ): Response<FileContentResponse>
-
-    @GET("/repos/{owner}/{repoName}/commits")
-    suspend fun getFileCommitHistory(
-        @Path("owner") owner: String,
-        @Path("repoName") repoName: String,
-    ): Response<ResponseBody> // TODO
-
-    // 삭제됨: removed
-    // 수정됨: modified
-    // 추가됨: added
-    @GET("/repos/{owner}/{repoName}/commits")
-    suspend fun getFileCommitContent(
-        @Path("owner") owner: String,
-        @Path("repoName") repoName: String,
-        @Query("ref") sha: String,
-    ): Response<Unit>
 }

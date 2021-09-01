@@ -12,7 +12,6 @@ package io.github.jisungbin.gitmessengerbot.data.github.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Stats(
-
     @field:JsonProperty("total")
     val total: Int?,
 
