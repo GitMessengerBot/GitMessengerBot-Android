@@ -66,7 +66,7 @@ import me.sungbin.fancybottombar.FancyItem
 class MainActivity : ComponentActivity() {
 
     private var onBackPressedTime = 0L
-    private var tab by mutableStateOf<Tab>(Tab.Script)
+    private var tab by mutableStateOf(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
             FancyBottomBar(
                 fancyColors = FancyColors(primary = colors.primary),
                 items = items
-            ) { tab = Tab.from(id) }
+            ) { tab = id }
             AnimatedVisibility(
                 visible = tab == Tab.Script,
                 enter = fadeIn(),
