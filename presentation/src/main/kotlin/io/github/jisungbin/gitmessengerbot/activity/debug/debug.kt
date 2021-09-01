@@ -84,6 +84,7 @@ import java.util.Locale
 
 @Composable
 fun Debug(activity: Activity, script: ScriptItem? = null) {
+    val app by AppConfig.app.observeAsState(AppConfig.appValue)
     val settingDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -92,7 +93,7 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
             DebugToolbar(
                 activity = activity,
                 script = script,
-                evalMode = AppConfig.appValue.evalMode,
+                evalMode = app.evalMode,
                 settingDialogVisible = settingDialogVisible
             )
         },
@@ -100,7 +101,7 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
             DebugContent(
                 activity = activity,
                 script = script,
-                evalMode = AppConfig.appValue.evalMode,
+                evalMode = app.evalMode,
                 settingDialogVisible = settingDialogVisible
             )
         }

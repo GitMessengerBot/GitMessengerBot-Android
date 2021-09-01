@@ -112,7 +112,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-    val app = AppConfig.app.observeAsState(AppConfig.appValue).value
+    val app by AppConfig.app.observeAsState(AppConfig.appValue)
     val backgroundService = Intent(context, BackgroundService::class.java)
     val githubJson = Storage.read(GithubConfig.DataPath, null)
         ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")

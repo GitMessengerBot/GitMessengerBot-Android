@@ -317,7 +317,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
 fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         val context = LocalContext.current
-        val app = AppConfig.app.observeAsState(AppConfig.appValue).value
+        val app by AppConfig.app.observeAsState(AppConfig.appValue)
         var newKakaoTalkPackage by remember { mutableStateOf(TextFieldValue()) }
         val focusManager = LocalFocusManager.current
 
