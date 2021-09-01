@@ -68,27 +68,27 @@ android {
 dependencies {
     implementation(Dependencies.hilt)
     implementation(Dependencies.jsoup)
+    implementation(Dependencies.jacksonModule)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
-    debugImplementation("com.mocklets:pluto:1.0.6")
-    releaseImplementation("com.mocklets:pluto-no-op:1.0.6")
-
     implementation(project(":core"))
+    implementation(project(":common"))
     implementation(project(":data-github"))
     implementation(project(":data-kaven"))
     implementation(project(":domain-github"))
     implementation(project(":domain-kaven"))
-    implementation(project(":common"))
 
-    Dependencies.debug.forEach(::debugImplementation)
     Dependencies.ui.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
+    Dependencies.compose.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
     Dependencies.retrofitutil.forEach(::implementation)
-    Dependencies.compose.forEach(::implementation)
+
+    Dependencies.debug.forEach(::debugImplementation)
+    Dependencies.release.forEach(::releaseImplementation)
 
     kapt(Dependencies.hiltCompiler)
 }

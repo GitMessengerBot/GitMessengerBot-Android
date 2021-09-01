@@ -46,6 +46,8 @@ object Versions {
     }
 
     object Util {
+        const val Pluto = "1.0.6"
+        const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.5.0"
@@ -74,10 +76,6 @@ object Versions {
         const val Activity = "1.3.1"
     }
 
-    object Debug {
-        const val LeakCanary = "2.7"
-    }
-
     object Lifecycle {
         const val Compose = "1.0.0-alpha07"
         const val Master = "2.3.1"
@@ -99,19 +97,25 @@ object Dependencies {
     const val livedata =
         "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Lifecycle.Master}"
 
+    const val jacksonModule =
+        "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.Jackson.Master}"
+
     val bot = listOf(
         "org.mozilla:rhino:${Versions.Bot.RhinoEngine}",
-        "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
+        // "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
     )
 
     val debug = listOf(
-        "com.squareup.leakcanary:leakcanary-android:${Versions.Debug.LeakCanary}"
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}",
+        "com.mocklets:pluto:${Versions.Util.Pluto}"
     )
+
+    val release = listOf("com.mocklets:pluto-no-op:${Versions.Util.Pluto}")
 
     val jackson = listOf(
         "com.fasterxml.jackson.core:jackson-core:${Versions.Jackson.Master}",
         "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}",
-        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}",
+        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}"
     )
 
     val retrofit = listOf(

@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.di.module
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.mocklets.pluto.PlutoInterceptor
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
+    private val mapper by lazy { ObjectMapper().registerModule(KotlinModule()) }
+
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
