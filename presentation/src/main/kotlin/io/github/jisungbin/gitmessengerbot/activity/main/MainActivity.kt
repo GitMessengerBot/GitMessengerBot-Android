@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.main
+package io.github.jisungbin.gitmessengerbot.activity.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -44,9 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
-import io.github.jisungbin.gitmessengerbot.activity.home.Tab
-import io.github.jisungbin.gitmessengerbot.activity.home.script.ScriptContent
-import io.github.jisungbin.gitmessengerbot.activity.home.setting.Setting
+import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
+import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast

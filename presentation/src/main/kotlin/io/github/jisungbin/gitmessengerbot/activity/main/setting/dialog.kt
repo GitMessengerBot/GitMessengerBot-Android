@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.setting
+package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -36,6 +36,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -312,11 +313,11 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     }
 }
 
-// TODO: items state 처리, 마지막 한 아이템은 삭제 못하게
 @Composable
 fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         val context = LocalContext.current
+        val app = AppConfig.app.observeAsState(AppConfig.appValue).value
         var newKakaoTalkPackage by remember { mutableStateOf(TextFieldValue()) }
         val focusManager = LocalFocusManager.current
 
@@ -358,7 +359,7 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
                         )
                     }
                     items(
-                        items = AppConfig.appValue.kakaoTalkPackageNames,
+                        items = app.kakaoTalkPackageNames,
                         key = { it }
                     ) { packageName ->
                         ApplicationItem(packageName = packageName)
@@ -580,6 +581,8 @@ private fun Spacer() {
 
 @Composable
 private fun ApplicationItem(packageName: String) {
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -587,7 +590,7 @@ private fun ApplicationItem(packageName: String) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = packageName, color = Color.Black, modifier = Modifier.padding(start = 15.dp))
+        Text(text = packageName, color = Color.Black)
         Icon(
             painter = painterResource(R.drawable.ic_round_trash_24),
             contentDescription = null,
@@ -596,8 +599,16 @@ private fun ApplicationItem(packageName: String) {
                 .clickable {
                     AppConfig.update { app ->
                         val kakaoTalkPackageNames = app.kakaoTalkPackageNames.toMutableList()
-                        kakaoTalkPackageNames.remove(packageName)
-                        app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
+                        return@update if (kakaoTalkPackageNames.size == 1) {
+                            toast(
+                                context,
+                                context.getString(R.string.composable_setting_dialog_toast_cant_delete_last_item)
+                            )
+                            app
+                        } else {
+                            kakaoTalkPackageNames.remove(packageName)
+                            app.copy(kakaoTalkPackageNames = kakaoTalkPackageNames)
+                        }
                     }
                 }
         )

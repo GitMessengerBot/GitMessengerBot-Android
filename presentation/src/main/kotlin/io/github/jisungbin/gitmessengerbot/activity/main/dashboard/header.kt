@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.script
+package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
 
 import android.app.Activity
 import android.app.ActivityOptions
@@ -182,8 +182,8 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                 width = Dimension.fillToConstraints
                 height = Dimension.value(90.dp)
             }
-        ) { state ->
-            if (!state) {
+        ) { isSearching ->
+            if (!isSearching) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center
@@ -244,13 +244,12 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                     }
                     MenuBox(
                         title = stringResource(R.string.main_menu_script_search),
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { searching = true }
+                        modifier = Modifier.weight(1f)
                     ) {
                         Column(
                             verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.clickable { searching = true }
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_round_search_24),

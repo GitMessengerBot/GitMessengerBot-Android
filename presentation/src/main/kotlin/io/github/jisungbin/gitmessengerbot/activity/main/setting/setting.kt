@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.home.setting
+package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -147,7 +147,7 @@ private fun Content(activity: Activity) {
                     )
                 }
             ) {
-                Text(text = app.editorFontName)
+                Text(text = "TODO")
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
