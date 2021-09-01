@@ -9,15 +9,15 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Links(
-    @SerializedName("git")
+    @field:JsonProperty("git")
     val git: String,
 
-    @SerializedName("self")
+    @field:JsonProperty("self")
     val self: String,
 
-    @SerializedName("html")
+    @field:JsonProperty("html")
     val html: String
 )

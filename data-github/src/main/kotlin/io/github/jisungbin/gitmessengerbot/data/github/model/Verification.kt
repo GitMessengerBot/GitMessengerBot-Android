@@ -9,18 +9,18 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Verification(
-    @SerializedName("reason")
+    @field:JsonProperty("reason")
     val reason: String,
 
-    @SerializedName("signature")
+    @field:JsonProperty("signature")
     val signature: Any,
 
-    @SerializedName("payload")
+    @field:JsonProperty("payload")
     val payload: Any,
 
-    @SerializedName("verified")
+    @field:JsonProperty("verified")
     val verified: Boolean,
 )

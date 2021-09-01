@@ -9,60 +9,60 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Owner(
-    @SerializedName("gists_url")
+    @field:JsonProperty("gists_url")
     val gistsUrl: String,
 
-    @SerializedName("repos_url")
+    @field:JsonProperty("repos_url")
     val reposUrl: String,
 
-    @SerializedName("following_url")
+    @field:JsonProperty("following_url")
     val followingUrl: String,
 
-    @SerializedName("starred_url")
+    @field:JsonProperty("starred_url")
     val starredUrl: String,
 
-    @SerializedName("login")
+    @field:JsonProperty("login")
     val login: String,
 
-    @SerializedName("followers_url")
+    @field:JsonProperty("followers_url")
     val followersUrl: String,
 
-    @SerializedName("type")
+    @field:JsonProperty("type")
     val type: String,
 
-    @SerializedName("url")
+    @field:JsonProperty("url")
     val url: String,
 
-    @SerializedName("subscriptions_url")
+    @field:JsonProperty("subscriptions_url")
     val subscriptionsUrl: String,
 
-    @SerializedName("received_events_url")
+    @field:JsonProperty("received_events_url")
     val receivedEventsUrl: String,
 
-    @SerializedName("avatar_url")
+    @field:JsonProperty("avatar_url")
     val avatarUrl: String,
 
-    @SerializedName("events_url")
+    @field:JsonProperty("events_url")
     val eventsUrl: String,
 
-    @SerializedName("html_url")
+    @field:JsonProperty("html_url")
     val htmlUrl: String,
 
-    @SerializedName("site_admin")
+    @field:JsonProperty("site_admin")
     val siteAdmin: Boolean,
 
-    @SerializedName("id")
+    @field:JsonProperty("id")
     val id: Int,
 
-    @SerializedName("gravatar_id")
+    @field:JsonProperty("gravatar_id")
     val gravatarId: String,
 
-    @SerializedName("node_id")
+    @field:JsonProperty("node_id")
     val nodeId: String,
 
-    @SerializedName("organizations_url")
+    @field:JsonProperty("organizations_url")
     val organizationsUrl: String
 )

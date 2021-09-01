@@ -9,18 +9,18 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Plan(
-    @SerializedName("private_repos")
+    @field:JsonProperty("private_repos")
     val privateRepos: Int,
 
-    @SerializedName("name")
+    @field:JsonProperty("name")
     val name: String,
 
-    @SerializedName("collaborators")
+    @field:JsonProperty("collaborators")
     val collaborators: Int,
 
-    @SerializedName("space")
+    @field:JsonProperty("space")
     val space: Int,
 )

@@ -9,12 +9,12 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Tree(
-    @SerializedName("sha")
+    @field:JsonProperty("sha")
     val sha: String,
 
-    @SerializedName("url")
+    @field:JsonProperty("url")
     val url: String,
 )

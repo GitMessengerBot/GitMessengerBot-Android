@@ -9,123 +9,123 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UserResponse(
-    @SerializedName("gists_url")
+    @field:JsonProperty("gists_url")
     val gistsUrl: String,
 
-    @SerializedName("repos_url")
+    @field:JsonProperty("repos_url")
     val reposUrl: String,
 
-    @SerializedName("two_factor_authentication")
+    @field:JsonProperty("two_factor_authentication")
     val twoFactorAuthentication: Boolean,
 
-    @SerializedName("following_url")
+    @field:JsonProperty("following_url")
     val followingUrl: String,
 
-    @SerializedName("twitter_username")
+    @field:JsonProperty("twitter_username")
     val twitterUsername: String,
 
-    @SerializedName("bio")
+    @field:JsonProperty("bio")
     val bio: String,
 
-    @SerializedName("created_at")
+    @field:JsonProperty("created_at")
     val createdAt: String,
 
-    @SerializedName("login")
+    @field:JsonProperty("login")
     val login: String,
 
-    @SerializedName("type")
+    @field:JsonProperty("type")
     val type: String,
 
-    @SerializedName("blog")
+    @field:JsonProperty("blog")
     val blog: String,
 
-    @SerializedName("private_gists")
+    @field:JsonProperty("private_gists")
     val privateGists: Int,
 
-    @SerializedName("total_private_repos")
+    @field:JsonProperty("total_private_repos")
     val totalPrivateRepos: Int,
 
-    @SerializedName("subscriptions_url")
+    @field:JsonProperty("subscriptions_url")
     val subscriptionsUrl: String,
 
-    @SerializedName("updated_at")
+    @field:JsonProperty("updated_at")
     val updatedAt: String,
 
-    @SerializedName("site_admin")
+    @field:JsonProperty("site_admin")
     val siteAdmin: Boolean,
 
-    @SerializedName("disk_usage")
+    @field:JsonProperty("disk_usage")
     val diskUsage: Int,
 
-    @SerializedName("collaborators")
+    @field:JsonProperty("collaborators")
     val collaborators: Int,
 
-    @SerializedName("company")
+    @field:JsonProperty("company")
     val company: String,
 
-    @SerializedName("owned_private_repos")
+    @field:JsonProperty("owned_private_repos")
     val ownedPrivateRepos: Int,
 
-    @SerializedName("id")
+    @field:JsonProperty("id")
     val id: Int,
 
-    @SerializedName("public_repos")
+    @field:JsonProperty("public_repos")
     val publicRepos: Int,
 
-    @SerializedName("gravatar_id")
+    @field:JsonProperty("gravatar_id")
     val gravatarId: String,
 
-    @SerializedName("plan")
+    @field:JsonProperty("plan")
     val plan: Plan,
 
-    @SerializedName("email")
+    @field:JsonProperty("email")
     val email: String,
 
-    @SerializedName("organizations_url")
+    @field:JsonProperty("organizations_url")
     val organizationsUrl: String,
 
-    @SerializedName("hireable")
+    @field:JsonProperty("hireable")
     val hireable: Boolean,
 
-    @SerializedName("starred_url")
+    @field:JsonProperty("starred_url")
     val starredUrl: String,
 
-    @SerializedName("followers_url")
+    @field:JsonProperty("followers_url")
     val followersUrl: String,
 
-    @SerializedName("public_gists")
+    @field:JsonProperty("public_gists")
     val publicGists: Int,
 
-    @SerializedName("url")
+    @field:JsonProperty("url")
     val url: String,
 
-    @SerializedName("received_events_url")
+    @field:JsonProperty("received_events_url")
     val receivedEventsUrl: String,
 
-    @SerializedName("followers")
+    @field:JsonProperty("followers")
     val followers: Int,
 
-    @SerializedName("avatar_url")
+    @field:JsonProperty("avatar_url")
     val avatarUrl: String,
 
-    @SerializedName("events_url")
+    @field:JsonProperty("events_url")
     val eventsUrl: String,
 
-    @SerializedName("html_url")
+    @field:JsonProperty("html_url")
     val htmlUrl: String,
 
-    @SerializedName("following")
+    @field:JsonProperty("following")
     val following: Int,
 
-    @SerializedName("name")
+    @field:JsonProperty("name")
     val name: String,
 
-    @SerializedName("location")
+    @field:JsonProperty("location")
     val location: String,
 
-    @SerializedName("node_id")
+    @field:JsonProperty("node_id")
     val nodeId: String,
 )

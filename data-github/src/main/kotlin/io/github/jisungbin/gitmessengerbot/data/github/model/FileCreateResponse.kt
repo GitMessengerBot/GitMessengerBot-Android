@@ -9,12 +9,12 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FileCreateResponse(
-    @SerializedName("commit")
+    @field:JsonProperty("commit")
     val commit: Commit,
 
-    @SerializedName("content")
+    @field:JsonProperty("content")
     val content: Content,
 )

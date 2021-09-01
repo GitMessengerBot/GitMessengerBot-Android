@@ -9,15 +9,15 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class AouthResponse(
-    @SerializedName("access_token")
+    @field:JsonProperty("access_token")
     val accessToken: String,
 
-    @SerializedName("scope")
+    @field:JsonProperty("scope")
     val scope: String,
 
-    @SerializedName("token_type")
+    @field:JsonProperty("token_type")
     val tokenType: String,
 )

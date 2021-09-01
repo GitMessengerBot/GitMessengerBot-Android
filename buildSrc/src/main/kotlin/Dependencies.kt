@@ -46,7 +46,6 @@ object Versions {
     }
 
     object Util {
-        const val Gson = "2.8.7"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.5.0"
@@ -60,6 +59,10 @@ object Versions {
 
     object Jetpack {
         const val Room = "2.3.0"
+    }
+
+    object Jackson {
+        const val Master = "2.12.5"
     }
 
     object Hilt {
@@ -83,7 +86,6 @@ object Versions {
 
 object Dependencies {
     const val jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
-    const val json = "com.google.code.gson:gson:${Versions.Util.Gson}"
 
     const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
     const val LandscapistCoil =
@@ -106,6 +108,11 @@ object Dependencies {
         "com.squareup.leakcanary:leakcanary-android:${Versions.Debug.LeakCanary}"
     )
 
+    val jackson = listOf(
+        "com.fasterxml.jackson.core:jackson-core:${Versions.Jackson.Master}",
+        "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}",
+    )
+
     val retrofit = listOf(
         "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
@@ -113,7 +120,7 @@ object Dependencies {
 
     val retrofitutil = listOf(
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
-        "com.squareup.retrofit2:converter-gson:${Versions.Network.Retrofit}",
+        "com.squareup.retrofit2:converter-jackson:${Versions.Network.Retrofit}",
     )
 
     val essential = listOf(

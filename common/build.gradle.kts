@@ -38,11 +38,10 @@ android {
 }
 
 dependencies {
-    api(Dependencies.json)
-
     implementation(Dependencies.jsoup)
     implementation(Dependencies.livedata)
     implementation(Dependencies.browser)
 
+    Dependencies.jackson.forEach(::api)
     Dependencies.essential.forEach(::api)
 }

@@ -9,42 +9,42 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FileContentResponse(
-    @SerializedName("path")
+    @field:JsonProperty("path")
     val path: String,
 
-    @SerializedName("size")
+    @field:JsonProperty("size")
     val size: Int,
 
-    @SerializedName("_links")
+    @field:JsonProperty("_links")
     val links: Links,
 
-    @SerializedName("html_url")
+    @field:JsonProperty("html_url")
     val htmlUrl: String,
 
-    @SerializedName("name")
+    @field:JsonProperty("name")
     val name: String,
 
-    @SerializedName("download_url")
+    @field:JsonProperty("download_url")
     val downloadUrl: String,
 
-    @SerializedName("git_url")
+    @field:JsonProperty("git_url")
     val gitUrl: String,
 
-    @SerializedName("type")
+    @field:JsonProperty("type")
     val type: String,
 
-    @SerializedName("encoding")
+    @field:JsonProperty("encoding")
     val encoding: String,
 
-    @SerializedName("sha")
+    @field:JsonProperty("sha")
     val sha: String,
 
-    @SerializedName("url")
+    @field:JsonProperty("url")
     val url: String,
 
-    @SerializedName("content")
+    @field:JsonProperty("content")
     val content: String,
 )

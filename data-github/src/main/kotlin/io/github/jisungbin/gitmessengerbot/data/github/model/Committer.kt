@@ -9,15 +9,15 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Committer(
-    @SerializedName("date")
+    @field:JsonProperty("date")
     val date: String,
 
-    @SerializedName("name")
+    @field:JsonProperty("name")
     val name: String,
 
-    @SerializedName("email")
+    @field:JsonProperty("email")
     val email: String
 )

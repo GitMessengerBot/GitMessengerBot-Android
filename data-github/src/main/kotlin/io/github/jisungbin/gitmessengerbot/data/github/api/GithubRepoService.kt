@@ -14,6 +14,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.model.FileCreateResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.RepoCreateResponse
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubRepo
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -41,4 +42,20 @@ interface GithubRepoService {
         @Path("path") path: String,
         @Query("ref") branch: String,
     ): Response<FileContentResponse>
+
+    @GET("/repos/{owner}/{repoName}/commits")
+    suspend fun getFileCommitHistory(
+        @Path("owner") owner: String,
+        @Path("repoName") repoName: String,
+    ): Response<ResponseBody> // TODO
+
+    // 삭제됨: removed
+    // 수정됨: modified
+    // 추가됨: added
+    @GET("/repos/{owner}/{repoName}/commits")
+    suspend fun getFileCommitContent(
+        @Path("owner") owner: String,
+        @Path("repoName") repoName: String,
+        @Query("ref") sha: String,
+    ): Response<Unit>
 }

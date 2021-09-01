@@ -9,15 +9,15 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Permissions(
-    @SerializedName("pull")
+    @field:JsonProperty("pull")
     val pull: Boolean,
 
-    @SerializedName("admin")
+    @field:JsonProperty("admin")
     val admin: Boolean,
 
-    @SerializedName("push")
+    @field:JsonProperty("push")
     val push: Boolean
 )
