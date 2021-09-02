@@ -13,5 +13,5 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CommitListResponse(
     @field:JsonProperty("CommitListResponse")
-    val commitListResponse: List<CommitListResponseItem?>? = null,
+    val commitList: List<CommitListItem?>? = null,
 )

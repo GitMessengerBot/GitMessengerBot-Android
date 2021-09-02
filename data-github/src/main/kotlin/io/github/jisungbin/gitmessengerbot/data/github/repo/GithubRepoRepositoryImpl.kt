@@ -27,7 +27,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Retrofit
 
-class GithubRepoRepositoryImpl constructor(private val retrofit: Retrofit) : GithubRepoRepository {
+class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepository {
     private val buildRetrofit by lazy { retrofit.create(GithubRepoService::class.java) }
     private val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
         ?: throw DataGithubException("GithubConfig.DataPath data is null.")
