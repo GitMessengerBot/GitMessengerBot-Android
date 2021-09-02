@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FileContentResponse(
     @field:JsonProperty("download_url")
-    val downloadUrl: String?,
+    val downloadUrl: String? = null,
 
     @field:JsonProperty("sha")
-    val sha: String?,
+    val sha: String? = null,
 )

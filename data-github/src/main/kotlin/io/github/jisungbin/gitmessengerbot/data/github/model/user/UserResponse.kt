@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UserResponse(
     @field:JsonProperty("login")
-    val login: String?,
+    val login: String? = null,
 
     @field:JsonProperty("avatar_url")
-    val avatarUrl: String?,
+    val avatarUrl: String? = null,
 )
