@@ -14,8 +14,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GetCommitContentUseCase
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GetCommitHistoryUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubCreateRepoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileContentUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
@@ -49,4 +52,14 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideGetUserInfoUseCase(githubUserRepository: GithubUserRepository) =
         GithubGetUserInfoUseCase(githubUserRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetCommitContentUseCase(githubCommitRepository: GithubCommitRepository) =
+        GetCommitContentUseCase(githubCommitRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetCommitHistoryUseCase(githubCommitRepository: GithubCommitRepository) =
+        GetCommitHistoryUseCase(githubCommitRepository)
 }

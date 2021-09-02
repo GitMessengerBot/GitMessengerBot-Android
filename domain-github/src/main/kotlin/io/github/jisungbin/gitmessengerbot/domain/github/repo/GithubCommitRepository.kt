@@ -18,11 +18,11 @@ interface GithubCommitRepository {
     suspend fun getFileCommitHistory(
         owner: String,
         repoName: String,
-    ): Flow<GithubResult<CommitContents>>
+    ): Flow<GithubResult<CommitLists>>
 
     suspend fun getFileCommitContent(
         owner: String,
         repoName: String,
         sha: String,
-    ): Flow<GithubResult<CommitLists>>
+    ): Flow<GithubResult<CommitContents>>
 }

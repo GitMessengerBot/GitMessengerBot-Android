@@ -28,14 +28,14 @@ import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Retrofit
 
 class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepository {
-    private val buildRetrofit by lazy { retrofit.create(GithubRepoService::class.java) }
+    private val api by lazy { retrofit.create(GithubRepoService::class.java) }
     private val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
         ?: throw DataGithubException("GithubConfig.DataPath data is null.")
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFileContent(repoName: String, path: String, branch: String) = callbackFlow {
         try {
-            val request = buildRetrofit.getFileContent(githubData.userName, repoName, path, branch)
+            val request = api.getFileContent(githubData.userName, repoName, path, branch)
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
@@ -53,7 +53,7 @@ class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepos
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun createRepo(githubRepo: GithubRepo) = callbackFlow {
         try {
-            val request = buildRetrofit.createRepo(githubRepo)
+            val request = api.createRepo(githubRepo)
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(Unit)
@@ -75,7 +75,7 @@ class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepos
         githubFile: GithubFile,
     ) = callbackFlow {
         try {
-            val request = buildRetrofit.updateFile(
+            val request = api.updateFile(
                 owner = githubData.userName,
                 repoName = repoName,
                 path = path,

@@ -13,11 +13,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubCommitRepositoryImpl
 import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubRepoRepositoryImpl
 import io.github.jisungbin.gitmessengerbot.data.github.repo.GithubUserRepositoryImpl
 import io.github.jisungbin.gitmessengerbot.di.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.SignedRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.UserRetrofit
+import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import javax.inject.Singleton
@@ -31,6 +33,11 @@ object RepoModule {
     @Singleton
     fun provideGithubRepoRepository(@SignedRetrofit retrofit: Retrofit): GithubRepoRepository =
         GithubRepoRepositoryImpl(retrofit = retrofit)
+
+    @Provides
+    @Singleton
+    fun provideGithubCommitRepository(@SignedRetrofit retrofit: Retrofit): GithubCommitRepository =
+        GithubCommitRepositoryImpl(signedRetrofit = retrofit)
 
     @Provides
     @Singleton

@@ -47,7 +47,7 @@ class GithubUserRepositoryImpl(
         return builder.build()
     }
 
-    private fun buildRetrofit(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
+    private fun getApi(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
         .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(aouthToken)))
         .build()
         .create(GithubUserService::class.java)
@@ -56,7 +56,7 @@ class GithubUserRepositoryImpl(
     override suspend fun getUserInfo(aouthToken: String) = callbackFlow {
         try {
             val request =
-                buildRetrofit(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
+                getApi(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
@@ -75,7 +75,7 @@ class GithubUserRepositoryImpl(
     override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
         try {
             val request =
-                buildRetrofit(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
+                getApi(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
                     requestCode = requestCode,
                     clientId = SecretConfig.GithubOauthClientId,
                     clientSecret = SecretConfig.GithubOauthClientSecret

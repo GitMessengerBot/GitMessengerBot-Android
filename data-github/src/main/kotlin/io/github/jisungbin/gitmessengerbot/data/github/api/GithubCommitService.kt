@@ -21,12 +21,12 @@ interface GithubCommitService {
     suspend fun getFileCommitHistory(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-    ): Response<CommitContentResponse>
+    ): Response<CommitListResponse>
 
     @GET("/repos/{owner}/{repoName}/commits")
     suspend fun getFileCommitContent(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
         @Query("ref") sha: String,
-    ): Response<CommitListResponse>
+    ): Response<CommitContentResponse>
 }

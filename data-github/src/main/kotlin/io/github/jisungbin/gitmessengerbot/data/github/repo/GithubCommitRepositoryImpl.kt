@@ -18,13 +18,9 @@ import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitReposi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class GithubCommitRepositoryImpl(
-    private val httpLoggingInterceptor: HttpLoggingInterceptor,
-    private val signedRetrofit: Retrofit,
-) : GithubCommitRepository {
+class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubCommitRepository {
     private val api by lazy { signedRetrofit.create(GithubCommitService::class.java) }
 
     @OptIn(ExperimentalCoroutinesApi::class)
