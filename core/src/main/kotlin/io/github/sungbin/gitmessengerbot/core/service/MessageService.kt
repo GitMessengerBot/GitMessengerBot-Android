@@ -11,6 +11,7 @@ package io.github.sungbin.gitmessengerbot.core.service
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
@@ -62,7 +63,10 @@ class MessageService : NotificationListenerService() {
                         /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
                          sbn.notification.getLargeIcon().toBitmap(context)*/
 
-                        println(listOf(room, message, sender, isGroupChat))
+                        Log.i(
+                            "NotificationListenerService",
+                            listOf(room, message, sender, isGroupChat).joinToString()
+                        )
                         chatHook(room, message, sender, isGroupChat)
                     }
                 }

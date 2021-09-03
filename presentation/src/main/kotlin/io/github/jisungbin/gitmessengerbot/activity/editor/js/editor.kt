@@ -179,14 +179,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
-                                println(exception)
-                                toast(
-                                    context,
-                                    context.getString(
-                                        R.string.composable_editor_toast_repo_create_error,
-                                        exception.message
-                                    )
-                                )
+                                showExceptionDialog(exception)
                             }
                         )
                     }
@@ -214,13 +207,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
-                                toast(
-                                    context,
-                                    context.getString(
-                                        R.string.composable_editor_toast_commit_error,
-                                        exception.message
-                                    )
-                                )
+                                showExceptionDialog(exception)
                             }
                         )
                     }
@@ -249,13 +236,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
-                                toast(
-                                    context,
-                                    context.getString(
-                                        R.string.composable_editor_toast_content_get_error,
-                                        exception.message
-                                    )
-                                )
+                                showExceptionDialog(exception)
                             }
                         )
                     }

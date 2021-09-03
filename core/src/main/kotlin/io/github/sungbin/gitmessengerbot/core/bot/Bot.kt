@@ -12,6 +12,7 @@ package io.github.sungbin.gitmessengerbot.core.bot
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import androidx.lifecycle.LiveData
@@ -109,7 +110,7 @@ object Bot {
     ) {
         try {
             val v8 = StackManager.v8[script.id] ?: run {
-                log("${script.name} v8 instance is null.")
+                Log.i("callJsResponder", "${script.name} v8 instance is null.")
                 return
             }
             v8.locker.acquire()
@@ -125,7 +126,7 @@ object Bot {
                 )
             }
             v8.locker.release()
-            Timbr("Run: ${script.name}")
+            Log.i("callJsResponder", "Run: ${script.name}")
         } catch (exception: Exception) {
             throw CoreException(exception.message)
         }

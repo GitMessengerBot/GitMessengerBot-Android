@@ -46,13 +46,12 @@ class GitMessengerBot : Application() {
         Pluto.setANRListener(object : ANRListener {
             override fun onAppNotResponding(exception: ANRException) {
                 exception.printStackTrace()
-                println("AAA")
                 PlutoLog.e("ANR", exception.threadStateMap)
             }
         })
 
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            println("Catched Exception") // TODO: 데이터 저장 했다가 다음에 실행됐을 때 보여주기
+            Timber.i("Catched Exception") // TODO: 데이터 저장 했다가 다음에 실행됐을 때 보여주기
             Process.killProcess(Process.myPid())
             exitProcess(10)
         }

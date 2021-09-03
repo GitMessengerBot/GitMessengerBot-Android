@@ -17,7 +17,7 @@ import androidx.compose.material.Text
 class ExceptionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("SUCCESS")
+
         setContent {
             Text(text = "TODO")
         }

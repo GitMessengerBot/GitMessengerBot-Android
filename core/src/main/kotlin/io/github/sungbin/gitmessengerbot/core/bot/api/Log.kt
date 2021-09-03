@@ -9,9 +9,11 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
+import android.util.Log
+
 internal class Log { // TODO
     fun print(value: Any) {
-        println(value)
+        Log.i("Log API", value.toString())
     }
 
     /*fun e(message: String) {
