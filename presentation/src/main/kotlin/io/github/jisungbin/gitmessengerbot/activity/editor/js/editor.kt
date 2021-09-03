@@ -279,12 +279,11 @@ private fun DrawerLayout(
                                     onSuccess = { commitLists ->
                                         val commitHistory = mutableListOf<CommitHistoryItem>()
                                         commitLists.commitList.forEach { commitList ->
-                                            val sha = commitList.sha
                                             val commitContents = flow {
                                                 vm.getCommitContent(
                                                     ownerName = gitUser.userName,
                                                     repoName = repoName,
-                                                    sha = sha
+                                                    sha = commitList.sha
                                                 ).collect { commitContentResult ->
                                                     commitContentResult.doWhen(
                                                         onSuccess = { commitContents ->
@@ -299,12 +298,14 @@ private fun DrawerLayout(
                                             }
                                             commitContents.collect { _commitContentItems ->
                                                 _commitContentItems?.let { commitContentItems ->
-                                                    val commitHistoryItem = CommitHistoryItem(
-                                                        key = sha,
-                                                        list = commitList,
-                                                        content = commitContentItems
-                                                    )
-                                                    commitHistory.add(commitHistoryItem)
+                                                    commitContentItems.forEach { commitContentItem ->
+                                                        commitHistory.add(
+                                                            CommitHistoryItem(
+                                                                key = commitList,
+                                                                items = commitContentItem
+                                                            )
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }

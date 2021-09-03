@@ -18,7 +18,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.core.log
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.edit
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
@@ -126,7 +125,7 @@ object Bot {
                 )
             }
             v8.locker.release()
-            log("Run: ${script.name}")
+            Timbr("Run: ${script.name}")
         } catch (exception: Exception) {
             throw CoreException(exception.message)
         }
