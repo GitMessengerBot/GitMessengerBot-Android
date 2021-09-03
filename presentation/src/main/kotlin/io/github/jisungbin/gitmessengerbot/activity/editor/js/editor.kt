@@ -53,17 +53,22 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.common.extension.toBase64
+import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
+import io.github.jisungbin.gitmessengerbot.ui.exception.showExceptionDialog
 import io.github.jisungbin.gitmessengerbot.util.doWhen
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
@@ -123,6 +128,8 @@ private fun DrawerLayout(
     val coroutineScope = rememberCoroutineScope()
 
     val repoName = script.name
+    val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
+        ?: throw PresentationException("GithubConfig.DataPath data value is null.")
     val repoPath = "script.${script.lang.getScriptSuffix()}"
     val repoDescription = GithubConfig.DefaultRepoDescription // TODO
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
@@ -261,7 +268,45 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                // TODO: connect with timeline-view
+                coroutineScope.launch {
+                    // TODO: Loading
+                    vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+                        .collect { commitListResult ->
+                            commitListResult.doWhen(
+                                onSuccess = { commitLists ->
+                                    val commitHistory = mutableListOf<CommitHistoryItem>()
+                                    commitLists.commitList.forEach { commitList ->
+                                        val sha = commitList.sha
+                                        vm.getCommitContent(
+                                            ownerName = gitUser.userName,
+                                            repoName = repoName,
+                                            sha = sha
+                                        ).collect { commitContentResult ->
+                                            commitContentResult.doWhen(
+                                                onSuccess = { commitContents ->
+                                                    commitContents.files.forEach { commitContent ->
+                                                        commitHistory.add(
+                                                            CommitHistoryItem(
+                                                                key = sha,
+                                                                list = commitList,
+                                                                content = commitContent
+                                                            )
+                                                        )
+                                                    }
+                                                },
+                                                onFail = { exception ->
+                                                    showExceptionDialog(exception)
+                                                }
+                                            )
+                                        }
+                                    }
+                                },
+                                onFail = { exception ->
+                                    showExceptionDialog(exception)
+                                }
+                            )
+                        }
+                }
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))

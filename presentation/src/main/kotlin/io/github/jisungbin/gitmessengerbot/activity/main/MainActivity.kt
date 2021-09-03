@@ -53,6 +53,8 @@ import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
+import io.github.jisungbin.gitmessengerbot.ui.exception.exceptionDialogOption
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.doWhen
@@ -70,8 +72,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        listOf(1)[2]
 
         AppConfig.app.observe(this) { app ->
             val botCoreService = Intent(this, BackgroundService::class.java)
@@ -120,6 +120,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Content()
+                ExceptionDialog(option = exceptionDialogOption)
             }
         }
     }

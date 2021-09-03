@@ -22,5 +22,9 @@ class GetCommitContentUseCase(
         parameter: String,
         parameter2: String,
         parameter3: String,
-    ) = commitRepository.getFileCommitContent(parameter, parameter2, parameter3)
+    ) = commitRepository.getFileCommitContent(
+        owner = parameter,
+        repoName = parameter2,
+        sha = parameter3
+    )
 }

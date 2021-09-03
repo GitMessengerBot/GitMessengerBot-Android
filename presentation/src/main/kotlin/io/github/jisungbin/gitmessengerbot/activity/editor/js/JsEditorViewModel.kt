@@ -14,11 +14,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GetCommitContentUseCase
+import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GetCommitHistoryUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubCreateRepoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileContentUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubUpdateFileUseCase
 import io.github.jisungbin.gitmessengerbot.util.RequestResult
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -28,12 +29,15 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import org.json.JSONObject
 import org.jsoup.Jsoup
+import javax.inject.Inject
 
 @HiltViewModel
 class JsEditorViewModel @Inject constructor(
     private val githubGetFileContentUseCase: GithubGetFileContentUseCase,
     private val githubUpdateFileUseCase: GithubUpdateFileUseCase,
     private val githubCreateRepoUseCase: GithubCreateRepoUseCase,
+    private val getCommitHistoryUseCase: GetCommitHistoryUseCase,
+    private val getCommitContentUseCase: GetCommitContentUseCase,
 ) : ViewModel() {
 
     private sealed class BeautifyType {
@@ -118,6 +122,16 @@ class JsEditorViewModel @Inject constructor(
 
             awaitClose { close() }
         }
+
+    suspend fun getCommitHistory(ownerName: String, repoName: String) =
+        getCommitHistoryUseCase(ownerName, repoName)
+
+    suspend fun getCommitContent(ownerName: String, repoName: String, sha: String) =
+        getCommitContentUseCase(
+            ownerName,
+            repoName,
+            sha
+        )
 
     suspend fun codeMinify(code: String): String = coroutineScope {
         async(Dispatchers.IO) { codeBeautify(BeautifyType.Minify, code) }

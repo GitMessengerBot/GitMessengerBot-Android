@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity
+package io.github.jisungbin.gitmessengerbot.activity.exception
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

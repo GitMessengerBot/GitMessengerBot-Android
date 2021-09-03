@@ -21,5 +21,5 @@ class GetCommitHistoryUseCase(
     override suspend fun invoke(
         parameter: String,
         parameter2: String,
-    ) = commitRepository.getFileCommitHistory(parameter, parameter2)
+    ) = commitRepository.getFileCommitHistory(owner = parameter, repoName = parameter2)
 }
