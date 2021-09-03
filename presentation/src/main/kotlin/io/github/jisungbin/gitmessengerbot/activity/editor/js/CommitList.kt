@@ -29,11 +29,11 @@ data class CommitHistoryItem(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CommitList(items: List<CommitHistoryItem>) {
+fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
     val context = LocalContext.current
 
     TimeLine(
-        modifier = Modifier,
+        modifier = modifier,
         items = items,
         timeLineOption = TimeLineOption(
             circleColor = colors.primary,

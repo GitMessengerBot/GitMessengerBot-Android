@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.activity.editor.js
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -21,6 +22,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,9 +35,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +56,10 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -77,6 +86,12 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+
+private sealed class CommitHistoryLoadState {
+    object None : CommitHistoryLoadState()
+    object Loading : CommitHistoryLoadState()
+    class Done(val content: @Composable () -> Unit) : CommitHistoryLoadState()
+}
 
 @Composable
 fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
@@ -127,6 +142,9 @@ private fun DrawerLayout(
     val vm: JsEditorViewModel = viewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    var commitHistoryLoadState by remember {
+        mutableStateOf<CommitHistoryLoadState>(CommitHistoryLoadState.None)
+    }
 
     val repoName = script.name
     val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
@@ -251,7 +269,7 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    // TODO: Loading start
+                    commitHistoryLoadState = CommitHistoryLoadState.Loading
                     // TODO: flow를 이렇때 쓰는게 맞나??
                     val commitHistoryFlow = flow {
                         vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
@@ -300,15 +318,37 @@ private fun DrawerLayout(
                             }
                     }
                     commitHistoryFlow.collect { _commitHistory ->
-                        // TODO: Loading end
                         _commitHistory?.let { commitHistory ->
-                            // TODO
+                            commitHistoryLoadState = CommitHistoryLoadState.Done {
+                                CommitList(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .requiredHeightIn(max = 500.dp),
+                                    items = commitHistory
+                                )
+                            }
                         }
                     }
                 }
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
+        }
+        Crossfade(targetState = commitHistoryLoadState) { state ->
+            when (state) {
+                is CommitHistoryLoadState.None -> Unit
+                is CommitHistoryLoadState.Loading -> {
+                    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+                    LottieAnimation(
+                        iterations = LottieConstants.IterateForever,
+                        composition = composition,
+                        modifier = Modifier.size(200.dp)
+                    )
+                }
+                is CommitHistoryLoadState.Done -> {
+                    state.content()
+                }
+            }
         }
         if (script.lang == ScriptLang.JavaScript) {
             Row(
