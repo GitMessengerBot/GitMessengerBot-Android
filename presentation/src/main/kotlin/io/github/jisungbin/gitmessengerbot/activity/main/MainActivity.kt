@@ -71,6 +71,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        listOf(1)[2]
+
         AppConfig.app.observe(this) { app ->
             val botCoreService = Intent(this, BackgroundService::class.java)
             if (app.power) {

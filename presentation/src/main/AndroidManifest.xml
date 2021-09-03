@@ -75,6 +75,7 @@
         <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
         <activity android:name=".ui.imageviewer.ImageViewActivity" />
         <activity android:name=".activity.debug.DebugActivty" />
+        <activity android:name=".activity.ExceptionActivity" />
 
         <service
             android:name="io.github.sungbin.gitmessengerbot.core.service.MessageService"

@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
+import android.os.Process
 import com.mocklets.pluto.Pluto
 import com.mocklets.pluto.PlutoLog
 import com.mocklets.pluto.modules.exceptions.ANRException
@@ -19,6 +20,7 @@ import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
+import kotlin.system.exitProcess
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
@@ -39,8 +41,15 @@ class GitMessengerBot : Application() {
         Pluto.setANRListener(object : ANRListener {
             override fun onAppNotResponding(exception: ANRException) {
                 exception.printStackTrace()
+                println("AAA")
                 PlutoLog.e("ANR", exception.threadStateMap)
             }
         })
+
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            println("Catched Exception") // TODO: 데이터 저장 했다가 다음에 실행됐을 때 보여주기
+            Process.killProcess(Process.myPid())
+            exitProcess(10)
+        }
     }
 }
