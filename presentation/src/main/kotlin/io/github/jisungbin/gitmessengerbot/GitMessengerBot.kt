@@ -21,11 +21,16 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlin.system.exitProcess
+import timber.log.Timber
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
 
         NotificationUtil.createChannel(
             context = applicationContext,
@@ -46,7 +51,7 @@ class GitMessengerBot : Application() {
             }
         })
 
-        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             println("Catched Exception") // TODO: 데이터 저장 했다가 다음에 실행됐을 때 보여주기
             Process.killProcess(Process.myPid())
             exitProcess(10)

@@ -13,15 +13,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
+import okhttp3.logging.HttpLoggingInterceptor
+import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
 object GlobalModule {
     @Provides
     @Singleton
-    fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    fun provideHttpLoggingInterceptor() =
+        HttpLoggingInterceptor { message -> Timber.tag("OkHttp").d(message) }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
 }
