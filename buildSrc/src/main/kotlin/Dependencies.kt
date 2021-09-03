@@ -31,22 +31,23 @@ object Versions {
     }
 
     object Bot {
-        const val J2V8 = "6.2.1@aar"
         const val Rhino = "1.7.13"
+        const val J2V8 = "6.2.1@aar"
     }
 
     object Ui {
-        const val Material = "1.4.0"
-        const val LottieCompose = "4.1.0"
-        const val LandscapistCoil = "1.3.4"
-        const val FancyBottomBar = "1.0.1"
         const val Browser = "1.3.0"
+        const val Material = "1.4.0"
         const val TimeLineView = "1.0.2"
+        const val LottieCompose = "4.1.0"
+        const val FancyBottomBar = "1.0.1"
+        const val LandscapistCoil = "1.3.4"
         const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object Util {
         const val Pluto = "1.0.6"
+        const val Timber = "5.0.1"
         const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
         const val ViewColorGenerator = "v0.1"
@@ -77,8 +78,8 @@ object Versions {
     }
 
     object Lifecycle {
-        const val Compose = "1.0.0-alpha07"
         const val Master = "2.3.1"
+        const val Compose = "1.0.0-alpha07"
     }
 }
 
@@ -106,16 +107,16 @@ object Dependencies {
     )
 
     val debug = listOf(
-        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}",
-        "com.mocklets:pluto:${Versions.Util.Pluto}"
+        "com.mocklets:pluto:${Versions.Util.Pluto}",
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}"
     )
 
     val release = listOf("com.mocklets:pluto-no-op:${Versions.Util.Pluto}")
 
     val jackson = listOf(
         "com.fasterxml.jackson.core:jackson-core:${Versions.Jackson.Master}",
-        "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}",
-        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}"
+        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}",
+        "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}"
     )
 
     val retrofit = listOf(
@@ -125,7 +126,7 @@ object Dependencies {
 
     val retrofitutil = listOf(
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
-        "com.squareup.retrofit2:converter-jackson:${Versions.Network.Retrofit}",
+        "com.squareup.retrofit2:converter-jackson:${Versions.Network.Retrofit}"
     )
 
     val essential = listOf(
@@ -134,14 +135,15 @@ object Dependencies {
     )
 
     val ui = listOf(
-        "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
         "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
-        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
         "com.google.android.material:material:${Versions.Ui.Material}",
-        "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}",
+        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
+        "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
+        "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
     )
 
     val util = listOf(
+        "com.jakewharton.timber:timber:${Versions.Util.Timber}",
         "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}",
         "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
     )
@@ -156,8 +158,8 @@ object Dependencies {
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
         "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
-        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
+        "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Lifecycle.Compose}"
     )
 }

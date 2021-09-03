@@ -271,48 +271,58 @@ private fun DrawerLayout(
             onClick = {
                 coroutineScope.launch {
                     // TODO: Loading start
-                    val commitHistory = mutableListOf<CommitHistoryItem>()
-                    vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
-                        .collect { commitListResult ->
-                            commitListResult.doWhen(
-                                onSuccess = { commitLists ->
-                                    commitLists.commitList.forEach { commitList ->
-                                        val sha = commitList.sha
-                                        val commitContents = flow {
-                                            vm.getCommitContent(
-                                                ownerName = gitUser.userName,
-                                                repoName = repoName,
-                                                sha = sha
-                                            ).collect { commitContentResult ->
-                                                commitContentResult.doWhen(
-                                                    onSuccess = { commitContents ->
-                                                        emit(commitContents.files)
-                                                    },
-                                                    onFail = { exception ->
-                                                        showExceptionDialog(exception)
-                                                        emit(null)
-                                                    }
-                                                )
+                    // TODO: flow를 이렇때 쓰는게 맞나??
+                    val commitHistoryFlow = flow {
+                        vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+                            .collect { commitListResult ->
+                                commitListResult.doWhen(
+                                    onSuccess = { commitLists ->
+                                        val commitHistory = mutableListOf<CommitHistoryItem>()
+                                        commitLists.commitList.forEach { commitList ->
+                                            val sha = commitList.sha
+                                            val commitContents = flow {
+                                                vm.getCommitContent(
+                                                    ownerName = gitUser.userName,
+                                                    repoName = repoName,
+                                                    sha = sha
+                                                ).collect { commitContentResult ->
+                                                    commitContentResult.doWhen(
+                                                        onSuccess = { commitContents ->
+                                                            emit(commitContents.files)
+                                                        },
+                                                        onFail = { exception ->
+                                                            showExceptionDialog(exception)
+                                                            emit(null)
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                            commitContents.collect { _commitContentItems ->
+                                                _commitContentItems?.let { commitContentItems ->
+                                                    val commitHistoryItem = CommitHistoryItem(
+                                                        key = sha,
+                                                        list = commitList,
+                                                        content = commitContentItems
+                                                    )
+                                                    commitHistory.add(commitHistoryItem)
+                                                }
                                             }
                                         }
-                                        commitContents.collect { _commitContentItems ->
-                                            _commitContentItems?.let { commitContentItems ->
-                                                val commitHistoryItem = CommitHistoryItem(
-                                                    key = sha,
-                                                    list = commitList,
-                                                    content = commitContentItems
-                                                )
-                                                commitHistory.add(commitHistoryItem)
-                                            }
-                                        }
+                                        emit(commitHistory.toList())
+                                    },
+                                    onFail = { exception ->
+                                        showExceptionDialog(exception)
+                                        emit(null)
                                     }
-                                },
-                                onFail = { exception ->
-                                    showExceptionDialog(exception)
-                                }
-                            )
+                                )
+                            }
+                    }
+                    commitHistoryFlow.collect { _commitHistory ->
+                        // TODO: Loading end
+                        _commitHistory?.let { commitHistory ->
+                            // TODO
                         }
-                    // TODO: Loading end
+                    }
                 }
             }
         ) {
