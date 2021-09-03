@@ -8,7 +8,7 @@ import me.sungbin.timelineview.TimeLineItem
 data class CommitHistoryItem(
     override val key: String,
     val list: CommitListItem,
-    val content: CommitContentItem,
+    val content: List<CommitContentItem>,
 ) : TimeLineItem<String>
 
 @Composable

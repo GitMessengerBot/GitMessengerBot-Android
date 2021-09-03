@@ -75,6 +75,7 @@ import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -269,35 +270,40 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 coroutineScope.launch {
-                    // TODO: Loading
+                    // TODO: Loading start
+                    val commitHistory = mutableListOf<CommitHistoryItem>()
                     vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
                         .collect { commitListResult ->
                             commitListResult.doWhen(
                                 onSuccess = { commitLists ->
-                                    val commitHistory = mutableListOf<CommitHistoryItem>()
                                     commitLists.commitList.forEach { commitList ->
                                         val sha = commitList.sha
-                                        vm.getCommitContent(
-                                            ownerName = gitUser.userName,
-                                            repoName = repoName,
-                                            sha = sha
-                                        ).collect { commitContentResult ->
-                                            commitContentResult.doWhen(
-                                                onSuccess = { commitContents ->
-                                                    commitContents.files.forEach { commitContent ->
-                                                        commitHistory.add(
-                                                            CommitHistoryItem(
-                                                                key = sha,
-                                                                list = commitList,
-                                                                content = commitContent
-                                                            )
-                                                        )
+                                        val commitContents = flow {
+                                            vm.getCommitContent(
+                                                ownerName = gitUser.userName,
+                                                repoName = repoName,
+                                                sha = sha
+                                            ).collect { commitContentResult ->
+                                                commitContentResult.doWhen(
+                                                    onSuccess = { commitContents ->
+                                                        emit(commitContents.files)
+                                                    },
+                                                    onFail = { exception ->
+                                                        showExceptionDialog(exception)
+                                                        emit(null)
                                                     }
-                                                },
-                                                onFail = { exception ->
-                                                    showExceptionDialog(exception)
-                                                }
-                                            )
+                                                )
+                                            }
+                                        }
+                                        commitContents.collect { _commitContentItems ->
+                                            _commitContentItems?.let { commitContentItems ->
+                                                val commitHistoryItem = CommitHistoryItem(
+                                                    key = sha,
+                                                    list = commitList,
+                                                    content = commitContentItems
+                                                )
+                                                commitHistory.add(commitHistoryItem)
+                                            }
                                         }
                                     }
                                 },
@@ -306,6 +312,7 @@ private fun DrawerLayout(
                                 }
                             )
                         }
+                    // TODO: Loading end
                 }
             }
         ) {

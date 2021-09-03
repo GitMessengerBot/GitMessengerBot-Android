@@ -37,12 +37,12 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 
-val exceptionDialogOption =
+val LocalExceptionDialogOption =
     ExceptionDialogOption(visible = true, exception = PresentationException(""))
 
 fun showExceptionDialog(exception: Exception) {
-    exceptionDialogOption.visible = true
-    exceptionDialogOption.exception = exception
+    LocalExceptionDialogOption.visible = true
+    LocalExceptionDialogOption.exception = exception
 }
 
 @Immutable
