@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Content()
-                ExceptionDialog(option = LocalExceptionDialogOption)
+                // ExceptionDialog(option = LocalExceptionDialogOption)
             }
         }
     }

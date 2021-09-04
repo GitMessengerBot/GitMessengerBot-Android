@@ -81,6 +81,11 @@ object Versions {
         const val Master = "2.3.1"
         const val Compose = "1.0.0-alpha07"
     }
+
+    object OssLicense {
+        const val Master = "17.0.0"
+        const val Classpath = "0.10.4"
+    }
 }
 
 object Dependencies {
@@ -139,6 +144,7 @@ object Dependencies {
         "com.google.android.material:material:${Versions.Ui.Material}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
+        "com.google.android.gms:play-services-oss-licenses:${Versions.OssLicense.Master}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
     )
 
