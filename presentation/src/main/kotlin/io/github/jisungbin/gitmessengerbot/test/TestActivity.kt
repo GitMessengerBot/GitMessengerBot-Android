@@ -16,10 +16,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -37,32 +39,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryItem
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorViewModel
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
-import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
-import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
-import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class TestActivity : ComponentActivity() {
 
-    private val repoName = "test"
-    private val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
-        ?: throw PresentationException("GithubConfig.DataPath data value is null.")
-    private val repoPath = "script.ts"
-    private val repoDescription = GithubConfig.DefaultRepoDescription
-    private val repoBranch = AppConfig.appValue.gitDefaultBranch
-    private val repo = GithubRepo(name = repoName, description = repoDescription)
+    private val ownerName = "gitmessengerbot"
+    private val repoName = "gitmessengerbot-android"
 
-    private val logs = mutableStateListOf("TestActivity")
+    private val logs = mutableStateListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,13 +64,12 @@ class TestActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.spacedBy(30.dp),
                 contentPadding = PaddingValues(16.dp)
             ) {
-                items(logs) { log ->
+                itemsIndexed(logs) { index, log ->
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Divider(modifier = Modifier.fillMaxWidth(), thickness = 5.dp)
                         Text(
                             text = with(AnnotatedString.Builder(log)) {
                                 addStyle(
@@ -92,7 +82,14 @@ class TestActivity : ComponentActivity() {
                             color = Color.Black,
                             fontSize = 15.sp
                         )
-                        Divider(modifier = Modifier.fillMaxWidth(), thickness = 5.dp)
+                        if (index < logs.size - 1) {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(30.dp)
+                            )
+                            Divider(modifier = Modifier.fillMaxWidth(), thickness = 5.dp)
+                        }
                     }
                 }
             }
@@ -101,6 +98,7 @@ class TestActivity : ComponentActivity() {
     }
 
     private fun log(message: Any) {
+        Timber.i(message.toString())
         logs.add(message.toString())
     }
 
@@ -108,30 +106,29 @@ class TestActivity : ComponentActivity() {
     @Composable
     private fun Test() {
         val vm: JsEditorViewModel = viewModel()
-        val coroutineScope = rememberCoroutineScope()
 
-        coroutineScope.launch {
-            vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+        rememberCoroutineScope().launch {
+            vm.getCommitHistory(ownerName = ownerName, repoName = repoName)
                 .collect { commitListResult ->
                     commitListResult.doWhen(
                         onSuccess = { _commitLists ->
                             val commitLists = _commitLists.commitList
                             log("commitListResult success: $commitLists")
                             val commitHistory = mutableListOf<CommitHistoryItem>()
-                            commitLists.map { commitList ->
-                                log("commitList launched: $commitList")
+                            commitLists.mapIndexed { commitListIndex, commitList ->
+                                log("commitList launched($commitListIndex): $commitList")
                                 async(Dispatchers.IO) {
                                     vm.getCommitContent(
-                                        ownerName = gitUser.userName,
+                                        ownerName = ownerName,
                                         repoName = repoName,
                                         sha = commitList.sha
                                     ).collect { commitContentResult ->
                                         commitContentResult.doWhen(
                                             onSuccess = { _commitContents ->
                                                 val commitContents = _commitContents.files
-                                                log("commitContents result: $commitContents")
-                                                commitContents.map { commitContentItem ->
-                                                    log("commitContentItem launched: $commitContentItem")
+                                                log("commitContents result($commitListIndex): $commitContents")
+                                                commitContents.mapIndexed { commitContentIndex, commitContentItem ->
+                                                    log("commitContentItem launched($commitListIndex-$commitContentIndex): $commitContentItem")
                                                     async(Dispatchers.IO) {
                                                         commitHistory.add(
                                                             CommitHistoryItem(
@@ -141,6 +138,7 @@ class TestActivity : ComponentActivity() {
                                                         )
                                                     }
                                                 }.awaitAll()
+                                                log("ALL TASK ENDED")
                                             },
                                             onFail = { exception ->
                                                 log("ERROR: $exception")
@@ -149,7 +147,7 @@ class TestActivity : ComponentActivity() {
                                     }
                                 }
                             }.awaitAll()
-                            log("ALL TASK ENDED: $commitHistory")
+                            log("ALL TASK ENDED2: $commitHistory")
                         },
                         onFail = { exception ->
                             log("ERROR2: $exception")

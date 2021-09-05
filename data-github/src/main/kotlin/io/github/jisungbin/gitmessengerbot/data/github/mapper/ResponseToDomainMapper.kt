@@ -48,7 +48,7 @@ private fun commitListItemToDomain(item: CommitListItem) =
 
 private fun commitContentItemToDomain(item: CommitContentItem) =
     io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContentItem(
-        patch = item.patch ?: throw exception("patch"),
+        patch = item.patch.toString(), // nullable
         filename = item.filename ?: throw exception("filename"),
         additions = item.additions ?: throw exception("additions"),
         deletions = item.deletions ?: throw exception("deletions"),
