@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.BuildConfig
+import io.github.jisungbin.gitmessengerbot.BuildOption
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
@@ -44,6 +45,7 @@ import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.test.TestActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -69,14 +71,18 @@ class SplashActivity : ComponentActivity() {
 
         toast("Built at: $builtTime", Toast.LENGTH_LONG)
 
-        doDelay(2000) {
-            finish()
-            startActivity(
-                Intent(
-                    this,
-                    if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+        if (BuildOption.TestMode) {
+            startActivity(Intent(this, TestActivity::class.java))
+        } else {
+            doDelay(2000) {
+                finish()
+                startActivity(
+                    Intent(
+                        this,
+                        if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                    )
                 )
-            )
+            }
         }
     }
 

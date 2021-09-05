@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -267,61 +266,7 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                coroutineScope.launch {
-                    commitHistoryLoadState = CommitHistoryLoadState.Loading
-                    vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
-                        .collect { commitListResult ->
-                            commitListResult.doWhen(
-                                onSuccess = { commitLists ->
-                                    println("commitListResult success: ")
-                                    println(commitLists.commitList)
-                                    val commitHistory = mutableListOf<CommitHistoryItem>()
-                                    commitLists.commitList.forEach { commitList ->
-                                        println("forEach: $commitList")
-                                        vm.getCommitContent(
-                                            ownerName = gitUser.userName,
-                                            repoName = repoName,
-                                            sha = commitList.sha
-                                        ).collect { commitContentResult ->
-                                            commitContentResult.doWhen(
-                                                onSuccess = { commitContents ->
-                                                    println("commitContents result: $commitContents")
-                                                    commitContents.files.forEach { commitContentItem ->
-                                                        println("innerForEach: $commitContentItem")
-                                                        commitHistory.add(
-                                                            CommitHistoryItem(
-                                                                key = commitList,
-                                                                items = commitContentItem
-                                                            )
-                                                        )
-                                                    }
-                                                    println("TASK ENDED")
-                                                    commitHistoryLoadState = CommitHistoryLoadState.Done {
-                                                        CommitList(
-                                                            modifier = Modifier
-                                                                .fillMaxWidth()
-                                                                .requiredHeightIn(max = 500.dp),
-                                                            items = commitHistory
-                                                        )
-                                                    }
-                                                },
-                                                onFail = { exception ->
-                                                    println("ERROR")
-                                                    println(exception)
-                                                    showExceptionDialog(exception)
-                                                }
-                                            )
-                                        }
-                                    }
-                                },
-                                onFail = { exception ->
-                                    println(exception)
-                                    println("ERROR")
-                                    showExceptionDialog(exception)
-                                }
-                            )
-                        }
-                }
+                // TODO
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
