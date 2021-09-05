@@ -12,9 +12,6 @@ package io.github.jisungbin.gitmessengerbot.data.github.model.commit
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CommitContentResponse(
-    @field:JsonProperty("html_url")
-    val htmlUrl: String? = null,
-
     @field:JsonProperty("files")
     val files: List<CommitContentItem?>? = null,
 )

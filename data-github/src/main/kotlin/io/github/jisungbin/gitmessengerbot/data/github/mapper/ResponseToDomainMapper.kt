@@ -41,22 +41,20 @@ private fun Commit.toDomain() =
 
 private fun commitListItemToDomain(item: CommitListItem) =
     io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitListItem(
-        htmlUrl = item.htmlUrl ?: throw exception("htmlUrl"),
         commit = item.commit?.toDomain() ?: throw exception("commit"),
-        sha = item.sha ?: throw exception("sha")
-
+        sha = item.sha ?: throw exception("sha"),
+        htmlUrl = item.htmlUrl ?: throw exception("htmlUrl")
     )
 
-private fun CommitContentItem.commitContentItemToDomain(htmlUrl: String?) =
+private fun commitContentItemToDomain(item: CommitContentItem) =
     io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContentItem(
-        patch = patch ?: throw exception("patch"),
-        filename = filename ?: throw exception("filename"),
-        additions = additions ?: throw exception("additions"),
-        deletions = deletions ?: throw exception("deletions"),
-        changes = changes ?: throw exception("changes"),
-        rawUrl = rawUrl ?: throw exception("rawUrl"),
-        status = status ?: throw exception("status"),
-        htmlUrl = htmlUrl ?: throw exception("htmlUrl"),
+        patch = item.patch ?: throw exception("patch"),
+        filename = item.filename ?: throw exception("filename"),
+        additions = item.additions ?: throw exception("additions"),
+        deletions = item.deletions ?: throw exception("deletions"),
+        changes = item.changes ?: throw exception("changes"),
+        rawUrl = item.rawUrl ?: throw exception("rawUrl"),
+        status = item.status ?: throw exception("status"),
     )
 
 fun AouthResponse.toDomain() = GithubAouth(token = accessToken ?: throw exception("token"))
@@ -76,6 +74,5 @@ fun List<CommitListItem?>.toDomain() = CommitLists(
 )
 
 fun CommitContentResponse.toDomain() = CommitContents(
-    files = files?.filterNotNull()?.map { it.commitContentItemToDomain(htmlUrl) }
-        ?: throw exception("files")
+    files = files?.filterNotNull()?.map(::commitContentItemToDomain) ?: throw exception("files")
 )

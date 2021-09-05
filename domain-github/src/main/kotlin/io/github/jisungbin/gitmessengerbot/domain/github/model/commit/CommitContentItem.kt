@@ -17,5 +17,4 @@ data class CommitContentItem(
     val changes: Int,
     val rawUrl: String,
     val status: String,
-    val htmlUrl: String,
 )

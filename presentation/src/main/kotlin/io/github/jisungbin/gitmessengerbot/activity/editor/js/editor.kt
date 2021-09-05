@@ -285,6 +285,7 @@ private fun DrawerLayout(
                                         ).collect { commitContentResult ->
                                             commitContentResult.doWhen(
                                                 onSuccess = { commitContents ->
+                                                    println("commitContents result: $commitContents")
                                                     commitContents.files.forEach { commitContentItem ->
                                                         println("innerForEach: $commitContentItem")
                                                         commitHistory.add(
@@ -294,26 +295,28 @@ private fun DrawerLayout(
                                                             )
                                                         )
                                                     }
+                                                    println("TASK ENDED")
+                                                    commitHistoryLoadState = CommitHistoryLoadState.Done {
+                                                        CommitList(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .requiredHeightIn(max = 500.dp),
+                                                            items = commitHistory
+                                                        )
+                                                    }
                                                 },
                                                 onFail = { exception ->
+                                                    println("ERROR")
                                                     println(exception)
                                                     showExceptionDialog(exception)
                                                 }
                                             )
                                         }
                                     }
-                                    println("commitHistory: $commitHistory")
-                                    commitHistoryLoadState = CommitHistoryLoadState.Done {
-                                        CommitList(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .requiredHeightIn(max = 500.dp),
-                                            items = commitHistory
-                                        )
-                                    }
                                 },
                                 onFail = { exception ->
                                     println(exception)
+                                    println("ERROR")
                                     showExceptionDialog(exception)
                                 }
                             )
@@ -339,6 +342,7 @@ private fun DrawerLayout(
                     )
                 }
                 is CommitHistoryLoadState.Done -> {
+                    println("DONE")
                     state.content()
                 }
             }
