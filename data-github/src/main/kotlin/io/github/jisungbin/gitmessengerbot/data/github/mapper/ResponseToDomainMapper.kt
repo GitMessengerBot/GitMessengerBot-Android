@@ -12,9 +12,7 @@ package io.github.jisungbin.gitmessengerbot.data.github.mapper
 import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Commit
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentItem
-import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListItem
-import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Committer
 import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.user.AouthResponse
@@ -71,11 +69,12 @@ fun FileContentResponse.toDomain() = GithubFileContent(
     sha = sha ?: throw exception("sha")
 )
 
-fun CommitListResponse.toDomain() = CommitLists(
-    commitList = commitList?.filterNotNull()?.map(::commitListItemToDomain)
-        ?: throw exception("commitList")
+@JvmName("CommitListItemToDomain")
+fun List<CommitListItem?>.toDomain() = CommitLists(
+    commitList = filterNotNull().map(::commitListItemToDomain)
 )
 
-fun CommitContentResponse.toDomain() = CommitContents(
-    files = files?.filterNotNull()?.map(::commitContentItemToDomain) ?: throw exception("files")
+@JvmName("CommitContentItemToDomain")
+fun List<CommitContentItem?>.toDomain() = CommitContents(
+    files = filterNotNull().map(::commitContentItemToDomain)
 )

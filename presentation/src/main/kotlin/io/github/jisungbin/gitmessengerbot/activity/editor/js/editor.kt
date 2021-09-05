@@ -84,9 +84,7 @@ import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private sealed class CommitHistoryLoadState {
     object None : CommitHistoryLoadState()
@@ -271,80 +269,55 @@ private fun DrawerLayout(
             onClick = {
                 coroutineScope.launch {
                     commitHistoryLoadState = CommitHistoryLoadState.Loading
-                    // TODO: flow를 이렇때 쓰는게 맞나??
-                    Timber.i("Starting load commits...")
-                    println("Starting load commits...")
-                    val commitHistoryFlow = flow {
-                        println("starting")
-                        vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
-                            .collect { commitListResult ->
-                                commitListResult.doWhen(
-                                    onSuccess = { commitLists ->
-                                        println("111")
-                                        println(commitLists)
-                                        val commitHistory = mutableListOf<CommitHistoryItem>()
-                                        commitLists.commitList.forEach { commitList ->
-                                            val commitContents = flow {
-                                                vm.getCommitContent(
-                                                    ownerName = gitUser.userName,
-                                                    repoName = repoName,
-                                                    sha = commitList.sha
-                                                ).collect { commitContentResult ->
-                                                    commitContentResult.doWhen(
-                                                        onSuccess = { commitContents ->
-                                                            emit(commitContents.files)
-                                                        },
-                                                        onFail = { exception ->
-                                                            println(exception)
-                                                            showExceptionDialog(exception)
-                                                            emit(null)
-                                                        }
-                                                    )
-                                                }
-                                            }
-                                            commitContents.collect { commitContentItems ->
-                                                commitContentItems?.forEach { commitContentItem ->
-                                                    commitHistory.add(
-                                                        CommitHistoryItem(
-                                                            key = commitList,
-                                                            items = commitContentItem
+                    vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+                        .collect { commitListResult ->
+                            commitListResult.doWhen(
+                                onSuccess = { commitLists ->
+                                    println("commitListResult success: ")
+                                    println(commitLists.commitList)
+                                    val commitHistory = mutableListOf<CommitHistoryItem>()
+                                    commitLists.commitList.forEach { commitList ->
+                                        println("forEach: $commitList")
+                                        vm.getCommitContent(
+                                            ownerName = gitUser.userName,
+                                            repoName = repoName,
+                                            sha = commitList.sha
+                                        ).collect { commitContentResult ->
+                                            commitContentResult.doWhen(
+                                                onSuccess = { commitContents ->
+                                                    commitContents.files.forEach { commitContentItem ->
+                                                        println("innerForEach: $commitContentItem")
+                                                        commitHistory.add(
+                                                            CommitHistoryItem(
+                                                                key = commitList,
+                                                                items = commitContentItem
+                                                            )
                                                         )
-                                                    )
-                                                    Timber.i(
-                                                        "Added: ${
-                                                        commitContentItem.filename
-                                                        }"
-                                                    )
-                                                    println(
-                                                        "Added: ${
-                                                        commitContentItem.filename
-                                                        }"
-                                                    )
+                                                    }
+                                                },
+                                                onFail = { exception ->
+                                                    println(exception)
+                                                    showExceptionDialog(exception)
                                                 }
-                                            }
+                                            )
                                         }
-                                        emit(commitHistory.toList())
-                                    },
-                                    onFail = { exception ->
-                                        println(exception)
-                                        showExceptionDialog(exception)
-                                        emit(null)
                                     }
-                                )
-                            }
-                    }
-                    commitHistoryFlow.collect { _commitHistory ->
-                        _commitHistory?.let { commitHistory ->
-                            commitHistoryLoadState = CommitHistoryLoadState.Done {
-                                CommitList(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .requiredHeightIn(max = 500.dp),
-                                    items = commitHistory
-                                )
-                            }
+                                    println("commitHistory: $commitHistory")
+                                    commitHistoryLoadState = CommitHistoryLoadState.Done {
+                                        CommitList(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .requiredHeightIn(max = 500.dp),
+                                            items = commitHistory
+                                        )
+                                    }
+                                },
+                                onFail = { exception ->
+                                    println(exception)
+                                    showExceptionDialog(exception)
+                                }
+                            )
                         }
-                    }
                 }
             }
         ) {
@@ -366,8 +339,6 @@ private fun DrawerLayout(
                     )
                 }
                 is CommitHistoryLoadState.Done -> {
-                    Timber.i("AAA")
-                    println("222")
                     state.content()
                 }
             }
