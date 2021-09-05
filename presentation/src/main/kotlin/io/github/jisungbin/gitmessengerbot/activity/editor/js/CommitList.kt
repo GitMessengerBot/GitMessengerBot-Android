@@ -1,3 +1,12 @@
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [CommitList.kt] created by Ji Sungbin on 21. 9. 5. 오후 11:41
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
 package io.github.jisungbin.gitmessengerbot.activity.editor.js
 
 import androidx.compose.foundation.clickable
