@@ -15,6 +15,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,7 +45,9 @@ import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -51,10 +57,10 @@ class TestActivity : ComponentActivity() {
     private val repoName = "test"
     private val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
         ?: throw PresentationException("GithubConfig.DataPath data value is null.")
-    val repoPath = "script.ts"
-    private val repoDescription = GithubConfig.DefaultRepoDescription // TODO
-    val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
-    val repo = GithubRepo(name = repoName, description = repoDescription)
+    private val repoPath = "script.ts"
+    private val repoDescription = GithubConfig.DefaultRepoDescription
+    private val repoBranch = AppConfig.appValue.gitDefaultBranch
+    private val repo = GithubRepo(name = repoName, description = repoDescription)
 
     private val logs = mutableStateListOf("TestActivity")
 
@@ -64,7 +70,8 @@ class TestActivity : ComponentActivity() {
         setContent {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(30.dp)
+                verticalArrangement = Arrangement.spacedBy(30.dp),
+                contentPadding = PaddingValues(16.dp)
             ) {
                 items(logs) { log ->
                     Column(
@@ -72,9 +79,20 @@ class TestActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Divider(modifier = Modifier.fillMaxWidth())
-                        Text(text = log, color = Color.Black, fontSize = 15.sp)
-                        Divider(modifier = Modifier.fillMaxWidth())
+                        Divider(modifier = Modifier.fillMaxWidth(), thickness = 5.dp)
+                        Text(
+                            text = with(AnnotatedString.Builder(log)) {
+                                addStyle(
+                                    SpanStyle(fontWeight = FontWeight.Bold),
+                                    0,
+                                    log.indexOf(":") + 1
+                                )
+                                toAnnotatedString()
+                            },
+                            color = Color.Black,
+                            fontSize = 15.sp
+                        )
+                        Divider(modifier = Modifier.fillMaxWidth(), thickness = 5.dp)
                     }
                 }
             }
@@ -87,9 +105,8 @@ class TestActivity : ComponentActivity() {
     }
 
     @SuppressLint("CoroutineCreationDuringComposition")
-    @OptIn(InternalCoroutinesApi::class)
     @Composable
-    fun Test() {
+    private fun Test() {
         val vm: JsEditorViewModel = viewModel()
         val coroutineScope = rememberCoroutineScope()
 
@@ -97,41 +114,45 @@ class TestActivity : ComponentActivity() {
             vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
                 .collect { commitListResult ->
                     commitListResult.doWhen(
-                        onSuccess = { commitLists ->
-                            log("commitListResult success: ${commitLists.commitList}")
+                        onSuccess = { _commitLists ->
+                            val commitLists = _commitLists.commitList
+                            log("commitListResult success: $commitLists")
                             val commitHistory = mutableListOf<CommitHistoryItem>()
-                            commitLists.commitList.forEach { commitList ->
-                                log("forEach: $commitList")
-                                vm.getCommitContent(
-                                    ownerName = gitUser.userName,
-                                    repoName = repoName,
-                                    sha = commitList.sha
-                                ).collect { commitContentResult ->
-                                    commitContentResult.doWhen(
-                                        onSuccess = { commitContents ->
-                                            log("commitContents result: $commitContents")
-                                            commitContents.files.forEach { commitContentItem ->
-                                                log("innerForEach: $commitContentItem")
-                                                commitHistory.add(
-                                                    CommitHistoryItem(
-                                                        key = commitList,
-                                                        items = commitContentItem
-                                                    )
-                                                )
+                            commitLists.map { commitList ->
+                                log("commitList launched: $commitList")
+                                async(Dispatchers.IO) {
+                                    vm.getCommitContent(
+                                        ownerName = gitUser.userName,
+                                        repoName = repoName,
+                                        sha = commitList.sha
+                                    ).collect { commitContentResult ->
+                                        commitContentResult.doWhen(
+                                            onSuccess = { _commitContents ->
+                                                val commitContents = _commitContents.files
+                                                log("commitContents result: $commitContents")
+                                                commitContents.map { commitContentItem ->
+                                                    log("commitContentItem launched: $commitContentItem")
+                                                    async(Dispatchers.IO) {
+                                                        commitHistory.add(
+                                                            CommitHistoryItem(
+                                                                key = commitList,
+                                                                items = commitContentItem
+                                                            )
+                                                        )
+                                                    }
+                                                }.awaitAll()
+                                            },
+                                            onFail = { exception ->
+                                                log("ERROR: $exception")
                                             }
-                                            log("TASK ENDED")
-                                        },
-                                        onFail = { exception ->
-                                            log("ERROR")
-                                            log(exception)
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
-                            }
+                            }.awaitAll()
+                            log("ALL TASK ENDED: $commitHistory")
                         },
                         onFail = { exception ->
-                            log(exception)
-                            log("ERROR")
+                            log("ERROR2: $exception")
                         }
                     )
                 }
