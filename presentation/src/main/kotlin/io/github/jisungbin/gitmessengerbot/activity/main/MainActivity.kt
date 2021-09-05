@@ -54,7 +54,7 @@ import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
-import io.github.jisungbin.gitmessengerbot.ui.exception.LocalExceptionDialogOption
+import io.github.jisungbin.gitmessengerbot.ui.exception.showExceptionDialog
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.doWhen
@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Content()
-                // ExceptionDialog(option = LocalExceptionDialogOption)
+                ExceptionDialog()
             }
         }
     }

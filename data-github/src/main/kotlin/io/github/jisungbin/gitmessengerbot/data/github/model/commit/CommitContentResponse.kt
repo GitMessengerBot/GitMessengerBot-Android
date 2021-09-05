@@ -9,9 +9,9 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model.commit
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonFormat
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 data class CommitContentResponse(
-    @field:JsonProperty("files")
     val files: List<CommitContentItem?>? = null,
 )

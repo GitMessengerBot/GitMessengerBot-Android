@@ -9,8 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.model.commit
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonFormat(with = [JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY])
 data class CommitListItem(
     @field:JsonProperty("html_url")
     val htmlUrl: String? = null,

@@ -38,7 +38,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
     private val mapper by lazy {
-        ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
             .registerKotlinModule()
     }
 
