@@ -12,6 +12,7 @@ package io.github.jisungbin.gitmessengerbot.data.github.mapper
 import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Commit
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentItem
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListItem
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.Committer
 import io.github.jisungbin.gitmessengerbot.data.github.model.repo.FileContentResponse
@@ -46,15 +47,16 @@ private fun commitListItemToDomain(item: CommitListItem) =
 
     )
 
-private fun commitContentItemToDomain(item: CommitContentItem) =
+private fun CommitContentItem.commitContentItemToDomain(htmlUrl: String?) =
     io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContentItem(
-        patch = item.patch ?: throw exception("patch"),
-        filename = item.filename ?: throw exception("filename"),
-        additions = item.additions ?: throw exception("additions"),
-        deletions = item.deletions ?: throw exception("deletions"),
-        changes = item.changes ?: throw exception("changes"),
-        rawUrl = item.rawUrl ?: throw exception("rawUrl"),
-        status = item.status ?: throw exception("status")
+        patch = patch ?: throw exception("patch"),
+        filename = filename ?: throw exception("filename"),
+        additions = additions ?: throw exception("additions"),
+        deletions = deletions ?: throw exception("deletions"),
+        changes = changes ?: throw exception("changes"),
+        rawUrl = rawUrl ?: throw exception("rawUrl"),
+        status = status ?: throw exception("status"),
+        htmlUrl = htmlUrl ?: throw exception("htmlUrl"),
     )
 
 fun AouthResponse.toDomain() = GithubAouth(token = accessToken ?: throw exception("token"))
@@ -69,12 +71,11 @@ fun FileContentResponse.toDomain() = GithubFileContent(
     sha = sha ?: throw exception("sha")
 )
 
-@JvmName("CommitListItemToDomain")
 fun List<CommitListItem?>.toDomain() = CommitLists(
     commitList = filterNotNull().map(::commitListItemToDomain)
 )
 
-@JvmName("CommitContentItemToDomain")
-fun List<CommitContentItem?>.toDomain() = CommitContents(
-    files = filterNotNull().map(::commitContentItemToDomain)
+fun CommitContentResponse.toDomain() = CommitContents(
+    files = files?.filterNotNull()?.map { it.commitContentItemToDomain(htmlUrl) }
+        ?: throw exception("files")
 )

@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.api
 
-import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentItem
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentResponse
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListItem
 import retrofit2.Response
 import retrofit2.http.GET
@@ -27,5 +27,5 @@ interface GithubCommitService {
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
         @Path("ref") sha: String,
-    ): Response<List<CommitContentItem?>>
+    ): Response<CommitContentResponse>
 }
