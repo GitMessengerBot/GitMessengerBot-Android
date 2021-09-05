@@ -17,6 +17,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,84 +51,88 @@ fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
             contentHeight = 100.dp
         ),
         header = { commitListItem ->
-            Card(
-                modifier = Modifier.fillMaxSize(),
-                shape = RoundedCornerShape(5.dp),
-                backgroundColor = twiceLightGray,
-                onClick = {
-                    Web.open(context, Web.Link.Custom(commitListItem.htmlUrl))
+            key(commitListItem.sha) {
+                Card(
+                    modifier = Modifier.fillMaxSize(),
+                    shape = RoundedCornerShape(5.dp),
+                    backgroundColor = twiceLightGray,
+                    onClick = {
+                        Web.open(context, Web.Link.Custom(commitListItem.htmlUrl))
+                    }
+                ) {
+                    ConstraintLayout(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                    ) {
+                        val (message, date) = createRefs()
+
+                        Text(
+                            text = commitListItem.commit.message,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.constrainAs(message) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                            }
+                        )
+                        Text(
+                            text = commitListItem.commit.committer.date,
+                            modifier = Modifier.constrainAs(date) {
+                                bottom.linkTo(parent.bottom)
+                                end.linkTo(parent.end)
+                            }
+                        )
+                    }
                 }
-            ) {
+            }
+        },
+        content = { commitHistoryItem ->
+            key(commitHistoryItem.items.rawUrl) {
+                val commitContentItem = commitHistoryItem.items
+
                 ConstraintLayout(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(vertical = 4.dp, horizontal = 8.dp)
+                        .clickable {
+                            Web.open(context, Web.Link.Custom(commitContentItem.rawUrl))
+                        }
                 ) {
-                    val (message, date) = createRefs()
+                    val (fileName, additions, changes, deletions) = createRefs()
 
                     Text(
-                        text = commitListItem.commit.message,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.constrainAs(message) {
+                        text = commitContentItem.filename,
+                        modifier = Modifier.constrainAs(fileName) {
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                             start.linkTo(parent.start)
                         }
                     )
                     Text(
-                        text = commitListItem.commit.committer.date,
-                        modifier = Modifier.constrainAs(date) {
+                        text = "+ ${commitContentItem.additions}",
+                        modifier = Modifier.constrainAs(additions) {
+                            top.linkTo(parent.top)
+                            end.linkTo(parent.end)
+                        }
+                    )
+                    Text(
+                        text = "* ${commitContentItem.changes}",
+                        modifier = Modifier.constrainAs(changes) {
+                            top.linkTo(additions.bottom)
+                            bottom.linkTo(deletions.top)
+                            end.linkTo(parent.end)
+                        }
+                    )
+                    Text(
+                        text = "- ${commitContentItem.deletions}",
+                        modifier = Modifier.constrainAs(deletions) {
                             bottom.linkTo(parent.bottom)
                             end.linkTo(parent.end)
                         }
                     )
                 }
-            }
-        },
-        content = { commitHistoryItem ->
-            val commitContentItem = commitHistoryItem.items
-
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 4.dp, horizontal = 8.dp)
-                    .clickable {
-                        Web.open(context, Web.Link.Custom(commitContentItem.rawUrl))
-                    }
-            ) {
-                val (fileName, additions, changes, deletions) = createRefs()
-
-                Text(
-                    text = commitContentItem.filename,
-                    modifier = Modifier.constrainAs(fileName) {
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    }
-                )
-                Text(
-                    text = "+ ${commitContentItem.additions}",
-                    modifier = Modifier.constrainAs(additions) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    }
-                )
-                Text(
-                    text = "* ${commitContentItem.changes}",
-                    modifier = Modifier.constrainAs(changes) {
-                        top.linkTo(additions.bottom)
-                        bottom.linkTo(deletions.top)
-                        end.linkTo(parent.end)
-                    }
-                )
-                Text(
-                    text = "- ${commitContentItem.deletions}",
-                    modifier = Modifier.constrainAs(deletions) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    }
-                )
             }
         }
     )
