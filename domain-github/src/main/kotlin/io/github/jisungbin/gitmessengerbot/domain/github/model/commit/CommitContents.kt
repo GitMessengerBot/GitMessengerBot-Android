@@ -10,4 +10,4 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.model.commit
 
 @JvmInline
-value class CommitContents(val files: List<CommitContentItem>)
+value class CommitContents(val value: List<CommitContentItem>)

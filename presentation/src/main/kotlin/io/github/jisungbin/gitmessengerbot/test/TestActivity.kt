@@ -13,33 +13,16 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryItem
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorViewModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
+import io.github.jisungbin.gitmessengerbot.util.ISO8601Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -59,6 +42,9 @@ class TestActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            Text(ISO8601Util.convertKST("2021-09-06T07:54:36Z"))
+        }
+        /*setContent {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(30.dp),
@@ -94,7 +80,7 @@ class TestActivity : ComponentActivity() {
                 }
             }
             Test()
-        }
+        }*/
     }
 
     private fun log(message: Any) {
@@ -112,7 +98,7 @@ class TestActivity : ComponentActivity() {
                 .collect { commitListResult ->
                     commitListResult.doWhen(
                         onSuccess = { _commitLists ->
-                            val commitLists = _commitLists.commitList
+                            val commitLists = _commitLists.value
                             log("commitListResult success: $commitLists")
                             val commitHistory = mutableListOf<CommitHistoryItem>()
                             commitLists.mapIndexed { commitListIndex, commitList ->
@@ -125,7 +111,7 @@ class TestActivity : ComponentActivity() {
                                     ).collect { commitContentResult ->
                                         commitContentResult.doWhen(
                                             onSuccess = { _commitContents ->
-                                                val commitContents = _commitContents.files
+                                                val commitContents = _commitContents.value
                                                 log("commitContents result($commitListIndex): $commitContents")
                                                 commitContents.mapIndexed { commitContentIndex, commitContentItem ->
                                                     log("commitContentItem launched($commitListIndex-$commitContentIndex): $commitContentItem")

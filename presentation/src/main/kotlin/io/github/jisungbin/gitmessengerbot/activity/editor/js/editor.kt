@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -40,6 +39,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,6 +88,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+private sealed class CommitListVisible {
+    object Hide : CommitListVisible()
+    object Show : CommitListVisible()
+
+    val visible get() = this == Show
+}
 
 @Composable
 fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
@@ -147,6 +154,7 @@ private fun DrawerLayout(
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
     val repo = GithubRepo(name = repoName, description = repoDescription)
 
+    var commitListVisible by remember { mutableStateOf<CommitListVisible>(CommitListVisible.Hide) }
     val commitHistory = remember { mutableStateListOf<CommitHistoryItem>() }
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
     val githubFile = GithubFile(
@@ -262,66 +270,80 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                coroutineScope.launch {
-                    vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
-                        .collect { commitListResult ->
-                            commitListResult.doWhen(
-                                onSuccess = { commitLists ->
-                                    commitLists.commitList.map { commitList ->
-                                        async {
-                                            vm.getCommitContent(
-                                                ownerName = gitUser.userName,
-                                                repoName = repoName,
-                                                sha = commitList.sha
-                                            ).collect { commitContentResult ->
-                                                commitContentResult.doWhen(
-                                                    onSuccess = { commitContents ->
-                                                        commitContents.files.map { commitContentItem ->
-                                                            async {
-                                                                commitHistory.add(
-                                                                    CommitHistoryItem(
-                                                                        key = commitList,
-                                                                        items = commitContentItem
-                                                                    )
-                                                                )
+                if (commitListVisible.visible) {
+                    commitListVisible = CommitListVisible.Hide
+                } else {
+                    commitListVisible = CommitListVisible.Show
+                    if (commitHistory.isEmpty()) {
+                        coroutineScope.launch {
+                            vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+                                .collect { commitListResult ->
+                                    commitListResult.doWhen(
+                                        onSuccess = { commitLists ->
+                                            commitLists.value.map { commitList ->
+                                                async {
+                                                    vm.getCommitContent(
+                                                        ownerName = gitUser.userName,
+                                                        repoName = repoName,
+                                                        sha = commitList.sha
+                                                    ).collect { commitContentResult ->
+                                                        commitContentResult.doWhen(
+                                                            onSuccess = { commitContents ->
+                                                                commitContents.value.map { commitContentItem ->
+                                                                    async {
+                                                                        commitHistory.add(
+                                                                            CommitHistoryItem(
+                                                                                key = commitList,
+                                                                                items = commitContentItem
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                }.awaitAll()
+                                                            },
+                                                            onFail = { exception ->
+                                                                Timber.e("ERROR: $exception")
                                                             }
-                                                        }.awaitAll()
-                                                    },
-                                                    onFail = { exception ->
-                                                        Timber.e("ERROR: $exception")
+                                                        )
                                                     }
-                                                )
-                                            }
+                                                }
+                                            }.awaitAll()
+                                        },
+                                        onFail = { exception ->
+                                            Timber.e("ERROR2: $exception")
                                         }
-                                    }.awaitAll()
-                                },
-                                onFail = { exception ->
-                                    Timber.e("ERROR2: $exception")
+                                    )
                                 }
-                            )
                         }
+                    }
                 }
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
         }
-        Crossfade(targetState = commitHistory.isEmpty()) { isCommitHistoryLoaded ->
-            if (isCommitHistoryLoaded) {
-                val composition by rememberLottieComposition(
-                    LottieCompositionSpec.RawRes(
-                        R.raw.loading
-                    )
-                )
-                LottieAnimation(
-                    iterations = LottieConstants.IterateForever,
-                    composition = composition,
-                    modifier = Modifier.size(200.dp)
-                )
-            } else {
-                CommitList(
-                    modifier = Modifier.fillMaxSize(),
-                    items = commitHistory
-                )
+        Crossfade(commitListVisible) { isCommitHistoryLoading ->
+            when (isCommitHistoryLoading) {
+                CommitListVisible.Hide -> Unit
+                CommitListVisible.Show -> {
+                    Crossfade(targetState = commitHistory.isEmpty()) { isCommitHistoryLoaded ->
+                        if (isCommitHistoryLoaded) {
+                            val composition by rememberLottieComposition(
+                                LottieCompositionSpec.RawRes(
+                                    R.raw.loading
+                                )
+                            )
+                            LottieAnimation(
+                                iterations = LottieConstants.IterateForever,
+                                composition = composition,
+                                modifier = Modifier.size(200.dp)
+                            )
+                        } else {
+                            CommitList(
+                                modifier = Modifier.fillMaxSize(),
+                                items = commitHistory
+                            )
+                        }
+                    }
+                }
             }
         }
     }

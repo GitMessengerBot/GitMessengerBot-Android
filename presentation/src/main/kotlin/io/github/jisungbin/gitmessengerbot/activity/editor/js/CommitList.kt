@@ -9,8 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.editor.js
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -20,14 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContentItem
 import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitListItem
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
+import io.github.jisungbin.gitmessengerbot.util.ISO8601Util
+import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import me.sungbin.timelineview.TimeLine
 import me.sungbin.timelineview.TimeLineItem
 import me.sungbin.timelineview.TimeLineOption
@@ -44,7 +50,7 @@ fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
 
     TimeLine(
         modifier = modifier,
-        items = items,
+        items = items.sortedByDescending { it.key.date },
         timeLineOption = TimeLineOption(
             circleColor = colors.primary,
             lineColor = colors.secondary,
@@ -60,29 +66,23 @@ fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
                         Web.open(context, Web.Link.Custom(commitListItem.htmlUrl))
                     }
                 ) {
-                    ConstraintLayout(
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        val (message, date) = createRefs()
-
                         Text(
-                            text = commitListItem.commit.message,
-                            maxLines = 2,
+                            text = commitListItem.message,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.constrainAs(message) {
-                                top.linkTo(parent.top)
-                                bottom.linkTo(parent.bottom)
-                                start.linkTo(parent.start)
-                            }
+                            fontSize = 15.sp,
+                            maxLines = 2
                         )
                         Text(
-                            text = commitListItem.commit.committer.date,
-                            modifier = Modifier.constrainAs(date) {
-                                bottom.linkTo(parent.bottom)
-                                end.linkTo(parent.end)
-                            }
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            text = ISO8601Util.convertKST(commitListItem.date),
+                            fontSize = 10.sp
                         )
                     }
                 }
@@ -95,10 +95,10 @@ fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
                 ConstraintLayout(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                        .clickable {
+                        .padding(12.dp)
+                        .noRippleClickable(onClick = {
                             Web.open(context, Web.Link.Custom(commitContentItem.rawUrl))
-                        }
+                        })
                 ) {
                     val (fileName, additions, changes, deletions) = createRefs()
 

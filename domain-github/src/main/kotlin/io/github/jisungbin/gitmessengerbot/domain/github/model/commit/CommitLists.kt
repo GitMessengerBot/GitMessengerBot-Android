@@ -10,4 +10,4 @@
 package io.github.jisungbin.gitmessengerbot.domain.github.model.commit
 
 @JvmInline
-value class CommitLists(val commitList: List<CommitListItem>)
+value class CommitLists(val value: List<CommitListItem>)
