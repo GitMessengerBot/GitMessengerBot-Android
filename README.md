@@ -12,6 +12,8 @@
 
 # 프로젝트 죽기 일보직전 -> 멱살잡고 살리는 중
 
+> 거의 다 살림!
+
 ### 죽기 직전 브런치: [f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
 -----
@@ -71,7 +73,6 @@
 1. 아키텍처 구조 문제
    * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨
    * 일부 `context`를 갖는 Api 클래스에서 메모리 누수 발생
-   * 
 
 # 라이선스
 
