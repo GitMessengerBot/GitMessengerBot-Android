@@ -41,12 +41,12 @@ object Versions {
         const val TimeLineView = "1.0.2"
         const val LottieCompose = "4.1.0"
         const val FancyBottomBar = "1.0.1"
-        const val LandscapistCoil = "1.3.4"
+        const val LandscapistCoil = "1.3.6"
         const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object Util {
-        const val Pluto = "1.0.6"
+        const val Pluto = "1.0.7"
         const val Timber = "5.0.1"
         const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
@@ -55,7 +55,7 @@ object Versions {
     }
 
     object Network {
-        const val Jsoup = "1.14.1"
+        const val Jsoup = "1.14.2"
         const val OkHttp = "4.9.1"
         const val Retrofit = "2.9.0"
     }
@@ -73,13 +73,18 @@ object Versions {
     }
 
     object Compose {
-        const val Master = "1.0.1"
+        const val Master = "1.0.2"
         const val Activity = "1.3.1"
     }
 
     object Lifecycle {
         const val Master = "2.3.1"
         const val Compose = "1.0.0-alpha07"
+    }
+
+    object OssLicense {
+        const val Master = "17.0.0"
+        const val Classpath = "0.10.4"
     }
 }
 
@@ -139,6 +144,7 @@ object Dependencies {
         "com.google.android.material:material:${Versions.Ui.Material}",
         "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
         "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
+        "com.google.android.gms:play-services-oss-licenses:${Versions.OssLicense.Master}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
     )
 

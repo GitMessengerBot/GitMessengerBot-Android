@@ -142,7 +142,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
                         when (ts2JsResult) {
                             is CoreResult.Success -> {
                                 val jsCode = ts2JsResult.response.jsCode
-                                Timber.i(jsCode)
+                                android.util.Log.i("ts2JsResult", jsCode)
                                 trySend(compileJavaScript(context, script, jsCode))
                             }
                             is CoreResult.Fail -> {

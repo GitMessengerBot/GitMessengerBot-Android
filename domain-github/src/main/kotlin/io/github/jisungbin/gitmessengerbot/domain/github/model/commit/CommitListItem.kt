@@ -9,4 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.model.commit
 
-data class CommitListItem(val htmlUrl: String, val commit: Commit, val sha: String)
+data class CommitListItem(
+    val sha: String,
+    val htmlUrl: String,
+    val message: String,
+    val date: String,
+    val name: String,
+)

@@ -10,23 +10,22 @@
 package io.github.jisungbin.gitmessengerbot.data.github.api
 
 import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitContentResponse
-import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListResponse
+import io.github.jisungbin.gitmessengerbot.data.github.model.commit.CommitListItem
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface GithubCommitService {
     @GET("/repos/{owner}/{repoName}/commits")
     suspend fun getFileCommitHistory(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-    ): Response<CommitListResponse>
+    ): Response<List<CommitListItem?>>
 
-    @GET("/repos/{owner}/{repoName}/commits")
+    @GET("/repos/{owner}/{repoName}/commits/{ref}")
     suspend fun getFileCommitContent(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-        @Query("ref") sha: String,
+        @Path("ref") sha: String,
     ): Response<CommitContentResponse>
 }

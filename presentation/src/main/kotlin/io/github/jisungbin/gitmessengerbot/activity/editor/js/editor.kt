@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -36,6 +35,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -83,14 +83,17 @@ import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-private sealed class CommitHistoryLoadState {
-    object None : CommitHistoryLoadState()
-    object Loading : CommitHistoryLoadState()
-    class Done(val content: @Composable () -> Unit) : CommitHistoryLoadState()
+private sealed class CommitListVisible {
+    object Hide : CommitListVisible()
+    object Show : CommitListVisible()
+
+    val visible get() = this == Show
 }
 
 @Composable
@@ -142,9 +145,6 @@ private fun DrawerLayout(
     val vm: JsEditorViewModel = viewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    var commitHistoryLoadState by remember {
-        mutableStateOf<CommitHistoryLoadState>(CommitHistoryLoadState.None)
-    }
 
     val repoName = script.name
     val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
@@ -154,6 +154,8 @@ private fun DrawerLayout(
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
     val repo = GithubRepo(name = repoName, description = repoDescription)
 
+    var commitListVisible by remember { mutableStateOf<CommitListVisible>(CommitListVisible.Hide) }
+    val commitHistory = remember { mutableStateListOf<CommitHistoryItem>() }
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
     val githubFile = GithubFile(
         message = commitMessage,
@@ -268,65 +270,49 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                coroutineScope.launch {
-                    commitHistoryLoadState = CommitHistoryLoadState.Loading
-                    // TODO: flow를 이렇때 쓰는게 맞나??
-                    val commitHistoryFlow = flow {
-                        vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
-                            .collect { commitListResult ->
-                                commitListResult.doWhen(
-                                    onSuccess = { commitLists ->
-                                        val commitHistory = mutableListOf<CommitHistoryItem>()
-                                        commitLists.commitList.forEach { commitList ->
-                                            val commitContents = flow {
-                                                vm.getCommitContent(
-                                                    ownerName = gitUser.userName,
-                                                    repoName = repoName,
-                                                    sha = commitList.sha
-                                                ).collect { commitContentResult ->
-                                                    commitContentResult.doWhen(
-                                                        onSuccess = { commitContents ->
-                                                            emit(commitContents.files)
-                                                        },
-                                                        onFail = { exception ->
-                                                            showExceptionDialog(exception)
-                                                            emit(null)
-                                                        }
-                                                    )
-                                                }
-                                            }
-                                            commitContents.collect { _commitContentItems ->
-                                                _commitContentItems?.let { commitContentItems ->
-                                                    commitContentItems.forEach { commitContentItem ->
-                                                        commitHistory.add(
-                                                            CommitHistoryItem(
-                                                                key = commitList,
-                                                                items = commitContentItem
-                                                            )
+                if (commitListVisible.visible) {
+                    commitListVisible = CommitListVisible.Hide
+                } else {
+                    commitListVisible = CommitListVisible.Show
+                    if (commitHistory.isEmpty()) {
+                        coroutineScope.launch {
+                            vm.getCommitHistory(ownerName = gitUser.userName, repoName = repoName)
+                                .collect { commitListResult ->
+                                    commitListResult.doWhen(
+                                        onSuccess = { commitLists ->
+                                            commitLists.value.map { commitList ->
+                                                async {
+                                                    vm.getCommitContent(
+                                                        ownerName = gitUser.userName,
+                                                        repoName = repoName,
+                                                        sha = commitList.sha
+                                                    ).collect { commitContentResult ->
+                                                        commitContentResult.doWhen(
+                                                            onSuccess = { commitContents ->
+                                                                commitContents.value.map { commitContentItem ->
+                                                                    async {
+                                                                        commitHistory.add(
+                                                                            CommitHistoryItem(
+                                                                                key = commitList,
+                                                                                items = commitContentItem
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                }.awaitAll()
+                                                            },
+                                                            onFail = { exception ->
+                                                                Timber.e("ERROR: $exception")
+                                                            }
                                                         )
                                                     }
                                                 }
-                                            }
+                                            }.awaitAll()
+                                        },
+                                        onFail = { exception ->
+                                            Timber.e("ERROR2: $exception")
                                         }
-                                        emit(commitHistory.toList())
-                                    },
-                                    onFail = { exception ->
-                                        showExceptionDialog(exception)
-                                        emit(null)
-                                    }
-                                )
-                            }
-                    }
-                    commitHistoryFlow.collect { _commitHistory ->
-                        _commitHistory?.let { commitHistory ->
-                            commitHistoryLoadState = CommitHistoryLoadState.Done {
-                                CommitList(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .requiredHeightIn(max = 500.dp),
-                                    items = commitHistory
-                                )
-                            }
+                                    )
+                                }
                         }
                     }
                 }
@@ -334,70 +320,80 @@ private fun DrawerLayout(
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
         }
-        Crossfade(targetState = commitHistoryLoadState) { state ->
-            when (state) {
-                is CommitHistoryLoadState.None -> Unit
-                is CommitHistoryLoadState.Loading -> {
-                    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
-                    LottieAnimation(
-                        iterations = LottieConstants.IterateForever,
-                        composition = composition,
-                        modifier = Modifier.size(200.dp)
-                    )
-                }
-                is CommitHistoryLoadState.Done -> {
-                    state.content()
+        Crossfade(commitListVisible) { isCommitHistoryLoading ->
+            when (isCommitHistoryLoading) {
+                CommitListVisible.Hide -> Unit
+                CommitListVisible.Show -> {
+                    Crossfade(targetState = commitHistory.isEmpty()) { isCommitHistoryLoaded ->
+                        if (isCommitHistoryLoaded) {
+                            val composition by rememberLottieComposition(
+                                LottieCompositionSpec.RawRes(
+                                    R.raw.loading
+                                )
+                            )
+                            LottieAnimation(
+                                iterations = LottieConstants.IterateForever,
+                                composition = composition,
+                                modifier = Modifier.size(200.dp)
+                            )
+                        } else {
+                            CommitList(
+                                modifier = Modifier.fillMaxSize(),
+                                items = commitHistory
+                            )
+                        }
+                    }
                 }
             }
         }
-        if (script.lang == ScriptLang.JavaScript) {
-            Row(
-                modifier = Modifier.padding(top = 30.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
-                    contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.composable_editor_drawer_beautify),
-                    modifier = Modifier.padding(start = 10.dp),
-                    fontSize = 30.sp
-                )
-            }
-            Row(
+    }
+    if (script.lang == ScriptLang.JavaScript) {
+        Row(
+            modifier = Modifier.padding(top = 30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
+                contentDescription = null
+            )
+            Text(
+                text = stringResource(R.string.composable_editor_drawer_beautify),
+                modifier = Modifier.padding(start = 10.dp),
+                fontSize = 30.sp
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    undoStack.value = codeField.value.text
+                    coroutineScope.launch {
+                        val minifyCode = vm.codeMinify(codeField.value.text)
+                        codeField.value = TextFieldValue(minifyCode)
+                    }
+                },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
+                    .weight(1f)
+                    .padding(end = 8.dp)
             ) {
-                OutlinedButton(
-                    onClick = {
-                        undoStack.value = codeField.value.text
-                        coroutineScope.launch {
-                            val minifyCode = vm.codeMinify(codeField.value.text)
-                            codeField.value = TextFieldValue(minifyCode)
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                ) {
-                    Text(text = stringResource(R.string.composable_editor_drawer_minify))
-                }
-                OutlinedButton(
-                    onClick = {
-                        undoStack.value = codeField.value.text
-                        coroutineScope.launch {
-                            val prettyCode = vm.codePretty(codeField.value.text)
-                            codeField.value = TextFieldValue(prettyCode)
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp)
-                ) {
-                    Text(text = stringResource(R.string.composable_editor_drawer_pretty))
-                }
+                Text(text = stringResource(R.string.composable_editor_drawer_minify))
+            }
+            OutlinedButton(
+                onClick = {
+                    undoStack.value = codeField.value.text
+                    coroutineScope.launch {
+                        val prettyCode = vm.codePretty(codeField.value.text)
+                        codeField.value = TextFieldValue(prettyCode)
+                    }
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text(text = stringResource(R.string.composable_editor_drawer_pretty))
             }
         }
     }

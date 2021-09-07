@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.config.Config
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
@@ -97,7 +99,6 @@ private fun Content(activity: Activity) {
         val gitDefaultCommitMessageDialogVisible = remember { mutableStateOf(false) }
         val gitDefaultCreateRepoOptionsDialogVisible = remember { mutableStateOf(false) }
         val kakaoTalkPackageNamesDialogVisible = remember { mutableStateOf(false) }
-        val openSourceLicenseVisible = remember { mutableStateOf(false) }
         val donateDialogVisble = remember { mutableStateOf(false) }
 
         ScriptAddDefaultCodeDialog(visible = scriptAddDefaultCodeDialogVisible)
@@ -105,7 +106,6 @@ private fun Content(activity: Activity) {
         GitDefaultCommitMessageDialog(visible = gitDefaultCommitMessageDialogVisible)
         GitDefaultCreateRepoOptionsDialog(visible = gitDefaultCreateRepoOptionsDialogVisible)
         KakaoTalkPackageNamesDialog(visible = kakaoTalkPackageNamesDialogVisible)
-        OpenSourceDialog(visible = openSourceLicenseVisible)
         DonateDialog(visible = donateDialogVisble)
 
         Text(
@@ -379,7 +379,9 @@ private fun Content(activity: Activity) {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { openSourceLicenseVisible.value = true }) {
+            OutlinedButton(onClick = {
+                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+            }) {
                 Text(text = stringResource(R.string.composable_setting_button_show))
             }
         }

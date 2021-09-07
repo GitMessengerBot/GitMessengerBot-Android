@@ -19,8 +19,9 @@ buildscript {
     dependencies {
         classpath("com.chaquo.python:gradle:${Versions.Essential.Python}")
         classpath("com.android.tools.build:gradle:${Versions.Essential.Gradle}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.Master}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
+        classpath("com.google.android.gms:oss-licenses-plugin:${Versions.OssLicense.Classpath}")
     }
 }
 
