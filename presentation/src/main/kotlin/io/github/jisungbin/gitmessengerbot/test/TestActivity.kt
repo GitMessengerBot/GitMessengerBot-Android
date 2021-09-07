@@ -13,16 +13,37 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryItem
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorViewModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
-import io.github.jisungbin.gitmessengerbot.util.ISO8601Util
+import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -42,8 +63,75 @@ class TestActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Text(ISO8601Util.convertKST("2021-09-06T07:54:36Z"))
+            MaterialTheme {
+                CompositionSizeAnimationTest()
+            }
         }
+    }
+
+    private fun log(message: Any) {
+        Timber.i(message.toString())
+        logs.add(message.toString())
+    }
+
+    @Composable
+    private fun CompositionSizeAnimationTest() {
+        val vm: TestViewModel = viewModel()
+        val scrollState = rememberLazyListState()
+        val scrollUpState by vm.scrollUp.observeAsState(false)
+        val itemHeigth by animateIntAsState(if (!scrollUpState) 100 else 0)
+
+        vm.updateScrollPosition(scrollState.firstVisibleItemIndex)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .border(width = 5.dp, color = Color.Red)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(color = Color.Blue)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(10.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(itemHeigth.dp)
+                        .background(color = Color.Yellow)
+                ) {
+                    repeat(10) {
+                        Text(text = it.toString())
+                    }
+                }
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = scrollState,
+                verticalArrangement = Arrangement.spacedBy(30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(items = List(100) { it }) { item ->
+                    Text(text = item.toString())
+                }
+            }
+        }
+    }
+
+    @SuppressLint("CoroutineCreationDuringComposition")
+    @Composable
+    private fun GithubCommitHistoryTest() {
         /*setContent {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -81,16 +169,7 @@ class TestActivity : ComponentActivity() {
             }
             Test()
         }*/
-    }
 
-    private fun log(message: Any) {
-        Timber.i(message.toString())
-        logs.add(message.toString())
-    }
-
-    @SuppressLint("CoroutineCreationDuringComposition")
-    @Composable
-    private fun Test() {
         val vm: JsEditorViewModel = viewModel()
 
         rememberCoroutineScope().launch {
