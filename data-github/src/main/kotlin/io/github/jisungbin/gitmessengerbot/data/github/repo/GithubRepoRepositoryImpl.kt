@@ -23,7 +23,6 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Retrofit
 
@@ -47,7 +46,7 @@ class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepos
             trySend(GithubResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -65,7 +64,7 @@ class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepos
             trySend(GithubResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -92,6 +91,6 @@ class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepos
             trySend(GithubResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 }

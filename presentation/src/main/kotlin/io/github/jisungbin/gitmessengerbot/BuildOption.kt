@@ -10,5 +10,5 @@
 package io.github.jisungbin.gitmessengerbot
 
 object BuildOption {
-    const val TestMode = true
+    const val TestMode = false
 }

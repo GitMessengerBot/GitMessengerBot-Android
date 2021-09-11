@@ -19,7 +19,6 @@ import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -68,7 +67,7 @@ class GithubUserRepositoryImpl(
             trySend(GithubResult.Fail(DataGithubException(exception.message)))
         }
 
-        awaitClose { close() }
+        close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -91,6 +90,6 @@ class GithubUserRepositoryImpl(
             trySend(GithubResult.Fail(DataGithubException(exception.message)))
         }
 
-        awaitClose { close() }
+        close()
     }
 }

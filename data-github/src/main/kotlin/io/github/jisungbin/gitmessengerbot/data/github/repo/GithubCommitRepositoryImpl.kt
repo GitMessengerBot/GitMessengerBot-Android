@@ -16,7 +16,6 @@ import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
 import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Retrofit
 
@@ -38,7 +37,7 @@ class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubC
             trySend(GithubResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -60,6 +59,6 @@ class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubC
             trySend(GithubResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 }
