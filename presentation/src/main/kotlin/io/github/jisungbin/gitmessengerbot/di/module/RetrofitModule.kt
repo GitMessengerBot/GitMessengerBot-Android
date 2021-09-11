@@ -72,7 +72,7 @@ object RetrofitModule {
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
         .baseUrl(GithubConfig.BaseApiUrl)
         .addConverterFactory(JacksonConverterFactory.create(mapper))
-        .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
+        .client(getInterceptor(/*loggingInterceptor,*/ AuthInterceptor(), PlutoInterceptor()))
         .build()
 
     @Provides

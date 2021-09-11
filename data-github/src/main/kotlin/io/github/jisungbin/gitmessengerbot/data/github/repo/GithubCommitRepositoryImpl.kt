@@ -49,7 +49,6 @@ class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubC
     ) = callbackFlow {
         try {
             val request = api.getFileCommitContent(owner = owner, repoName = repoName, sha = sha)
-            println("fileContentResult: ${request.body()}")
             trySend(
                 if (request.isValid()) {
                     GithubResult.Success(request.body()!!.toDomain())
