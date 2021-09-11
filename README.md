@@ -1,7 +1,7 @@
-// 336
+// 348
 <image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
 
-# GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg) [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
+# GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
 
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
@@ -10,9 +10,7 @@
 
 ---
 
-# 프로젝트 죽기 일보직전 -> 멱살잡고 살리는 중
-
-> 거의 다 살림!
+# 프로젝트 죽기 일보직전 -> ~~멱살잡고 살리는 중~~ -> 부활 성공!!
 
 ### 죽기 직전 브런치: [f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
@@ -47,10 +45,10 @@
 
 # 개발 스킬
 
-0. 100% Kotlin
+0. 100% Kotlin [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
 1. Jetpack Compose
 2. MVVM/Repository Pattern
-3. Coroutines(flow)
+3. Coroutines, Flow
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
 6. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
@@ -71,7 +69,7 @@
 # 알려진 이슈
 
 1. 아키텍처 구조 문제
-   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨
+   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨?
    * 일부 `context`를 갖는 Api 클래스에서 메모리 누수 발생
 
 # 라이선스
