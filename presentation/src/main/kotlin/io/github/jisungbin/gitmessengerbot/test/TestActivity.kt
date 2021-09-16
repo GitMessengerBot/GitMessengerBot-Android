@@ -10,6 +10,8 @@
 package io.github.jisungbin.gitmessengerbot.test
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateIntAsState
@@ -24,20 +26,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,14 +69,45 @@ class TestActivity : ComponentActivity() {
     private val logs = mutableListOf<CommitHistoryItem>()
     private val _logs = mutableStateListOf<String>()
 
+    private var message = mutableStateOf("Task Start.")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             MaterialTheme {
-                GithubCommitHistoryTest()
+                // GithubCommitHistoryTest()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    ThreadTest()
+                }
             }
         }
+    }
+
+    @Composable
+    private fun ThreadTest() {
+        val messageUpdate = 1000 // 보낼 메시지 값
+
+        Text(text = message.value) // 텍스트뷰
+
+        // 핸들러 인자로 루퍼를 지정할 수 있음.
+        val handler = Handler(Looper.getMainLooper()) { // UI 수정이 필요함으로 메인루퍼 가져옴
+            if (it.what == messageUpdate) { // 만약 받은 메시지의 값이 1000 이라면
+                message.value = "Task Done." // 텍스트뷰 업데이트
+            }
+            true // 메시지를 한 번 받고 더 이상 처리할 일이 없으면 true
+            // Callback@return: True if no further handling is desired
+        }
+        Thread { // 스레드 생성
+            Thread.sleep(5000) // 오래 걸리는 작업을 표현하기 위해 5초 딜레이
+            val message = handler.obtainMessage(messageUpdate) // 핸들러로 보낼 메시지를 지정
+            handler.sendMessage(message) // 핸들러로 메시지를 보냄
+        }.start() // 스레드 시작!
     }
 
     @Composable
