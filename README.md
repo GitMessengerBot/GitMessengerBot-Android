@@ -47,7 +47,7 @@
 
 0. 100% Kotlin [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
 1. Jetpack Compose
-2. MVVM/Repository Pattern
+2. MVI/Repository Pattern
 3. Coroutines, Flow
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
