@@ -12,7 +12,7 @@
 
 # 프로젝트 죽기 일보직전 -> ~~멱살잡고 살리는 중~~ -> 부활 성공!!
 
-### 리펙토링 직전 커밋: [f2ab6d28cd](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
+### 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
 -----
 
