@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":domain-kaven"))
 
     Dependencies.ui.forEach(::implementation)
+    Dependencies.mvi.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)

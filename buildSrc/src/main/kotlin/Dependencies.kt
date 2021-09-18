@@ -86,6 +86,10 @@ object Versions {
         const val Master = "17.0.0"
         const val Classpath = "0.10.4"
     }
+
+    object Mvi {
+        const val Orbit = "4.2.0"
+    }
 }
 
 object Dependencies {
@@ -167,5 +171,10 @@ object Dependencies {
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Lifecycle.Compose}"
+    )
+
+    val mvi = listOf(
+        "org.orbit-mvi:orbit-core:${Versions.Mvi.Orbit}",
+        "org.orbit-mvi:orbit-viewmodel:${Versions.Mvi.Orbit}"
     )
 }
