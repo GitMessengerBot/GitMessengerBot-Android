@@ -47,7 +47,7 @@
 
 0. 100% Kotlin [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
 1. Jetpack Compose
-2. MVI/Repository Pattern (MVI framework: [Mavericks (formerly MvRx)](https://github.com/airbnb/mavericks))
+2. MVI/Repository Pattern (MVI framework: [Orbit](https://github.com/orbit-mvi/orbit-mvi))
 3. Coroutines, Flow
 4. Retrofit, OkHttp
 5. Dagger2 - Hilt
