@@ -344,7 +344,7 @@ class SetupActivity : ComponentActivity() {
             if (!state.isException()) {
                 finish()
                 startActivity(Intent(this@SetupActivity, MainActivity::class.java))
-                toast(getString(R.string.vm_setup_toast_welcome_start, state.userName))
+                toast(getString(R.string.activity_setup_toast_welcome, state.userName))
             } else {
                 toast(state.exception.toString()) // TODO: ErrorDialog
             }

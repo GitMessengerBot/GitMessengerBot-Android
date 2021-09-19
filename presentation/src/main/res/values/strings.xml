@@ -26,7 +26,7 @@
     <string name="setup_dialog_way_to_get_personal_key">개인 키 얻는법</string>
     <string name="setup_dialog_open_github">깃허브 열기</string>
     <string name="setup_dialog_start">시작하기</string>
-    <string name="vm_setup_toast_welcome_start">%s님 환영합니다! 🎉🎈</string>
+    <string name="activity_setup_toast_welcome">%s님 환영합니다! 🎉🎈</string>
 
     <string name="composable_main_welcome">Hi, %s</string>
     <string name="composable_main_header_power">메인 전원</string>
