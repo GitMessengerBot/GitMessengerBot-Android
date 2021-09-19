@@ -52,8 +52,6 @@ import androidx.core.app.ActivityCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage

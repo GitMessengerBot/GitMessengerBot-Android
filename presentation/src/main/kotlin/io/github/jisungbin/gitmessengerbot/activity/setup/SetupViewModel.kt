@@ -11,8 +11,6 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
