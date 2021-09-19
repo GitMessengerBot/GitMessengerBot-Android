@@ -1,5 +1,5 @@
 // 360
-<image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
+<!-- <image src="https://raw.githubusercontent.com/GitMessengerBot/GitMessengerBot-Android/stable/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" /> -->
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
 
@@ -46,15 +46,16 @@
 # 개발 스킬
 
 0. 100% Kotlin [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
-1. Jetpack Compose
-2. MVVM+MVI/Repository Pattern (MVI framework: [Orbit](https://github.com/orbit-mvi/orbit-mvi))
-3. Coroutines, Flow
-4. Retrofit, OkHttp
-5. Dagger2 - Hilt
-6. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
-7. Room
-8. Clean architecture
-9. multi-module
+1. 100% pure function
+2. Jetpack Compose
+3. MVVM+MVI/Repository Pattern (MVI framework: [Orbit](https://github.com/orbit-mvi/orbit-mvi))
+4. Coroutines, Flow
+5. Retrofit, OkHttp
+6. Dagger2 - Hilt
+7. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
+8. Room
+9. Clean architecture
+10. multi-module
 
 # ktlint [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
