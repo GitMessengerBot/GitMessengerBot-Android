@@ -11,12 +11,13 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -28,17 +29,16 @@ import org.orbitmvi.orbit.viewmodel.container
 class SetupViewModel @Inject constructor(
     private val githubRequestAouthTokenUseCase: GithubRequestAouthTokenUseCase,
     private val githubGetUserInfoUseCase: GithubGetUserInfoUseCase,
-) : ContainerHost<GithubData, MviSetupSideEffect>, ViewModel() {
+) : ContainerHost<MviSetupState, MviSetupSideEffect>, ViewModel() {
 
-    override val container = container<GithubData, MviSetupSideEffect>(GithubData())
+    override val container = container<MviSetupState, MviSetupSideEffect>(MviSetupState())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun login(requestCode: String) = intent {
         githubRequestAouthTokenUseCase(requestCode).collect { githubAouthResult ->
             githubAouthResult.doWhen(
                 onSuccess = { githubAouth ->
                     var githubData = GithubData(aouthToken = githubAouth.token)
-                    githubGetUserInfoUseCase(githubData.aouthToken!!).collect { userInfoResult ->
+                    githubGetUserInfoUseCase(githubData.aouthToken).collect { userInfoResult ->
                         userInfoResult.doWhen(
                             onSuccess = { userInfo ->
                                 githubData = githubData.copy(
@@ -48,20 +48,25 @@ class SetupViewModel @Inject constructor(
                                 postSideEffect(MviSetupSideEffect.SaveData(githubData))
                                 reduce {
                                     state.copy(
-                                        aouthToken = githubData.aouthToken!!,
+                                        loading = false,
+                                        aouthToken = githubData.aouthToken,
                                         userName = githubData.userName,
                                         profileImageUrl = githubData.profileImageUrl
                                     )
                                 }
                             },
                             onFail = { exception ->
-                                postSideEffect(MviSetupSideEffect.Error(exception))
+                                reduce {
+                                    state.copy(loading = false, exception = exception)
+                                }
                             }
                         )
                     }
                 },
                 onFail = { exception ->
-                    postSideEffect(MviSetupSideEffect.Error(exception))
+                    reduce {
+                        state.copy(loading = false, exception = exception)
+                    }
                 }
             )
         }

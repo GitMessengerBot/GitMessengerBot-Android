@@ -52,6 +52,8 @@ import androidx.core.app.ActivityCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -62,7 +64,6 @@ import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -340,17 +341,20 @@ class SetupActivity : ComponentActivity() {
         vm.login(requestCode)
     }
 
-    private fun handleState(state: GithubData) {
-        if (state.aouthToken != null) {
-            finish()
-            startActivity(Intent(this@SetupActivity, MainActivity::class.java))
-            toast(getString(R.string.vm_setup_toast_welcome_start, state.userName))
+    private fun handleState(state: MviSetupState) {
+        if (!state.loading) {
+            if (!state.isException()) {
+                finish()
+                startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+                toast(getString(R.string.vm_setup_toast_welcome_start, state.userName))
+            } else {
+                toast(state.exception.toString()) // TODO: ErrorDialog
+            }
         }
     }
 
     private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
         when (sideEffect) {
-            is MviSetupSideEffect.Error -> toast(sideEffect.exception.message ?: "") // TODO
             is MviSetupSideEffect.SaveData -> {
                 Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())
             }
