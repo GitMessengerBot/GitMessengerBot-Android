@@ -78,9 +78,9 @@
 
 # 라이선스
 
-GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. <br/><br/>
 개발: 지성빈 <br/>
 디자인: 구환 <br/><br/>
+GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. <br/>
 `GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 -----
