@@ -70,15 +70,17 @@
 # 알려진 이슈
 
 1. 아키텍처 구조 문제
-   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨?
-   * 일부 `context`를 갖는 Api 클래스에서 메모리 누수 발생
+   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨? (`LiveData` -> `Flow` 변경 필요)
+   * 일부 `context`를 갖는 Api 클래스에서 **메모리 누수** 발생 (해결 가능?)
 2. Side-Effect
    * `composable`에서 Side-Effect 발생
 3. MVVM -> MVI 변경 필요
 
 # 라이선스
 
-GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.<br/>
+개발: [지성빈](https://github.com/jisungbin) <br/>
+디자인: 구환 <br/><br/>
+GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. <br/>
 `GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 -----
