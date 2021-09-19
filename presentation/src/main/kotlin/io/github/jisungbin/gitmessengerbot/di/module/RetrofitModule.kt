@@ -33,7 +33,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
-@Suppress("HasPlatformType")
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
@@ -69,19 +68,22 @@ object RetrofitModule {
     @Provides
     @SignedRetrofit
     @Singleton
-    fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
-        .baseUrl(GithubConfig.BaseApiUrl)
-        .addConverterFactory(JacksonConverterFactory.create(mapper))
-        .client(getInterceptor(/*loggingInterceptor,*/ AuthInterceptor(), PlutoInterceptor()))
-        .build()
+    fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(GithubConfig.BaseApiUrl)
+            .addConverterFactory(JacksonConverterFactory.create(mapper))
+            .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
+            .build()
 
     @Provides
     @UserRetrofit
     @Singleton
-    fun provideUserRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseApiUrl)
+    fun provideUserRetrofit(): Retrofit.Builder =
+        buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @Singleton
-    fun provideAouthRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseUrl)
+    fun provideAouthRetrofit(): Retrofit.Builder =
+        buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseUrl)
 }

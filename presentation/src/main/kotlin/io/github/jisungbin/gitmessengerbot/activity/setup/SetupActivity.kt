@@ -53,20 +53,22 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Wear
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.doWhen
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import kotlinx.coroutines.flow.collect
+import org.orbitmvi.orbit.viewmodel.observe
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
@@ -104,8 +106,8 @@ class SetupActivity : ComponentActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         }
 
+        vm.observe(lifecycleOwner = this, state = ::handleState, sideEffect = ::handleSideEffect)
         SystemUiController(window).setSystemBarsColor(colors.primary)
-
         setContent {
             MaterialTheme {
                 Content()
@@ -336,19 +338,22 @@ class SetupActivity : ComponentActivity() {
         val requestCode = intent?.data?.getQueryParameter("code")
             ?: throw PresentationException("Github aouth request code intent data is null.")
 
-        lifecycleScope.launchWhenCreated {
-            vm.login(requestCode).collect { loginResult ->
-                loginResult.doWhen(
-                    onSuccess = { githubData ->
-                        finish()
-                        startActivity(Intent(this@SetupActivity, MainActivity::class.java))
-                        toast(getString(R.string.vm_setup_toast_welcome_start, githubData.userName))
-                    },
-                    onFail = { exception ->
-                        exception.printStackTrace()
-                        // todo: ErrorDialog
-                    }
-                )
+        lifecycleScope.launchWhenCreated { vm.login(requestCode) }
+    }
+
+    private fun handleState(state: GithubData) {
+        if (state.aouthToken != null) {
+            finish()
+            startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+            toast(getString(R.string.vm_setup_toast_welcome_start, state.userName))
+        }
+    }
+
+    private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
+        when (sideEffect) {
+            is MviSetupSideEffect.Error -> toast(sideEffect.exception.message ?: "") // TODO
+            is MviSetupSideEffect.SaveData -> {
+                Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())
             }
         }
     }
