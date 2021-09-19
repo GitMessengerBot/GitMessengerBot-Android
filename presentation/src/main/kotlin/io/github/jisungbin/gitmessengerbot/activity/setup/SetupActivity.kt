@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
@@ -338,7 +337,7 @@ class SetupActivity : ComponentActivity() {
         val requestCode = intent?.data?.getQueryParameter("code")
             ?: throw PresentationException("Github aouth request code intent data is null.")
 
-        lifecycleScope.launchWhenCreated { vm.login(requestCode) }
+        vm.login(requestCode)
     }
 
     private fun handleState(state: GithubData) {

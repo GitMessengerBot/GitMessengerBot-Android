@@ -33,7 +33,7 @@ class SetupViewModel @Inject constructor(
     override val container = container<GithubData, MviSetupSideEffect>(GithubData())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun login(requestCode: String) = intent {
+    fun login(requestCode: String) = intent {
         githubRequestAouthTokenUseCase(requestCode).collect { githubAouthResult ->
             githubAouthResult.doWhen(
                 onSuccess = { githubAouth ->
