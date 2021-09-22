@@ -26,11 +26,10 @@ object AppConfig {
     val app: LiveData<App> get() = _app
     val appValue: App get() = app.value ?: throw CoreException("AppConfig.app value is null.")
 
-    val canUseEval: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
+    val evalUsable: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
 
     fun update(update: (App) -> App) {
-        var value = _app.value ?: throw CoreException("AppConfig.app value is null.")
-        value = update(value)
+        val value = update(appValue)
         Storage.write(PathConfig.AppData, value.toJsonString())
         _app.value = value
     }

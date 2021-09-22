@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
-            if (AppConfig.canUseEval) {
+            if (AppConfig.evalUsable) {
                 Bot.compileScript(
                     applicationContext,
                     ScriptItem(

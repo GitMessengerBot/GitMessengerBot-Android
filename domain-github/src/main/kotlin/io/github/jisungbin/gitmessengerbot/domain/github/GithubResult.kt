@@ -14,9 +14,9 @@ sealed class GithubResult<out T> {
     data class Fail(val exception: Exception) : GithubResult<Nothing>()
 }
 
-suspend fun <T> GithubResult<T>.doWhen(
-    onSuccess: suspend (T) -> Unit,
-    onFail: suspend (Exception) -> Unit,
+inline fun <T> GithubResult<T>.doWhen(
+    onSuccess: (T) -> Unit,
+    onFail: (Exception) -> Unit,
 ) {
     when (this) {
         is GithubResult.Success -> onSuccess(response)
