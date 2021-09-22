@@ -11,8 +11,8 @@ import org.gradle.api.JavaVersion
 
 object Application {
     const val minSdk = 24
-    const val targetSdk = 30
-    const val compileSdk = 30
+    const val targetSdk = 31
+    const val compileSdk = 31
     const val jvmTarget = "11"
     const val versionCode = 1
     const val versionName = "please_die_fucking_covid"
@@ -69,6 +69,7 @@ object Versions {
         const val FancyBottomBar = "1.0.1"
         const val LandscapistCoil = "1.3.6"
         const val Lifecycle = "1.0.0-alpha07"
+        const val Navigation = "2.4.0-alpha09"
         const val ConstraintLayout = "1.0.0-beta01"
     }
 
@@ -149,6 +150,7 @@ object Dependencies {
         "io.github.jisungbin:timelineview:${Versions.Compose.TimeLineView}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
         "io.github.jisungbin:fancybottombar:${Versions.Compose.FancyBottomBar}",
+        "androidx.navigation:navigation-compose:${Versions.Compose.Navigation}",
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Compose.Lifecycle}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.ConstraintLayout}"
     )

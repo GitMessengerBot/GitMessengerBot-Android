@@ -13,41 +13,34 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
@@ -59,14 +52,10 @@ import io.github.sungbin.gitmessengerbot.core.doWhen
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.flow.collect
-import me.sungbin.fancybottombar.FancyBottomBar
-import me.sungbin.fancybottombar.FancyColors
-import me.sungbin.fancybottombar.FancyItem
 
 class MainActivity : ComponentActivity() {
 
     private var onBackPressedTime = 0L
-    private var tab by mutableStateOf(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,73 +114,65 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun Content() {
+        val navController = rememberNavController()
         val scriptAddDialogVisible = remember { mutableStateOf(false) }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.primary)
-        ) {
-            Crossfade(
-                targetState = tab,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 60.dp)
-            ) { index ->
-                when (index) {
-                    Tab.Script -> ScriptContent(
+        Scaffold(
+            bottomBar = {
+                BottomNavigation(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    backgroundColor = Color.White
+                ) {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    val fabs = listOf(Tab.Script, Tab.Debug, Tab.Kaven, Tab.Setting)
+                    fabs.forEach { fab ->
+                        BottomNavigationItem(
+                            icon = {
+                                Icon(
+                                    painter = painterResource(fab.iconRes),
+                                    contentDescription = null
+                                )
+                            },
+                            selectedContentColor = colors.primary,
+                            unselectedContentColor = Color.LightGray,
+                            alwaysShowLabel = false,
+                            selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
+                            onClick = {
+                                navController.navigate(fab.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Tab.Script.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(Tab.Script.route) {
+                    ScriptContent(
                         activity = this@MainActivity,
                         scriptAddDialogVisible = scriptAddDialogVisible
                     )
-                    Tab.Debug -> Debug(activity = this@MainActivity)
-                    Tab.Kaven -> Text(text = "TODO")
-                    Tab.Setting -> Setting(this@MainActivity)
-                    else -> throw PresentationException("Unknown tab index: $index")
                 }
-            }
-            Footer(scriptAddDialogVisible)
-        }
-    }
-
-    @OptIn(ExperimentalAnimationApi::class)
-    @Composable
-    private fun Footer(scriptAddDialogVisible: MutableState<Boolean>) {
-        val items = listOf(
-            FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
-            FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
-            FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
-            FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
-        )
-
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            FancyBottomBar(
-                fancyColors = FancyColors(primary = colors.primary),
-                items = items
-            ) { tab = id }
-            AnimatedVisibility(
-                visible = tab == Tab.Script,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .padding(bottom = 35.dp)
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            scriptAddDialogVisible.value = true
-                        },
-                    color = colors.primary,
-                    elevation = 2.dp
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_round_add_24),
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .align(Alignment.Center)
-                    )
+                composable(Tab.Debug.route) {
+                    Debug(activity = this@MainActivity)
+                }
+                composable(Tab.Kaven.route) {
+                    Text(text = "TODO")
+                }
+                composable(Tab.Setting.route) {
+                    Setting(activity = this@MainActivity)
                 }
             }
         }
