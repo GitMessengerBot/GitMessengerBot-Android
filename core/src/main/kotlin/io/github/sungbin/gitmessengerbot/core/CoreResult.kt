@@ -14,9 +14,9 @@ sealed class CoreResult<out T> {
     data class Fail(val exception: Exception) : CoreResult<Nothing>()
 }
 
-suspend fun <T> CoreResult<T>.doWhen(
-    onSuccess: suspend (T) -> Unit,
-    onFail: suspend (Exception) -> Unit,
+inline fun <T> CoreResult<T>.doWhen(
+    onSuccess: (T) -> Unit,
+    onFail: (Exception) -> Unit,
 ) {
     when (this) {
         is CoreResult.Success -> onSuccess(response)

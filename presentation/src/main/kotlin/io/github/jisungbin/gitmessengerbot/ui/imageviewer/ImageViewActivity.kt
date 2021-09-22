@@ -26,51 +26,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.mindorks.ViewColorGenerator
-import com.mindorks.`interface`.OnImageLoaded
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
+import com.skydoves.landscapist.palette.BitmapPalette
 import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 
 class ImageViewActivity : ComponentActivity() {
 
     private var onBackPressed by mutableStateOf(false)
-    private var dominantComposeColor by mutableStateOf(Color.White)
+    private var dominantColor by mutableStateOf(Color.White)
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageUrl = intent.getStringExtra(IntentConfig.ImageUrl)
-            ?: throw PresentationException("'${IntentConfig.ImageUrl}' intent extra value is null.")
+        val imageUrl = intent.getStringExtra(IntentConfig.ImageUrl)!!
 
-        ViewColorGenerator().load(
-            imageUrl,
-            object : OnImageLoaded {
-                override fun onImageLoaded(
-                    vibrantColor: String,
-                    vibrantLightColor: String,
-                    vibrantDarkColor: String,
-                    mutedColor: String,
-                    mutedLightColor: String,
-                    mutedDarkColor: String,
-                    dominantColor: String,
-                ) {
-                    dominantComposeColor = Color(android.graphics.Color.parseColor(dominantColor))
-                }
-            }
-        )
-
-        SystemUiController(window).setSystemBarsColor(dominantComposeColor)
         setContent {
             MaterialTheme {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(dominantComposeColor),
+                        .background(dominantColor),
                     contentAlignment = Alignment.Center
                 ) {
                     AnimatedVisibility(
@@ -81,7 +60,11 @@ class ImageViewActivity : ComponentActivity() {
                         CoilImage(
                             imageModel = imageUrl,
                             modifier = Modifier.wrapContentSize(),
-                            circularReveal = CircularReveal()
+                            circularReveal = CircularReveal(),
+                            bitmapPalette = BitmapPalette { palette ->
+                                dominantColor = Color(palette.dominantSwatch?.rgb ?: 0)
+                                SystemUiController(window).setSystemBarsColor(dominantColor)
+                            }
                         )
                     }
                 }

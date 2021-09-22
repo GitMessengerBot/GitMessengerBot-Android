@@ -23,7 +23,6 @@ object Application {
 
 object Versions {
     object Essential {
-        const val Python = "9.1.0"
         const val Kotlin = "1.5.21"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
@@ -31,6 +30,7 @@ object Versions {
     }
 
     object Bot {
+        const val Python = "9.1.0"
         const val Rhino = "1.7.13"
         const val J2V8 = "6.2.1@aar"
     }
@@ -38,19 +38,15 @@ object Versions {
     object Ui {
         const val Browser = "1.3.0"
         const val Material = "1.4.0"
-        const val TimeLineView = "1.0.2"
-        const val LottieCompose = "4.1.0"
-        const val FancyBottomBar = "1.0.1"
-        const val LandscapistCoil = "1.3.6"
-        const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object Util {
-        const val Pluto = "1.0.7"
+        const val Pluto = "1.0.8"
         const val Timber = "5.0.1"
+        const val LiveData = "2.3.1"
+        const val Jackson = "2.12.5"
         const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
-        const val ViewColorGenerator = "v0.1"
         const val CheckDependencyUpdates = "1.5.0"
     }
 
@@ -62,24 +58,18 @@ object Versions {
 
     object Jetpack {
         const val Room = "2.3.0"
-    }
-
-    object Jackson {
-        const val Master = "2.12.5"
-    }
-
-    object Hilt {
-        const val Master = "2.38.1"
+        const val Hilt = "2.38.1"
     }
 
     object Compose {
+        const val Lottie = "4.1.0"
         const val Master = "1.0.2"
         const val Activity = "1.3.1"
-    }
-
-    object Lifecycle {
-        const val Master = "2.3.1"
-        const val Compose = "1.0.0-alpha07"
+        const val TimeLineView = "1.0.2"
+        const val FancyBottomBar = "1.0.1"
+        const val LandscapistCoil = "1.3.6"
+        const val Lifecycle = "1.0.0-alpha07"
+        const val ConstraintLayout = "1.0.0-beta01"
     }
 
     object OssLicense {
@@ -97,35 +87,36 @@ object Dependencies {
 
     const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
     const val LandscapistCoil =
-        "com.github.skydoves:landscapist-coil:${Versions.Ui.LandscapistCoil}"
+        "com.github.skydoves:landscapist-coil:${Versions.Compose.LandscapistCoil}"
 
-    const val hilt = "com.google.dagger:hilt-android:${Versions.Hilt.Master}"
-    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Hilt.Master}"
+    const val hilt = "com.google.dagger:hilt-android:${Versions.Jetpack.Hilt}"
+    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Jetpack.Hilt}"
 
     const val roomCompiler = "androidx.room:room-compiler:${Versions.Jetpack.Room}"
 
     const val livedata =
-        "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Lifecycle.Master}"
+        "androidx.lifecycle:lifecycle-livedata-core-ktx:${Versions.Util.LiveData}"
 
-    const val jacksonModule =
-        "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.Jackson.Master}"
+    val essential = listOf(
+        "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Essential.Coroutines}"
+    )
 
     val bot = listOf(
         "org.mozilla:rhino:${Versions.Bot.Rhino}",
         "com.eclipsesource.j2v8:j2v8:${Versions.Bot.J2V8}"
     )
 
-    val debug = listOf(
-        "com.mocklets:pluto:${Versions.Util.Pluto}",
-        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}"
+    val ui = listOf(
+        "com.google.android.material:material:${Versions.Ui.Material}",
+        "com.google.android.gms:play-services-oss-licenses:${Versions.OssLicense.Master}"
     )
 
-    val release = listOf("com.mocklets:pluto-no-op:${Versions.Util.Pluto}")
-
     val jackson = listOf(
-        "com.fasterxml.jackson.core:jackson-core:${Versions.Jackson.Master}",
-        "com.fasterxml.jackson.core:jackson-databind:${Versions.Jackson.Master}",
-        "com.fasterxml.jackson.core:jackson-annotations:${Versions.Jackson.Master}"
+        "com.fasterxml.jackson.core:jackson-core:${Versions.Util.Jackson}",
+        "com.fasterxml.jackson.core:jackson-databind:${Versions.Util.Jackson}",
+        "com.fasterxml.jackson.core:jackson-annotations:${Versions.Util.Jackson}",
+        "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.Util.Jackson}"
     )
 
     val retrofit = listOf(
@@ -138,24 +129,9 @@ object Dependencies {
         "com.squareup.retrofit2:converter-jackson:${Versions.Network.Retrofit}"
     )
 
-    val essential = listOf(
-        "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
-        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Essential.Coroutines}"
-    )
-
-    val ui = listOf(
-        "io.github.jisungbin:timelineview:${Versions.Ui.TimeLineView}",
-        "com.google.android.material:material:${Versions.Ui.Material}",
-        "com.airbnb.android:lottie-compose:${Versions.Ui.LottieCompose}",
-        "io.github.jisungbin:fancybottombar:${Versions.Ui.FancyBottomBar}",
-        "com.google.android.gms:play-services-oss-licenses:${Versions.OssLicense.Master}",
-        "androidx.constraintlayout:constraintlayout-compose:${Versions.Ui.ConstraintLayout}"
-    )
-
     val util = listOf(
         "com.jakewharton.timber:timber:${Versions.Util.Timber}",
-        "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}",
-        "com.github.MindorksOpenSource:ViewColorGenerator:${Versions.Util.ViewColorGenerator}"
+        "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}"
     )
 
     val room = listOf(
@@ -166,15 +142,26 @@ object Dependencies {
     val compose = listOf(
         "androidx.compose.ui:ui:${Versions.Compose.Master}",
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
+        "com.airbnb.android:lottie-compose:${Versions.Compose.Lottie}",
         "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
+        "io.github.jisungbin:timelineview:${Versions.Compose.TimeLineView}",
         "androidx.compose.runtime:runtime-livedata:${Versions.Compose.Master}",
-        "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Lifecycle.Compose}"
+        "io.github.jisungbin:fancybottombar:${Versions.Compose.FancyBottomBar}",
+        "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Compose.Lifecycle}",
+        "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.ConstraintLayout}"
     )
 
     val mvi = listOf(
         "org.orbit-mvi:orbit-core:${Versions.Mvi.Orbit}",
         "org.orbit-mvi:orbit-viewmodel:${Versions.Mvi.Orbit}"
     )
+
+    val debug = listOf(
+        "com.mocklets:pluto:${Versions.Util.Pluto}",
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}"
+    )
+
+    val release = listOf("com.mocklets:pluto-no-op:${Versions.Util.Pluto}")
 }

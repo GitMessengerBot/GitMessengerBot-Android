@@ -14,7 +14,6 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.jsoup.Connection
 
@@ -30,6 +29,6 @@ internal class Ts2JsRepoImpl(private val jsoup: Connection) : Ts2JsRepo {
             trySend(CoreResult.Fail(exception))
         }
 
-        awaitClose { close() }
+        close()
     }
 }

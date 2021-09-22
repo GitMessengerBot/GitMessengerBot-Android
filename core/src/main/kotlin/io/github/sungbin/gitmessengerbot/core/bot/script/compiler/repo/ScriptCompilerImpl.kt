@@ -24,7 +24,6 @@ import io.github.sungbin.gitmessengerbot.core.bot.api.UI
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 
@@ -168,6 +167,6 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
             Bot.scriptDataSave(script)
         }
 
-        awaitClose { close() }
+        close()
     }
 }

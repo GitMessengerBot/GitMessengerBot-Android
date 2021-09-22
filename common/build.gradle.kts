@@ -41,7 +41,6 @@ dependencies {
     implementation(Dependencies.jsoup)
     implementation(Dependencies.browser)
     implementation(Dependencies.livedata)
-    implementation(Dependencies.jacksonModule)
 
     Dependencies.essential.forEach(::api)
     Dependencies.jackson.forEach(::implementation)

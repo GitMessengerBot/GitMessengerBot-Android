@@ -11,7 +11,7 @@ package io.github.sungbin.gitmessengerbot.core.bot.api
 
 import android.content.Context
 
-// TODO: activity 메모리 누수 해결
+// TODO: context 메모리 누수 해결
 internal class UI(private val context: Context) { // TODO
     fun toast(message: String) {
         io.github.jisungbin.gitmessengerbot.common.extension.toast(context, message)
