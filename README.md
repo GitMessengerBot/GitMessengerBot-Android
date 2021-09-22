@@ -1,4 +1,4 @@
-// 360
+// 370
 <!-- <image src="https://raw.githubusercontent.com/GitMessengerBot/GitMessengerBot-Android/stable/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" /> -->
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
@@ -70,7 +70,7 @@
 # 알려진 이슈
 
 1. 아키텍처 구조 문제
-   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨? (`LiveData` -> `Flow` 변경 필요)
+   * `presentation` 계층을 제외한 다른 계층은 `Android` 프레임워크를 알려서는 안됨
    * 일부 `context`를 갖는 Api 클래스에서 **메모리 누수** 발생 (해결 가능?)
 2. Side-Effect
    * `composable`에서 Side-Effect 발생
