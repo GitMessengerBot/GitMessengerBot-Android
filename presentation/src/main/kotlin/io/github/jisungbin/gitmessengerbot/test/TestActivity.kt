@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -53,6 +54,8 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryItem
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorViewModel
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
+import kotlin.random.Random
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -71,20 +74,28 @@ class TestActivity : ComponentActivity() {
 
     private var message = mutableStateOf("Task Start.")
 
+    private var exception = mutableStateOf<Exception?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             MaterialTheme {
                 // GithubCommitHistoryTest()
-                Box(
+                /*Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color = Color.White),
                     contentAlignment = Alignment.Center
                 ) {
                     ThreadTest()
+                }*/
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Button(onClick = { exception.value = Exception(Random.nextInt().toString()) }) {
+                        Text(text = "TEST")
+                    }
                 }
+                ExceptionDialog(exception)
             }
         }
     }
