@@ -9,12 +9,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.github.jisungbin.gitmessengerbot"
-    tools:ignore="ScopedStorage">
+    package="io.github.jisungbin.gitmessengerbot">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
@@ -44,10 +44,12 @@
             android:name=".activity.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.GitMessengerBot.Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
@@ -65,6 +67,7 @@
                     android:host="authorize"
                     android:scheme="gmb" />
             </intent-filter>
+
         </activity>
 
         <activity
@@ -73,9 +76,9 @@
 
         <activity android:name=".activity.editor.js.JsEditorActivity" />
         <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
-        <activity android:name=".ui.imageviewer.ImageViewActivity" />
         <activity android:name=".activity.debug.DebugActivty" />
         <activity android:name=".activity.exception.ExceptionActivity" />
+        <activity android:name=".ui.imageviewer.ImageViewActivity" />
         <activity android:name=".test.TestActivity" />
 
         <service

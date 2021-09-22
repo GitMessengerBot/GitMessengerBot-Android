@@ -31,11 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import io.github.jisungbin.gitmessengerbot.BuildConfig
 import io.github.jisungbin.gitmessengerbot.BuildOption
 import io.github.jisungbin.gitmessengerbot.R
@@ -94,17 +92,10 @@ class SplashActivity : ComponentActivity() {
                 .background(colors.primary)
                 .padding(30.dp)
         ) {
-            val (content, footer) = createRefs()
+            val footer = createRef()
 
             Column(
-                modifier = Modifier.constrainAs(content) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.fillToConstraints
-                },
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -128,12 +119,10 @@ class SplashActivity : ComponentActivity() {
                 text = stringResource(R.string.copyright),
                 color = Color.White,
                 fontSize = 10.sp,
-                textAlign = TextAlign.Center,
                 modifier = Modifier.constrainAs(footer) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
                 }
             )
         }
