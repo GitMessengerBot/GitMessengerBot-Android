@@ -57,6 +57,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
@@ -82,6 +83,7 @@ import org.orbitmvi.orbit.viewmodel.observe
 @Composable
 fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     val vm: JsEditorViewModel = viewModel()
+    val context = LocalContext.current
     val lifeCycle = LocalLifecycleOwner.current
     var codeField by remember { mutableStateOf(script.getCode()) }
     var undoStack by remember { mutableStateOf("") }
@@ -90,7 +92,23 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
 
     ExceptionDialog(exception = exception)
     LaunchedEffect(vm) {
-        vm.observe(lifecycleOwner = lifeCycle, state = { }, sideEffect = { }) // TODO
+        vm.observe(
+            lifecycleOwner = lifeCycle,
+            state = { state ->
+                handleState(
+                    state = state,
+                    onExceptionChanged = { _exception -> exception.value = _exception },
+                    toast = { stringRes -> toast(context, context.getString(stringRes)) }
+                )
+            },
+            sideEffect = { sideEffect ->
+                handleSideEffect(
+                    sideEffect = sideEffect,
+                    codeFieldChanged = { code -> codeField = code },
+                    commitHistoryItemsChanged = { items -> commitHistoryItems.addAll(items) }
+                )
+            }
+        )
     }
 
     Scaffold(
@@ -100,7 +118,7 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
                 script = script,
                 scaffoldState = scaffoldState,
                 codeField = codeField,
-                codeFieldChanged = { codeField = it },
+                codeFieldChanged = { code -> codeField = code },
                 undoStack = undoStack,
                 clearUndoStack = { undoStack = "" },
             )
@@ -110,7 +128,7 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
             DrawerLayout(
                 script = script,
                 codeField = codeField,
-                undoStackChanged = { undoStack = it },
+                undoStackChanged = { code -> undoStack = code },
                 commitHistoryItems = commitHistoryItems
             )
         },
@@ -118,7 +136,7 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     ) {
         TextField(
             value = codeField,
-            onValueChange = { codeField = it },
+            onValueChange = { code -> codeField = code },
             modifier = Modifier
                 .fillMaxSize()
                 .runIf(AppConfig.appValue.editorHorizontalScroll) {
@@ -130,13 +148,33 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     }
 }
 
-private fun handleState(state: MviJsEditorState, onExceptionChanged: (Exception?) -> Unit) {
-    when (state) {
-
+private inline fun handleState(
+    state: MviJsEditorState,
+    onExceptionChanged: (Exception) -> Unit,
+    toast: (Int) -> Unit
+) {
+    if (state.loaded) {
+        if (!state.isException()) {
+            when (state.successType) {
+                MviJsEditorSuccessType.None -> {
+                }
+                MviJsEditorSuccessType.GithubCreateRepo -> {
+                    toast(R.string.composable_editor_toast_repo_create_success)
+                }
+                MviJsEditorSuccessType.GithubUpdateProject -> {
+                    toast(R.string.composable_editor_toast_file_update_success)
+                }
+                MviJsEditorSuccessType.GithubCommitAndPush -> {
+                    toast(R.string.composable_editor_toast_commit_success)
+                }
+            }
+        } else {
+            onExceptionChanged(state.exception!!)
+        }
     }
 }
 
-private fun handleSideEffect(
+private inline fun handleSideEffect(
     sideEffect: MviJsEditorSideEffect,
     codeFieldChanged: (String) -> Unit,
     commitHistoryItemsChanged: (List<CommitHistoryItem>) -> Unit
