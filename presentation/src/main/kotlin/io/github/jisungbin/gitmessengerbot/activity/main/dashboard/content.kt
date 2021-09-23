@@ -99,9 +99,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boolean>) {
     val searchField = remember { mutableStateOf(TextFieldValue()) }
+
     ScriptAddDialog(visible = scriptAddDialogVisible)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = colors.primary)
+    ) {
         Header(activity, searchField)
         Column(
             modifier = Modifier

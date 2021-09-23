@@ -12,7 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.setup.mvi
 import io.github.jisungbin.gitmessengerbot.mvi.MviBaseState
 
 data class MviSetupState(
-    override val loaded: Boolean = true,
+    override val loaded: Boolean = false,
     override val exception: Exception? = null,
     val aouthToken: String = "",
     val userName: String = "",

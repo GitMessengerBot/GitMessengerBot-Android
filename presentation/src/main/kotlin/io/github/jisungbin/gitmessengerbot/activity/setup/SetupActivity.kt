@@ -358,6 +358,7 @@ class SetupActivity : ComponentActivity() {
     }
 
     private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
+        println(state)
         if (state.loaded) {
             if (!state.isException()) {
                 finish()
