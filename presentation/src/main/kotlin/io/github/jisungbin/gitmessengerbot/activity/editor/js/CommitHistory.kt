@@ -38,6 +38,14 @@ import me.sungbin.timelineview.TimeLine
 import me.sungbin.timelineview.TimeLineItem
 import me.sungbin.timelineview.TimeLineOption
 
+sealed class CommitHistoryState {
+    object Hide : CommitHistoryState()
+    object Loading : CommitHistoryState()
+    data class Show(val history: List<CommitHistoryItem>) : CommitHistoryState()
+
+    val visible get() = this is Show
+}
+
 data class CommitHistoryItem(
     override val key: CommitListItem,
     val items: CommitContentItem,
@@ -45,7 +53,7 @@ data class CommitHistoryItem(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
+fun CommitHistory(modifier: Modifier, items: List<CommitHistoryItem>) {
     val context = LocalContext.current
 
     TimeLine(

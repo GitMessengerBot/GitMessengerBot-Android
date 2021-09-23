@@ -76,7 +76,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.ui.exception.showExceptionDialog
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
 import io.github.jisungbin.gitmessengerbot.util.doWhen
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
@@ -84,20 +84,14 @@ import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
-
-private sealed class CommitListVisible {
-    object Hide : CommitListVisible()
-    object Loading : CommitListVisible()
-    data class Show(val history: List<CommitHistoryItem>) : CommitListVisible()
-
-    val visible get() = this is Show
-}
 
 @Composable
 fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
-    val codeField = remember { mutableStateOf(TextFieldValue(script.getCode())) }
-    val undoStack = remember { mutableStateOf("") }
+    val codeField by remember { mutableStateOf(TextFieldValue(script.getCode())) }
+    val undoStack by remember { mutableStateOf("") }
+    val exception = remember { mutableStateOf<Exception?>(null) }
+
+    ExceptionDialog(exception = exception)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -137,8 +131,11 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
 @Composable
 private fun DrawerLayout(
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>,
-    undoStack: MutableState<String>,
+    codeField: TextFieldValue,
+    codeFieldChanged: (TextFieldValue) -> Unit,
+    undoStack: TextFieldValue,
+    undoStackChanged: (TextFieldValue) -> Unit,
+    onException: (Exception) -> Unit
 ) {
     val vm: JsEditorViewModel = viewModel()
     val context = LocalContext.current
@@ -153,11 +150,11 @@ private fun DrawerLayout(
     val repo = GithubRepo(name = repoName, description = repoDescription)
 
     val commitHistory = remember { mutableListOf<CommitHistoryItem>() }
-    var commitListVisible by remember { mutableStateOf<CommitListVisible>(CommitListVisible.Hide) }
+    var commitListVisible by remember { mutableStateOf<CommitHistoryState>(CommitHistoryState.Hide) }
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
     val githubFile = GithubFile(
         message = commitMessage,
-        content = codeField.value.text.toBase64(),
+        content = codeField.text.toBase64(),
         sha = "",
         branch = repoBranch
     )
@@ -197,7 +194,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
-                                showExceptionDialog(exception)
+                                onException(exception)
                             }
                         )
                     }
@@ -225,7 +222,7 @@ private fun DrawerLayout(
                                 )
                             },
                             onFail = { exception ->
-                                showExceptionDialog(exception)
+                                onException(exception)
                             }
                         )
                     }
@@ -247,14 +244,14 @@ private fun DrawerLayout(
                     ).collect { fileContentResult ->
                         fileContentResult.doWhen(
                             onSuccess = { fileContent ->
-                                codeField.value = TextFieldValue(Web.parse(fileContent.downloadUrl))
+                                codeFieldChanged(TextFieldValue(Web.parse(fileContent.downloadUrl)))
                                 toast(
                                     context,
                                     context.getString(R.string.composable_editor_toast_file_update_success)
                                 )
                             },
                             onFail = { exception ->
-                                showExceptionDialog(exception)
+                                onException(exception)
                             }
                         )
                     }
@@ -269,10 +266,10 @@ private fun DrawerLayout(
                 .padding(top = 8.dp),
             onClick = {
                 if (commitListVisible.visible) {
-                    commitListVisible = CommitListVisible.Hide
+                    commitListVisible = CommitHistoryState.Hide
                 } else {
                     if (commitHistory.isEmpty()) {
-                        commitListVisible = CommitListVisible.Loading
+                        commitListVisible = CommitHistoryState.Loading
                         coroutineScope.launch {
                             launch {
                                 vm.getCommitHistory(
@@ -299,23 +296,22 @@ private fun DrawerLayout(
                                                             }
                                                         },
                                                         onFail = { exception ->
-                                                            Timber.e("ERROR: $exception")
+                                                            onException(exception)
                                                         }
                                                     )
                                                 }
                                             }
                                         },
                                         onFail = { exception ->
-                                            Timber.e("ERROR2: $exception")
+                                            onException(exception)
                                         }
                                     )
                                 }
                             }.join()
-                            Timber.i("finished.")
-                            commitListVisible = CommitListVisible.Show(commitHistory)
+                            commitListVisible = CommitHistoryState.Show(commitHistory)
                         }
                     } else {
-                        commitListVisible = CommitListVisible.Show(commitHistory)
+                        commitListVisible = CommitHistoryState.Show(commitHistory)
                     }
                 }
             }
@@ -324,8 +320,8 @@ private fun DrawerLayout(
         }
         Crossfade(commitListVisible) { commitHistoryLoading ->
             when (commitHistoryLoading) {
-                is CommitListVisible.Hide -> Unit
-                is CommitListVisible.Loading -> {
+                is CommitHistoryState.Hide -> Unit
+                is CommitHistoryState.Loading -> {
                     val composition by rememberLottieComposition(
                         LottieCompositionSpec.RawRes(
                             R.raw.loading
@@ -337,8 +333,8 @@ private fun DrawerLayout(
                         modifier = Modifier.size(200.dp)
                     )
                 }
-                is CommitListVisible.Show -> {
-                    CommitList(
+                is CommitHistoryState.Show -> {
+                    CommitHistory(
                         modifier = Modifier.fillMaxSize(),
                         items = commitHistoryLoading.history
                     )

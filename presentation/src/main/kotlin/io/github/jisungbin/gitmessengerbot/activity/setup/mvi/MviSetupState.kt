@@ -7,12 +7,12 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup
+package io.github.jisungbin.gitmessengerbot.activity.setup.mvi
 
 import io.github.jisungbin.gitmessengerbot.mvi.MviBaseState
 
 data class MviSetupState(
-    override val loading: Boolean = true,
+    override val loaded: Boolean = true,
     override val exception: Exception? = null,
     val aouthToken: String = "",
     val userName: String = "",

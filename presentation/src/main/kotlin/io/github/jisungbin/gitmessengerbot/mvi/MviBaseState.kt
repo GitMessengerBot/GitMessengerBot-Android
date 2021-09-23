@@ -10,7 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.mvi
 
 interface MviBaseState {
-    val loading: Boolean
+    val loaded: Boolean
     val exception: Exception?
 
     fun isException() = exception == null

@@ -11,6 +11,8 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
@@ -46,7 +48,7 @@ class SetupViewModel @Inject constructor(
                                 postSideEffect(MviSetupSideEffect.SaveData(githubData))
                                 reduce {
                                     state.copy(
-                                        loading = false,
+                                        loaded = true,
                                         aouthToken = githubData.aouthToken,
                                         userName = githubData.userName,
                                         profileImageUrl = githubData.profileImageUrl
@@ -55,7 +57,7 @@ class SetupViewModel @Inject constructor(
                             },
                             onFail = { exception ->
                                 reduce {
-                                    state.copy(loading = false, exception = exception)
+                                    state.copy(loaded = true, exception = exception)
                                 }
                             }
                         )
@@ -63,7 +65,7 @@ class SetupViewModel @Inject constructor(
                 },
                 onFail = { exception ->
                     reduce {
-                        state.copy(loading = false, exception = exception)
+                        state.copy(loaded = true, exception = exception)
                     }
                 }
             )

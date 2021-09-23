@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class JsEditorActivity : ComponentActivity() {
 
-    private lateinit var onBackPressedAction: () -> Unit
+    private var onBackPressedAction: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +69,6 @@ class JsEditorActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        if (::onBackPressedAction.isInitialized) {
-            onBackPressedAction()
-        } else {
-            super.onBackPressed()
-        }
+        onBackPressedAction?.invoke() ?: super.onBackPressed()
     }
 }

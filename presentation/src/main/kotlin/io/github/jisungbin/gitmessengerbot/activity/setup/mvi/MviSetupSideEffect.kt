@@ -7,7 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.setup
+package io.github.jisungbin.gitmessengerbot.activity.setup.mvi
 
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 
