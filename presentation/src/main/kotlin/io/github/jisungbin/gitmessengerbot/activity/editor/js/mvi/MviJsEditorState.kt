@@ -9,12 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi
 
-import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryState
 import io.github.jisungbin.gitmessengerbot.mvi.MviBaseState
 
 data class MviJsEditorState(
     override val loaded: Boolean = false,
     override val exception: Exception? = null,
-    val successType: MviJsEditorSuccessType = MviJsEditorSuccessType.None,
-    val commitHistoryState: CommitHistoryState = CommitHistoryState.Hide
+    val successType: MviJsEditorSuccessType = MviJsEditorSuccessType.None
 ) : MviBaseState

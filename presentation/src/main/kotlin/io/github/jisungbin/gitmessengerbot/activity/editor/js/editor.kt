@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +32,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,26 +42,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
 import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.common.extension.toBase64
@@ -70,37 +66,43 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
-import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
-import io.github.jisungbin.gitmessengerbot.util.doWhen
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.viewmodel.observe
 
 @Composable
 fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
-    val codeField by remember { mutableStateOf(TextFieldValue(script.getCode())) }
-    val undoStack by remember { mutableStateOf("") }
+    val vm: JsEditorViewModel = viewModel()
+    val lifeCycle = LocalLifecycleOwner.current
+    var codeField by remember { mutableStateOf(script.getCode()) }
+    var undoStack by remember { mutableStateOf("") }
     val exception = remember { mutableStateOf<Exception?>(null) }
+    val commitHistoryItems = remember { mutableListOf<CommitHistoryItem>() }
 
     ExceptionDialog(exception = exception)
+    LaunchedEffect(vm) {
+        vm.observe(lifecycleOwner = lifeCycle, state = { }, sideEffect = { }) // TODO
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ToolBar(
                 script = script,
-                codeField = codeField,
                 scaffoldState = scaffoldState,
-                undoStack = undoStack
+                codeField = codeField,
+                codeFieldChanged = { codeField = it },
+                undoStack = undoStack,
+                clearUndoStack = { undoStack = "" },
             )
         },
         scaffoldState = scaffoldState,
@@ -108,14 +110,15 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
             DrawerLayout(
                 script = script,
                 codeField = codeField,
-                undoStack = undoStack
+                undoStackChanged = { undoStack = it },
+                commitHistoryItems = commitHistoryItems
             )
         },
         drawerShape = RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp)
     ) {
         TextField(
-            value = codeField.value,
-            onValueChange = { codeField.value = it },
+            value = codeField,
+            onValueChange = { codeField = it },
             modifier = Modifier
                 .fillMaxSize()
                 .runIf(AppConfig.appValue.editorHorizontalScroll) {
@@ -127,19 +130,36 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     }
 }
 
+private fun handleState(state: MviJsEditorState, onExceptionChanged: (Exception?) -> Unit) {
+    when (state) {
+
+    }
+}
+
+private fun handleSideEffect(
+    sideEffect: MviJsEditorSideEffect,
+    codeFieldChanged: (String) -> Unit,
+    commitHistoryItemsChanged: (List<CommitHistoryItem>) -> Unit
+) {
+    when (sideEffect) {
+        is MviJsEditorSideEffect.UpdateCodeField -> {
+            codeFieldChanged(sideEffect.code)
+        }
+        is MviJsEditorSideEffect.UpdateCommitHistoryItems -> {
+            commitHistoryItemsChanged(sideEffect.commitHistoryItems)
+        }
+    }
+}
+
 @OptIn(InternalCoroutinesApi::class)
 @Composable
 private fun DrawerLayout(
     script: ScriptItem,
-    codeField: TextFieldValue,
-    codeFieldChanged: (TextFieldValue) -> Unit,
-    undoStack: TextFieldValue,
-    undoStackChanged: (TextFieldValue) -> Unit,
-    onException: (Exception) -> Unit
+    codeField: String,
+    undoStackChanged: (String) -> Unit,
+    commitHistoryItems: List<CommitHistoryItem>
 ) {
     val vm: JsEditorViewModel = viewModel()
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
     val repoName = script.name
     val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
@@ -149,15 +169,18 @@ private fun DrawerLayout(
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
     val repo = GithubRepo(name = repoName, description = repoDescription)
 
-    val commitHistory = remember { mutableListOf<CommitHistoryItem>() }
-    var commitListVisible by remember { mutableStateOf<CommitHistoryState>(CommitHistoryState.Hide) }
+    var commitHistoryVisible by remember { mutableStateOf(false) }
     val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
     val githubFile = GithubFile(
         message = commitMessage,
-        content = codeField.text.toBase64(),
+        content = codeField.toBase64(),
         sha = "",
         branch = repoBranch
     )
+
+    LaunchedEffect(vm) {
+        vm.loadCommitHistory(userName = gitUser.userName, repoName = repoName)
+    }
 
     Column(
         modifier = Modifier
@@ -180,25 +203,11 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 10.dp),
             onClick = {
-                coroutineScope.launch {
-                    vm.githubCreateRepo(
-                        path = repoPath,
-                        githubRepo = repo,
-                        githubFile = githubFile
-                    ).collect { createRepoResult ->
-                        createRepoResult.doWhen(
-                            onSuccess = {
-                                toast(
-                                    context,
-                                    context.getString(R.string.composable_editor_toast_repo_create_success)
-                                )
-                            },
-                            onFail = { exception ->
-                                onException(exception)
-                            }
-                        )
-                    }
-                }
+                vm.githubCreateRepo(
+                    path = repoPath,
+                    githubRepo = repo,
+                    githubFile = githubFile
+                )
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_create_repo, script.name))
@@ -208,25 +217,11 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                coroutineScope.launch {
-                    vm.githubCommitAndPush(
-                        repoName = repoName,
-                        path = repoPath,
-                        githubFile = githubFile
-                    ).collect { commitAndPushResult ->
-                        commitAndPushResult.doWhen(
-                            onSuccess = {
-                                toast(
-                                    context,
-                                    context.getString(R.string.composable_editor_toast_commit_success)
-                                )
-                            },
-                            onFail = { exception ->
-                                onException(exception)
-                            }
-                        )
-                    }
-                }
+                vm.githubCommitAndPush(
+                    repoName = repoName,
+                    path = repoPath,
+                    githubFile = githubFile
+                )
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_and_push))
@@ -236,26 +231,11 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                coroutineScope.launch {
-                    vm.githubGetFileContent(
-                        repoName = repoName,
-                        path = repoPath,
-                        branch = repoBranch
-                    ).collect { fileContentResult ->
-                        fileContentResult.doWhen(
-                            onSuccess = { fileContent ->
-                                codeFieldChanged(TextFieldValue(Web.parse(fileContent.downloadUrl)))
-                                toast(
-                                    context,
-                                    context.getString(R.string.composable_editor_toast_file_update_success)
-                                )
-                            },
-                            onFail = { exception ->
-                                onException(exception)
-                            }
-                        )
-                    }
-                }
+                vm.githubUpdateProject(
+                    repoName = repoName,
+                    path = repoPath,
+                    branch = repoBranch
+                )
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_update_project))
@@ -265,80 +245,17 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             onClick = {
-                if (commitListVisible.visible) {
-                    commitListVisible = CommitHistoryState.Hide
-                } else {
-                    if (commitHistory.isEmpty()) {
-                        commitListVisible = CommitHistoryState.Loading
-                        coroutineScope.launch {
-                            launch {
-                                vm.getCommitHistory(
-                                    ownerName = gitUser.userName,
-                                    repoName = repoName
-                                ).collect { commitListResult ->
-                                    commitListResult.doWhen(
-                                        onSuccess = { commitLists ->
-                                            commitLists.value.forEach { commitList ->
-                                                vm.getCommitContent(
-                                                    ownerName = gitUser.userName,
-                                                    repoName = repoName,
-                                                    sha = commitList.sha
-                                                ).collect { commitContentResult ->
-                                                    commitContentResult.doWhen(
-                                                        onSuccess = { commitContents ->
-                                                            commitContents.value.forEach { commitContentItem ->
-                                                                commitHistory.add(
-                                                                    CommitHistoryItem(
-                                                                        key = commitList,
-                                                                        items = commitContentItem
-                                                                    )
-                                                                )
-                                                            }
-                                                        },
-                                                        onFail = { exception ->
-                                                            onException(exception)
-                                                        }
-                                                    )
-                                                }
-                                            }
-                                        },
-                                        onFail = { exception ->
-                                            onException(exception)
-                                        }
-                                    )
-                                }
-                            }.join()
-                            commitListVisible = CommitHistoryState.Show(commitHistory)
-                        }
-                    } else {
-                        commitListVisible = CommitHistoryState.Show(commitHistory)
-                    }
-                }
+                commitHistoryVisible = !commitHistoryVisible
             }
         ) {
             Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
         }
-        Crossfade(commitListVisible) { commitHistoryLoading ->
-            when (commitHistoryLoading) {
-                is CommitHistoryState.Hide -> Unit
-                is CommitHistoryState.Loading -> {
-                    val composition by rememberLottieComposition(
-                        LottieCompositionSpec.RawRes(
-                            R.raw.loading
-                        )
-                    )
-                    LottieAnimation(
-                        iterations = LottieConstants.IterateForever,
-                        composition = composition,
-                        modifier = Modifier.size(200.dp)
-                    )
-                }
-                is CommitHistoryState.Show -> {
-                    CommitHistory(
-                        modifier = Modifier.fillMaxSize(),
-                        items = commitHistoryLoading.history
-                    )
-                }
+        Crossfade(commitHistoryVisible) { visible ->
+            if (visible) {
+                CommitHistory(
+                    modifier = Modifier.fillMaxSize(),
+                    items = commitHistoryItems
+                )
             }
         }
     }
@@ -364,11 +281,8 @@ private fun DrawerLayout(
         ) {
             OutlinedButton(
                 onClick = {
-                    undoStack.value = codeField.value.text
-                    coroutineScope.launch {
-                        val minifyCode = vm.codeMinify(codeField.value.text)
-                        codeField.value = TextFieldValue(minifyCode)
-                    }
+                    undoStackChanged(codeField)
+                    vm.codeMinify(codeField)
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -378,11 +292,8 @@ private fun DrawerLayout(
             }
             OutlinedButton(
                 onClick = {
-                    undoStack.value = codeField.value.text
-                    coroutineScope.launch {
-                        val prettyCode = vm.codePretty(codeField.value.text)
-                        codeField.value = TextFieldValue(prettyCode)
-                    }
+                    undoStackChanged(codeField)
+                    vm.codePretty(codeField)
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -398,9 +309,11 @@ private fun DrawerLayout(
 @Composable
 private fun ToolBar(
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>,
     scaffoldState: ScaffoldState,
-    undoStack: MutableState<String>,
+    codeField: String,
+    codeFieldChanged: (String) -> Unit,
+    undoStack: String,
+    clearUndoStack: () -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -451,7 +364,7 @@ private fun ToolBar(
                         context,
                         context.getString(R.string.composable_editor_toast_saved)
                     )
-                    Bot.scriptCodeSave(script, codeField.value.text)
+                    Bot.scriptCodeSave(script, codeField)
                 }
                 .constrainAs(save) {
                     end.linkTo(parent.end)
@@ -459,7 +372,7 @@ private fun ToolBar(
                 }
         )
         AnimatedVisibility(
-            visible = undoStack.value.isNotBlank(),
+            visible = undoStack.isNotBlank(),
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
@@ -469,8 +382,8 @@ private fun ToolBar(
                         )
                     },
                     onLongClick = {
-                        codeField.value = TextFieldValue(undoStack.value)
-                        undoStack.value = ""
+                        codeFieldChanged(undoStack)
+                        clearUndoStack()
                     }
                 )
                 .constrainAs(undo) {

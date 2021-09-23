@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
+import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
@@ -24,10 +25,10 @@ import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetFileCo
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubUpdateFileUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.orbitmvi.orbit.ContainerHost
@@ -59,7 +60,6 @@ class JsEditorViewModel @Inject constructor(
             .post()
             .wholeText()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun githubCreateRepo(
         path: String,
         githubRepo: GithubRepo,
@@ -78,6 +78,7 @@ class JsEditorViewModel @Inject constructor(
                                 reduce {
                                     state.copy(
                                         loaded = true,
+                                        exception = null,
                                         successType = MviJsEditorSuccessType.GithubCreateRepo
                                     )
                                 }
@@ -99,14 +100,16 @@ class JsEditorViewModel @Inject constructor(
         }
     }
 
-    fun githubGetFileContent(repoName: String, path: String, branch: String) = intent {
+    fun githubUpdateProject(repoName: String, path: String, branch: String) = intent {
         githubGetFileContentUseCase(repoName, path, branch).collect { getFileContentResult ->
             getFileContentResult.doWhen(
-                onSuccess = {
+                onSuccess = { fileContent ->
+                    postSideEffect(MviJsEditorSideEffect.UpdateCodeField(Web.parse(fileContent.downloadUrl)))
                     reduce {
                         state.copy(
                             loaded = true,
-                            successType = MviJsEditorSuccessType.GithubGetFileContent
+                            exception = null,
+                            successType = MviJsEditorSuccessType.GithubUpdateProject
                         )
                     }
                 },
@@ -119,7 +122,6 @@ class JsEditorViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun githubCommitAndPush(repoName: String, path: String, githubFile: GithubFile) = intent {
         githubGetFileContentUseCase(
             repoName,
@@ -138,7 +140,8 @@ class JsEditorViewModel @Inject constructor(
                                 reduce {
                                     state.copy(
                                         loaded = true,
-                                        successType = MviJsEditorSuccessType.GithubUpdateFile
+                                        exception = null,
+                                        successType = MviJsEditorSuccessType.GithubCommitAndPush
                                     )
                                 }
                             },
@@ -159,15 +162,58 @@ class JsEditorViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCommitHistory(ownerName: String, repoName: String) =
-        getCommitHistoryUseCase(ownerName, repoName)
+    fun loadCommitHistory(userName: String, repoName: String) = intent {
+        val commitHistory = mutableListOf<CommitHistoryItem>()
 
-    suspend fun getCommitContent(ownerName: String, repoName: String, sha: String) =
-        getCommitContentUseCase(
-            ownerName,
-            repoName,
-            sha
-        )
+        coroutineScope {
+            launch {
+                getCommitHistoryUseCase(userName, repoName).collect { commitListResult ->
+                    commitListResult.doWhen(
+                        onSuccess = { commitLists ->
+                            commitLists.value.forEach { commitList ->
+                                getCommitContentUseCase(
+                                    userName,
+                                    repoName,
+                                    commitList.sha
+                                ).collect { commitContentResult ->
+                                    commitContentResult.doWhen(
+                                        onSuccess = { commitContents ->
+                                            commitContents.value.forEach { commitContentItem ->
+                                                commitHistory.add(
+                                                    CommitHistoryItem(
+                                                        key = commitList,
+                                                        items = commitContentItem
+                                                    )
+                                                )
+                                            }
+                                        },
+                                        onFail = { exception ->
+                                            reduce {
+                                                state.copy(loaded = true, exception = exception)
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        },
+                        onFail = { exception ->
+                            reduce {
+                                state.copy(loaded = true, exception = exception)
+                            }
+                        }
+                    )
+                }
+            }.join()
+            postSideEffect(MviJsEditorSideEffect.UpdateCommitHistoryItems(commitHistory))
+            reduce {
+                state.copy(
+                    loaded = true,
+                    exception = null,
+                    successType = MviJsEditorSuccessType.None
+                )
+            }
+        }
+    }
 
     fun codeMinify(code: String) = intent {
         val minifyCode = coroutineScope {
@@ -175,7 +221,7 @@ class JsEditorViewModel @Inject constructor(
         }
         postSideEffect(MviJsEditorSideEffect.UpdateCodeField(minifyCode.await()))
         reduce {
-            state.copy(loaded = true, successType = MviJsEditorSuccessType.None)
+            state.copy(loaded = true, exception = null, successType = MviJsEditorSuccessType.None)
         }
     }
 
@@ -187,7 +233,7 @@ class JsEditorViewModel @Inject constructor(
         }
         postSideEffect(MviJsEditorSideEffect.UpdateCodeField(prettyCode.await()))
         reduce {
-            state.copy(loaded = true, successType = MviJsEditorSuccessType.None)
+            state.copy(loaded = true, exception = null, successType = MviJsEditorSuccessType.None)
         }
     }
 }

@@ -49,6 +49,7 @@ class SetupViewModel @Inject constructor(
                                 reduce {
                                     state.copy(
                                         loaded = true,
+                                        exception = null,
                                         aouthToken = githubData.aouthToken,
                                         userName = githubData.userName,
                                         profileImageUrl = githubData.profileImageUrl

@@ -10,5 +10,5 @@
 package io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi
 
 enum class MviJsEditorSuccessType {
-    None, GithubCreateRepo, GithubGetFileContent, GithubCommitAndPush, GithubUpdateFile
+    None, GithubCreateRepo, GithubUpdateProject, GithubCommitAndPush
 }
