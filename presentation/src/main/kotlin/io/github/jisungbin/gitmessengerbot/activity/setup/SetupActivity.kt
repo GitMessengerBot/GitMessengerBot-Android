@@ -31,13 +31,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -67,6 +70,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import org.orbitmvi.orbit.viewmodel.observe
 
@@ -74,7 +78,6 @@ import org.orbitmvi.orbit.viewmodel.observe
 class SetupActivity : ComponentActivity() {
 
     private val vm: SetupViewModel by viewModels()
-
     private var wearAppInstalled by mutableStateOf(false)
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -106,7 +109,6 @@ class SetupActivity : ComponentActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         }
 
-        vm.observe(lifecycleOwner = this, state = ::handleState, sideEffect = ::handleSideEffect)
         SystemUiController(window).setSystemBarsColor(colors.primary)
         setContent {
             MaterialTheme {
@@ -117,6 +119,20 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
+        val lifeCycle = LocalLifecycleOwner.current
+        val exception = remember { mutableStateOf<Exception?>(null) }
+
+        ExceptionDialog(exception = exception)
+        LaunchedEffect(vm) {
+            vm.observe(
+                lifecycleOwner = lifeCycle,
+                state = { state ->
+                    handleState(state = state, onExceptionChanged = { exception.value = it })
+                },
+                sideEffect = ::handleSideEffect
+            )
+        }
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -341,19 +357,20 @@ class SetupActivity : ComponentActivity() {
         vm.login(requestCode)
     }
 
-    private fun handleState(state: MviSetupState) {
+    private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
         if (state.loaded) {
             if (!state.isException()) {
                 finish()
                 startActivity(Intent(this@SetupActivity, MainActivity::class.java))
                 toast(getString(R.string.activity_setup_toast_welcome, state.userName))
             } else {
-                toast(state.exception.toString()) // TODO: ErrorDialog
+                onExceptionChanged(state.exception!!)
             }
         }
     }
 
     private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
+        println(sideEffect)
         when (sideEffect) {
             is MviSetupSideEffect.SaveData -> {
                 Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())

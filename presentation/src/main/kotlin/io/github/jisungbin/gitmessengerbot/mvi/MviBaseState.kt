@@ -13,5 +13,5 @@ interface MviBaseState {
     val loaded: Boolean
     val exception: Exception?
 
-    fun isException() = exception == null
+    fun isException() = exception != null
 }
