@@ -97,8 +97,8 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
             state = { state ->
                 handleState(
                     state = state,
-                    onExceptionChanged = { _exception -> exception.value = _exception },
-                    toast = { stringRes -> toast(context, context.getString(stringRes)) }
+                    toast = { stringRes -> toast(context, context.getString(stringRes)) },
+                    onExceptionChanged = { _exception -> exception.value = _exception }
                 )
             },
             sideEffect = { sideEffect ->
@@ -150,8 +150,8 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
 
 private inline fun handleState(
     state: MviJsEditorState,
-    onExceptionChanged: (Exception) -> Unit,
-    toast: (Int) -> Unit
+    toast: (Int) -> Unit,
+    onExceptionChanged: (Exception) -> Unit
 ) {
     if (state.loaded) {
         if (!state.isException()) {

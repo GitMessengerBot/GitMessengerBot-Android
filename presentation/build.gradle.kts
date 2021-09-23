@@ -84,6 +84,7 @@ dependencies {
     Dependencies.ui.forEach(::implementation)
     Dependencies.mvi.forEach(::implementation)
     Dependencies.util.forEach(::implementation)
+    Dependencies.jackson.forEach(::implementation)
     Dependencies.compose.forEach(::implementation)
     Dependencies.retrofit.forEach(::implementation)
     Dependencies.retrofitutil.forEach(::implementation)
