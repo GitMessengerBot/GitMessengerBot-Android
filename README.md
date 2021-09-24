@@ -1,4 +1,4 @@
-<image src="https://raw.githubusercontent.com/sungbin5304/GitMessengerBot/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" />
+<image src="https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/xml/alpha/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png?raw=true" align="right" />
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 a Messenger Auto-Reply Bot application with Git service.
