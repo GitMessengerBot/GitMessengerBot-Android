@@ -358,7 +358,6 @@ class SetupActivity : ComponentActivity() {
     }
 
     private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
-        println(state)
         if (state.loaded) {
             if (!state.isException()) {
                 finish()
@@ -371,7 +370,6 @@ class SetupActivity : ComponentActivity() {
     }
 
     private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
-        println(sideEffect)
         when (sideEffect) {
             is MviSetupSideEffect.SaveData -> {
                 Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())
