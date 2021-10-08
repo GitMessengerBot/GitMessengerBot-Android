@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Retrofit
 
 class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubCommitRepository {
-    private val api by lazy { signedRetrofit.create(GithubCommitService::class.java) }
+    private val api = signedRetrofit.create(GithubCommitService::class.java)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getFileCommitHistory(owner: String, repoName: String) = callbackFlow {
