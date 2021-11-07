@@ -9,6 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.mvi
 
-sealed class MviBaseSideEffect {
-    data class Toast(val message: String) : MviBaseSideEffect()
+sealed interface MviBaseSideEffect {
+    data class Toast(val message: String) : MviBaseSideEffect
 }

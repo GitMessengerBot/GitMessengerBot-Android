@@ -28,7 +28,7 @@ class DebugActivty : ComponentActivity() {
         val script = try {
             Bot.getAllScripts().first { it.id == scriptId }
         } catch (exception: Exception) {
-            throw PresentationException("DebugItem script it not exist. (${exception.message})")
+            throw PresentationException("$scriptId 아이디를 가진 DebugItem 스크립트가 존재하지 않아요. (${exception.message})")
         }
 
         SystemUiController(window).run {

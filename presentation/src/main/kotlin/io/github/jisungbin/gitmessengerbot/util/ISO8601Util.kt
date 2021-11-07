@@ -22,7 +22,7 @@ object ISO8601Util {
 
         val outputFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA)
         val date = inputFormat.parse(time)
-            ?: throw PresentationException("ISO8601Util.convertKST inputFormat.parse is null.")
+            ?: throw PresentationException("inputFormat.parse 값이 null 이에요.")
 
         return outputFormat.format(date).toString()
     }

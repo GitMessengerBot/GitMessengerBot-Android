@@ -40,8 +40,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -77,14 +77,14 @@ import io.github.sungbin.gitmessengerbot.core.bot.debug.getByScriptId
 import io.github.sungbin.gitmessengerbot.core.bot.debug.sortedByTime
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 @Composable
 fun Debug(activity: Activity, script: ScriptItem? = null) {
-    val app by AppConfig.app.observeAsState(AppConfig.appValue)
+    val app by AppConfig.app.collectAsState()
     val settingDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -281,7 +281,7 @@ private fun DebugContent(
         val coroutineScope = rememberCoroutineScope()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
-        var items = DebugStore.items.observeAsState(DebugStore.itemsValue).value
+        var items = DebugStore.items.collectAsState().value
         val debugId: Int
 
         when {

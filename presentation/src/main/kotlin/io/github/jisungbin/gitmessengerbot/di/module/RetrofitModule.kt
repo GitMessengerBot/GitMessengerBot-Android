@@ -45,7 +45,7 @@ object RetrofitModule {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
             val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-                ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
+                ?: throw PresentationException("GithubConfig.DataPath 값이 null 이에요.")
             builder = builder
                 .addHeader("Authorization", "token ${githubData.aouthToken}")
                 .addHeader("Accept", "application/json")
