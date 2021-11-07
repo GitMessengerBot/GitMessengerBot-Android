@@ -22,6 +22,8 @@ object Application {
 }
 
 object Versions {
+    const val Orbit = "4.2.0"
+
     object Essential {
         const val Kotlin = "1.6.0-RC"
         const val CoreKtx = "1.6.0"
@@ -61,13 +63,13 @@ object Versions {
     }
 
     object Compose {
-        const val Lottie = "4.1.0"
+        const val Lottie = "4.2.0"
         const val Master = "1.0.5"
-        const val Activity = "1.3.1"
+        const val Activity = "1.4.0"
         const val TimeLineView = "1.0.2"
         const val FancyBottomBar = "1.0.1"
         const val LandscapistCoil = "1.4.1"
-        const val Lifecycle = "1.0.0-alpha07"
+        const val Lifecycle = "2.4.0"
         const val Navigation = "2.4.0-alpha09"
         const val ConstraintLayout = "1.0.0-beta01"
     }
@@ -76,16 +78,12 @@ object Versions {
         const val Master = "17.0.0"
         const val Classpath = "0.10.4"
     }
-
-    object Mvi {
-        const val Orbit = "4.2.0"
-    }
 }
 
 object Dependencies {
     const val Jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
+    const val Orbit = "org.orbit-mvi:orbit-viewmodel:${Versions.Orbit}"
     const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
-    const val Orbit = "org.orbit-mvi:orbit-viewmodel:${Versions.Mvi.Orbit}"
     const val LandscapistCoil =
         "com.github.skydoves:landscapist-coil:${Versions.Compose.LandscapistCoil}"
 
