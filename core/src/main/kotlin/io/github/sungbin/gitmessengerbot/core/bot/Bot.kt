@@ -15,8 +15,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
@@ -32,16 +30,17 @@ import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@Suppress("FunctionName")
 object Sender {
     const val Bot = "Bot"
+
+    @Suppress("FunctionName")
     fun User(name: String = "User") = name
 }
 
 object Bot {
     private val _scripts = MutableStateFlow(getList())
-    private val scriptPowers: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
-    private val compileStates: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
+    private val scriptPowers: HashMap<Int, MutableStateFlow<Boolean>> = hashMapOf()
+    private val compileStates: HashMap<Int, MutableStateFlow<Boolean>> = hashMapOf()
     private val scriptCompiler = Injection.Compiler.provide
 
     val scripts = _scripts.asStateFlow()
@@ -55,13 +54,11 @@ object Bot {
 
     fun getRunnableScripts() = _scripts.value.filter { it.isRunnable }
 
-    fun getScriptPower(script: ScriptItem): LiveData<Boolean> =
-        scriptPowers[script.id]
-            ?: throw CoreException("There is no ${script.id} key in scriptPowers.")
+    fun getScriptPower(script: ScriptItem) = scriptPowers[script.id]?.asStateFlow()
+        ?: throw CoreException("scriptPowers에 ${script.id} 키가 없어요.")
 
-    fun getCompileState(script: ScriptItem): LiveData<Boolean> =
-        scriptPowers[script.id]
-            ?: throw CoreException("There is no ${script.id} key in compileStates.")
+    fun getCompileState(script: ScriptItem) = compileStates[script.id]?.asStateFlow()
+        ?: throw CoreException("compileStates에 ${script.id} 키가 없어요.")
 
     fun scriptDataSave(script: ScriptItem) {
         _scripts.edit {
@@ -93,7 +90,7 @@ object Bot {
             val sendIntent = Intent()
             val messageBundle = Bundle()
             val remoteInputs =
-                session.remoteInputs ?: throw CoreException("remoteInputs cannot be null.")
+                session.remoteInputs ?: throw CoreException("remoteInputs가 null 이에요.")
             for (inputable in remoteInputs) {
                 messageBundle.putCharSequence(inputable.resultKey, message)
             }
@@ -144,7 +141,7 @@ object Bot {
                 .filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
                     val scriptData = Storage.read(scriptDataFile.path, null)
-                        ?: throw CoreException("$scriptDataFile file is null.")
+                        ?: throw CoreException("$scriptDataFile 파일이 null 이에요.")
                     val script: ScriptItem = scriptData.toModel()
                     if (script.compiled) {
                         if (StackManager.v8[script.id] == null) {

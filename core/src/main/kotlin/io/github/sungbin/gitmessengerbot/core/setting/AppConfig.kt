@@ -9,22 +9,21 @@
 
 package io.github.sungbin.gitmessengerbot.core.setting
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.github.jisungbin.gitmessengerbot.common.constant.PathConstant
 import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.setting.model.App
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 object AppConfig {
-    private val _app = MutableLiveData(loadApp())
+    private val _app = MutableStateFlow(loadApp())
 
-    val app: LiveData<App> get() = _app
-    val appValue: App get() = app.value ?: throw CoreException("AppConfig.app value is null.")
+    val app = _app.asStateFlow()
+    val appValue: App get() = app.value
 
     val evalUsable: Boolean get() = StackManager.v8[ScriptConstant.EvalId] != null
 
