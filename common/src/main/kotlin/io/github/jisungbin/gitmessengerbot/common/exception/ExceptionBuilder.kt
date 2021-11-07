@@ -9,6 +9,8 @@
 
 package io.github.jisungbin.gitmessengerbot.common.exception
 
+class TodoException(where: String) : Exception("$where 은 아직 개발되지 않은 기능입니다.")
+
 class CoreException(override val message: String?) : Exception()
 
 class DataGithubException(override val message: String?) : Exception()

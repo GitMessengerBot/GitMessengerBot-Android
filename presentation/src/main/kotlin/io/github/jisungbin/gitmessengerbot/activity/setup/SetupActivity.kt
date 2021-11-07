@@ -57,7 +57,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Wear
@@ -372,7 +372,7 @@ class SetupActivity : ComponentActivity() {
     private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
         when (sideEffect) {
             is MviSetupSideEffect.SaveData -> {
-                Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())
+                Storage.write(GithubConstant.DataPath, sideEffect.data.toJsonString())
             }
         }
     }

@@ -22,7 +22,7 @@ internal class BotApi(private val context: Context, private val scriptId: Int) {
     private val showAll = "\u200b".repeat(500)
 
     private fun getReplySession(room: String) = StackManager.sessions[room]
-        ?: throw CoreException("There is no $scriptId key in StackManager.sessions.")
+        ?: throw CoreException("StackManager.sessions에 $scriptId 키가 없어요.")
 
     fun reply(room: String, message: String, isDebugMode: Boolean) {
         if (!isDebugMode) {

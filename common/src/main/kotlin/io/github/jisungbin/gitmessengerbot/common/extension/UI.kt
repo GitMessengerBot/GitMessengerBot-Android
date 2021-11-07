@@ -15,7 +15,7 @@ import android.widget.Toast
 
 fun toast(activity: Activity, message: String, length: Int = Toast.LENGTH_SHORT) {
     activity.runOnUiThread {
-        Toast.makeText(activity, message, length).show()
+        toast(activity, message, length)
     }
 }
 

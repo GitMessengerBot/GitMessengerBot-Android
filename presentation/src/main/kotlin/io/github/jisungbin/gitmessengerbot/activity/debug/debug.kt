@@ -61,7 +61,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -286,12 +286,12 @@ private fun DebugContent(
 
         when {
             evalMode -> {
-                items = items.getByScriptId(ScriptConfig.EvalId)
-                debugId = ScriptConfig.EvalId
+                items = items.getByScriptId(ScriptConstant.EvalId)
+                debugId = ScriptConstant.EvalId
             }
             script == null -> {
-                items = items.filterNot { it.scriptId == ScriptConfig.EvalId }
-                debugId = ScriptConfig.DebugAllBot
+                items = items.filterNot { it.scriptId == ScriptConstant.EvalId }
+                debugId = ScriptConstant.DebugAllBot
             }
             else -> {
                 items = items.getByScriptId(script.id)
@@ -356,7 +356,7 @@ private fun DebugContent(
                             evalMode -> {
                                 Bot.callJsResponder(
                                     script = ScriptItem(
-                                        id = ScriptConfig.EvalId,
+                                        id = ScriptConstant.EvalId,
                                         name = "",
                                         lang = 0,
                                         power = false,

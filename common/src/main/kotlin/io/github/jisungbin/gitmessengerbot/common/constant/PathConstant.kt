@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common.config
+package io.github.jisungbin.gitmessengerbot.common.constant
 
-object PathConfig {
+object PathConstant {
     internal const val AppStorage = "GitMessengerBot/data"
     const val AppData = "$AppStorage/app.json"
 }

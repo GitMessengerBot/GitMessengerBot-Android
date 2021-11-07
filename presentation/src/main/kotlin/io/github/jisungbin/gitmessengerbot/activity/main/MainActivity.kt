@@ -40,7 +40,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                 Bot.compileScript(
                     applicationContext,
                     ScriptItem(
-                        id = ScriptConfig.EvalId,
+                        id = ScriptConstant.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,

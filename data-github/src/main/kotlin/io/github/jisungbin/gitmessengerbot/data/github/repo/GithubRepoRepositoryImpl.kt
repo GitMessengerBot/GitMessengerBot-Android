@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.repo
 
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
@@ -28,7 +28,7 @@ import retrofit2.Retrofit
 
 class GithubRepoRepositoryImpl(private val retrofit: Retrofit) : GithubRepoRepository {
     private val api = retrofit.create(GithubRepoService::class.java)
-    private val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
+    private val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
         ?: throw DataGithubException("GithubConfig.DataPath data is null.")
 
     @OptIn(ExperimentalCoroutinesApi::class)

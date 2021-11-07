@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.Config
+import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -312,7 +312,7 @@ private fun Content(activity: Activity) {
             )
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
                 val kakaoTalkPackageNames =
-                    app.kakaoTalkPackageNames.sortedBy { it == Config.KakaoTalkDefaultPackageName }
+                    app.kakaoTalkPackageNames.sortedBy { it == BotConstant.KakaoTalkDefaultPackageName }
                         .asReversed()
                 val message =
                     if (kakaoTalkPackageNames.size == 1) kakaoTalkPackageNames.first()

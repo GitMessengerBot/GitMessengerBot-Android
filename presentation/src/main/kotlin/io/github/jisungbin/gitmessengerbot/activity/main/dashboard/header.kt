@@ -63,8 +63,8 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
@@ -113,7 +113,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
 
     val app by AppConfig.app.observeAsState(AppConfig.appValue)
     val backgroundService = Intent(context, BackgroundService::class.java)
-    val githubJson = Storage.read(GithubConfig.DataPath, null)
+    val githubJson = Storage.read(GithubConstant.DataPath, null)
         ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
     val githubData: GithubData = githubJson.toModel()
     var searching by remember { mutableStateOf(false) }
@@ -133,7 +133,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                 .clip(CircleShape)
                 .clickable {
                     val intent = Intent(activity, ImageViewActivity::class.java).apply {
-                        putExtra(IntentConfig.ImageUrl, githubData.profileImageUrl)
+                        putExtra(IntentConstant.ImageUrl, githubData.profileImageUrl)
                     }
                     activity.startActivity(
                         intent,

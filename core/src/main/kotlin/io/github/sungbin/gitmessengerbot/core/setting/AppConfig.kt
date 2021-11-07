@@ -11,8 +11,8 @@ package io.github.sungbin.gitmessengerbot.core.setting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.common.config.PathConfig
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.PathConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
@@ -26,13 +26,13 @@ object AppConfig {
     val app: LiveData<App> get() = _app
     val appValue: App get() = app.value ?: throw CoreException("AppConfig.app value is null.")
 
-    val evalUsable: Boolean get() = StackManager.v8[ScriptConfig.EvalId] != null
+    val evalUsable: Boolean get() = StackManager.v8[ScriptConstant.EvalId] != null
 
     fun update(update: (App) -> App) {
         val value = update(appValue)
-        Storage.write(PathConfig.AppData, value.toJsonString())
+        Storage.write(PathConstant.AppData, value.toJsonString())
         _app.value = value
     }
 
-    private fun loadApp() = Storage.read(PathConfig.AppData, null)?.toModel() ?: App()
+    private fun loadApp() = Storage.read(PathConstant.AppData, null)?.toModel() ?: App()
 }

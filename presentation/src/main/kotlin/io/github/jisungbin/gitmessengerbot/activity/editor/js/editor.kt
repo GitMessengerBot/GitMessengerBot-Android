@@ -58,7 +58,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
@@ -200,10 +200,10 @@ private fun DrawerLayout(
     val vm: JsEditorViewModel = viewModel()
 
     val repoName = script.name
-    val gitUser: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
+    val gitUser: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
         ?: throw PresentationException("GithubConfig.DataPath data value is null.")
     val repoPath = "script.${script.lang.getScriptSuffix()}"
-    val repoDescription = GithubConfig.DefaultRepoDescription // TODO
+    val repoDescription = GithubConstant.DefaultRepoDescription // TODO
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
     val repo = GithubRepo(name = repoName, description = repoDescription)
 

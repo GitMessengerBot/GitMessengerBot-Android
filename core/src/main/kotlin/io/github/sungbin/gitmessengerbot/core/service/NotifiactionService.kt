@@ -12,7 +12,7 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.R
@@ -28,8 +28,8 @@ class NotifiactionService : BroadcastReceiver() {
     private val scriptCompiler = Injection.Compiler.provide
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.getStringExtra(IntentConfig.NotificationAction)) {
-            IntentConfig.BotPowerToggle -> {
+        when (intent?.getStringExtra(IntentConstant.NotificationAction)) {
+            IntentConstant.BotPowerToggle -> {
                 // TODO
                 /*if (Bot.app.value.power.value) {
                     context!!.startService(Intent(context, BackgroundService::class.java))
@@ -38,7 +38,7 @@ class NotifiactionService : BroadcastReceiver() {
                 }
                 Bot.scriptDataSaveAndUpdate(Bot.app.value.copy(power = mutableStateOf(!Bot.app.value.power.value)))*/
             }
-            IntentConfig.BotAllRecompile -> {
+            IntentConstant.BotAllRecompile -> {
                 CoroutineScope(Dispatchers.Default).launch {
                     toast(
                         context!!,

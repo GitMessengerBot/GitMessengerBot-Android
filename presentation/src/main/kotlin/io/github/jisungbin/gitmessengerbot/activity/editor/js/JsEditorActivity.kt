@@ -16,7 +16,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
@@ -37,7 +37,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(IntentConfig.ScriptId, -1)
+        val scriptId = intent.getIntExtra(IntentConstant.ScriptId, -1)
 
         setContent {
             MaterialTheme {

@@ -7,28 +7,28 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common.config
+package io.github.jisungbin.gitmessengerbot.common.constant
 
 import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import kotlin.random.Random
 
 @Suppress("FunctionName")
-object ScriptConfig {
+object ScriptConstant {
     const val DebugAllBot = -1
     const val EvalId = -2
 
     const val DefaultResponseFunctionName = "onMessage"
-    const val DebugAllPath = "${PathConfig.AppStorage}/debug"
+    const val DebugAllPath = "${PathConstant.AppStorage}/debug"
 
     fun DebugDataPath(scriptId: Int) =
-        "${PathConfig.AppStorage}/debug/$scriptId/${Random.nextInt()}.json"
+        "${PathConstant.AppStorage}/debug/$scriptId/${Random.nextInt()}.json"
 
     fun ScriptPath(name: String, lang: Int) =
-        "${PathConfig.AppStorage}/scripts/${lang.toScriptLangName()}/$name.${lang.getScriptSuffix()}"
+        "${PathConstant.AppStorage}/scripts/${lang.toScriptLangName()}/$name.${lang.getScriptSuffix()}"
 
-    fun ScriptListPath(lang: Int) = "${PathConfig.AppStorage}/scripts/${lang.toScriptLangName()}"
+    fun ScriptListPath(lang: Int) = "${PathConstant.AppStorage}/scripts/${lang.toScriptLangName()}"
 
     fun ScriptDataPath(name: String, lang: Int) =
-        "${PathConfig.AppStorage}/scripts/${lang.toScriptLangName()}/$name-data.json"
+        "${PathConstant.AppStorage}/scripts/${lang.toScriptLangName()}/$name-data.json"
 }

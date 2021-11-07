@@ -9,24 +9,24 @@
 
 package io.github.sungbin.gitmessengerbot.core.setting.model
 
-import io.github.jisungbin.gitmessengerbot.common.config.Config
-import io.github.jisungbin.gitmessengerbot.common.config.EditorConfig
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.EditorConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 
 data class App(
     val power: Boolean = false,
     val evalMode: Boolean = false,
-    val editorHorizontalScroll: Boolean = EditorConfig.HorizontalScroll,
-    val editorFontName: String = EditorConfig.FontName,
-    val editorFontSize: Int = EditorConfig.FontSize,
-    val editorAutoSave: Int = EditorConfig.AutoSave,
+    val editorHorizontalScroll: Boolean = EditorConstant.HorizontalScroll,
+    val editorFontName: String = EditorConstant.FontName,
+    val editorFontSize: Int = EditorConstant.FontSize,
+    val editorAutoSave: Int = EditorConstant.AutoSave,
     val scriptDefaultCode: ScriptDefaultCode = ScriptDefaultCode(),
     val scriptDefaultLang: Int = ScriptLang.TypeScript,
-    val scriptResponseFunctionName: String = ScriptConfig.DefaultResponseFunctionName,
-    val gitDefaultBranch: String = GithubConfig.DefaultBranch,
-    val gitDefaultCommitMessage: String = GithubConfig.DefaultCommitMessage,
+    val scriptResponseFunctionName: String = ScriptConstant.DefaultResponseFunctionName,
+    val gitDefaultBranch: String = GithubConstant.DefaultBranch,
+    val gitDefaultCommitMessage: String = GithubConstant.DefaultCommitMessage,
     val gitDefaultRepoOptions: RepoOptions = RepoOptions(),
-    val kakaoTalkPackageNames: List<String> = listOf(Config.KakaoTalkDefaultPackageName),
+    val kakaoTalkPackageNames: List<String> = listOf(BotConstant.KakaoTalkDefaultPackageName),
 )

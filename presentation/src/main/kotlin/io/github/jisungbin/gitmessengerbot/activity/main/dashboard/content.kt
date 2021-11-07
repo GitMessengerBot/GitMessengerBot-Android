@@ -80,7 +80,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.isEnglish
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
@@ -231,7 +231,7 @@ private fun ScriptItem(script: ScriptItem) {
             .clip(shape)
             .clickable {
                 val intent = Intent(context, JsEditorActivity::class.java).apply {
-                    putExtra(IntentConfig.ScriptId, script.id)
+                    putExtra(IntentConstant.ScriptId, script.id)
                 }
                 context.startActivity(intent)
             }
@@ -300,7 +300,7 @@ private fun ScriptItem(script: ScriptItem) {
                     .size(20.dp)
                     .clickable {
                         val intent = Intent(context, DebugActivty::class.java).apply {
-                            putExtra(IntentConfig.DebugScriptId, script.id)
+                            putExtra(IntentConstant.DebugScriptId, script.id)
                         }
                         context.startActivity(intent)
                     }

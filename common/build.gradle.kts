@@ -40,7 +40,6 @@ android {
 dependencies {
     implementation(Dependencies.jsoup)
     implementation(Dependencies.browser)
-    implementation(Dependencies.livedata)
 
     Dependencies.essential.forEach(::api)
     Dependencies.jackson.forEach(::implementation)
