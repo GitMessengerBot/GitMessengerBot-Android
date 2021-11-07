@@ -12,14 +12,22 @@ package io.github.jisungbin.gitmessengerbot.domain.github.repo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
+import kotlinx.coroutines.CoroutineScope
 
 interface GithubRepoRepository {
     suspend fun getFileContent(
         repoName: String,
         path: String,
         branch: String,
+        coroutineScope: CoroutineScope
     ): Result<GithubFileContent>
 
-    suspend fun createRepo(githubRepo: GithubRepo): Result<Unit>
-    suspend fun updateFile(repoName: String, path: String, githubFile: GithubFile): Result<Unit>
+    suspend fun createRepo(githubRepo: GithubRepo, coroutineScope: CoroutineScope): Result<Unit>
+
+    suspend fun updateFile(
+        repoName: String,
+        path: String,
+        githubFile: GithubFile,
+        coroutineScope: CoroutineScope
+    ): Result<Unit>
 }

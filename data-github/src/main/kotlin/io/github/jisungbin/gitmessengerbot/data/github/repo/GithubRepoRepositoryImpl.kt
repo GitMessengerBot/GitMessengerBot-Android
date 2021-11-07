@@ -28,10 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 
-class GithubRepoRepositoryImpl(
-    retrofit: Retrofit,
-    private val coroutineScope: CoroutineScope
-) : GithubRepoRepository {
+class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
     private val api = retrofit.create(GithubRepoService::class.java)
     private val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
         ?: throw DataGithubException("GithubConfig.DataPath 데이터가 null 이에요.")
@@ -39,7 +36,8 @@ class GithubRepoRepositoryImpl(
     override suspend fun getFileContent(
         repoName: String,
         path: String,
-        branch: String
+        branch: String,
+        coroutineScope: CoroutineScope
     ): Result<GithubFileContent> = suspendCoroutine { continuation ->
         coroutineScope.launch {
             try {
@@ -57,7 +55,10 @@ class GithubRepoRepositoryImpl(
         }
     }
 
-    override suspend fun createRepo(githubRepo: GithubRepo): Result<Unit> =
+    override suspend fun createRepo(
+        githubRepo: GithubRepo,
+        coroutineScope: CoroutineScope
+    ): Result<Unit> =
         suspendCoroutine { continuation ->
             coroutineScope.launch {
                 try {
@@ -79,6 +80,7 @@ class GithubRepoRepositoryImpl(
         repoName: String,
         path: String,
         githubFile: GithubFile,
+        coroutineScope: CoroutineScope
     ): Result<Unit> = suspendCoroutine { continuation ->
         coroutineScope.launch {
             try {

@@ -9,15 +9,13 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseGithubRequestAouthTokenUseCase = BaseUseCase<String, GithubAouth>
-
-class GithubRequestAouthTokenUseCase(
-    private val githubUserRepository: GithubUserRepository,
-) : BaseGithubRequestAouthTokenUseCase {
-    override suspend fun invoke(parameter: String) =
-        githubUserRepository.requestAouthToken(requestCode = parameter)
+class GithubRequestAouthTokenUseCase(private val githubUserRepository: GithubUserRepository) {
+    suspend operator fun invoke(requestCode: String, coroutineScope: CoroutineScope) =
+        githubUserRepository.requestAouthToken(
+            requestCode = requestCode,
+            coroutineScope = coroutineScope
+        )
 }

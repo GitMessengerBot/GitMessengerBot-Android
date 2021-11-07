@@ -9,17 +9,17 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase2
-import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitLists
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseCommitHistoryUseCase = BaseUseCase2<String, String, CommitLists>
-
-class GetCommitHistoryUseCase(
-    private val commitRepository: GithubCommitRepository,
-) : BaseCommitHistoryUseCase {
-    override suspend fun invoke(
-        parameter: String,
-        parameter2: String,
-    ) = commitRepository.getFileCommitHistory(owner = parameter, repoName = parameter2)
+class GetCommitHistoryUseCase(private val commitRepository: GithubCommitRepository) {
+    suspend operator fun invoke(
+        owner: String,
+        repoName: String,
+        coroutineScope: CoroutineScope
+    ) = commitRepository.getFileCommitHistory(
+        owner = owner,
+        repoName = repoName,
+        coroutineScope = coroutineScope
+    )
 }

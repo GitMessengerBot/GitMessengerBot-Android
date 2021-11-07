@@ -9,15 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseGithubGetUserInfoUseCase = BaseUseCase<String, GithubUser>
-
-class GithubGetUserInfoUseCase(
-    private val githubUserRepository: GithubUserRepository,
-) : BaseGithubGetUserInfoUseCase {
-    override suspend fun invoke(parameter: String) =
-        githubUserRepository.getUserInfo(aouthToken = parameter)
+class GithubGetUserInfoUseCase(private val githubUserRepository: GithubUserRepository) {
+    suspend operator fun invoke(aouthToken: String, coroutineScope: CoroutineScope) =
+        githubUserRepository.getUserInfo(aouthToken = aouthToken, coroutineScope = coroutineScope)
 }

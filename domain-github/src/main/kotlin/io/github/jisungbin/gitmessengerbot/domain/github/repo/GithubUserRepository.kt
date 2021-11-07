@@ -11,8 +11,12 @@ package io.github.jisungbin.gitmessengerbot.domain.github.repo
 
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
+import kotlinx.coroutines.CoroutineScope
 
 interface GithubUserRepository {
-    suspend fun getUserInfo(aouthToken: String): Result<GithubUser>
-    suspend fun requestAouthToken(requestCode: String): Result<GithubAouth>
+    suspend fun getUserInfo(aouthToken: String, coroutineScope: CoroutineScope): Result<GithubUser>
+    suspend fun requestAouthToken(
+        requestCode: String,
+        coroutineScope: CoroutineScope
+    ): Result<GithubAouth>
 }

@@ -32,8 +32,7 @@ import retrofit2.Retrofit
 class GithubUserRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
-    private val aouthRetrofit: Retrofit.Builder,
-    private val coroutineScope: CoroutineScope
+    private val aouthRetrofit: Retrofit.Builder
 ) : GithubUserRepository {
     private class AuthInterceptor(private val aouthToken: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -55,7 +54,10 @@ class GithubUserRepositoryImpl(
         .build()
         .create(GithubUserService::class.java)
 
-    override suspend fun getUserInfo(aouthToken: String): Result<GithubUser> =
+    override suspend fun getUserInfo(
+        aouthToken: String,
+        coroutineScope: CoroutineScope
+    ): Result<GithubUser> =
         suspendCoroutine { continuation ->
             coroutineScope.launch {
                 try {
@@ -75,7 +77,10 @@ class GithubUserRepositoryImpl(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun requestAouthToken(requestCode: String): Result<GithubAouth> =
+    override suspend fun requestAouthToken(
+        requestCode: String,
+        coroutineScope: CoroutineScope
+    ): Result<GithubAouth> =
         suspendCoroutine { continuation ->
             coroutineScope.launch {
                 try {

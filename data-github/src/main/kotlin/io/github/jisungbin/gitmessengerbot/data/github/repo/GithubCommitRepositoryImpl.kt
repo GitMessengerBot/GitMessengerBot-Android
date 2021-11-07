@@ -22,15 +22,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 
-class GithubCommitRepositoryImpl(
-    signedRetrofit: Retrofit,
-    private val coroutineScope: CoroutineScope
-) : GithubCommitRepository {
+class GithubCommitRepositoryImpl(signedRetrofit: Retrofit) : GithubCommitRepository {
     private val api = signedRetrofit.create(GithubCommitService::class.java)
 
     override suspend fun getFileCommitHistory(
         owner: String,
-        repoName: String
+        repoName: String,
+        coroutineScope: CoroutineScope
     ): Result<CommitLists> = suspendCoroutine { continuation ->
         coroutineScope.launch {
             try {
@@ -52,6 +50,7 @@ class GithubCommitRepositoryImpl(
         owner: String,
         repoName: String,
         sha: String,
+        coroutineScope: CoroutineScope
     ): Result<CommitContents> = suspendCoroutine { continuation ->
         coroutineScope.launch {
             try {

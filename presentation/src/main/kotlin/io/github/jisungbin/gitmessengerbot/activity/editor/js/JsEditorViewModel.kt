@@ -10,11 +10,14 @@
 package io.github.jisungbin.gitmessengerbot.activity.editor.js
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
 import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
+import io.github.jisungbin.gitmessengerbot.common.extension.toException
 import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
@@ -27,7 +30,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.jsoup.Jsoup
@@ -66,61 +68,63 @@ class JsEditorViewModel @Inject constructor(
         githubRepo: GithubRepo,
         githubFile: GithubFile,
     ) = intent {
-        githubCreateRepoUseCase(githubRepo).collect { repoCreateResult ->
-            repoCreateResult.doWhen(
-                onSuccess = {
-                    githubUpdateFileUseCase(
-                        githubRepo.name,
-                        path,
-                        githubFile
-                    ).collect { updateFileResult ->
-                        updateFileResult.doWhen(
-                            onSuccess = {
-                                reduce {
-                                    state.copy(
-                                        loaded = true,
-                                        exception = null,
-                                        successType = MviJsEditorSuccessType.GithubCreateRepo
-                                    )
-                                }
-                            },
-                            onFail = { exception ->
-                                reduce {
-                                    state.copy(exception = exception)
-                                }
-                            }
-                        )
+        githubCreateRepoUseCase(
+            githubRepoarameter = githubRepo,
+            coroutineScope = viewModelScope
+        ).doWhen(
+            onSuccess = {
+                githubUpdateFileUseCase(
+                    githubRepo.name,
+                    path,
+                    githubFile
+                ).doWhen(
+                    onSuccess = {
+                        reduce {
+                            state.copy(
+                                loaded = true,
+                                exception = null,
+                                successType = MviJsEditorSuccessType.GithubCreateRepo
+                            )
+                        }
+                    },
+                    onFailure = { throwable ->
+                        reduce {
+                            state.copy(exception = throwable.toException())
+                        }
                     }
-                },
-                onFail = { exception ->
-                    reduce {
-                        state.copy(exception = exception)
-                    }
+                )
+            },
+            onFailure = { throwable ->
+                reduce {
+                    state.copy(exception = throwable.toException())
                 }
-            )
-        }
+            }
+        )
     }
 
     fun githubUpdateProject(repoName: String, path: String, branch: String) = intent {
-        githubGetFileContentUseCase(repoName, path, branch).collect { getFileContentResult ->
-            getFileContentResult.doWhen(
-                onSuccess = { fileContent ->
-                    postSideEffect(MviJsEditorSideEffect.UpdateCodeField(Web.parse(fileContent.downloadUrl)))
-                    reduce {
-                        state.copy(
-                            loaded = true,
-                            exception = null,
-                            successType = MviJsEditorSuccessType.GithubUpdateProject
-                        )
-                    }
-                },
-                onFail = { exception ->
-                    reduce {
-                        state.copy(loaded = true, exception = exception)
-                    }
+        githubGetFileContentUseCase(
+            repoName = repoName,
+            path = path,
+            branch = branch,
+            coroutineScope = viewModelScope
+        ).doWhen(
+            onSuccess = { fileContent ->
+                postSideEffect(MviJsEditorSideEffect.UpdateCodeField(Web.parse(fileContent.downloadUrl)))
+                reduce {
+                    state.copy(
+                        loaded = true,
+                        exception = null,
+                        successType = MviJsEditorSuccessType.GithubUpdateProject
+                    )
                 }
-            )
-        }
+            },
+            onFailure = { throwable ->
+                reduce {
+                    state.copy(loaded = true, exception = throwable.toException())
+                }
+            }
+        )
     }
 
     fun githubCommitAndPush(repoName: String, path: String, githubFile: GithubFile) = intent {
