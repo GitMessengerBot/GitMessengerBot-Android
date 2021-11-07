@@ -9,19 +9,17 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github
 
-import kotlinx.coroutines.flow.Flow
-
 interface BaseUseCase<in Parameter, out ResultType> {
     suspend operator fun invoke(
         parameter: Parameter,
-    ): Flow<GithubResult<ResultType>>
+    ): Result<ResultType>
 }
 
 interface BaseUseCase2<in Parameter, in Parameter2, out ResultType> {
     suspend operator fun invoke(
         parameter: Parameter,
         parameter2: Parameter2,
-    ): Flow<GithubResult<ResultType>>
+    ): Result<ResultType>
 }
 
 interface BaseUseCase3<in Parameter, in Parameter2, in Parameter3, out ResultType> {
@@ -29,5 +27,5 @@ interface BaseUseCase3<in Parameter, in Parameter2, in Parameter3, out ResultTyp
         parameter: Parameter,
         parameter2: Parameter2,
         parameter3: Parameter3,
-    ): Flow<GithubResult<ResultType>>
+    ): Result<ResultType>
 }

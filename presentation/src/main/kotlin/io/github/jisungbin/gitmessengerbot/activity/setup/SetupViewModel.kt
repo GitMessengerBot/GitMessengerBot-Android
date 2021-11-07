@@ -58,7 +58,7 @@ class SetupViewModel @Inject constructor(
                             },
                             onFail = { exception ->
                                 reduce {
-                                    state.copy(loaded = true, exception = exception)
+                                    state.copy(exception = exception)
                                 }
                             }
                         )
@@ -66,7 +66,7 @@ class SetupViewModel @Inject constructor(
                 },
                 onFail = { exception ->
                     reduce {
-                        state.copy(loaded = true, exception = exception)
+                        state.copy(exception = exception)
                     }
                 }
             )

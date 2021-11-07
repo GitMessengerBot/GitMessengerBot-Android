@@ -23,8 +23,8 @@ import io.github.sungbin.gitmessengerbot.core.bot.api.Log
 import io.github.sungbin.gitmessengerbot.core.bot.api.UI
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepo
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
     private fun compileJavaScript(
@@ -129,9 +129,8 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
         api.release()
     }
 
-    @OptIn(InternalCoroutinesApi::class)
     override suspend fun process(context: Context, script: ScriptItem): Result<Unit> =
-        suspendCancellableCoroutine { continuation ->
+        suspendCoroutine { continuation ->
             when (script.lang) {
                 ScriptLang.TypeScript -> suspend {
                     ts2Js
@@ -140,25 +139,25 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
                             onSuccess = { ts2JsResult ->
                                 val jsCode = ts2JsResult.jsCode
                                 android.util.Log.i("ts2JsResult", jsCode)
-                                continuation.tryResume(
+                                continuation.resume(
                                     compileJavaScript(context, script, jsCode)
                                 )
                             },
                             onFailure = { exception ->
                                 script.power = false
                                 script.compiled = false
-                                continuation.tryResume(Result.failure(exception))
+                                continuation.resume(Result.failure(exception))
                             }
                         )
                 }
                 ScriptLang.JavaScript -> {
-                    continuation.tryResume(compileJavaScript(context, script, script.getCode()))
+                    continuation.resume(compileJavaScript(context, script, script.getCode()))
                 }
                 ScriptLang.Python -> { // todo
-                    continuation.tryResume(Result.failure(TodoException("파이썬 언어")))
+                    continuation.resume(Result.failure(TodoException("파이썬 언어")))
                 }
                 ScriptLang.Simple -> { // todo
-                    continuation.tryResume(Result.failure(TodoException("단자응 언어")))
+                    continuation.resume(Result.failure(TodoException("단자응 언어")))
                 }
             }
 

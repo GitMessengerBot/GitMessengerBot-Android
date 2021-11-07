@@ -48,12 +48,13 @@ class JsEditorViewModel @Inject constructor(
 
     override val container = container<MviJsEditorState, MviJsEditorSideEffect>(MviJsEditorState())
 
-    private enum class BeautifyType {
-        Minify, Pretty
+    private enum class BeautifyType(val apiAddress: String) {
+        Minify("https://javascript-minifier.com/raw"),
+        Pretty("https://amp.prettifyjs.net")
     }
 
     private fun codeBeautify(beautifyType: BeautifyType, code: String) =
-        Jsoup.connect(if (beautifyType == BeautifyType.Minify) "https://javascript-minifier.com/raw" else "https://amp.prettifyjs.net")
+        Jsoup.connect(beautifyType.apiAddress)
             .ignoreContentType(true)
             .ignoreHttpErrors(true)
             .data("input", code)
@@ -85,7 +86,7 @@ class JsEditorViewModel @Inject constructor(
                             },
                             onFail = { exception ->
                                 reduce {
-                                    state.copy(loaded = true, exception = exception)
+                                    state.copy(exception = exception)
                                 }
                             }
                         )
@@ -93,7 +94,7 @@ class JsEditorViewModel @Inject constructor(
                 },
                 onFail = { exception ->
                     reduce {
-                        state.copy(loaded = true, exception = exception)
+                        state.copy(exception = exception)
                     }
                 }
             )

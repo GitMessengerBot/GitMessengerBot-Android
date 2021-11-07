@@ -9,7 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.mvi
 
-sealed interface MviBaseState {
+interface MviBaseState {
     val loaded: Boolean
     val exception: Exception?
 

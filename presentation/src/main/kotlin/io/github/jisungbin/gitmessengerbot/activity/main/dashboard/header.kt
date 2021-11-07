@@ -36,8 +36,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -111,10 +111,10 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-    val app by AppConfig.app.observeAsState(AppConfig.appValue)
+    val app by AppConfig.app.collectAsState()
     val backgroundService = Intent(context, BackgroundService::class.java)
     val githubJson = Storage.read(GithubConstant.DataPath, null)
-        ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
+        ?: throw PresentationException("GithubConfig.DataPath의 값이 null 이에요.")
     val githubData: GithubData = githubJson.toModel()
     var searching by remember { mutableStateOf(false) }
 

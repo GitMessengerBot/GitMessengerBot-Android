@@ -10,14 +10,14 @@
 package io.github.jisungbin.gitmessengerbot.data.github.util
 
 import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.data.github.R
 import retrofit2.Response
 
 fun <T> Response<T>.isValid() = isSuccessful && body() != null
 
-fun <T> Response<T>.toFailResult(requestMethod: String) = GithubResult.Fail(
+fun <T, R> Response<T>.toFailResult(requestMethod: String) = Result.failure<R>(
     DataGithubException(
-        "Github.$requestMethod request fail.\n\n${
+        "Github.$requestMethod 요청 실패\n\n${
         errorBody()?.use { it.string() }
         }"
     )

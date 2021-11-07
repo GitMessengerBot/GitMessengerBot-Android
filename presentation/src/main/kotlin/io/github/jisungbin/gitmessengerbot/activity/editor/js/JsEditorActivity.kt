@@ -57,7 +57,7 @@ class JsEditorActivity : ComponentActivity() {
                 val script = try {
                     Bot.getAllScripts().first { it.id == scriptId }
                 } catch (exception: Exception) {
-                    throw PresentationException("Script it not exist. (${exception.message})")
+                    throw PresentationException("$scriptId 스크립트가 존재하지 않아요. (${exception.message})")
                 }
 
                 Editor(
