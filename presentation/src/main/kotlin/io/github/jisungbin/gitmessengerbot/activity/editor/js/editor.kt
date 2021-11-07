@@ -153,8 +153,8 @@ private inline fun handleState(
     toast: (Int) -> Unit,
     onExceptionChanged: (Exception) -> Unit
 ) {
-    if (state.loaded) {
-        if (!state.isException()) {
+    if (!state.isException()) {
+        if (state.loaded) {
             when (state.successType) {
                 MviJsEditorSuccessType.None -> {
                 }
@@ -168,9 +168,9 @@ private inline fun handleState(
                     toast(R.string.composable_editor_toast_commit_success)
                 }
             }
-        } else {
-            onExceptionChanged(state.exception!!)
         }
+    } else {
+        onExceptionChanged(state.exception!!)
     }
 }
 
@@ -201,7 +201,7 @@ private fun DrawerLayout(
 
     val repoName = script.name
     val gitUser: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-        ?: throw PresentationException("GithubConfig.DataPath data value is null.")
+        ?: throw PresentationException("GithubConfig.DataPath 데이터가 null 이에요.")
     val repoPath = "script.${script.lang.getScriptSuffix()}"
     val repoDescription = GithubConstant.DefaultRepoDescription // TODO
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO

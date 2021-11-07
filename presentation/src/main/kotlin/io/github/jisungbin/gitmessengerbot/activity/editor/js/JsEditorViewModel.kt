@@ -18,7 +18,6 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuc
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.extension.toException
-import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GetCommitContentUseCase
@@ -31,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -55,13 +53,16 @@ class JsEditorViewModel @Inject constructor(
         Pretty("https://amp.prettifyjs.net")
     }
 
-    private fun codeBeautify(beautifyType: BeautifyType, code: String) =
-        Jsoup.connect(beautifyType.apiAddress)
-            .ignoreContentType(true)
-            .ignoreHttpErrors(true)
-            .data("input", code)
-            .post()
-            .wholeText()
+    private suspend fun codeBeautify(beautifyType: BeautifyType, code: String) = coroutineScope {
+        async(Dispatchers.IO) {
+            Jsoup.connect(beautifyType.apiAddress)
+                .ignoreContentType(true)
+                .ignoreHttpErrors(true)
+                .data("input", code)
+                .post()
+                .wholeText()
+        }
+    }.await()
 
     fun githubCreateRepo(
         path: String,
@@ -74,9 +75,10 @@ class JsEditorViewModel @Inject constructor(
         ).doWhen(
             onSuccess = {
                 githubUpdateFileUseCase(
-                    githubRepo.name,
-                    path,
-                    githubFile
+                    repoName = githubRepo.name,
+                    path = path,
+                    githubFile = githubFile,
+                    coroutineScope = viewModelScope
                 ).doWhen(
                     onSuccess = {
                         reduce {
@@ -121,7 +123,7 @@ class JsEditorViewModel @Inject constructor(
             },
             onFailure = { throwable ->
                 reduce {
-                    state.copy(loaded = true, exception = throwable.toException())
+                    state.copy(exception = throwable.toException())
                 }
             }
         )
@@ -129,42 +131,40 @@ class JsEditorViewModel @Inject constructor(
 
     fun githubCommitAndPush(repoName: String, path: String, githubFile: GithubFile) = intent {
         githubGetFileContentUseCase(
-            repoName,
-            path,
-            githubFile.branch
-        ).collect { fileContentResult ->
-            fileContentResult.doWhen(
-                onSuccess = { fileContent ->
-                    githubUpdateFileUseCase(
-                        repoName,
-                        path,
-                        githubFile.copy(sha = fileContent.sha)
-                    ).collect { updateFileResult ->
-                        updateFileResult.doWhen(
-                            onSuccess = {
-                                reduce {
-                                    state.copy(
-                                        loaded = true,
-                                        exception = null,
-                                        successType = MviJsEditorSuccessType.GithubCommitAndPush
-                                    )
-                                }
-                            },
-                            onFail = { exception ->
-                                reduce {
-                                    state.copy(loaded = true, exception = exception)
-                                }
-                            }
-                        )
+            repoName = repoName,
+            path = path,
+            branch = githubFile.branch,
+            coroutineScope = viewModelScope
+        ).doWhen(
+            onSuccess = { fileContent ->
+                githubUpdateFileUseCase(
+                    repoName = repoName,
+                    path = path,
+                    githubFile = githubFile.copy(sha = fileContent.sha),
+                    coroutineScope = viewModelScope
+                ).doWhen(
+                    onSuccess = {
+                        reduce {
+                            state.copy(
+                                loaded = true,
+                                exception = null,
+                                successType = MviJsEditorSuccessType.GithubCommitAndPush
+                            )
+                        }
+                    },
+                    onFailure = { throwable ->
+                        reduce {
+                            state.copy(exception = throwable.toException())
+                        }
                     }
-                },
-                onFail = { exception ->
-                    reduce {
-                        state.copy(loaded = true, exception = exception)
-                    }
+                )
+            },
+            onFailure = { throwable ->
+                reduce {
+                    state.copy(exception = throwable.toException())
                 }
-            )
-        }
+            }
+        )
     }
 
     fun loadCommitHistory(userName: String, repoName: String) = intent {
@@ -172,42 +172,43 @@ class JsEditorViewModel @Inject constructor(
 
         coroutineScope {
             launch {
-                getCommitHistoryUseCase(userName, repoName).collect { commitListResult ->
-                    commitListResult.doWhen(
-                        onSuccess = { commitLists ->
-                            commitLists.value.forEach { commitList ->
-                                getCommitContentUseCase(
-                                    userName,
-                                    repoName,
-                                    commitList.sha
-                                ).collect { commitContentResult ->
-                                    commitContentResult.doWhen(
-                                        onSuccess = { commitContents ->
-                                            commitContents.value.forEach { commitContentItem ->
-                                                commitHistory.add(
-                                                    CommitHistoryItem(
-                                                        key = commitList,
-                                                        items = commitContentItem
-                                                    )
-                                                )
-                                            }
-                                        },
-                                        onFail = { exception ->
-                                            reduce {
-                                                state.copy(loaded = true, exception = exception)
-                                            }
-                                        }
-                                    )
+                getCommitHistoryUseCase(
+                    owner = userName,
+                    repoName = repoName,
+                    coroutineScope = viewModelScope
+                ).doWhen(
+                    onSuccess = { commitLists ->
+                        commitLists.value.forEach { commitList ->
+                            getCommitContentUseCase(
+                                owner = userName,
+                                repoName = repoName,
+                                sha = commitList.sha,
+                                coroutineScope = viewModelScope
+                            ).doWhen(
+                                onSuccess = { commitContents ->
+                                    commitContents.value.forEach { commitContentItem ->
+                                        commitHistory.add(
+                                            CommitHistoryItem(
+                                                key = commitList,
+                                                items = commitContentItem
+                                            )
+                                        )
+                                    }
+                                },
+                                onFailure = { throwable ->
+                                    reduce {
+                                        state.copy(exception = throwable.toException())
+                                    }
                                 }
-                            }
-                        },
-                        onFail = { exception ->
-                            reduce {
-                                state.copy(loaded = true, exception = exception)
-                            }
+                            )
                         }
-                    )
-                }
+                    },
+                    onFailure = { throwable ->
+                        reduce {
+                            state.copy(exception = throwable.toException())
+                        }
+                    }
+                )
             }.join()
             postSideEffect(MviJsEditorSideEffect.UpdateCommitHistoryItems(commitHistory))
             reduce {
@@ -221,22 +222,28 @@ class JsEditorViewModel @Inject constructor(
     }
 
     fun codeMinify(code: String) = intent {
-        val minifyCode = coroutineScope {
-            async(Dispatchers.IO) { codeBeautify(BeautifyType.Minify, code) }
-        }
-        postSideEffect(MviJsEditorSideEffect.UpdateCodeField(minifyCode.await()))
+        postSideEffect(
+            MviJsEditorSideEffect.UpdateCodeField(
+                codeBeautify(
+                    beautifyType = BeautifyType.Minify,
+                    code = code
+                )
+            )
+        )
         reduce {
             state.copy(loaded = true, exception = null, successType = MviJsEditorSuccessType.None)
         }
     }
 
     fun codePretty(code: String) = intent {
-        val prettyCode = coroutineScope {
-            async(Dispatchers.IO) {
-                JSONObject(codeBeautify(BeautifyType.Pretty, code)).getString("output")
-            }
-        }
-        postSideEffect(MviJsEditorSideEffect.UpdateCodeField(prettyCode.await()))
+        postSideEffect(
+            MviJsEditorSideEffect.UpdateCodeField(
+                codeBeautify(
+                    beautifyType = BeautifyType.Pretty,
+                    code = code
+                )
+            )
+        )
         reduce {
             state.copy(loaded = true, exception = null, successType = MviJsEditorSuccessType.None)
         }
