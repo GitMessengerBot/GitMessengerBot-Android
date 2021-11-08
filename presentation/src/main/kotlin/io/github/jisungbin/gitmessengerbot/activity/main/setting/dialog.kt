@@ -35,8 +35,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -168,7 +168,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
 fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         val context = LocalContext.current
-        val app by AppConfig.app.observeAsState(AppConfig.appValue)
+        val app by AppConfig.app.collectAsState()
         var newKakaoTalkPackage by remember { mutableStateOf(TextFieldValue()) }
         val focusManager = LocalFocusManager.current
 

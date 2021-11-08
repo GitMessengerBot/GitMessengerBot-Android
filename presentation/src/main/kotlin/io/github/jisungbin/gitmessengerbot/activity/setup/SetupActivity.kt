@@ -31,8 +31,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,26 +55,29 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Wear
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.doWhen
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
-import kotlinx.coroutines.flow.collect
+import org.orbitmvi.orbit.viewmodel.observe
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
 
     private val vm: SetupViewModel by viewModels()
-
     private var wearAppInstalled by mutableStateOf(false)
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
@@ -105,7 +110,6 @@ class SetupActivity : ComponentActivity() {
         }
 
         SystemUiController(window).setSystemBarsColor(colors.primary)
-
         setContent {
             MaterialTheme {
                 Content()
@@ -115,6 +119,19 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
+        val exception = remember { mutableStateOf<Exception?>(null) }
+
+        ExceptionDialog(exception = exception)
+        LaunchedEffect(vm) {
+            vm.observe(
+                lifecycleOwner = this@SetupActivity,
+                state = { state ->
+                    handleState(state = state, onExceptionChanged = { exception.value = it })
+                },
+                sideEffect = ::handleSideEffect
+            )
+        }
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -305,27 +322,29 @@ class SetupActivity : ComponentActivity() {
 
     @SuppressLint("NewApi")
     private fun Permission.requestPermission() {
-        when (permissions.first()) {
-            PermissionType.NotificationRead -> {
-                NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
-                doDelay(1000) {
-                    notificationPermissionGranted = true
+        lifecycleScope.launchWhenCreated {
+            when (permissions.first()) {
+                PermissionType.NotificationRead -> {
+                    NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
+                    doDelay(1000) {
+                        notificationPermissionGranted = true
+                    }
                 }
-            }
-            PermissionType.Wear -> {
-                Wear.install(applicationContext)
-                doDelay(1000) {
-                    wearAppInstalled = true
+                PermissionType.Wear -> {
+                    Wear.install(applicationContext)
+                    doDelay(1000) {
+                        wearAppInstalled = true
+                    }
                 }
-            }
-            PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(this@SetupActivity)
-                doDelay(1000) {
-                    storagePermissionGranted = true
+                PermissionType.ScopedStorage -> {
+                    Storage.requestStorageManagePermission(this@SetupActivity)
+                    doDelay(1000) {
+                        storagePermissionGranted = true
+                    }
                 }
-            }
-            else -> {
-                permissionsContracts.launch(this.permissions.toTypedArray())
+                else -> {
+                    permissionsContracts.launch(this@requestPermission.permissions.toTypedArray())
+                }
             }
         }
     }
@@ -334,21 +353,27 @@ class SetupActivity : ComponentActivity() {
         super.onNewIntent(intent)
 
         val requestCode = intent?.data?.getQueryParameter("code")
-            ?: throw PresentationException("Github aouth request code intent data is null.")
+            ?: throw PresentationException("Github aouth request code intent가 null 이에요.")
 
-        lifecycleScope.launchWhenCreated {
-            vm.login(requestCode).collect { loginResult ->
-                loginResult.doWhen(
-                    onSuccess = { githubData ->
-                        finish()
-                        startActivity(Intent(this@SetupActivity, MainActivity::class.java))
-                        toast(getString(R.string.vm_setup_toast_welcome_start, githubData.userName))
-                    },
-                    onFail = { exception ->
-                        exception.printStackTrace()
-                        // todo: ErrorDialog
-                    }
-                )
+        vm.login(requestCode)
+    }
+
+    private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
+        if (!state.isException()) {
+            if (state.loaded) {
+                finish()
+                startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+                toast(getString(R.string.activity_setup_toast_welcome, state.userName))
+            }
+        } else {
+            onExceptionChanged(state.exception!!)
+        }
+    }
+
+    private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
+        when (sideEffect) {
+            is MviSetupSideEffect.SaveData -> {
+                Storage.write(GithubConstant.DataPath, sideEffect.data.toJsonString())
             }
         }
     }

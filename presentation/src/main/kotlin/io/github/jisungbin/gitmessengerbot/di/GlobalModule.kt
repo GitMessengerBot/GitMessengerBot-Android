@@ -13,9 +13,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.jisungbin.logeukes.logeukes
 import javax.inject.Singleton
 import okhttp3.logging.HttpLoggingInterceptor
-import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,7 +23,7 @@ object GlobalModule {
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor() =
-        HttpLoggingInterceptor { message -> Timber.tag("OkHttp").d(message) }.apply {
+        HttpLoggingInterceptor { message -> logeukes("OkHttp") { message } }.apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 }

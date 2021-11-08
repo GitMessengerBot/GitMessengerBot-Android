@@ -7,8 +7,6 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-@file:Suppress("UnnecessaryComposedModifier")
-
 package io.github.jisungbin.gitmessengerbot.util.extension
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -19,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 
 // https://stackoverflow.com/a/66839858/14299073s
+@Suppress("UnnecessaryComposedModifier")
 @OptIn(ExperimentalFoundationApi::class)
 inline fun Modifier.noRippleClickable(
     crossinline onClick: () -> Unit,

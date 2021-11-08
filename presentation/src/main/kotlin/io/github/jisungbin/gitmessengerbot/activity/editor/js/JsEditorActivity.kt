@@ -16,7 +16,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class JsEditorActivity : ComponentActivity() {
 
-    private lateinit var onBackPressedAction: () -> Unit
+    private var onBackPressedAction: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(IntentConfig.ScriptId, -1)
+        val scriptId = intent.getIntExtra(IntentConstant.ScriptId, -1)
 
         setContent {
             MaterialTheme {
@@ -57,7 +57,7 @@ class JsEditorActivity : ComponentActivity() {
                 val script = try {
                     Bot.getAllScripts().first { it.id == scriptId }
                 } catch (exception: Exception) {
-                    throw PresentationException("Script it not exist. (${exception.message})")
+                    throw PresentationException("$scriptId 스크립트가 존재하지 않아요. (${exception.message})")
                 }
 
                 Editor(
@@ -69,10 +69,6 @@ class JsEditorActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        if (::onBackPressedAction.isInitialized) {
-            onBackPressedAction()
-        } else {
-            super.onBackPressed()
-        }
+        onBackPressedAction?.invoke() ?: super.onBackPressed()
     }
 }

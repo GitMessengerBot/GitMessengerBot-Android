@@ -34,8 +34,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.Config
+import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -90,7 +90,7 @@ private fun Content(activity: Activity) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        val app by AppConfig.app.observeAsState(AppConfig.appValue)
+        val app by AppConfig.app.collectAsState()
 
         val context = LocalContext.current
 
@@ -312,7 +312,7 @@ private fun Content(activity: Activity) {
             )
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
                 val kakaoTalkPackageNames =
-                    app.kakaoTalkPackageNames.sortedBy { it == Config.KakaoTalkDefaultPackageName }
+                    app.kakaoTalkPackageNames.sortedBy { it == BotConstant.KakaoTalkDefaultPackageName }
                         .asReversed()
                 val message =
                     if (kakaoTalkPackageNames.size == 1) kakaoTalkPackageNames.first()

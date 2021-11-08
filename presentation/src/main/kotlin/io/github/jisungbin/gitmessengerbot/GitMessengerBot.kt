@@ -10,18 +10,14 @@
 package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
-import android.os.Process
 import com.mocklets.pluto.Pluto
-import com.mocklets.pluto.PlutoLog
-import com.mocklets.pluto.modules.exceptions.ANRException
-import com.mocklets.pluto.modules.exceptions.ANRListener
 import dagger.hilt.android.HiltAndroidApp
+import io.github.jisungbin.erratum.Erratum
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.jisungbin.logeukes.Logeukes
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import kotlin.system.exitProcess
-import timber.log.Timber
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
@@ -29,7 +25,7 @@ class GitMessengerBot : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+            Logeukes.setup()
         }
 
         NotificationUtil.createChannel(
@@ -43,17 +39,6 @@ class GitMessengerBot : Application() {
         DebugStore.items
 
         Pluto.initialize(applicationContext)
-        Pluto.setANRListener(object : ANRListener {
-            override fun onAppNotResponding(exception: ANRException) {
-                exception.printStackTrace()
-                PlutoLog.e("ANR", exception.threadStateMap)
-            }
-        })
-
-        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            Timber.i("Catched Exception") // TODO: 데이터 저장 했다가 다음에 실행됐을 때 보여주기
-            Process.killProcess(Process.myPid())
-            exitProcess(10)
-        }
+        Erratum.setup(this)
     }
 }

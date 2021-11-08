@@ -9,22 +9,19 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase3
-import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFileContent
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseGithubGetFileContentUseCase = BaseUseCase3<String, String, String, GithubFileContent>
-
-class GithubGetFileContentUseCase(
-    private val githubRepoRepository: GithubRepoRepository,
-) : BaseGithubGetFileContentUseCase {
-    override suspend fun invoke(
-        parameter: String,
-        parameter2: String,
-        parameter3: String,
+class GithubGetFileContentUseCase(private val githubRepoRepository: GithubRepoRepository) {
+    suspend operator fun invoke(
+        repoName: String,
+        path: String,
+        branch: String,
+        coroutineScope: CoroutineScope
     ) = githubRepoRepository.getFileContent(
-        repoName = parameter,
-        path = parameter2,
-        branch = parameter3
+        repoName = repoName,
+        path = path,
+        branch = branch,
+        coroutineScope = coroutineScope
     )
 }

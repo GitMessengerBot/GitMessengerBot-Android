@@ -9,6 +9,7 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -31,17 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.BuildConfig
 import io.github.jisungbin.gitmessengerbot.BuildOption
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
@@ -51,6 +51,7 @@ import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import java.util.Calendar
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +64,7 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        val isSetupDone = Storage.read(GithubConfig.DataPath, null) != null
+        val isSetupDone = Storage.read(GithubConstant.DataPath, null) != null
         val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
         val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
             " ${builtDate.get(Calendar.MINUTE)}m " +
@@ -74,14 +75,16 @@ class SplashActivity : ComponentActivity() {
         if (BuildOption.TestMode) {
             startActivity(Intent(this, TestActivity::class.java))
         } else {
-            doDelay(2000) {
-                finish()
-                startActivity(
-                    Intent(
-                        this,
-                        if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+            lifecycleScope.launchWhenCreated {
+                doDelay(2000) {
+                    finish()
+                    startActivity(
+                        Intent(
+                            this@SplashActivity,
+                            if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -94,17 +97,10 @@ class SplashActivity : ComponentActivity() {
                 .background(colors.primary)
                 .padding(30.dp)
         ) {
-            val (content, footer) = createRefs()
+            val footer = createRef()
 
             Column(
-                modifier = Modifier.constrainAs(content) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.fillToConstraints
-                },
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -128,12 +124,10 @@ class SplashActivity : ComponentActivity() {
                 text = stringResource(R.string.copyright),
                 color = Color.White,
                 fontSize = 10.sp,
-                textAlign = TextAlign.Center,
                 modifier = Modifier.constrainAs(footer) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
                 }
             )
         }

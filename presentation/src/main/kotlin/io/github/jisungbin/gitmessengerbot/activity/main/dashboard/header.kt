@@ -36,8 +36,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,12 +63,12 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
@@ -91,10 +91,9 @@ private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            content()
-        }
+            verticalArrangement = Arrangement.Center,
+            content = { content() }
+        )
         Text(
             text = title,
             modifier = Modifier
@@ -112,10 +111,10 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-    val app by AppConfig.app.observeAsState(AppConfig.appValue)
+    val app by AppConfig.app.collectAsState()
     val backgroundService = Intent(context, BackgroundService::class.java)
-    val githubJson = Storage.read(GithubConfig.DataPath, null)
-        ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
+    val githubJson = Storage.read(GithubConstant.DataPath, null)
+        ?: throw PresentationException("GithubConfig.DataPath의 값이 null 이에요.")
     val githubData: GithubData = githubJson.toModel()
     var searching by remember { mutableStateOf(false) }
 
@@ -134,7 +133,7 @@ fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
                 .clip(CircleShape)
                 .clickable {
                     val intent = Intent(activity, ImageViewActivity::class.java).apply {
-                        putExtra(IntentConfig.ImageUrl, githubData.profileImageUrl)
+                        putExtra(IntentConstant.ImageUrl, githubData.profileImageUrl)
                     }
                     activity.startActivity(
                         intent,

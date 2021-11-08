@@ -17,7 +17,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
@@ -33,22 +33,19 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
-@Suppress("HasPlatformType")
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-    private val mapper by lazy {
-        ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
-            .registerKotlinModule()
-    }
+    private val mapper = ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+        .registerKotlinModule()
 
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
-            val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
-                ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
+            val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
+                ?: throw PresentationException("GithubConfig.DataPath 값이 null 이에요.")
             builder = builder
                 .addHeader("Authorization", "token ${githubData.aouthToken}")
                 .addHeader("Accept", "application/json")
@@ -69,19 +66,22 @@ object RetrofitModule {
     @Provides
     @SignedRetrofit
     @Singleton
-    fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor) = Retrofit.Builder()
-        .baseUrl(GithubConfig.BaseApiUrl)
-        .addConverterFactory(JacksonConverterFactory.create(mapper))
-        .client(getInterceptor(/*loggingInterceptor,*/ AuthInterceptor(), PlutoInterceptor()))
-        .build()
+    fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(GithubConstant.BaseApiUrl)
+            .addConverterFactory(JacksonConverterFactory.create(mapper))
+            .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
+            .build()
 
     @Provides
     @UserRetrofit
     @Singleton
-    fun provideUserRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseApiUrl)
+    fun provideUserRetrofit(): Retrofit.Builder =
+        buildRetrofitWithoutClient(baseUrl = GithubConstant.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @Singleton
-    fun provideAouthRetrofit() = buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseUrl)
+    fun provideAouthRetrofit(): Retrofit.Builder =
+        buildRetrofitWithoutClient(baseUrl = GithubConstant.BaseUrl)
 }

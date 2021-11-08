@@ -9,9 +9,9 @@
 
 package io.github.jisungbin.gitmessengerbot.common.extension
 
-import android.os.Handler
-import android.os.Looper
+import kotlinx.coroutines.delay
 
-inline fun doDelay(ms: Long, crossinline action: () -> Unit) {
-    Handler(Looper.getMainLooper()).postDelayed({ action() }, ms)
+suspend fun doDelay(ms: Long, block: () -> Unit) {
+    delay(ms)
+    block()
 }

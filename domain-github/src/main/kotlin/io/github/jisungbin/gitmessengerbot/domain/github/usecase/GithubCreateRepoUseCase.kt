@@ -9,15 +9,14 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseGithubCreateRepoUseCase = BaseUseCase<GithubRepo, Unit>
-
-class GithubCreateRepoUseCase(
-    private val githubRepoRepository: GithubRepoRepository,
-) : BaseGithubCreateRepoUseCase {
-    override suspend fun invoke(parameter: GithubRepo) =
-        githubRepoRepository.createRepo(githubRepo = parameter)
+class GithubCreateRepoUseCase(private val githubRepoRepository: GithubRepoRepository) {
+    suspend operator fun invoke(githubRepoarameter: GithubRepo, coroutineScope: CoroutineScope) =
+        githubRepoRepository.createRepo(
+            githubRepo = githubRepoarameter,
+            coroutineScope = coroutineScope
+        )
 }

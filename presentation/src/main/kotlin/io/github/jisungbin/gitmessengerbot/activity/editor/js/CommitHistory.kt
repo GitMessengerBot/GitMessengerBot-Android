@@ -45,7 +45,7 @@ data class CommitHistoryItem(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CommitList(modifier: Modifier, items: List<CommitHistoryItem>) {
+fun CommitHistory(modifier: Modifier, items: List<CommitHistoryItem>) {
     val context = LocalContext.current
 
     TimeLine(

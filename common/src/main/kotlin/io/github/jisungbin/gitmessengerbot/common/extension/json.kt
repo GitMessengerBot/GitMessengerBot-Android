@@ -21,7 +21,7 @@ internal val mapper by lazy {
 }
 
 inline fun <reified T> String.toModel(): T = mapper.readValue(this, T::class.java)
-    ?: throw CommonException("Error occur when convert string to json-object. ($this)")
+    ?: throw CommonException("문자열을 json 모델로 바꾸는데 오류가 발생했어요.\n\n($this)")
 
 fun Any.toJsonString() = mapper.writeValueAsString(this)
-    ?: throw CommonException("Error occur when convert json-object to string. ($this)")
+    ?: throw CommonException("json 모델을 문자열로 바꾸는데 오류가 발생했어요.\n\n($this)")

@@ -67,9 +67,9 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.hilt)
-    implementation(Dependencies.jsoup)
-    implementation(Dependencies.jacksonModule)
+    implementation(Dependencies.Hilt)
+    implementation(Dependencies.Orbit)
+    implementation(Dependencies.Jsoup)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
@@ -77,19 +77,19 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":common"))
-    implementation(project(":data-github"))
     implementation(project(":data-kaven"))
-    implementation(project(":domain-github"))
+    implementation(project(":data-github"))
     implementation(project(":domain-kaven"))
+    implementation(project(":domain-github"))
 
-    Dependencies.ui.forEach(::implementation)
-    Dependencies.util.forEach(::implementation)
-    Dependencies.compose.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.retrofitutil.forEach(::implementation)
+    Dependencies.Ui.forEach(::implementation)
+    Dependencies.Util.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
+    Dependencies.Compose.forEach(::implementation)
+    Dependencies.Retrofit.forEach(::implementation)
+    Dependencies.RetrofitUtil.forEach(::implementation)
 
-    Dependencies.debug.forEach(::debugImplementation)
-    Dependencies.release.forEach(::releaseImplementation)
+    Dependencies.Debug.forEach(::debugImplementation)
 
-    kapt(Dependencies.hiltCompiler)
+    kapt(Dependencies.HiltCompiler)
 }

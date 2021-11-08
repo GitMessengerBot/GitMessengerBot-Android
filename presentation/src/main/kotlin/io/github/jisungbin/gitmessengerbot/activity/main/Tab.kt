@@ -2,25 +2,19 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Tab.kt] created by Ji Sungbin on 21. 9. 1. 오후 5:00
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
- * [Tab.kt] created by Ji Sungbin on 21. 6. 19. 오후 11:40.
+ * [Screen.kt] created by Ji Sungbin on 21. 9. 22. 오후 7:51
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
 package io.github.jisungbin.gitmessengerbot.activity.main
 
-object Tab {
-    const val Script = 0
-    const val Debug = 1
-    const val Kaven = 2
-    const val Setting = 3
+import androidx.annotation.DrawableRes
+import io.github.jisungbin.gitmessengerbot.R
+
+enum class Tab(val route: String, @DrawableRes val iconRes: Int) {
+    Script("Script", R.drawable.ic_round_script_24),
+    Debug("Debug", R.drawable.ic_round_debug_24),
+    Kaven("Kaven", R.drawable.ic_round_github_24),
+    Setting("Setting", R.drawable.ic_round_settings_24)
 }

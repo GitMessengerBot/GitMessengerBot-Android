@@ -12,7 +12,7 @@ package io.github.jisungbin.gitmessengerbot.activity.debug
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
@@ -24,11 +24,11 @@ class DebugActivty : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val scriptId = intent.getIntExtra(IntentConfig.DebugScriptId, -1)
+        val scriptId = intent.getIntExtra(IntentConstant.DebugScriptId, -1)
         val script = try {
             Bot.getAllScripts().first { it.id == scriptId }
         } catch (exception: Exception) {
-            throw PresentationException("DebugItem script it not exist. (${exception.message})")
+            throw PresentationException("$scriptId 아이디를 가진 DebugItem 스크립트가 존재하지 않아요. (${exception.message})")
         }
 
         SystemUiController(window).run {
