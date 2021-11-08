@@ -16,6 +16,15 @@ jobs:
         with:
           java-version: 11
           
+      - name: Decrypt secret.tar.gpg
+        run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$SECRET_GPG_PASSWORD" --output secret.tar secret.tar.gpg
+
+        env:
+          SECRET_GPG_PASSWORD: $
+
+      - name: Unzip secret.tar
+        run: tar xvf secret.tar
+          
       - name: Touch local properties
         run: touch local.properties
 
