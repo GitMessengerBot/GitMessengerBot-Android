@@ -44,7 +44,8 @@ object Versions {
 
     object Util {
         const val Pluto = "1.1.1"
-        const val Timber = "5.0.1"
+        const val Erratum = "1.0.1"
+        const val Logeukes = "1.0.0"
         const val Jackson = "2.13.0"
         const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
@@ -66,10 +67,10 @@ object Versions {
         const val Lottie = "4.2.0"
         const val Master = "1.0.5"
         const val Activity = "1.4.0"
+        const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
         const val FancyBottomBar = "1.0.1"
         const val LandscapistCoil = "1.4.1"
-        const val Lifecycle = "2.4.0"
         const val Navigation = "2.4.0-alpha09"
         const val ConstraintLayout = "1.0.0-beta01"
     }
@@ -125,7 +126,8 @@ object Dependencies {
     )
 
     val Util = listOf(
-        "com.jakewharton.timber:timber:${Versions.Util.Timber}",
+        "io.github.jisungbin:erratum:${Versions.Util.Erratum}",
+        "io.github.jisungbin:logeukes:${Versions.Util.Logeukes}",
         "io.github.ParkSangGwon:tedkeyboardobserver:${Versions.Util.KeyboardObserver}"
     )
 
