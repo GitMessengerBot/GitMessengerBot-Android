@@ -29,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -40,7 +42,8 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
@@ -48,7 +51,6 @@ import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.doWhen
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.flow.collect
@@ -60,12 +62,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppConfig.app.observe(this) { app ->
-            val botCoreService = Intent(this, BackgroundService::class.java)
-            if (app.power) {
-                startService(botCoreService)
-            } else {
-                stopService(botCoreService)
+        lifecycleScope.launchWhenCreated {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                AppConfig.app.collect { app ->
+                    val botCoreService = Intent(this@MainActivity, BackgroundService::class.java)
+                    if (app.power) {
+                        startService(botCoreService)
+                    } else {
+                        stopService(botCoreService)
+                    }
+                }
             }
         }
 
@@ -79,28 +85,26 @@ class MainActivity : ComponentActivity() {
                 Bot.compileScript(
                     applicationContext,
                     ScriptItem(
-                        id = ScriptConfig.EvalId,
+                        id = ScriptConstant.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,
                         compiled = false,
                         lastRun = ""
                     )
-                ).collect { compileResult ->
-                    compileResult.doWhen(
-                        onSuccess = {
-                            toast(getString(R.string.activity_main_toast_eval_loaded))
-                        },
-                        onFail = { exception ->
-                            toast(
-                                getString(
-                                    R.string.activity_main_toast_eval_load_fail,
-                                    exception.message
-                                )
+                ).doWhen(
+                    onSuccess = {
+                        toast(getString(R.string.activity_main_toast_eval_loaded))
+                    },
+                    onFailure = { exception ->
+                        toast(
+                            getString(
+                                R.string.activity_main_toast_eval_load_fail,
+                                exception.message
                             )
-                        }
-                    )
-                }
+                        )
+                    }
+                )
             }
         }
 

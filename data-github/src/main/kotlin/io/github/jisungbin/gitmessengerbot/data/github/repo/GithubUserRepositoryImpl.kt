@@ -9,17 +9,20 @@
 
 package io.github.jisungbin.gitmessengerbot.data.github.repo
 
-import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubUserService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
 import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -29,7 +32,7 @@ import retrofit2.Retrofit
 class GithubUserRepositoryImpl(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val userRetrofit: Retrofit.Builder,
-    private val aouthRetrofit: Retrofit.Builder,
+    private val aouthRetrofit: Retrofit.Builder
 ) : GithubUserRepository {
     private class AuthInterceptor(private val aouthToken: String?) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -51,45 +54,52 @@ class GithubUserRepositoryImpl(
         .build()
         .create(GithubUserService::class.java)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getUserInfo(aouthToken: String) = callbackFlow {
-        try {
-            val request =
-                getApi(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
-            trySend(
-                if (request.isValid()) {
-                    GithubResult.Success(request.body()!!.toDomain())
-                } else {
-                    request.toFailResult("getUserInfo")
+    override suspend fun getUserInfo(
+        aouthToken: String,
+        coroutineScope: CoroutineScope
+    ): Result<GithubUser> =
+        suspendCoroutine { continuation ->
+            coroutineScope.launch {
+                try {
+                    val request =
+                        getApi(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
+                    continuation.resume(
+                        if (request.isValid()) {
+                            Result.success(request.body()!!.toDomain())
+                        } else {
+                            request.toFailResult("getUserInfo")
+                        }
+                    )
+                } catch (exception: Exception) {
+                    continuation.resume(Result.failure(exception))
                 }
-            )
-        } catch (exception: Exception) {
-            trySend(GithubResult.Fail(DataGithubException(exception.message)))
+            }
         }
 
-        close()
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun requestAouthToken(requestCode: String) = callbackFlow {
-        try {
-            val request =
-                getApi(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
-                    requestCode = requestCode,
-                    clientId = SecretConfig.GithubOauthClientId,
-                    clientSecret = SecretConfig.GithubOauthClientSecret
-                )
-            trySend(
-                if (request.isValid()) {
-                    GithubResult.Success(request.body()!!.toDomain())
-                } else {
-                    request.toFailResult("requestAouthToken")
+    override suspend fun requestAouthToken(
+        requestCode: String,
+        coroutineScope: CoroutineScope
+    ): Result<GithubAouth> =
+        suspendCoroutine { continuation ->
+            coroutineScope.launch {
+                try {
+                    val request =
+                        getApi(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
+                            requestCode = requestCode,
+                            clientId = SecretConfig.GithubOauthClientId,
+                            clientSecret = SecretConfig.GithubOauthClientSecret
+                        )
+                    continuation.resume(
+                        if (request.isValid()) {
+                            Result.success(request.body()!!.toDomain())
+                        } else {
+                            request.toFailResult("requestAouthToken")
+                        }
+                    )
+                } catch (exception: Exception) {
+                    continuation.resume(Result.failure(exception))
                 }
-            )
-        } catch (exception: Exception) {
-            trySend(GithubResult.Fail(DataGithubException(exception.message)))
+            }
         }
-
-        close()
-    }
 }

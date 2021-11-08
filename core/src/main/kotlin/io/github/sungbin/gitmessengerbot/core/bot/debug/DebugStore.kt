@@ -9,9 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.debug
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.clear
@@ -19,47 +17,46 @@ import io.github.jisungbin.gitmessengerbot.common.extension.removeAll
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.common.operator.plusAssign
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-@Suppress("ObjectPropertyName")
 object DebugStore {
-    private val _items = MutableLiveData(getList())
+    private val _items = MutableStateFlow(getList())
+    val items = _items.asStateFlow()
 
-    val items: LiveData<List<DebugItem>> get() = _items
-    val itemsValue get(): List<DebugItem> = items.value ?: emptyList()
-
-    fun getByScriptId(id: Int) = itemsValue.filter { id == id }
+    fun getByScriptId(id: Int) = items.value.filter { id == id }
 
     fun add(item: DebugItem) {
         _items += item
-        Storage.write(ScriptConfig.DebugDataPath(item.scriptId), item.toJsonString())
+        Storage.write(ScriptConstant.DebugDataPath(item.scriptId), item.toJsonString())
     }
 
     fun removeAll() {
         _items.clear()
-        Storage.deleteAll(ScriptConfig.DebugAllPath)
+        Storage.deleteAll(ScriptConstant.DebugAllPath)
     }
 
     fun removeAll(scriptId: Int) {
-        if (scriptId == ScriptConfig.DebugAllBot) {
-            _items.removeAll { it.scriptId != ScriptConfig.EvalId }
-            Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
-                if (debugFolder.path != ScriptConfig.DebugDataPath(ScriptConfig.EvalId)) {
+        if (scriptId == ScriptConstant.DebugAllBot) {
+            _items.removeAll { it.scriptId != ScriptConstant.EvalId }
+            Storage.fileList(ScriptConstant.DebugAllPath).forEach { debugFolder ->
+                if (debugFolder.path != ScriptConstant.DebugDataPath(ScriptConstant.EvalId)) {
                     debugFolder.deleteRecursively()
                 }
             }
         } else {
             _items.removeAll { it.scriptId == scriptId }
-            Storage.deleteAll(ScriptConfig.DebugDataPath(scriptId))
+            Storage.deleteAll(ScriptConstant.DebugDataPath(scriptId))
         }
     }
 
     private fun getList(): List<DebugItem> {
         val debugs = mutableListOf<DebugItem>()
-        Storage.fileList(ScriptConfig.DebugAllPath).forEach { debugFolder ->
+        Storage.fileList(ScriptConstant.DebugAllPath).forEach { debugFolder ->
             Storage.fileList(debugFolder.path).forEach { debugFile ->
                 debugs.add(
                     Storage.read(debugFile.path, null)?.toModel()
-                        ?: throw CoreException("$debugFile file is null.")
+                        ?: throw CoreException("$debugFile 파일이 없어요.")
                 )
             }
         }

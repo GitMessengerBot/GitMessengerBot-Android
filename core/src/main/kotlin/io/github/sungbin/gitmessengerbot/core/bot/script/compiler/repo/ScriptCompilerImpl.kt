@@ -12,10 +12,10 @@ package io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo
 import android.content.Context
 import com.eclipsesource.v8.V8
 import com.eclipsesource.v8.V8Object
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
-import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
+import io.github.jisungbin.gitmessengerbot.common.exception.TodoException
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.CoreResult
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager
 import io.github.sungbin.gitmessengerbot.core.bot.api.BotApi
@@ -23,12 +23,10 @@ import io.github.sungbin.gitmessengerbot.core.bot.api.Log
 import io.github.sungbin.gitmessengerbot.core.bot.api.UI
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepo
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
-
     private fun compileJavaScript(
         context: Context,
         script: ScriptItem,
@@ -102,11 +100,11 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
         StackManager.v8[script.id] = v8
         script.compiled = true
         v8.locker.release()
-        CoreResult.Success(Unit)
+        Result.success(Unit)
     } catch (exception: Exception) {
         script.power = false
         script.compiled = false
-        CoreResult.Fail(exception)
+        Result.failure(exception)
     }
 
     @Suppress("DEPRECATION")
@@ -131,42 +129,40 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
         api.release()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun process(context: Context, script: ScriptItem) = callbackFlow {
-        when (script.lang) {
-            ScriptLang.TypeScript -> {
-                ts2Js
-                    .convert(script.getCode())
-                    .collect { ts2JsResult ->
-                        when (ts2JsResult) {
-                            is CoreResult.Success -> {
-                                val jsCode = ts2JsResult.response.jsCode
+    override suspend fun process(context: Context, script: ScriptItem): Result<Unit> =
+        suspendCoroutine { continuation ->
+            when (script.lang) {
+                ScriptLang.TypeScript -> suspend {
+                    ts2Js
+                        .convert(script.getCode())
+                        .doWhen(
+                            onSuccess = { ts2JsResult ->
+                                val jsCode = ts2JsResult.jsCode
                                 android.util.Log.i("ts2JsResult", jsCode)
-                                trySend(compileJavaScript(context, script, jsCode))
-                            }
-                            is CoreResult.Fail -> {
+                                continuation.resume(
+                                    compileJavaScript(context, script, jsCode)
+                                )
+                            },
+                            onFailure = { exception ->
                                 script.power = false
                                 script.compiled = false
-                                trySend(CoreResult.Fail(ts2JsResult.exception))
+                                continuation.resume(Result.failure(exception))
                             }
-                        }
-                    }
+                        )
+                }
+                ScriptLang.JavaScript -> {
+                    continuation.resume(compileJavaScript(context, script, script.getCode()))
+                }
+                ScriptLang.Python -> { // todo
+                    continuation.resume(Result.failure(TodoException("파이썬 언어")))
+                }
+                ScriptLang.Simple -> { // todo
+                    continuation.resume(Result.failure(TodoException("단자응 언어")))
+                }
             }
-            ScriptLang.JavaScript -> {
-                trySend(compileJavaScript(context, script, script.getCode()))
-            }
-            ScriptLang.Python -> { // todo
-                trySend(CoreResult.Fail(CoreException("Python build is TODO.")))
-            }
-            ScriptLang.Simple -> { // todo
-                trySend(CoreResult.Fail(CoreException("SimpleLang build is TODO.")))
+
+            if (script.id != ScriptConstant.EvalId) {
+                Bot.scriptDataSave(script)
             }
         }
-
-        if (script.id != ScriptConfig.EvalId) {
-            Bot.scriptDataSave(script)
-        }
-
-        close()
-    }
 }

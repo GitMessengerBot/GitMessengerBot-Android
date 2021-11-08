@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common.config
+package io.github.jisungbin.gitmessengerbot.common.constant
 
-object IntentConfig {
+object IntentConstant {
     const val ScriptId = "intent-script-id"
     const val DebugScriptId = "intent-debug-script-id"
 

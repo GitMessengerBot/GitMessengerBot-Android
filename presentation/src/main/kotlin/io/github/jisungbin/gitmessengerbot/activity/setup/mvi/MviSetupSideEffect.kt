@@ -10,7 +10,8 @@
 package io.github.jisungbin.gitmessengerbot.activity.setup.mvi
 
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
+import io.github.jisungbin.gitmessengerbot.mvi.MviToastSideEffect
 
-sealed class MviSetupSideEffect {
+sealed class MviSetupSideEffect : MviToastSideEffect {
     data class SaveData(val data: GithubData) : MviSetupSideEffect()
 }

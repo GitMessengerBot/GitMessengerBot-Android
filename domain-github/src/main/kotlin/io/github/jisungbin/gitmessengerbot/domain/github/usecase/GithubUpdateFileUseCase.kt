@@ -9,22 +9,20 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.usecase
 
-import io.github.jisungbin.gitmessengerbot.domain.github.BaseUseCase3
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
+import kotlinx.coroutines.CoroutineScope
 
-private typealias BaseGithubUpdateFileUseCase = BaseUseCase3<String, String, GithubFile, Unit>
-
-class GithubUpdateFileUseCase(
-    private val githubRepoRepository: GithubRepoRepository,
-) : BaseGithubUpdateFileUseCase {
-    override suspend fun invoke(
-        parameter: String,
-        parameter2: String,
-        parameter3: GithubFile,
+class GithubUpdateFileUseCase(private val githubRepoRepository: GithubRepoRepository) {
+    suspend operator fun invoke(
+        repoName: String,
+        path: String,
+        githubFile: GithubFile,
+        coroutineScope: CoroutineScope
     ) = githubRepoRepository.updateFile(
-        repoName = parameter,
-        path = parameter2,
-        githubFile = parameter3
+        repoName = repoName,
+        path = path,
+        githubFile = githubFile,
+        coroutineScope = coroutineScope
     )
 }

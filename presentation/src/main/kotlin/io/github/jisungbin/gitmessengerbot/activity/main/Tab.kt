@@ -12,9 +12,9 @@ package io.github.jisungbin.gitmessengerbot.activity.main
 import androidx.annotation.DrawableRes
 import io.github.jisungbin.gitmessengerbot.R
 
-sealed class Tab(val route: String, @DrawableRes val iconRes: Int) {
-    object Script : Tab("Script", R.drawable.ic_round_script_24)
-    object Debug : Tab("Debug", R.drawable.ic_round_debug_24)
-    object Kaven : Tab("Kaven", R.drawable.ic_round_github_24)
-    object Setting : Tab("Setting", R.drawable.ic_round_settings_24)
+enum class Tab(val route: String, @DrawableRes val iconRes: Int) {
+    Script("Script", R.drawable.ic_round_script_24),
+    Debug("Debug", R.drawable.ic_round_debug_24),
+    Kaven("Kaven", R.drawable.ic_round_github_24),
+    Setting("Setting", R.drawable.ic_round_settings_24)
 }

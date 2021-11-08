@@ -15,9 +15,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.edit
@@ -29,48 +27,52 @@ import io.github.sungbin.gitmessengerbot.core.Injection
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.bot.debug.createDebugItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-@Suppress("FunctionName")
 object Sender {
     const val Bot = "Bot"
+
+    @Suppress("FunctionName")
     fun User(name: String = "User") = name
 }
 
 object Bot {
-    private val _scripts = MutableLiveData(getList())
-    private val scriptPowers: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
-    private val compileStates: HashMap<Int, MutableLiveData<Boolean>> = hashMapOf()
+    private val _scripts = MutableStateFlow(getList())
+    private val scriptPowers: HashMap<Int, MutableStateFlow<Boolean>> = hashMapOf()
+    private val compileStates: HashMap<Int, MutableStateFlow<Boolean>> = hashMapOf()
     private val scriptCompiler = Injection.Compiler.provide
 
-    val scripts get(): LiveData<List<ScriptItem>> = _scripts
+    val scripts = _scripts.asStateFlow()
 
-    fun compileScript(context: Context, script: ScriptItem) =
+    suspend fun compileScript(context: Context, script: ScriptItem) =
         scriptCompiler.process(context, script)
 
-    fun getAllScripts() = scripts.value ?: emptyList()
+    fun getAllScripts() = scripts.value
 
-    fun getCompiledScripts() = _scripts.value?.filter { it.compiled } ?: emptyList()
+    fun getCompiledScripts() = _scripts.value.filter { it.compiled }
 
-    fun getRunnableScripts() = _scripts.value?.filter { it.isRunnable } ?: emptyList()
+    fun getRunnableScripts() = _scripts.value.filter { it.isRunnable }
 
-    fun getScriptPower(script: ScriptItem): LiveData<Boolean> =
-        scriptPowers[script.id]
-            ?: throw CoreException("There is no ${script.id} key in scriptPowers.")
+    fun getScriptPower(script: ScriptItem) = scriptPowers[script.id]?.asStateFlow()
+        ?: throw CoreException("scriptPowers에 ${script.id} 키가 없어요.")
 
-    fun getCompileState(script: ScriptItem): LiveData<Boolean> =
-        scriptPowers[script.id]
-            ?: throw CoreException("There is no ${script.id} key in compileStates.")
+    fun getCompileState(script: ScriptItem) = compileStates[script.id]?.asStateFlow()
+        ?: throw CoreException("compileStates에 ${script.id} 키가 없어요.")
 
     fun scriptDataSave(script: ScriptItem) {
         _scripts.edit {
             removeIf { it.id == script.id }
             add(script)
         }
-        Storage.write(ScriptConfig.ScriptDataPath(script.name, script.lang), script.toJsonString())
+        Storage.write(
+            ScriptConstant.ScriptDataPath(script.name, script.lang),
+            script.toJsonString()
+        )
     }
 
     fun scriptCodeSave(script: ScriptItem, code: String) {
-        Storage.write(ScriptConfig.ScriptPath(script.name, script.lang), code)
+        Storage.write(ScriptConstant.ScriptPath(script.name, script.lang), code)
     }
 
     fun addScript(script: ScriptItem) {
@@ -88,7 +90,7 @@ object Bot {
             val sendIntent = Intent()
             val messageBundle = Bundle()
             val remoteInputs =
-                session.remoteInputs ?: throw CoreException("remoteInputs cannot be null.")
+                session.remoteInputs ?: throw CoreException("remoteInputs가 null 이에요.")
             for (inputable in remoteInputs) {
                 messageBundle.putCharSequence(inputable.resultKey, message)
             }
@@ -114,14 +116,14 @@ object Bot {
                 return
             }
             v8.locker.acquire()
-            if (script.id == ScriptConfig.EvalId) {
+            if (script.id == ScriptConstant.EvalId) {
                 val result = v8.executeScript(message).toString()
-                DebugStore.add(createDebugItem(ScriptConfig.EvalId, result, "null", Sender.Bot))
+                DebugStore.add(createDebugItem(ScriptConstant.EvalId, result, "null", Sender.Bot))
             } else {
                 val arguments =
                     listOf(room, message, sender, isGroupChat, "null", isDebugMode)
                 v8.executeJSFunction(
-                    ScriptConfig.DefaultResponseFunctionName,
+                    ScriptConstant.DefaultResponseFunctionName,
                     *arguments.toTypedArray()
                 )
             }
@@ -135,10 +137,11 @@ object Bot {
     private fun getList(): List<ScriptItem> {
         val scripts = mutableListOf<ScriptItem>()
         repeat(4) { lang -> // 스크립트 코드파일이 아니라, 스크립트 정보 파일을 읽어와야함
-            Storage.fileList(ScriptConfig.ScriptListPath(lang)).filter { it.path.endsWith(".json") }
+            Storage.fileList(ScriptConstant.ScriptListPath(lang))
+                .filter { it.path.endsWith(".json") }
                 .forEach { scriptDataFile ->
                     val scriptData = Storage.read(scriptDataFile.path, null)
-                        ?: throw CoreException("$scriptDataFile file is null.")
+                        ?: throw CoreException("$scriptDataFile 파일이 null 이에요.")
                     val script: ScriptItem = scriptData.toModel()
                     if (script.compiled) {
                         if (StackManager.v8[script.id] == null) {

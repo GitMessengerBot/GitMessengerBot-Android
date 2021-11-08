@@ -9,20 +9,21 @@
 
 package io.github.jisungbin.gitmessengerbot.domain.github.repo
 
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
 import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContents
 import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitLists
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
 
 interface GithubCommitRepository {
     suspend fun getFileCommitHistory(
         owner: String,
         repoName: String,
-    ): Flow<GithubResult<CommitLists>>
+        coroutineScope: CoroutineScope
+    ): Result<CommitLists>
 
     suspend fun getFileCommitContent(
         owner: String,
         repoName: String,
         sha: String,
-    ): Flow<GithubResult<CommitContents>>
+        coroutineScope: CoroutineScope
+    ): Result<CommitContents>
 }

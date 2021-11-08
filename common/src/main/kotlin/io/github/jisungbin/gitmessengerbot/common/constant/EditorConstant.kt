@@ -7,9 +7,9 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common.config
+package io.github.jisungbin.gitmessengerbot.common.constant
 
-object EditorConfig {
+object EditorConstant {
     const val HorizontalScroll = true
     const val FontName = "" // TODO
     const val FontSize = 13

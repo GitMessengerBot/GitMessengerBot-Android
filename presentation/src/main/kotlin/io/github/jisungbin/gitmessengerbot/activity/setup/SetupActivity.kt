@@ -40,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -52,12 +51,13 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.core.Wear
@@ -119,13 +119,12 @@ class SetupActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
-        val lifeCycle = LocalLifecycleOwner.current
         val exception = remember { mutableStateOf<Exception?>(null) }
 
         ExceptionDialog(exception = exception)
         LaunchedEffect(vm) {
             vm.observe(
-                lifecycleOwner = lifeCycle,
+                lifecycleOwner = this@SetupActivity,
                 state = { state ->
                     handleState(state = state, onExceptionChanged = { exception.value = it })
                 },
@@ -323,27 +322,29 @@ class SetupActivity : ComponentActivity() {
 
     @SuppressLint("NewApi")
     private fun Permission.requestPermission() {
-        when (permissions.first()) {
-            PermissionType.NotificationRead -> {
-                NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
-                doDelay(1000) {
-                    notificationPermissionGranted = true
+        lifecycleScope.launchWhenCreated {
+            when (permissions.first()) {
+                PermissionType.NotificationRead -> {
+                    NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
+                    doDelay(1000) {
+                        notificationPermissionGranted = true
+                    }
                 }
-            }
-            PermissionType.Wear -> {
-                Wear.install(applicationContext)
-                doDelay(1000) {
-                    wearAppInstalled = true
+                PermissionType.Wear -> {
+                    Wear.install(applicationContext)
+                    doDelay(1000) {
+                        wearAppInstalled = true
+                    }
                 }
-            }
-            PermissionType.ScopedStorage -> {
-                Storage.requestStorageManagePermission(this@SetupActivity)
-                doDelay(1000) {
-                    storagePermissionGranted = true
+                PermissionType.ScopedStorage -> {
+                    Storage.requestStorageManagePermission(this@SetupActivity)
+                    doDelay(1000) {
+                        storagePermissionGranted = true
+                    }
                 }
-            }
-            else -> {
-                permissionsContracts.launch(this.permissions.toTypedArray())
+                else -> {
+                    permissionsContracts.launch(this@requestPermission.permissions.toTypedArray())
+                }
             }
         }
     }
@@ -352,27 +353,27 @@ class SetupActivity : ComponentActivity() {
         super.onNewIntent(intent)
 
         val requestCode = intent?.data?.getQueryParameter("code")
-            ?: throw PresentationException("Github aouth request code intent data is null.")
+            ?: throw PresentationException("Github aouth request code intent가 null 이에요.")
 
         vm.login(requestCode)
     }
 
     private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
-        if (state.loaded) {
-            if (!state.isException()) {
+        if (!state.isException()) {
+            if (state.loaded) {
                 finish()
                 startActivity(Intent(this@SetupActivity, MainActivity::class.java))
                 toast(getString(R.string.activity_setup_toast_welcome, state.userName))
-            } else {
-                onExceptionChanged(state.exception!!)
             }
+        } else {
+            onExceptionChanged(state.exception!!)
         }
     }
 
     private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
         when (sideEffect) {
             is MviSetupSideEffect.SaveData -> {
-                Storage.write(GithubConfig.DataPath, sideEffect.data.toJsonString())
+                Storage.write(GithubConstant.DataPath, sideEffect.data.toJsonString())
             }
         }
     }

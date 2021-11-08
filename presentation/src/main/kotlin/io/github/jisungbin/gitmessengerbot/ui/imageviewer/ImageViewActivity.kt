@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import com.skydoves.landscapist.palette.BitmapPalette
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 
@@ -42,7 +42,7 @@ class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageUrl = intent.getStringExtra(IntentConfig.ImageUrl)!!
+        val imageUrl = intent.getStringExtra(IntentConstant.ImageUrl)!!
 
         setContent {
             MaterialTheme {

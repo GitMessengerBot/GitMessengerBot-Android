@@ -13,52 +13,59 @@ import io.github.jisungbin.gitmessengerbot.data.github.api.GithubCommitService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
 import io.github.jisungbin.gitmessengerbot.data.github.util.isValid
 import io.github.jisungbin.gitmessengerbot.data.github.util.toFailResult
-import io.github.jisungbin.gitmessengerbot.domain.github.GithubResult
+import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitContents
+import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitLists
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.callbackFlow
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 
-class GithubCommitRepositoryImpl(private val signedRetrofit: Retrofit) : GithubCommitRepository {
+class GithubCommitRepositoryImpl(signedRetrofit: Retrofit) : GithubCommitRepository {
     private val api = signedRetrofit.create(GithubCommitService::class.java)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getFileCommitHistory(owner: String, repoName: String) = callbackFlow {
-        try {
-            val request = api.getFileCommitHistory(owner = owner, repoName = repoName)
-            trySend(
-                if (request.isValid()) {
-                    GithubResult.Success(request.body()!!.toDomain())
-                } else {
-                    request.toFailResult("getFileCommitHistory")
-                }
-            )
-        } catch (exception: Exception) {
-            trySend(GithubResult.Fail(exception))
+    override suspend fun getFileCommitHistory(
+        owner: String,
+        repoName: String,
+        coroutineScope: CoroutineScope
+    ): Result<CommitLists> = suspendCoroutine { continuation ->
+        coroutineScope.launch {
+            try {
+                val request = api.getFileCommitHistory(owner = owner, repoName = repoName)
+                continuation.resume(
+                    if (request.isValid()) {
+                        Result.success(request.body()!!.toDomain())
+                    } else {
+                        request.toFailResult("getFileCommitHistory")
+                    }
+                )
+            } catch (exception: Exception) {
+                continuation.resume(Result.failure(exception))
+            }
         }
-
-        close()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getFileCommitContent(
         owner: String,
         repoName: String,
         sha: String,
-    ) = callbackFlow {
-        try {
-            val request = api.getFileCommitContent(owner = owner, repoName = repoName, sha = sha)
-            trySend(
-                if (request.isValid()) {
-                    GithubResult.Success(request.body()!!.toDomain())
-                } else {
-                    request.toFailResult("getFileCommitContent")
-                }
-            )
-        } catch (exception: Exception) {
-            trySend(GithubResult.Fail(exception))
+        coroutineScope: CoroutineScope
+    ): Result<CommitContents> = suspendCoroutine { continuation ->
+        coroutineScope.launch {
+            try {
+                val request =
+                    api.getFileCommitContent(owner = owner, repoName = repoName, sha = sha)
+                continuation.resume(
+                    if (request.isValid()) {
+                        Result.success(request.body()!!.toDomain())
+                    } else {
+                        request.toFailResult("getFileCommitContent")
+                    }
+                )
+            } catch (exception: Exception) {
+                continuation.resume(Result.failure(exception))
+            }
         }
-
-        close()
     }
 }

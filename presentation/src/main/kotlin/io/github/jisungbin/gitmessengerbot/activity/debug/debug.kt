@@ -40,8 +40,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +61,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -77,14 +77,14 @@ import io.github.sungbin.gitmessengerbot.core.bot.debug.getByScriptId
 import io.github.sungbin.gitmessengerbot.core.bot.debug.sortedByTime
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 @Composable
 fun Debug(activity: Activity, script: ScriptItem? = null) {
-    val app by AppConfig.app.observeAsState(AppConfig.appValue)
+    val app by AppConfig.app.collectAsState()
     val settingDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -281,17 +281,17 @@ private fun DebugContent(
         val coroutineScope = rememberCoroutineScope()
         var inputField by remember { mutableStateOf(TextFieldValue()) }
 
-        var items = DebugStore.items.observeAsState(DebugStore.itemsValue).value
+        var items = DebugStore.items.collectAsState().value
         val debugId: Int
 
         when {
             evalMode -> {
-                items = items.getByScriptId(ScriptConfig.EvalId)
-                debugId = ScriptConfig.EvalId
+                items = items.getByScriptId(ScriptConstant.EvalId)
+                debugId = ScriptConstant.EvalId
             }
             script == null -> {
-                items = items.filterNot { it.scriptId == ScriptConfig.EvalId }
-                debugId = ScriptConfig.DebugAllBot
+                items = items.filterNot { it.scriptId == ScriptConstant.EvalId }
+                debugId = ScriptConstant.DebugAllBot
             }
             else -> {
                 items = items.getByScriptId(script.id)
@@ -356,7 +356,7 @@ private fun DebugContent(
                             evalMode -> {
                                 Bot.callJsResponder(
                                     script = ScriptItem(
-                                        id = ScriptConfig.EvalId,
+                                        id = ScriptConstant.EvalId,
                                         name = "",
                                         lang = 0,
                                         power = false,

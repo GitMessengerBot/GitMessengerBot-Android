@@ -7,13 +7,13 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.common.config
+package io.github.jisungbin.gitmessengerbot.common.constant
 
-object GithubConfig {
+object GithubConstant {
     const val BaseUrl = "https://github.com"
     const val BaseApiUrl = "https://api.github.com"
 
-    const val DataPath = "${PathConfig.AppStorage}/github-data.json"
+    const val DataPath = "${PathConstant.AppStorage}/github-data.json"
 
     const val DefaultBranch = "main"
     const val DefaultRepoDescription = "Created by GitMessengerBot"

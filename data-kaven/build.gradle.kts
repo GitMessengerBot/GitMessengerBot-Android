@@ -42,10 +42,10 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":domain-kaven"))
 
-    Dependencies.room.forEach(::implementation)
-    Dependencies.jackson.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.retrofitutil.forEach(::implementation)
+    Dependencies.Room.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
+    Dependencies.Retrofit.forEach(::implementation)
+    Dependencies.RetrofitUtil.forEach(::implementation)
 
-    kapt(Dependencies.roomCompiler)
+    kapt(Dependencies.RoomCompiler)
 }

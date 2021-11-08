@@ -12,7 +12,6 @@ package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -48,8 +47,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -80,8 +79,9 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
-import io.github.jisungbin.gitmessengerbot.common.config.IntentConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.extension.isEnglish
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
@@ -91,9 +91,7 @@ import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.search
-import io.github.sungbin.gitmessengerbot.core.doWhen
 import kotlin.random.Random
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -140,8 +138,8 @@ fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boole
 }
 
 @Composable
-private fun LazyScript(modifier: Modifier, search: String) {
-    val scripts = Bot.scripts.observeAsState(emptyList()).value.search(search)
+private fun LazyScript(modifier: Modifier, search: String) { // TODO: 키보드 입력 1초동안 없을 때 검색하게 개선 필요
+    val scripts = Bot.scripts.collectAsState().value.search(search)
 
     if (scripts.isNotEmpty()) {
         LazyColumn(
@@ -212,10 +210,7 @@ private fun ScriptItem(script: ScriptItem) {
 
     val angle by animateFloatAsState(
         targetValue = if (isRotated) 360F else 0F,
-        animationSpec = tween(
-            durationMillis = 2000,
-            easing = FastOutSlowInEasing
-        ),
+        animationSpec = tween(durationMillis = 2000),
         finishedListener = { isRotated = false }
     )
 
@@ -231,7 +226,7 @@ private fun ScriptItem(script: ScriptItem) {
             .clip(shape)
             .clickable {
                 val intent = Intent(context, JsEditorActivity::class.java).apply {
-                    putExtra(IntentConfig.ScriptId, script.id)
+                    putExtra(IntentConstant.ScriptId, script.id)
                 }
                 context.startActivity(intent)
             }
@@ -300,7 +295,7 @@ private fun ScriptItem(script: ScriptItem) {
                     .size(20.dp)
                     .clickable {
                         val intent = Intent(context, DebugActivty::class.java).apply {
-                            putExtra(IntentConfig.DebugScriptId, script.id)
+                            putExtra(IntentConstant.DebugScriptId, script.id)
                         }
                         context.startActivity(intent)
                     }
@@ -318,30 +313,28 @@ private fun ScriptItem(script: ScriptItem) {
                     .size(25.dp)
                     .rotate(angle)
                     .clickable {
-                        isRotated = true
                         coroutineScope.launch {
+                            isRotated = true
+                            var message = ""
                             Bot
                                 .compileScript(context, script)
-                                .collect { compileResult ->
-                                    var message = ""
-                                    compileResult.doWhen(
-                                        onSuccess = {
-                                            message =
-                                                context.getString(R.string.script_toast_compile_success)
-                                        },
-                                        onFail = { exception ->
-                                            compileErrorDialogVisible.value = true
-                                            compileErrorExceptionMessage =
-                                                exception.message.toString()
-                                            message = context.getString(
-                                                R.string.script_toast_compile_failed,
-                                                compileErrorExceptionMessage
-                                            )
-                                        }
-                                    )
-                                    isRotated = false
-                                    toast(context = context, message = message)
-                                }
+                                .doWhen(
+                                    onSuccess = {
+                                        message =
+                                            context.getString(R.string.script_toast_compile_success)
+                                    },
+                                    onFailure = { exception ->
+                                        compileErrorDialogVisible.value = true
+                                        compileErrorExceptionMessage =
+                                            exception.message.toString()
+                                        message = context.getString(
+                                            R.string.script_toast_compile_failed,
+                                            compileErrorExceptionMessage
+                                        )
+                                    }
+                                )
+                            isRotated = false
+                            toast(context = context, message = message)
                         }
                     }
                     .constrainAs(reload) {

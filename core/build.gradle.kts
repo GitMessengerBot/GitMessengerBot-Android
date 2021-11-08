@@ -44,11 +44,10 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.jsoup)
-    implementation(Dependencies.livedata)
+    implementation(Dependencies.Jsoup)
 
     implementation(project(":common"))
 
-    Dependencies.bot.forEach(::implementation)
-    Dependencies.jackson.forEach(::implementation)
+    Dependencies.Bot.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
 }

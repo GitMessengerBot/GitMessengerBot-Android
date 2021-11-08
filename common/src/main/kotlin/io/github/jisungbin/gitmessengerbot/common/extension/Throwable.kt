@@ -2,16 +2,11 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [Activity.kt] created by Ji Sungbin on 21. 8. 30. 오후 5:05
+ * [Throwable.kt] created by Ji Sungbin on 21. 11. 7. 오후 11:49
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
 package io.github.jisungbin.gitmessengerbot.common.extension
 
-import android.app.Activity
-import android.widget.Toast
-
-fun Activity.toast(message: String, length: Int = Toast.LENGTH_SHORT) {
-    toast(this, message, length)
-}
+fun Throwable.toException() = Exception(this)

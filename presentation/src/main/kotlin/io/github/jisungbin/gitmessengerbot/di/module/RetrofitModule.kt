@@ -17,7 +17,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.jisungbin.gitmessengerbot.common.config.GithubConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
@@ -44,8 +44,8 @@ object RetrofitModule {
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
-            val githubData: GithubData = Storage.read(GithubConfig.DataPath, null)?.toModel()
-                ?: throw PresentationException("GithubConfig.DataPath value is cannot be null.")
+            val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
+                ?: throw PresentationException("GithubConfig.DataPath 값이 null 이에요.")
             builder = builder
                 .addHeader("Authorization", "token ${githubData.aouthToken}")
                 .addHeader("Accept", "application/json")
@@ -68,7 +68,7 @@ object RetrofitModule {
     @Singleton
     fun provideSignedRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit =
         Retrofit.Builder()
-            .baseUrl(GithubConfig.BaseApiUrl)
+            .baseUrl(GithubConstant.BaseApiUrl)
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
             .build()
@@ -77,11 +77,11 @@ object RetrofitModule {
     @UserRetrofit
     @Singleton
     fun provideUserRetrofit(): Retrofit.Builder =
-        buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseApiUrl)
+        buildRetrofitWithoutClient(baseUrl = GithubConstant.BaseApiUrl)
 
     @Provides
     @AouthRetrofit
     @Singleton
     fun provideAouthRetrofit(): Retrofit.Builder =
-        buildRetrofitWithoutClient(baseUrl = GithubConfig.BaseUrl)
+        buildRetrofitWithoutClient(baseUrl = GithubConstant.BaseUrl)
 }

@@ -9,7 +9,7 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script
 
-import io.github.jisungbin.gitmessengerbot.common.config.ScriptConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
 import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
@@ -30,16 +30,16 @@ data class ScriptItem(
     private val defaultCode = lang.getScriptDefaultCode()
 
     fun add() {
-        Storage.write(ScriptConfig.ScriptPath(name, lang), defaultCode)
-        Storage.write(ScriptConfig.ScriptDataPath(name, lang), toJsonString())
+        Storage.write(ScriptConstant.ScriptPath(name, lang), defaultCode)
+        Storage.write(ScriptConstant.ScriptDataPath(name, lang), toJsonString())
     }
 
     fun delete() {
-        Storage.delete(ScriptConfig.ScriptPath(name, lang))
-        Storage.delete(ScriptConfig.ScriptDataPath(name, lang))
+        Storage.delete(ScriptConstant.ScriptPath(name, lang))
+        Storage.delete(ScriptConstant.ScriptDataPath(name, lang))
     }
 
-    fun getCode() = Storage.read(ScriptConfig.ScriptPath(name, lang), defaultCode)
+    fun getCode() = Storage.read(ScriptConstant.ScriptPath(name, lang), defaultCode)
         ?: throw CoreException("The script's code cannot be null. (ScriptId: $id)")
 }
 
