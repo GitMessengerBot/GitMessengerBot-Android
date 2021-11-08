@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app
-          path: ci-build
+          path: presentation/build/outputs/apk/debug
