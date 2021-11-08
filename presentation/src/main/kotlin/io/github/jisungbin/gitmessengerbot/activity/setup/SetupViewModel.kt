@@ -10,15 +10,16 @@
 package io.github.jisungbin.gitmessengerbot.activity.setup
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
 import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
-import io.github.jisungbin.gitmessengerbot.domain.github.doWhen
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
+import io.github.jisungbin.gitmessengerbot.common.extension.toException
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubGetUserInfoUseCase
 import io.github.jisungbin.gitmessengerbot.domain.github.usecase.GithubRequestAouthTokenUseCase
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -34,42 +35,44 @@ class SetupViewModel @Inject constructor(
     override val container = container<MviSetupState, MviSetupSideEffect>(MviSetupState())
 
     fun login(requestCode: String) = intent {
-        githubRequestAouthTokenUseCase(requestCode).collect { githubAouthResult ->
-            githubAouthResult.doWhen(
-                onSuccess = { githubAouth ->
-                    var githubData = GithubData(aouthToken = githubAouth.token)
-                    githubGetUserInfoUseCase(githubData.aouthToken).collect { userInfoResult ->
-                        userInfoResult.doWhen(
-                            onSuccess = { userInfo ->
-                                githubData = githubData.copy(
-                                    userName = userInfo.userName,
-                                    profileImageUrl = userInfo.profileImageUrl
-                                )
-                                postSideEffect(MviSetupSideEffect.SaveData(githubData))
-                                reduce {
-                                    state.copy(
-                                        loaded = true,
-                                        exception = null,
-                                        aouthToken = githubData.aouthToken,
-                                        userName = githubData.userName,
-                                        profileImageUrl = githubData.profileImageUrl
-                                    )
-                                }
-                            },
-                            onFail = { exception ->
-                                reduce {
-                                    state.copy(exception = exception)
-                                }
-                            }
+        githubRequestAouthTokenUseCase(
+            requestCode = requestCode,
+            coroutineScope = viewModelScope
+        ).doWhen(
+            onSuccess = { githubAouth ->
+                var githubData = GithubData(aouthToken = githubAouth.token)
+                githubGetUserInfoUseCase(
+                    aouthToken = githubData.aouthToken,
+                    coroutineScope = viewModelScope
+                ).doWhen(
+                    onSuccess = { userInfo ->
+                        githubData = githubData.copy(
+                            userName = userInfo.userName,
+                            profileImageUrl = userInfo.profileImageUrl
                         )
+                        postSideEffect(MviSetupSideEffect.SaveData(githubData))
+                        reduce {
+                            state.copy(
+                                loaded = true,
+                                exception = null,
+                                aouthToken = githubData.aouthToken,
+                                userName = githubData.userName,
+                                profileImageUrl = githubData.profileImageUrl
+                            )
+                        }
+                    },
+                    onFailure = { throwable ->
+                        reduce {
+                            state.copy(exception = throwable.toException())
+                        }
                     }
-                },
-                onFail = { exception ->
-                    reduce {
-                        state.copy(exception = exception)
-                    }
+                )
+            },
+            onFailure = { throwable ->
+                reduce {
+                    state.copy(exception = throwable.toException())
                 }
-            )
-        }
+            }
+        )
     }
 }
