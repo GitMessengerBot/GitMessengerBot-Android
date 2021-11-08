@@ -75,7 +75,7 @@
 2. Side-Effect
    * ~~`composable`에서 Side-Effect 발생~~?
 3. ~~MVVM -> MVI 변경 필요~~ -> [#21](https://github.com/GitMessengerBot/GitMessengerBot-Android/pull/21) 완료
-4. 
+
 # 라이선스
 
 개발: [지성빈](https://github.com/jisungbin) <br/>
