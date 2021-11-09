@@ -68,7 +68,7 @@
 # 알려진 이슈
 
 1. 아키텍처 구조 문제
-   * ~~최대한 `Android` 프레임워크를 알려서는 안됨~~ -> `LiveData` 대신에 `StateFlow`를 사용함으로써 해결
+   * ~~ViewModel은 platform independence 해야함~~ -> `LiveData` 대신에 `StateFlow`를 사용함으로써 해결
    * 일부 `context`를 갖는 Api 클래스에서 **메모리 누수** 발생 (해결 가능?)
 2. Side-Effect
    * ~~`composable`에서 Side-Effect 발생~~?
