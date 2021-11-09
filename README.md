@@ -5,7 +5,8 @@
 
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
-> 12월 말까지 완성 <br/>
+> 12월 말까지 완성
+>
 > 스타 100개를 향해,,,~~
 
 > 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
@@ -18,7 +19,8 @@
 
 # 다운로드 (알파버전 업로드 상태)
 
-정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)<br/>
+정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)
+
 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
 
 # 기능
@@ -72,12 +74,21 @@
    * ~~`composable`에서 Side-Effect 발생~~?
 3. ~~MVVM -> MVI 변경 필요~~ -> [#21](https://github.com/GitMessengerBot/GitMessengerBot-Android/pull/21) 완료
 
+# 관련 아티클
+
+> 준비중...
+
 # 라이선스
 
-개발: [지성빈](https://github.com/jisungbin) <br/>
-디자인: 구환 <br/><br/>
-GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. <br/>
-`GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
+개발: [지성빈](https://github.com/jisungbin)
+
+디자인: 구환 
+
+
+
+GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. 
+
+GitMessengerBot은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 -----
 
