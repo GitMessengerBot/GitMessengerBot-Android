@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -83,8 +84,8 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launchWhenCreated {
             if (AppConfig.evalUsable) {
                 Bot.compileScript(
-                    applicationContext,
-                    ScriptItem(
+                    context = applicationContext,
+                    script = ScriptItem(
                         id = ScriptConstant.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
@@ -109,6 +110,8 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            println("MainActivity: $tag")
+
             MaterialTheme {
                 Content()
             }

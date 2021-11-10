@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 
 object AppConfig {
     private val _app = MutableStateFlow(loadApp())
-
     val app = _app.asStateFlow()
     val appValue: App get() = app.value
 

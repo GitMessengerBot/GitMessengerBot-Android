@@ -79,6 +79,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
+import io.github.jisungbin.gitmessengerbot.activity.main.tag
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
@@ -96,6 +97,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boolean>) {
+    println("ScriptContent: $tag")
+
     val searchField = remember { mutableStateOf(TextFieldValue()) }
 
     ScriptAddDialog(visible = scriptAddDialogVisible)

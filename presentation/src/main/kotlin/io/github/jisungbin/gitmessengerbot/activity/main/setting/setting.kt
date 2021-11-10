@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.main.tag
 import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
@@ -60,6 +61,8 @@ import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
 fun Setting(activity: Activity) {
+    println("SettingContent: $tag")
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { Toolbar() },
