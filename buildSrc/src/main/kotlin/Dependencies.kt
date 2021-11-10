@@ -28,7 +28,7 @@ object Versions {
         const val Kotlin = "1.5.31"
         const val CoreKtx = "1.6.0"
         const val Coroutines = "1.5.1"
-        const val Gradle = "7.1.0-beta02"
+        const val Gradle = "7.1.0-beta03"
     }
 
     object Bot {
