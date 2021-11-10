@@ -1,18 +1,15 @@
-// 435
+// 439
 <!-- <image src="https://raw.githubusercontent.com/GitMessengerBot/GitMessengerBot-Android/stable/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" /> -->
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
 
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
-> 12월 말까지 완성 <br/>
+> 12월 말까지 완성
+>
 > 스타 100개를 향해,,,~~
 
----
-
-# 프로젝트 죽기 일보직전 -> ~~멱살잡고 살리는 중~~ -> 부활 성공!!
-
-### 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
+> 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
 
 -----
 
@@ -22,7 +19,8 @@
 
 # 다운로드 (알파버전 업로드 상태)
 
-정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)<br/>
+정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)
+
 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
 
 # 기능
@@ -70,18 +68,29 @@
 # 알려진 이슈
 
 1. 아키텍처 구조 문제
-   * ~~최대한 `Android` 프레임워크를 알려서는 안됨~~ -> `LiveData` 대신에 `StateFlow`를 사용함으로써 해결
+   * ~~ViewModel은 platform independence 해야함~~ -> `LiveData` 대신에 `StateFlow`를 사용함으로써 해결
    * 일부 `context`를 갖는 Api 클래스에서 **메모리 누수** 발생 (해결 가능?)
 2. Side-Effect
    * ~~`composable`에서 Side-Effect 발생~~?
 3. ~~MVVM -> MVI 변경 필요~~ -> [#21](https://github.com/GitMessengerBot/GitMessengerBot-Android/pull/21) 완료
 
+# 개발 아티클
+
+1. [LiveData 대신에 StateFlow/SharedFlow를 사용해보자](https://jisungbin.medium.com/livedata-%EB%8C%80%EC%8B%A0%EC%97%90-stateflow-sharedflow%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90-c78b87ea4248)
+2. [코틀린 inline에 대해 한 번에 알아보자](https://jisungbin.medium.com/%EC%BD%94%ED%8B%80%EB%A6%B0%EC%9D%98-%EC%9D%B8%EB%9D%BC%EC%9D%B8%EC%97%90-%EB%8C%80%ED%95%B4-%ED%95%9C-%EB%B2%88%EC%97%90-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90-591c7da73219)
+3. [아직도 MVVM? 이젠 MVI 시대!](https://jisungbin.medium.com/%EC%95%84%EC%A7%81%EB%8F%84-mvvm-%EC%9D%B4%EC%A0%A0-mvi-%EC%8B%9C%EB%8C%80-319990c7d60)
+
 # 라이선스
 
-개발: [지성빈](https://github.com/jisungbin) <br/>
-디자인: 구환 <br/><br/>
-GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. <br/>
-`GitMessengerBot`은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
+개발: [지성빈](https://github.com/jisungbin)
+
+디자인: 구환 
+
+
+
+GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. 
+
+GitMessengerBot은 [GPL-3.0](https://github.com/jisungbin/GitMessengerBot/blob/master/LICENSE) 라이선스를 따릅니다.
 
 -----
 
