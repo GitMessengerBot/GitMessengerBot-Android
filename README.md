@@ -1,4 +1,4 @@
-// 439
+// 451
 <!-- <image src="https://raw.githubusercontent.com/GitMessengerBot/GitMessengerBot-Android/stable/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" /> -->
 
 # GitMessengerBot [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
@@ -82,11 +82,7 @@
 
 # 라이선스
 
-개발: [지성빈](https://github.com/jisungbin)
-
-디자인: 구환 
-
-
+개발: [지성빈](https://github.com/jisungbin) / 디자인: 구환 
 
 GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. 
 
