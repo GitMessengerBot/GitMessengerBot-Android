@@ -44,5 +44,4 @@ dependencies {
 
     Dependencies.Jackson.forEach(::implementation)
     Dependencies.Retrofit.forEach(::implementation)
-    Dependencies.RetrofitUtil.forEach(::implementation)
 }

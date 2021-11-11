@@ -26,7 +26,7 @@ object Versions {
 
     object Essential {
         const val Kotlin = "1.5.31"
-        const val CoreKtx = "1.6.0"
+        const val CoreKtx = "1.7.0"
         const val Coroutines = "1.5.1"
         const val Gradle = "7.1.0-beta03"
     }
@@ -45,7 +45,7 @@ object Versions {
     object Util {
         const val Pluto = "1.1.1"
         const val Erratum = "1.0.1"
-        const val Logeukes = "1.0.0"
+        const val Logeukes = "1.0.1"
         const val Jackson = "2.13.0"
         const val LeakCanary = "2.7"
         const val KeyboardObserver = "1.0.1"
@@ -59,8 +59,8 @@ object Versions {
     }
 
     object Jetpack {
-        const val Room = "2.3.0"
         const val Hilt = "2.40"
+        const val Room = "2.3.0"
     }
 
     object Compose {
@@ -70,7 +70,7 @@ object Versions {
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
         const val FancyBottomBar = "1.0.1"
-        const val LandscapistCoil = "1.4.1"
+        const val LandscapistCoil = "1.4.2"
         const val Navigation = "2.4.0-alpha09"
         const val ConstraintLayout = "1.0.0-beta01"
     }
@@ -116,11 +116,7 @@ object Dependencies {
     )
 
     val Retrofit = listOf(
-        "com.squareup.okhttp3:okhttp:${Versions.Network.OkHttp}",
-        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}"
-    )
-
-    val RetrofitUtil = listOf(
+        "com.squareup.retrofit2:retrofit:${Versions.Network.Retrofit}",
         "com.squareup.okhttp3:logging-interceptor:${Versions.Network.OkHttp}",
         "com.squareup.retrofit2:converter-jackson:${Versions.Network.Retrofit}"
     )

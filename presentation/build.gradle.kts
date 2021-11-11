@@ -87,7 +87,6 @@ dependencies {
     Dependencies.Jackson.forEach(::implementation)
     Dependencies.Compose.forEach(::implementation)
     Dependencies.Retrofit.forEach(::implementation)
-    Dependencies.RetrofitUtil.forEach(::implementation)
 
     Dependencies.Debug.forEach(::debugImplementation)
 

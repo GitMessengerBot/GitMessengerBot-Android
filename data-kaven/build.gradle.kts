@@ -45,7 +45,6 @@ dependencies {
     Dependencies.Room.forEach(::implementation)
     Dependencies.Jackson.forEach(::implementation)
     Dependencies.Retrofit.forEach(::implementation)
-    Dependencies.RetrofitUtil.forEach(::implementation)
 
     kapt(Dependencies.RoomCompiler)
 }
