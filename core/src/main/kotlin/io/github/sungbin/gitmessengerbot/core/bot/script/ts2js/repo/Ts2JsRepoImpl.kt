@@ -13,12 +13,12 @@ import io.github.jisungbin.gitmessengerbot.common.extension.ioThread
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.Ts2JsResponse
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.jsoup.Connection
 
 internal class Ts2JsRepoImpl(private val jsoup: Connection) : Ts2JsRepo {
     override suspend fun convert(js: String): Result<Ts2JsResponse> =
-        suspendCoroutine { continuation ->
+        suspendCancellableCoroutine { continuation ->
             try {
                 ioThread {
                     val ts2js: Ts2JsResponse = jsoup.requestBody(js).post().text().toModel()

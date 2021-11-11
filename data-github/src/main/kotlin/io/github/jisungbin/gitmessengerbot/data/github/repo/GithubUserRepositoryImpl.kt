@@ -19,10 +19,9 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubAouth
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubUser
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubUserRepository
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -49,7 +48,7 @@ class GithubUserRepositoryImpl(
         return builder.build()
     }
 
-    private fun getApi(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
+    private fun buildGithubUserService(retrofit: Retrofit.Builder, aouthToken: String?) = retrofit
         .client(getInterceptor(httpLoggingInterceptor, AuthInterceptor(aouthToken)))
         .build()
         .create(GithubUserService::class.java)
@@ -57,49 +56,50 @@ class GithubUserRepositoryImpl(
     override suspend fun getUserInfo(
         aouthToken: String,
         coroutineScope: CoroutineScope
-    ): Result<GithubUser> =
-        suspendCoroutine { continuation ->
-            coroutineScope.launch {
-                try {
-                    val request =
-                        getApi(retrofit = userRetrofit, aouthToken = aouthToken).getUserInfo()
-                    continuation.resume(
-                        if (request.isValid()) {
-                            Result.success(request.body()!!.toDomain())
-                        } else {
-                            request.toFailResult("getUserInfo")
-                        }
-                    )
-                } catch (exception: Exception) {
-                    continuation.resume(Result.failure(exception))
-                }
+    ): Result<GithubUser> = suspendCancellableCoroutine { continuation ->
+        coroutineScope.launch {
+            try {
+                val request = buildGithubUserService(
+                    retrofit = userRetrofit,
+                    aouthToken = aouthToken
+                ).getUserInfo()
+                continuation.resume(
+                    if (request.isValid()) {
+                        Result.success(request.body()!!.toDomain())
+                    } else {
+                        request.toFailResult("getUserInfo")
+                    }
+                )
+            } catch (exception: Exception) {
+                continuation.resume(Result.failure(exception))
             }
         }
+    }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun requestAouthToken(
         requestCode: String,
         coroutineScope: CoroutineScope
-    ): Result<GithubAouth> =
-        suspendCoroutine { continuation ->
-            coroutineScope.launch {
-                try {
-                    val request =
-                        getApi(retrofit = aouthRetrofit, aouthToken = null).requestAouthToken(
-                            requestCode = requestCode,
-                            clientId = SecretConfig.GithubOauthClientId,
-                            clientSecret = SecretConfig.GithubOauthClientSecret
-                        )
-                    continuation.resume(
-                        if (request.isValid()) {
-                            Result.success(request.body()!!.toDomain())
-                        } else {
-                            request.toFailResult("requestAouthToken")
-                        }
-                    )
-                } catch (exception: Exception) {
-                    continuation.resume(Result.failure(exception))
-                }
+    ): Result<GithubAouth> = suspendCancellableCoroutine { continuation ->
+        coroutineScope.launch {
+            try {
+                val request = buildGithubUserService(
+                    retrofit = aouthRetrofit,
+                    aouthToken = null
+                ).requestAouthToken(
+                    requestCode = requestCode,
+                    clientId = SecretConfig.GithubOauthClientId,
+                    clientSecret = SecretConfig.GithubOauthClientSecret
+                )
+                continuation.resume(
+                    if (request.isValid()) {
+                        Result.success(request.body()!!.toDomain())
+                    } else {
+                        request.toFailResult("requestAouthToken")
+                    }
+                )
+            } catch (exception: Exception) {
+                continuation.resume(Result.failure(exception))
             }
         }
+    }
 }

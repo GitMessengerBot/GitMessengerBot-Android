@@ -23,9 +23,9 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubRepoRepository
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Retrofit
 
 class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
@@ -38,7 +38,7 @@ class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
         path: String,
         branch: String,
         coroutineScope: CoroutineScope
-    ): Result<GithubFileContent> = suspendCoroutine { continuation ->
+    ): Result<GithubFileContent> = suspendCancellableCoroutine { continuation ->
         coroutineScope.launch {
             try {
                 val request = api.getFileContent(githubData.userName, repoName, path, branch)
@@ -58,30 +58,29 @@ class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
     override suspend fun createRepo(
         githubRepo: GithubRepo,
         coroutineScope: CoroutineScope
-    ): Result<Unit> =
-        suspendCoroutine { continuation ->
-            coroutineScope.launch {
-                try {
-                    val request = api.createRepo(githubRepo)
-                    continuation.resume(
-                        if (request.isValid()) {
-                            Result.success(Unit)
-                        } else {
-                            request.toFailResult("createRepo")
-                        }
-                    )
-                } catch (exception: Exception) {
-                    continuation.resume(Result.failure(exception))
-                }
+    ): Result<Unit> = suspendCancellableCoroutine { continuation ->
+        coroutineScope.launch {
+            try {
+                val request = api.createRepo(githubRepo)
+                continuation.resume(
+                    if (request.isValid()) {
+                        Result.success(Unit)
+                    } else {
+                        request.toFailResult("createRepo")
+                    }
+                )
+            } catch (exception: Exception) {
+                continuation.resume(Result.failure(exception))
             }
         }
+    }
 
     override suspend fun updateFile(
         repoName: String,
         path: String,
         githubFile: GithubFile,
         coroutineScope: CoroutineScope
-    ): Result<Unit> = suspendCoroutine { continuation ->
+    ): Result<Unit> = suspendCancellableCoroutine { continuation ->
         coroutineScope.launch {
             try {
                 val request = api.updateFile(

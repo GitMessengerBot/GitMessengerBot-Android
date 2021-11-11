@@ -24,7 +24,7 @@ import io.github.sungbin.gitmessengerbot.core.bot.api.UI
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.ts2js.repo.Ts2JsRepo
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler {
     private fun compileJavaScript(
@@ -130,7 +130,7 @@ internal class ScriptCompilerImpl(private val ts2Js: Ts2JsRepo) : ScriptCompiler
     }
 
     override suspend fun process(context: Context, script: ScriptItem): Result<Unit> =
-        suspendCoroutine { continuation ->
+        suspendCancellableCoroutine { continuation ->
             when (script.lang) {
                 ScriptLang.TypeScript -> suspend {
                     ts2Js

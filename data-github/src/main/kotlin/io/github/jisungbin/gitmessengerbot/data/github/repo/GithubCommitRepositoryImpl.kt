@@ -17,9 +17,9 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitCont
 import io.github.jisungbin.gitmessengerbot.domain.github.model.commit.CommitLists
 import io.github.jisungbin.gitmessengerbot.domain.github.repo.GithubCommitRepository
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Retrofit
 
 class GithubCommitRepositoryImpl(signedRetrofit: Retrofit) : GithubCommitRepository {
@@ -29,7 +29,7 @@ class GithubCommitRepositoryImpl(signedRetrofit: Retrofit) : GithubCommitReposit
         owner: String,
         repoName: String,
         coroutineScope: CoroutineScope
-    ): Result<CommitLists> = suspendCoroutine { continuation ->
+    ): Result<CommitLists> = suspendCancellableCoroutine { continuation ->
         coroutineScope.launch {
             try {
                 val request = api.getFileCommitHistory(owner = owner, repoName = repoName)
@@ -51,7 +51,7 @@ class GithubCommitRepositoryImpl(signedRetrofit: Retrofit) : GithubCommitReposit
         repoName: String,
         sha: String,
         coroutineScope: CoroutineScope
-    ): Result<CommitContents> = suspendCoroutine { continuation ->
+    ): Result<CommitContents> = suspendCancellableCoroutine { continuation ->
         coroutineScope.launch {
             try {
                 val request =
