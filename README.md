@@ -82,11 +82,7 @@
 
 # 라이선스
 
-개발: [지성빈](https://github.com/jisungbin)
-
-디자인: 구환 
-
-
+개발: [지성빈](https://github.com/jisungbin) / 디자인: 구환 
 
 GitMessengerBot © 2021 지성빈 & 구환. all rights reserved. 
 
