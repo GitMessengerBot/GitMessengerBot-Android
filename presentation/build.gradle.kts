@@ -31,6 +31,10 @@ android {
             useSupportLibrary = true
         }
 
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+        }
+
         buildConfigField("long", "TIMESTAMP", "${System.currentTimeMillis()}L")
     }
 
@@ -67,6 +71,9 @@ android {
 }
 
 dependencies {
+    implementation("com.facebook.flipper:flipper:0.119.0")
+    implementation("com.facebook.soloader:soloader:0.10.3")
+
     implementation(Dependencies.Hilt)
     implementation(Dependencies.Orbit)
     implementation(Dependencies.Jsoup)

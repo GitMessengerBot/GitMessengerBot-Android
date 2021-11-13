@@ -10,6 +10,11 @@
 package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.mocklets.pluto.Pluto
 import dagger.hilt.android.HiltAndroidApp
 import io.github.jisungbin.erratum.Erratum
@@ -23,6 +28,7 @@ import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 class GitMessengerBot : Application() {
     override fun onCreate() {
         super.onCreate()
+        SoLoader.init(this, false)
 
         if (BuildConfig.DEBUG) {
             Logeukes.setup()
@@ -38,6 +44,11 @@ class GitMessengerBot : Application() {
         AppConfig.app
         DebugStore.items
 
+        if (FlipperUtils.shouldEnableFlipper(this)) {
+            val client = AndroidFlipperClient.getInstance(this)
+            client.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
+            client.start()
+        }
         Pluto.initialize(applicationContext)
         Erratum.setup(this)
     }
