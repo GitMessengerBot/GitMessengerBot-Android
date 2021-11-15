@@ -119,4 +119,6 @@
     <string name="composable_setting_button_denied">거부됨</string>
     <string name="composable_script_button_copy_exception">에러 복사</string>
     <string name="composable_setting_dialog_toast_cant_delete_last_item">마지막 한 아이템은 삭제할 수 없습니다.</string>
+
+    <string name="activity_exception_button_retry_with_avoid">%s 피해 다시 시도해보기 🚀</string>
 </resources>

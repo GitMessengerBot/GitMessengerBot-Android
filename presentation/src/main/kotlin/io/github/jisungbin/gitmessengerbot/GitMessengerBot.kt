@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
+import android.content.Intent
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin
@@ -20,6 +21,8 @@ import com.facebook.flipper.plugins.leakcanary2.LeakCanary2FlipperPlugin
 import com.facebook.soloader.SoLoader
 import dagger.hilt.android.HiltAndroidApp
 import io.github.jisungbin.erratum.Erratum
+import io.github.jisungbin.erratum.ErratumExceptionActivity
+import io.github.jisungbin.gitmessengerbot.activity.exception.ExceptionActivity
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.logeukes.Logeukes
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -32,7 +35,18 @@ class GitMessengerBot : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Erratum.setup(this) // todo: 디버그 모드 아닐땐 에러 스택 보여주면 안됨
+        Erratum.setup(
+            application = this,
+            registerExceptionActivityIntent = { thread, throwable, lastActivity ->
+                Intent(lastActivity, ExceptionActivity::class.java).apply {
+                    putExtra(ErratumExceptionActivity.EXTRA_EXCEPTION_STRING, throwable.toString())
+                    putExtra(
+                        ErratumExceptionActivity.EXTRA_LAST_ACTIVITY_INTENT,
+                        lastActivity.intent
+                    )
+                }
+            }
+        )
 
         if (BuildConfig.DEBUG) {
             LeakCanary.config = LeakCanary.config.copy(

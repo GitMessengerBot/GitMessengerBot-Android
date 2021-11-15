@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        listOf(1)[2]
         lifecycleScope.launchWhenCreated {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 AppConfig.app.collect { app ->
