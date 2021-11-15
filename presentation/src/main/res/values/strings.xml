@@ -38,16 +38,16 @@
     <string name="activity_main_composable_dashboard_script_content_label">SCRIPT</string>
     <string name="activity_main_composable_dashboard_script_content_empty">스크립트가 비었어요</string>
     <string name="activity_main_composable_dashboard_script_content_compile">컴파일</string>
-    <string name="script_add_create_new">스크립트 추가</string>
-    <string name="script_add_input_name">스크립트 이름을 입력해 주세요.</string>
-    <string name="script_add_name">스크립트 이름</string>
-    <string name="script_add_name_only_eng">Git 사용을 위해 영어만 가능합니다</string>
-    <string name="script_add_lang">스크립트 언어</string>
-    <string name="script_toast_cant_use_python">파이썬 언어는 현재 이용하실 수 없습니다. (개발중)</string>
-    <string name="script_toast_compile_success">컴파일 성공!</string>
-    <string name="script_toast_compile_failed">컴파일 실패\n\n%s</string>
-    <string name="composable_script_dialog_compile_error">스크립트 컴파일 에러</string>
-    <string name="composable_setting_dialog_toast_already_added_package_name">%s은 이미 추가돼 있습니다.</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_button_script_add">스크립트 추가</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_toast_confirm_script_name">스크립트 이름을 입력해 주세요.</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_script_nane">스크립트 이름</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_script_name_allow_only_english">Git 사용을 위해 영어만 가능합니다</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_script_language">스크립트 언어</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_toast_cant_use_python_language">파이썬 언어는 현재 이용하실 수 없습니다. (개발중)</string>
+    <string name="activity_main_composable_dashboard_script_content_toast_success_compile">컴파일 성공!</string>
+    <string name="activity_main_composable_dashboard_script_content_toast_fail_compile">컴파일 실패\n\n%s</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_compile_error">스크립트 컴파일 에러</string>
+    <string name="activity_main_composable_setting_dialog_toast_already_added_package">%s은 이미 추가돼 있습니다.</string>
 
     <string name="composable_editor_toast_saved">저장되었습니다.</string>
     <string name="composable_editor_toast_repo_create_success">레포 생성 성공</string>

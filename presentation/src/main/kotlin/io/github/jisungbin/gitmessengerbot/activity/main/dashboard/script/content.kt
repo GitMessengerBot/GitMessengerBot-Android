@@ -2,21 +2,12 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [content.kt] created by Ji Sungbin on 21. 11. 15. 오후 9:20
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
  * [content.kt] created by Ji Sungbin on 21. 6. 19. 오후 10:56.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
+package io.github.jisungbin.gitmessengerbot.activity.main.dashboard.script
 
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
@@ -88,6 +79,7 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
 import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
+import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.Header
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
@@ -206,7 +198,7 @@ private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage:
                     Text(text = stringResource(R.string.composable_script_button_copy_exception))
                 }
             },
-            title = { Text(text = stringResource(R.string.composable_script_dialog_compile_error)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_compile_error)) },
             text = { Text(text = exceptionMessage) },
             modifier = Modifier.width(250.dp),
             shape = RoundedCornerShape(30.dp)
@@ -336,14 +328,14 @@ private fun ScriptItem(script: ScriptItem) {
                                 .doWhen(
                                     onSuccess = {
                                         message =
-                                            context.getString(R.string.script_toast_compile_success)
+                                            context.getString(R.string.activity_main_composable_dashboard_script_content_toast_success_compile)
                                     },
                                     onFailure = { exception ->
                                         compileErrorDialogVisible.value = true
                                         compileErrorExceptionMessage =
                                             exception.message.toString()
                                         message = context.getString(
-                                            R.string.script_toast_compile_failed,
+                                            R.string.activity_main_composable_dashboard_script_content_toast_fail_compile,
                                             compileErrorExceptionMessage
                                         )
                                     }
@@ -448,11 +440,11 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         .width(200.dp)
                         .wrapContentHeight()
                 ) {
-                    Text(text = stringResource(R.string.script_add_name), color = Color.Black)
+                    Text(text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_nane), color = Color.Black)
                     TextField(
                         label = {
                             Text(
-                                text = stringResource(R.string.script_add_name_only_eng),
+                                text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_name_allow_only_english),
                                 fontSize = 10.sp
                             )
                         },
@@ -493,7 +485,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                         if (scriptLang == ScriptLang.Python) {
                                             toast(
                                                 context,
-                                                context.getString(R.string.script_toast_cant_use_python)
+                                                context.getString(R.string.activity_main_composable_dashboard_script_content_dialog_toast_cant_use_python_language)
                                             )
                                         } else {
                                             selectedScriptLang = scriptLang
@@ -561,7 +553,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                             } else {
                                 toast(
                                     context,
-                                    context.getString(R.string.script_add_input_name)
+                                    context.getString(R.string.activity_main_composable_dashboard_script_content_dialog_toast_confirm_script_name)
                                 )
                             }
                         },
@@ -572,7 +564,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.script_add_create_new),
+                            text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_button_script_add),
                             color = Color.White
                         )
                     }

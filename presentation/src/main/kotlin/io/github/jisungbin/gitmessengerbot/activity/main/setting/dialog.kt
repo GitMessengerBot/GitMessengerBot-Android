@@ -231,7 +231,7 @@ private fun updateKakaoTalkPackageNames(context: Context, packageName: String) {
             toast(
                 context,
                 context.getString(
-                    R.string.composable_setting_dialog_toast_already_added_package_name,
+                    R.string.activity_main_composable_setting_dialog_toast_already_added_package,
                     packageName
                 )
             )

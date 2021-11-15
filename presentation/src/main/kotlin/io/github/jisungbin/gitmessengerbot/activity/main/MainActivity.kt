@@ -44,7 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
 import io.github.jisungbin.gitmessengerbot.activity.main.composable.CustomWidthBottomNavigationItem
-import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
+import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
