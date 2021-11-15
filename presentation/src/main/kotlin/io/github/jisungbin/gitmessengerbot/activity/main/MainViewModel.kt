@@ -17,7 +17,15 @@ class MainViewModel : ViewModel() {
     private val _dashboardState = MutableStateFlow(Tab.Script)
     val dashboardState = _dashboardState.asStateFlow()
 
+    @Suppress("MoveLambdaOutsideParentheses")
+    private val _fabAction = MutableStateFlow({})
+    val fabAction = _fabAction.asStateFlow()
+
     fun updateDashboardState(tab: Tab) {
         _dashboardState.value = tab
+    }
+
+    fun updateFabAction(action: () -> Unit) {
+        _fabAction.value = action
     }
 }

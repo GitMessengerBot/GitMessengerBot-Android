@@ -29,11 +29,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -128,15 +127,12 @@ class MainActivity : ComponentActivity() {
     private fun Content() {
         val navController = rememberNavController()
         val vm: MainViewModel = composableActivityViewModel()
-        val scriptAddDialogVisible = remember { mutableStateOf(false) }
+        val fabAction by vm.fabAction.collectAsState()
         val dashboardState by vm.dashboardState.collectAsState()
 
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(
-                    // TODO
-                    onClick = { }
-                ) {
+                FloatingActionButton(onClick = { fabAction() }) {
                     Crossfade(dashboardState) {
                         Icon(
                             painter = painterResource(
@@ -215,19 +211,16 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Tab.Script.route) {
-                    ScriptContent(
-                        activity = this@MainActivity,
-                        scriptAddDialogVisible = scriptAddDialogVisible
-                    )
+                    ScriptContent()
                 }
                 composable(Tab.Debug.route) {
-                    Debug(activity = this@MainActivity)
+                    Debug()
                 }
                 composable(Tab.Kaven.route) {
-                    Text(text = "TODO")
+                    Text(text = stringResource(id = R.string.app_name))
                 }
                 composable(Tab.Setting.route) {
-                    Setting(activity = this@MainActivity)
+                    Setting()
                 }
             }
         }

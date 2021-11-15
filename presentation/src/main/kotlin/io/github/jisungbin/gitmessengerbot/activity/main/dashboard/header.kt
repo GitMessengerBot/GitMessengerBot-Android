@@ -72,6 +72,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity
+import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
@@ -107,7 +108,8 @@ private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -
 }
 
 @Composable
-fun Header(activity: Activity, searchField: MutableState<TextFieldValue>) {
+fun Header(searchField: MutableState<TextFieldValue>) {
+    val activity = getActivity()
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 

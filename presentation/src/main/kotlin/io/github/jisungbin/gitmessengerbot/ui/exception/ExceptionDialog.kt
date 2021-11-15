@@ -30,7 +30,8 @@ fun ExceptionDialog(exception: MutableState<Exception?>) {
     if (exception.value != null) {
         val context = LocalContext.current
         val contents = listOf("눈덩이", "돌덩이", "나뭇가지", "새똥", "나뭇잎", "흙더미")
-        val exceptionMessage = exception.value!!.message ?: "오류를 불러올 수 없음"
+        val exceptionMessage = (exception.value!!.message ?: "오류를 불러올 수 없음")
+            .split("io.github.jisungbin.gitmessengerbot.common.exception.")[1]
 
         AlertDialog(
             onDismissRequest = { exception.value = null },

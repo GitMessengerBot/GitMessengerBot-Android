@@ -9,7 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -97,19 +96,22 @@ import kotlin.random.Random
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boolean>) {
+fun ScriptContent() {
     val vm: MainViewModel = composableActivityViewModel()
-
     val searchField = remember { mutableStateOf(TextFieldValue()) }
+    val scriptAddDialogVisible = remember { mutableStateOf(false) }
 
     ScriptAddDialog(visible = scriptAddDialogVisible)
+    vm.updateFabAction {
+        scriptAddDialogVisible.value = true
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = colors.primary)
     ) {
-        Header(activity, searchField)
+        Header(searchField = searchField)
         Column(
             modifier = Modifier
                 .fillMaxSize()

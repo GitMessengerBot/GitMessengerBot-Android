@@ -9,7 +9,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,16 +56,17 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
+import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
-fun Setting(activity: Activity) {
+fun Setting() {
     val vm: MainViewModel = composableActivityViewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { Toolbar() },
-        content = { Content(activity) }
+        content = { Content() }
     )
 }
 
@@ -85,7 +85,7 @@ private fun Toolbar() {
 
 @Suppress("NewApi")
 @Composable
-private fun Content(activity: Activity) {
+private fun Content() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -94,6 +94,7 @@ private fun Content(activity: Activity) {
     ) {
         val app by AppConfig.app.collectAsState()
 
+        val activity = getActivity()
         val context = LocalContext.current
 
         val scriptAddDefaultCodeDialogVisible = remember { mutableStateOf(false) }

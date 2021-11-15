@@ -70,6 +70,7 @@ import io.github.jisungbin.gitmessengerbot.theme.orange
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
 import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
+import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugItem
@@ -85,7 +86,7 @@ import java.util.Locale
 import kotlinx.coroutines.launch
 
 @Composable
-fun Debug(activity: Activity, script: ScriptItem? = null) {
+fun Debug(script: ScriptItem? = null) {
     val vm: MainViewModel = composableActivityViewModel()
 
     val app by AppConfig.app.collectAsState()
@@ -95,7 +96,6 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             DebugToolbar(
-                activity = activity,
                 script = script,
                 evalMode = app.evalMode,
                 settingDialogVisible = settingDialogVisible
@@ -103,7 +103,6 @@ fun Debug(activity: Activity, script: ScriptItem? = null) {
         },
         content = {
             DebugContent(
-                activity = activity,
                 script = script,
                 evalMode = app.evalMode,
                 settingDialogVisible = settingDialogVisible
@@ -166,7 +165,7 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
 
 @Composable
 private fun DebugToolbar(
-    activity: Activity,
+    activity: Activity = getActivity(),
     script: ScriptItem?,
     evalMode: Boolean,
     settingDialogVisible: MutableState<Boolean>,
@@ -270,7 +269,6 @@ private fun DebugToolbar(
 
 @Composable
 private fun DebugContent(
-    activity: Activity,
     script: ScriptItem?,
     evalMode: Boolean,
     settingDialogVisible: MutableState<Boolean>,
@@ -312,7 +310,7 @@ private fun DebugContent(
         scrollDown()
         DebugSettingDialog(visible = settingDialogVisible, debugId = debugId)
 
-        TedKeyboardObserver(activity).listen {
+        TedKeyboardObserver(getActivity()).listen {
             scrollDown()
         }
 

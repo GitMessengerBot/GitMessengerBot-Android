@@ -37,7 +37,7 @@ class DebugActivty : ComponentActivity() {
         }
         setContent {
             MaterialTheme {
-                Debug(activity = this, script = script)
+                Debug(script = script)
             }
         }
     }
