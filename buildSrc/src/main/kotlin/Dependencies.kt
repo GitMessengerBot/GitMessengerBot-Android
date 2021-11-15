@@ -70,7 +70,6 @@ object Versions {
         const val Activity = "1.4.0"
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
-        const val FancyBottomBar = "1.0.1"
         const val LandscapistCoil = "1.4.2"
         const val Navigation = "2.4.0-alpha09"
         const val ConstraintLayout = "1.0.0-beta01"
@@ -141,7 +140,6 @@ object Dependencies {
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "io.github.jisungbin:timelineview:${Versions.Compose.TimeLineView}",
-        "io.github.jisungbin:fancybottombar:${Versions.Compose.FancyBottomBar}",
         "androidx.navigation:navigation-compose:${Versions.Compose.Navigation}",
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Compose.Lifecycle}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.ConstraintLayout}"

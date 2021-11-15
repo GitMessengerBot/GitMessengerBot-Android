@@ -130,9 +130,9 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(
+                FloatingActionButton( // TODO
                     elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp),
-                    onClick = { }, // TODO
+                    onClick = { },
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_round_add_24),
