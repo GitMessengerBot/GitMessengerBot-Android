@@ -76,7 +76,7 @@ class SplashActivity : ComponentActivity() {
             startActivity(Intent(this, TestActivity::class.java))
         } else {
             lifecycleScope.launchWhenCreated {
-                doDelay(2000) {
+                doDelay(1500) {
                     finish()
                     startActivity(
                         Intent(
