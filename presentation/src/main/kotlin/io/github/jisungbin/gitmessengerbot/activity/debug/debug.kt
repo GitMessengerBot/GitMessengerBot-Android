@@ -10,7 +10,6 @@
 package io.github.jisungbin.gitmessengerbot.activity.debug
 
 import android.app.Activity
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +59,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
@@ -71,7 +69,7 @@ import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.orange
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
-import io.github.jisungbin.logeukes.logeukes
+import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.Sender
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugItem
@@ -88,8 +86,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Debug(activity: Activity, script: ScriptItem? = null) {
-    val vm: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
-    logeukes { vm.random }
+    val vm: MainViewModel = composableActivityViewModel()
 
     val app by AppConfig.app.collectAsState()
     val settingDialogVisible = remember { mutableStateOf(false) }

@@ -10,8 +10,14 @@
 package io.github.jisungbin.gitmessengerbot.activity.main
 
 import androidx.lifecycle.ViewModel
-import kotlin.random.Random
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel : ViewModel() {
-    val random = Random.nextInt()
+    private val _dashboardState = MutableStateFlow(Tab.Script)
+    val dashboardState = _dashboardState.asStateFlow()
+
+    fun updateDashboardState(tab: Tab) {
+        _dashboardState.value = tab
+    }
 }

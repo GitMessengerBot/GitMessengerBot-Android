@@ -16,5 +16,6 @@ enum class Tab(val route: String, @DrawableRes val iconRes: Int) {
     Script("Script", R.drawable.ic_round_script_24),
     Debug("Debug", R.drawable.ic_round_debug_24),
     Kaven("Kaven", R.drawable.ic_round_github_24),
-    Setting("Setting", R.drawable.ic_round_settings_24)
+    Setting("Setting", R.drawable.ic_round_settings_24),
+    Empty("", 0)
 }

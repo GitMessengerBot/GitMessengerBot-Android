@@ -16,8 +16,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -29,6 +29,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +57,8 @@ import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.ui.BottomNavigationItem2
+import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
@@ -126,17 +129,22 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Content() {
         val navController = rememberNavController()
+        val vm: MainViewModel = composableActivityViewModel()
         val scriptAddDialogVisible = remember { mutableStateOf(false) }
+        val dashboardState by vm.dashboardState.collectAsState()
 
         Scaffold(
+            // backgroundColor = if (dashboardState != Tab.Setting) twiceLightGray else Color.White,
             floatingActionButton = {
-                FloatingActionButton( // TODO
-                    elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp),
+                FloatingActionButton(
+                    // TODO
                     onClick = { },
+                    elevation = FloatingActionButtonDefaults.elevation(6.dp, 12.dp)
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_round_add_24),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.White
                     )
                 }
             },
@@ -147,35 +155,52 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    cutoutShape = CircleShape,
                     contentPadding = PaddingValues(0.dp)
                 ) {
                     BottomNavigation(backgroundColor = Color.White) {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
-                        val fabs = listOf(Tab.Script, Tab.Debug, Tab.Kaven, Tab.Setting)
+                        val fabs = listOf(
+                            Tab.Script,
+                            Tab.Debug,
+                            Tab.Empty,
+                            Tab.Empty,
+                            Tab.Kaven,
+                            Tab.Setting
+                        )
                         fabs.forEach { fab ->
-                            BottomNavigationItem(
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(fab.iconRes),
-                                        contentDescription = null
-                                    )
-                                },
-                                selectedContentColor = colors.primary,
-                                unselectedContentColor = Color.LightGray,
-                                alwaysShowLabel = false,
-                                selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
-                                onClick = { // TODO: 백스택 뒤로가기 구현
-                                    navController.navigate(fab.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                            if (fab == Tab.Empty) {
+                                BottomNavigationItem2(
+                                    customSize = true,
+                                    selected = false,
+                                    onClick = {},
+                                    icon = {},
+                                    enabled = false,
+                                    modifier = Modifier.width(35.dp)
+                                )
+                            } else {
+                                BottomNavigationItem(
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(fab.iconRes),
+                                            contentDescription = null
+                                        )
+                                    },
+                                    selectedContentColor = colors.primary,
+                                    unselectedContentColor = Color.LightGray,
+                                    alwaysShowLabel = false,
+                                    selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
+                                    onClick = { // TODO: 백스택 뒤로가기 구현
+                                        navController.navigate(fab.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
