@@ -400,7 +400,7 @@ private fun ToolBar(
                 .clickable {
                     toast(
                         context,
-                        context.getString(R.string.composable_editor_toast_saved)
+                        context.getString(R.string.activity_setting_composable_editor_toast_saved)
                     )
                     Bot.scriptCodeSave(script, codeField)
                 }

@@ -79,7 +79,7 @@ private fun Toolbar() {
             .wrapContentHeight(),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
     ) {
-        Text(text = stringResource(R.string.composable_setting_appbar_title))
+        Text(text = stringResource(R.string.activity_main_composable_setting_content_title))
     }
 }
 
@@ -112,13 +112,13 @@ private fun Content() {
         DonateDialog(visible = donateDialogVisble)
 
         Text(
-            text = stringResource(R.string.composable_setting_label_editor),
+            text = stringResource(R.string.activity_main_composable_setting_content_editer),
             fontSize = 18.sp,
             color = Color.Gray
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_editor_horizontal_scroll),
+                text = stringResource(R.string.activity_main_composable_setting_content_horizontal_scroll),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -139,7 +139,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 16.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_editor_font_name),
+                text = stringResource(R.string.activity_main_composable_setting_content_choice_font),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -147,7 +147,7 @@ private fun Content() {
                 onClick = {
                     toast(
                         context,
-                        context.getString(R.string.composable_setting_toast_todo_dev)
+                        context.getString(R.string.todo)
                     )
                 }
             ) {
@@ -156,7 +156,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_editor_font_size),
+                text = stringResource(R.string.activity_main_composable_setting_content_font_size),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -179,7 +179,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_editor_auto_save),
+                text = stringResource(R.string.activity_main_composable_setting_content_auto_save),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -201,24 +201,24 @@ private fun Content() {
             )
         }
         Text(
-            text = stringResource(R.string.composable_setting_label_script),
+            text = stringResource(R.string.activity_main_composable_setting_content_label_script),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_script_add_default_code),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_script_cpde),
                 fontSize = 15.sp,
                 color = Color.Black
             )
             OutlinedButton(onClick = { scriptAddDefaultCodeDialogVisible.value = true }) {
-                Text(text = stringResource(R.string.composable_setting_script_each_language_option))
+                Text(text = stringResource(R.string.activity_main_composable_setting_content_button_each_language_option))
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_script_default_add_lang),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_script_language),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -228,7 +228,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_script_default_response_function_name),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_script_function_name),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -249,14 +249,14 @@ private fun Content() {
             )
         }
         Text(
-            text = stringResource(R.string.composable_setting_label_git),
+            text = stringResource(R.string.activity_main_composable_setting_content_label_git),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_git_default_branch),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_branch),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -278,7 +278,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_git_default_commit_message),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_commit_message),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -293,7 +293,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_git_default_new_repo_options),
+                text = stringResource(R.string.activity_main_composable_setting_content_default_repo_create_option),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -302,14 +302,14 @@ private fun Content() {
             }
         }
         Text(
-            text = stringResource(R.string.composable_setting_label_app),
+            text = stringResource(R.string.activity_main_composable_setting_content_label_app),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_app_kakaotak_package_names),
+                text = stringResource(R.string.activity_main_composable_setting_content_kakaotalk_package_names),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -325,7 +325,7 @@ private fun Content() {
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_app_notification_read_permission),
+                text = stringResource(R.string.activity_main_composable_setting_content_noficiation_access_permission),
                 fontSize = 15.sp,
                 color = Color.Black
             )
@@ -335,8 +335,8 @@ private fun Content() {
                 val isPermissionGranted =
                     NotificationUtil.isNotificationListenerPermissionGranted(context)
                 val message =
-                    if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
-                    else stringResource(R.string.composable_setting_button_denied)
+                    if (isPermissionGranted) stringResource(R.string.activity_main_composable_setting_content_button_granted)
+                    else stringResource(R.string.activity_main_composable_setting_content_button_denied)
                 Text(text = message)
             }
         }
@@ -350,57 +350,57 @@ private fun Content() {
                 OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
                     val isPermissionGranted = Storage.isStorageManagerPermissionGranted()
                     val message =
-                        if (isPermissionGranted) stringResource(R.string.composable_setting_button_granted)
-                        else stringResource(R.string.composable_setting_button_denied)
+                        if (isPermissionGranted) stringResource(R.string.activity_main_composable_setting_content_button_granted)
+                        else stringResource(R.string.activity_main_composable_setting_content_button_denied)
                     Text(text = message)
                 }
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_app_ignore_battery_optimization),
+                text = stringResource(R.string.activity_main_composable_setting_content_battery_optimization),
                 fontSize = 15.sp,
                 color = Color.Black
             )
             OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
                 val isOptimization = BatteryUtil.isIgnoringBatteryOptimization(context)
                 val message =
-                    if (isOptimization) stringResource(R.string.composable_setting_button_granted)
-                    else stringResource(R.string.composable_setting_button_denied)
+                    if (isOptimization) stringResource(R.string.activity_main_composable_setting_content_button_granted)
+                    else stringResource(R.string.activity_main_composable_setting_content_button_denied)
                 Text(text = message)
             }
         }
         Text(
-            text = stringResource(R.string.composable_setting_label_etc),
+            text = stringResource(R.string.activity_main_composable_setting_content_label_ect),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_etc_opensource_license),
+                text = stringResource(R.string.activity_main_composable_setting_content_opensource_license),
                 fontSize = 15.sp,
                 color = Color.Black
             )
             OutlinedButton(onClick = {
                 context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }) {
-                Text(text = stringResource(R.string.composable_setting_button_show))
+                Text(text = stringResource(R.string.activity_main_composable_setting_content_button_show))
             }
         }
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                text = stringResource(R.string.composable_setting_etc_donate),
+                text = stringResource(R.string.activity_main_composable_setting_content_donate),
                 fontSize = 15.sp,
                 color = Color.Black
             )
             OutlinedButton(onClick = { donateDialogVisble.value = true }) {
-                Text(text = stringResource(R.string.composable_setting_button_thanks))
+                Text(text = stringResource(R.string.activity_main_composable_setting_content_button_thanks))
             }
         }
         Text(
             text = stringResource(
-                R.string.composable_setting_etc_lovers,
+                R.string.activity_main_composable_setting_content_donater,
                 "클라이드님" // TODO: firebase realtime update
             ),
             modifier = Modifier.padding(top = 15.dp),

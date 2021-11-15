@@ -106,7 +106,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_git_default_commit_message)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_setting_content_default_commit_message)) },
             confirmButton = {
                 OutlinedButton(
                     onClick = {
@@ -144,7 +144,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
     if (visible.value) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_git_default_new_repo_options)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_setting_content_default_repo_create_option)) },
             confirmButton = {
                 OutlinedButton(onClick = { /*TODO*/ }) {
                     Text(text = stringResource(R.string.composable_dialog_button_save))
@@ -174,7 +174,7 @@ fun KakaoTalkPackageNamesDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_app_kakaotak_package_names)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_setting_content_kakaotalk_package_names)) },
             buttons = {},
             text = {
                 LazyColumn(
@@ -249,7 +249,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
             onDismissRequest = { visible.value = false },
             buttons = {},
             title = {
-                Text(text = stringResource(R.string.composable_setting_script_default_add_lang))
+                Text(text = stringResource(R.string.activity_main_composable_setting_content_default_script_language))
             },
             text = {
                 Column(
@@ -316,7 +316,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
 
         AlertDialog(
             onDismissRequest = { visible.value = false },
-            title = { Text(text = stringResource(R.string.composable_setting_script_add_default_code)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_setting_content_default_script_cpde)) },
             buttons = {},
             text = {
                 Column(
