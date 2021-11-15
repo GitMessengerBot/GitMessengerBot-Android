@@ -43,11 +43,12 @@ object Versions {
     }
 
     object Util {
-        const val Pluto = "1.1.1"
         const val Erratum = "1.0.1"
         const val Logeukes = "1.0.1"
         const val Jackson = "2.13.0"
         const val LeakCanary = "2.7"
+        const val SoLoader = "0.10.3"
+        const val Flipper = "0.119.0"
         const val KeyboardObserver = "1.0.1"
         const val CheckDependencyUpdates = "1.5.0"
     }
@@ -147,7 +148,9 @@ object Dependencies {
     )
 
     val Debug = listOf(
-        "com.mocklets:pluto:${Versions.Util.Pluto}",
-        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}"
+        "com.facebook.flipper:flipper:${Versions.Util.Flipper}",
+        "com.facebook.soloader:soloader:${Versions.Util.SoLoader}",
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}",
+        "com.facebook.flipper:flipper-leakcanary2-plugin:${Versions.Util.Flipper}"
     )
 }
