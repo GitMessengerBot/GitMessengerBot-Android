@@ -63,7 +63,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.tag
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -79,8 +78,6 @@ import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
 private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -> Unit) {
-    println("ScriptHeader: $tag")
-
     Column(
         modifier = modifier
             .width(65.dp)

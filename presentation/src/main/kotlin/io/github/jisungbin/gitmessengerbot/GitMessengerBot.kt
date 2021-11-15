@@ -29,6 +29,7 @@ import leakcanary.LeakCanary
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
+
     override fun onCreate() {
         super.onCreate()
         Erratum.setup(this) // todo: 디버그 모드 아닐땐 에러 스택 보여주면 안됨

@@ -12,7 +12,6 @@ package io.github.jisungbin.gitmessengerbot.di.module
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.mocklets.pluto.PlutoInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,7 +69,7 @@ object RetrofitModule {
         Retrofit.Builder()
             .baseUrl(GithubConstant.BaseApiUrl)
             .addConverterFactory(JacksonConverterFactory.create(mapper))
-            .client(getInterceptor(loggingInterceptor, AuthInterceptor(), PlutoInterceptor()))
+            .client(getInterceptor(loggingInterceptor, AuthInterceptor()))
             .build()
 
     @Provides

@@ -11,6 +11,7 @@ package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,9 +48,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.tag
+import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
 import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
@@ -57,11 +59,13 @@ import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.logeukes.logeukes
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
 fun Setting(activity: Activity) {
-    println("SettingContent: $tag")
+    val vm: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
+    logeukes { vm.random }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

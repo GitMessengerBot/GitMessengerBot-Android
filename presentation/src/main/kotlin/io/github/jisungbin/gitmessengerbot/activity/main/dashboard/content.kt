@@ -11,6 +11,7 @@ package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -72,6 +73,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -79,7 +81,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
-import io.github.jisungbin.gitmessengerbot.activity.main.tag
+import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
@@ -89,6 +91,7 @@ import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
+import io.github.jisungbin.logeukes.logeukes
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
 import io.github.sungbin.gitmessengerbot.core.bot.script.search
@@ -97,7 +100,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ScriptContent(activity: Activity, scriptAddDialogVisible: MutableState<Boolean>) {
-    println("ScriptContent: $tag")
+    val vm: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
+    logeukes { vm.random }
 
     val searchField = remember { mutableStateOf(TextFieldValue()) }
 

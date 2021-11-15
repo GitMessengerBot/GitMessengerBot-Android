@@ -13,12 +13,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FabPosition
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -29,10 +34,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -110,8 +115,6 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            println("MainActivity: $tag")
-
             MaterialTheme {
                 Content()
             }
@@ -125,38 +128,53 @@ class MainActivity : ComponentActivity() {
         val scriptAddDialogVisible = remember { mutableStateOf(false) }
 
         Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { }, // TODO
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_round_add_24),
+                        contentDescription = null
+                    )
+                }
+            },
+            isFloatingActionButtonDocked = true,
+            floatingActionButtonPosition = FabPosition.Center,
             bottomBar = {
-                BottomNavigation(
+                BottomAppBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    backgroundColor = Color.White
+                    cutoutShape = CircleShape,
+                    contentPadding = PaddingValues(0.dp)
                 ) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    val fabs = listOf(Tab.Script, Tab.Debug, Tab.Kaven, Tab.Setting)
-                    fabs.forEach { fab ->
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(fab.iconRes),
-                                    contentDescription = null
-                                )
-                            },
-                            selectedContentColor = colors.primary,
-                            unselectedContentColor = Color.LightGray,
-                            alwaysShowLabel = false,
-                            selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
-                            onClick = {
-                                navController.navigate(fab.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                    BottomNavigation(backgroundColor = Color.White) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        val fabs = listOf(Tab.Script, Tab.Debug, Tab.Kaven, Tab.Setting)
+                        fabs.forEach { fab ->
+                            BottomNavigationItem(
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(fab.iconRes),
+                                        contentDescription = null
+                                    )
+                                },
+                                selectedContentColor = colors.primary,
+                                unselectedContentColor = Color.LightGray,
+                                alwaysShowLabel = false,
+                                selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
+                                onClick = { // TODO: 백스택 뒤로가기 구현
+                                    navController.navigate(fab.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
