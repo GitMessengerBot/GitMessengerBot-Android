@@ -16,7 +16,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
@@ -48,6 +47,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
+import io.github.jisungbin.gitmessengerbot.activity.main.composable.CustomWidthBottomNavigationItem
 import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
@@ -57,7 +57,6 @@ import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.ui.BottomNavigationItem2
 import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
@@ -170,13 +169,12 @@ class MainActivity : ComponentActivity() {
                         )
                         fabs.forEach { fab ->
                             if (fab == Tab.Empty) {
-                                BottomNavigationItem2(
-                                    customSize = true,
+                                CustomWidthBottomNavigationItem(
+                                    width = 35.dp,
                                     selected = false,
                                     onClick = {},
                                     icon = {},
                                     enabled = false,
-                                    modifier = Modifier.width(35.dp)
                                 )
                             } else {
                                 BottomNavigationItem(

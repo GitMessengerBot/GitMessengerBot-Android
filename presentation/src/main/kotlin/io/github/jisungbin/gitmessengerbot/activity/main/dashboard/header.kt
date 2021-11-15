@@ -71,7 +71,7 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.ui.imageviewer.ImageViewActivity
+import io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig

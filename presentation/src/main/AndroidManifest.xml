@@ -85,7 +85,7 @@
 
         <activity android:name=".activity.exception.ExceptionActivity" />
 
-        <activity android:name=".ui.imageviewer.ImageViewActivity" />
+        <activity android:name="io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity" />
 
         <activity android:name=".test.TestActivity" />
 

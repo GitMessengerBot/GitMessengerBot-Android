@@ -1,4 +1,13 @@
-package io.github.jisungbin.gitmessengerbot.ui
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
+ * [CustomWeightBottomNavigationItem.kt] created by Ji Sungbin on 21. 11. 15. 오후 7:08
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+package io.github.jisungbin.gitmessengerbot.activity.main.composable
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
@@ -7,10 +16,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -31,15 +42,23 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import kotlin.math.max
 import kotlin.math.roundToInt
 
+private val BottomNavigationAnimationSpec = TweenSpec<Float>(
+    durationMillis = 300,
+    easing = FastOutSlowInEasing
+)
+
+private val BottomNavigationItemHorizontalPadding = 12.dp
+
+@Suppress("unused")
 @Composable
-fun RowScope.BottomNavigationItem2(
+fun RowScope.CustomWidthBottomNavigationItem(
     modifier: Modifier = Modifier,
-    customSize: Boolean = false,
+    width: Dp,
     selected: Boolean,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
@@ -52,14 +71,11 @@ fun RowScope.BottomNavigationItem2(
 ) {
     val styledLabel: @Composable (() -> Unit)? = label?.let {
         @Composable {
-            val style =
-                androidx.compose.material.MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center)
+            val style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center)
             ProvideTextStyle(style, content = label)
         }
     }
-    // The color of the Ripple should always the selected color, as we want to show the color
-    // before the item is considered selected, and hence before the new contentColor is
-    // provided by BottomNavigationTransition.
+
     val ripple = rememberRipple(bounded = false, color = selectedContentColor)
 
     Box(
@@ -72,7 +88,7 @@ fun RowScope.BottomNavigationItem2(
                 interactionSource = interactionSource,
                 indication = ripple
             )
-            .runIf(!customSize) { weight(1f) },
+            .width(width),
         contentAlignment = Alignment.Center
     ) {
         BottomNavigationTransition(
@@ -91,8 +107,6 @@ fun RowScope.BottomNavigationItem2(
     }
 }
 
-private val BottomNavigationItemHorizontalPadding = 12.dp
-
 private fun MeasureScope.placeIcon(
     iconPlaceable: Placeable,
     constraints: Constraints
@@ -108,7 +122,6 @@ private fun MeasureScope.placeIcon(
 private fun BottomNavigationItemBaselineLayout(
     icon: @Composable () -> Unit,
     label: @Composable (() -> Unit)?,
-    /*@FloatRange(from = 0.0, to = 1.0)*/
     iconPositionAnimationProgress: Float
 ) {
     Layout(
@@ -128,13 +141,10 @@ private fun BottomNavigationItemBaselineLayout(
 
         val labelPlaceable = label?.let {
             measurables.first { it.layoutId == "label" }.measure(
-                // Measure with loose constraints for height as we don't want the label to take up more
-                // space than it needs
                 constraints.copy(minHeight = 0)
             )
         }
 
-        // If there is no label, just place the icon.
         if (label == null) {
             placeIcon(iconPlaceable, constraints)
         } else {
@@ -147,11 +157,6 @@ private fun BottomNavigationItemBaselineLayout(
         }
     }
 }
-
-private val BottomNavigationAnimationSpec = TweenSpec<Float>(
-    durationMillis = 300,
-    easing = FastOutSlowInEasing
-)
 
 @Composable
 private fun BottomNavigationTransition(
@@ -181,37 +186,18 @@ private fun MeasureScope.placeLabelAndIcon(
     labelPlaceable: Placeable,
     iconPlaceable: Placeable,
     constraints: Constraints,
-    /*@FloatRange(from = 0.0, to = 1.0)*/
     iconPositionAnimationProgress: Float
 ): MeasureResult {
     val height = constraints.maxHeight
-
-    // TODO: consider multiple lines of text here, not really supported by spec but we should
-    // have a better strategy than overlapping the icon and label
     val baseline = labelPlaceable[LastBaseline]
-
     val baselineOffset = CombinedItemTextBaseline.roundToPx()
-
-    // Label should be [baselineOffset] from the bottom
     val labelY = height - baseline - baselineOffset
-
     val unselectedIconY = (height - iconPlaceable.height) / 2
-
-    // Icon should be [baselineOffset] from the text baseline, which is itself
-    // [baselineOffset] from the bottom
     val selectedIconY = height - (baselineOffset * 2) - iconPlaceable.height
-
     val containerWidth = max(labelPlaceable.width, iconPlaceable.width)
-
     val labelX = (containerWidth - labelPlaceable.width) / 2
     val iconX = (containerWidth - iconPlaceable.width) / 2
-
-    // How far the icon needs to move between unselected and selected states
     val iconDistance = unselectedIconY - selectedIconY
-
-    // When selected the icon is above the unselected position, so we will animate moving
-    // downwards from the selected state, so when progress is 1, the total distance is 0, and we
-    // are at the selected state.
     val offset = (iconDistance * (1 - iconPositionAnimationProgress)).roundToInt()
 
     return layout(containerWidth, height) {
