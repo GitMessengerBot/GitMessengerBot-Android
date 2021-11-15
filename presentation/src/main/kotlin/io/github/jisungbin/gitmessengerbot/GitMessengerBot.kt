@@ -44,13 +44,13 @@ class GitMessengerBot : Application() {
 
             if (FlipperUtils.shouldEnableFlipper(this)) {
                 AndroidFlipperClient.getInstance(this).apply {
-                    addPlugin(CrashReporterPlugin.getInstance())
                     addPlugin(
                         InspectorFlipperPlugin(
                             this@GitMessengerBot,
                             DescriptorMapping.withDefaults()
                         )
                     )
+                    addPlugin(CrashReporterPlugin.getInstance())
                     addPlugin(LeakCanary2FlipperPlugin())
                 }.start()
             }

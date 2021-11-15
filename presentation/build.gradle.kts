@@ -94,5 +94,5 @@ dependencies {
 
     Dependencies.Debug.forEach(::debugImplementation)
 
-    kapt(Dependencies.HiltCompiler)
+    kapt(Dependencies.HiltCompiler) // TODO: ksp
 }
