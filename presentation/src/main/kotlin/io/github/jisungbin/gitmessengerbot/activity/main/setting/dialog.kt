@@ -83,7 +83,10 @@ fun DonateDialog(visible: MutableState<Boolean>) {
                 }
                 OutlinedButton(
                     onClick = {
-                        Util.copy(context, context.getString(R.string.activity_main_composable_setting_dialog_kakaotalk_id))
+                        Util.copy(
+                            context,
+                            context.getString(R.string.activity_main_composable_setting_dialog_kakaotalk_id)
+                        )
                     }
                 ) {
                     Text(text = stringResource(R.string.activity_main_composable_setting_dialog_button_copy_kakaotalk_id))
@@ -115,7 +118,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
                         }
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_dialog_button_save))
+                    Text(text = stringResource(R.string.save))
                 }
             },
             text = {
@@ -147,7 +150,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
             title = { Text(text = stringResource(R.string.activity_main_composable_setting_content_default_repo_create_option)) },
             confirmButton = {
                 OutlinedButton(onClick = { /*TODO*/ }) {
-                    Text(text = stringResource(R.string.composable_dialog_button_save))
+                    Text(text = stringResource(R.string.save))
                 }
             },
             text = {
@@ -330,7 +333,11 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                             .fillMaxWidth()
                             .height(40.dp)
                             .clip(scriptLangItemShape)
-                            .border(1.dp, colors.secondary, scriptLangItemShape)
+                            .border(
+                                width = 1.dp,
+                                color = colors.secondary,
+                                shape = scriptLangItemShape
+                            )
                     ) {
                         repeat(4) { scriptLang ->
                             Column(
@@ -398,7 +405,7 @@ private fun ScriptDefaultCodeSettingDialog(
                         innerVisible.value = false
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_dialog_button_save))
+                    Text(text = stringResource(R.string.save))
                 }
             },
             text = {

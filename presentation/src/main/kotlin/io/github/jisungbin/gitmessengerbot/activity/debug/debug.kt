@@ -120,20 +120,20 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
             buttons = {},
-            title = { Text(text = stringResource(R.string.composable_debug_setting)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_debug_setting)) },
             text = {
                 Surface(
                     modifier = Modifier.combinedClickable(
                         onClick = {
                             toast(
                                 context,
-                                context.getString(R.string.composable_debug_toast_confirm_remove)
+                                context.getString(R.string.activity_main_composable_debug_toast_confirm_remove)
                             )
                         },
                         onLongClick = {
                             toast(
                                 context,
-                                context.getString(R.string.composable_debug_toast_removed)
+                                context.getString(R.string.activity_main_composable_debug_toast_removed)
                             )
                             DebugStore.removeAll(debugId)
                         },
@@ -211,7 +211,7 @@ private fun DebugToolbar(
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.composable_debug_title),
+                    text = stringResource(R.string.activity_main_composable_debug_title),
                     color = Color.White,
                     modifier = Modifier.constrainAs(title) {
                         start.linkTo(parent.start)
@@ -254,7 +254,7 @@ private fun DebugToolbar(
                 ),
             )
             Text(
-                text = stringResource(R.string.composable_debug_eval_mode),
+                text = stringResource(R.string.activity_main_composable_debug_eval_mode),
                 color = Color.White,
                 fontSize = 13.sp,
                 modifier = Modifier.constrainAs(switchDescription) {

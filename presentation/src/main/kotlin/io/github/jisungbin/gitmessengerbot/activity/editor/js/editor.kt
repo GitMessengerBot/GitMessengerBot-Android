@@ -159,13 +159,13 @@ private inline fun handleState(
                 MviJsEditorSuccessType.None -> {
                 }
                 MviJsEditorSuccessType.GithubCreateRepo -> {
-                    toast(R.string.composable_editor_toast_repo_create_success)
+                    toast(R.string.activity_jseditor_composable_editor_toast_repo_create_success)
                 }
                 MviJsEditorSuccessType.GithubUpdateProject -> {
-                    toast(R.string.composable_editor_toast_file_update_success)
+                    toast(R.string.activity_jseditor_composable_editor_toast_file_update_success)
                 }
                 MviJsEditorSuccessType.GithubCommitAndPush -> {
-                    toast(R.string.composable_editor_toast_commit_success)
+                    toast(R.string.activity_jseditor_composable_editor_toast_commit_success)
                 }
             }
         }
@@ -231,7 +231,7 @@ private fun DrawerLayout(
                 contentDescription = null
             )
             Text(
-                text = stringResource(R.string.composable_editor_drawer_git),
+                text = stringResource(R.string.activity_jseditor_composable_editor_drawer_git),
                 fontSize = 30.sp,
                 modifier = Modifier.padding(start = 10.dp)
             )
@@ -248,7 +248,7 @@ private fun DrawerLayout(
                 )
             }
         ) {
-            Text(text = stringResource(R.string.composable_editor_drawer_create_repo, script.name))
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_create_repo, script.name))
         }
         OutlinedButton(
             modifier = Modifier
@@ -262,7 +262,7 @@ private fun DrawerLayout(
                 )
             }
         ) {
-            Text(text = stringResource(R.string.composable_editor_drawer_commit_and_push))
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_commit_and_push))
         }
         OutlinedButton(
             modifier = Modifier
@@ -276,7 +276,7 @@ private fun DrawerLayout(
                 )
             }
         ) {
-            Text(text = stringResource(R.string.composable_editor_drawer_update_project))
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_update_project))
         }
         OutlinedButton(
             modifier = Modifier
@@ -286,7 +286,7 @@ private fun DrawerLayout(
                 commitHistoryVisible = !commitHistoryVisible
             }
         ) {
-            Text(text = stringResource(R.string.composable_editor_drawer_commit_history))
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_commit_history))
         }
         Crossfade(commitHistoryVisible) { visible ->
             if (visible) {
@@ -307,7 +307,7 @@ private fun DrawerLayout(
                 contentDescription = null
             )
             Text(
-                text = stringResource(R.string.composable_editor_drawer_beautify),
+                text = stringResource(R.string.activity_jseditor_composable_editor_drawer_beautify),
                 modifier = Modifier.padding(start = 10.dp),
                 fontSize = 30.sp
             )
@@ -326,7 +326,7 @@ private fun DrawerLayout(
                     .weight(1f)
                     .padding(end = 8.dp)
             ) {
-                Text(text = stringResource(R.string.composable_editor_drawer_minify))
+                Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_minify))
             }
             OutlinedButton(
                 onClick = {
@@ -337,7 +337,7 @@ private fun DrawerLayout(
                     .weight(1f)
                     .padding(start = 8.dp)
             ) {
-                Text(text = stringResource(R.string.composable_editor_drawer_pretty))
+                Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_pretty))
             }
         }
     }
@@ -398,10 +398,7 @@ private fun ToolBar(
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    toast(
-                        context,
-                        context.getString(R.string.activity_setting_composable_editor_toast_saved)
-                    )
+                    toast(context, context.getString(R.string.saved))
                     Bot.scriptCodeSave(script, codeField)
                 }
                 .constrainAs(save) {
@@ -416,7 +413,7 @@ private fun ToolBar(
                     onClick = {
                         toast(
                             context,
-                            context.getString(R.string.composable_editor_toast_confirm_undo_beautify)
+                            context.getString(R.string.activity_jseditor_composable_editor_toast_confirm_undo_beautify)
                         )
                     },
                     onLongClick = {
