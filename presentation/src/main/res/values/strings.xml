@@ -10,17 +10,19 @@
 <resources>
     <string name="app_name">GitMessengerBot</string>
     <string name="copyright">© 2021 지성빈 &amp; 구환. all rights reserved.</string>
-    <string name="kakaotalk_id">sungbin5304</string>
+    <string name="todo">개발 예정</string>
+    <string name="save">저장</string>
+    <string name="saved">저장되었습니다.</string>
 
     <string name="activity_setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="activity_setup_last_way">마지막으로,</string>
     <string name="activity_setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
     <string name="activity_setup_start_with_github_login">깃허브 로그인으로 시작하기</string>
-    <string name="activity_setup_permission_storage_label">저장소 접근 권한</string>
+    <string name="activity_setup_permission_storage">저장소 접근 권한</string>
     <string name="activity_setup_permission_storage_description">봇 데이터 저장을 위해 저장공간에 접근이 필요합니다.</string>
-    <string name="activity_setup_permission_notification_label">알림 읽기 권한</string>
+    <string name="activity_setup_permission_notification">알림 읽기 권한</string>
     <string name="activity_setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
-    <string name="activity_setup_app_wear_label">안드로이드 웨어 설치</string>
+    <string name="activity_setup_app_wear">안드로이드 웨어 설치</string>
     <string name="activity_setup_app_wear_description">봇이 정상적으로 작동하기 위해 필요합니다.</string>
     <string name="activity_setup_dialog_button_start">시작하기</string>
     <string name="activity_setup_toast_welcome">%s님 환영합니다! 🎉🎈</string>
@@ -40,16 +42,15 @@
     <string name="activity_main_composable_dashboard_script_content_compile">컴파일</string>
     <string name="activity_main_composable_dashboard_script_content_toast_success_compile">컴파일 성공!</string>
     <string name="activity_main_composable_dashboard_script_content_toast_fail_compile">컴파일 실패\n\n%s</string>
-    <string name="activity_main_composable_dashboard_script_content_dialog_button_script_add">스크립트 추가</string>
-    <string name="activity_main_composable_dashboard_script_content_dialog_toast_confirm_script_name">스크립트 이름을 입력해 주세요.</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_compile_error">스크립트 컴파일 에러</string>
     <string name="activity_main_composable_dashboard_script_content_dialog_script_nane">스크립트 이름</string>
     <string name="activity_main_composable_dashboard_script_content_dialog_script_name_allow_only_english">Git 사용을 위해 영어만 가능합니다</string>
     <string name="activity_main_composable_dashboard_script_content_dialog_script_language">스크립트 언어</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_button_copy_error">에러 복사</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_button_script_add">스크립트 추가</string>
+    <string name="activity_main_composable_dashboard_script_content_dialog_toast_confirm_script_name">스크립트 이름을 입력해 주세요.</string>
     <string name="activity_main_composable_dashboard_script_content_dialog_toast_cant_use_python_language">파이썬 언어는 현재 이용하실 수 없습니다. (개발중)</string>
-    <string name="activity_main_composable_dashboard_script_content_dialog_compile_error">스크립트 컴파일 에러</string>
 
-    <string name="activity_main_composable_setting_dialog_toast_already_added_package">%s은 이미 추가돼 있습니다.</string>
-    <string name="activity_setting_composable_editor_toast_saved">저장되었습니다.</string>
     <string name="composable_editor_toast_repo_create_success">레포 생성 성공</string>
     <string name="composable_editor_toast_repo_create_error">레포 생성 실패\n\n%s</string>
     <string name="composable_editor_toast_commit_success">커밋 성공</string>
@@ -74,20 +75,23 @@
     <string name="composable_debug_toast_removed">삭제되었습니다.</string>
     <string name="composable_debug_remove_all_history">디버그 기록 전체 삭제</string>
 
+    <string name="activity_main_composable_setting_dialog_toast_already_added_package">%s은 이미 추가돼 있습니다.</string>
+
     <string name="activity_main_composable_setting_content_title">앱 설정</string>
-    <string name="composable_dialog_toast_saved">저장되었습니다.</string>
     <string name="activity_main_composable_setting_content_editer">에디터</string>
-    <string name="activity_main_composable_setting_content_label_app">앱</string>
-    <string name="activity_main_composable_setting_content_label_git">Git</string>
-    <string name="activity_main_composable_setting_content_label_script">스크립트</string>
-    <string name="activity_main_composable_setting_content_label_ect">기타</string>
+    <string name="activity_main_composable_setting_content_app">앱</string>
+    <string name="activity_main_composable_setting_content_git">Git</string>
+    <string name="activity_main_composable_setting_content_script">스크립트</string>
+    <string name="activity_main_composable_setting_content_etc">기타</string>
+    <string name="activity_main_composable_setting_content_button_each_language_option">언어별 설정</string>
     <string name="activity_main_composable_setting_content_button_thanks">감사합니다</string>
-    <string name="composable_setting_button_setting">설정</string>
     <string name="activity_main_composable_setting_content_button_show">표시</string>
+    <string name="activity_main_composable_setting_content_button_granted">부여됨</string>
+    <string name="activity_main_composable_setting_content_button_denied">거부됨</string>
     <string name="activity_main_composable_setting_content_horizontal_scroll">가로 스크롤</string>
+    <string name="activity_main_composable_setting_content_choice_font">폰트 설정</string>
     <string name="activity_main_composable_setting_content_font_size">폰트 사이즈</string>
     <string name="activity_main_composable_setting_content_auto_save">자동 저장 (분 단위, 0: 비활성화)</string>
-    <string name="activity_main_composable_setting_content_button_each_language_option">언어별 설정</string>
     <string name="activity_main_composable_setting_content_default_script_cpde">추가시 기본 코드</string>
     <string name="activity_main_composable_setting_content_default_script_function_name">기본 리스폰스 함수명</string>
     <string name="activity_main_composable_setting_content_default_script_language">추가 기본 언어</string>
@@ -96,24 +100,17 @@
     <string name="activity_main_composable_setting_content_default_repo_create_option">레포 생성 기본 옵션</string>
     <string name="activity_main_composable_setting_content_kakaotalk_package_names">카톡 패키지명</string>
     <string name="activity_main_composable_setting_content_noficiation_access_permission">알림 읽기 권한</string>
-    <string name="composable_setting_app_access_storage_manager_permission">전체 저장소 접근 권한</string>
+    <string name="activity_main_composable_setting_content_access_storage_manager_permission">전체 저장소 접근 권한</string>
     <string name="activity_main_composable_setting_content_battery_optimization">배터리 최적화 제외</string>
     <string name="activity_main_composable_setting_content_opensource_license">오픈소스 라이선스</string>
     <string name="activity_main_composable_setting_content_donate">개발자 사탕 사주기</string>
     <string name="activity_main_composable_setting_content_donater">후원해주신 분들: %s</string>
-    <string name="composable_setting_etc_empty">없네요 😭</string>
-    <string name="composable_dialog_opensource_license">오픈소스 라이선스</string>
-    <string name="composable_dialog_edit_default_code">%s 기본 코드 편집</string>
-    <string name="composable_dialog_donate">1인 개발자를 도와주셔서 감사합니다! 🥰🥰\n카카오톡 오픈채팅방으로 와 주세요!\n\n또는? 성빈 카톡: sungbin5304</string>
-    <string name="composable_dialog_button_direct_go">바로가기</string>
-    <string name="composable_dialog_button_copy_kakaotalk_id">톡디 복사</string>
-    <string name="composable_dialog_button_save">저장</string>
-    <string name="activity_main_composable_setting_content_choice_font">폰트 설정</string>
-    <string name="todo">개발 예정</string>
-    <string name="activity_main_composable_setting_content_button_granted">부여됨</string>
-    <string name="activity_main_composable_setting_content_button_denied">거부됨</string>
-    <string name="composable_script_button_copy_exception">에러 복사</string>
-    <string name="composable_setting_dialog_toast_cant_delete_last_item">마지막 한 아이템은 삭제할 수 없습니다.</string>
+    <string name="activity_main_composable_setting_dialog_kakaotalk_id">sungbin5304</string>
+    <string name="activity_main_composable_setting_dialog_edit_default_code">%s 기본 코드 편집</string>
+    <string name="activity_main_composable_setting_dialog_thanks_donate">1인 개발자를 도와주셔서 감사합니다! 🥰🥰\n카카오톡 오픈채팅방으로 와 주세요!\n\n또는? 성빈 카톡: sungbin5304</string>
+    <string name="activity_main_composable_setting_dialog_toast_cant_deleate_last_item">마지막 한 아이템은 삭제할 수 없습니다.</string>
+    <string name="activity_main_composable_setting_dialog_button_direct_go">바로가기</string>
+    <string name="activity_main_composable_setting_dialog_button_copy_kakaotalk_id">톡디 복사</string>
 
     <string name="activity_exception_button_retry_with_avoid">%s 피해 다시 시도해보기 🚀</string>
 </resources>

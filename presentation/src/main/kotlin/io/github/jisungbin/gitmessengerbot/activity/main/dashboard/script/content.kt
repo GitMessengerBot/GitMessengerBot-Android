@@ -195,7 +195,7 @@ private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage:
             onDismissRequest = { visible.value = false },
             buttons = {
                 OutlinedButton(onClick = { Util.copy(context, exceptionMessage) }) {
-                    Text(text = stringResource(R.string.composable_script_button_copy_exception))
+                    Text(text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_button_copy_error))
                 }
             },
             title = { Text(text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_compile_error)) },

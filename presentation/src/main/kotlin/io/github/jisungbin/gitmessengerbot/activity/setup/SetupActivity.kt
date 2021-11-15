@@ -186,7 +186,7 @@ class SetupActivity : ComponentActivity() {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                             )
                         },
-                        name = stringResource(R.string.activity_setup_permission_storage_label),
+                        name = stringResource(R.string.activity_setup_permission_storage),
                         description = stringResource(R.string.activity_setup_permission_storage_description),
                         icon = R.drawable.ic_round_folder_24
                     ),
@@ -196,7 +196,7 @@ class SetupActivity : ComponentActivity() {
                 PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.NotificationRead),
-                        name = stringResource(R.string.activity_setup_permission_notification_label),
+                        name = stringResource(R.string.activity_setup_permission_notification),
                         description = stringResource(R.string.activity_setup_permission_notification_description),
                         icon = R.drawable.ic_round_notifications_24
                     ),
@@ -206,7 +206,7 @@ class SetupActivity : ComponentActivity() {
                 PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.Wear),
-                        name = stringResource(R.string.activity_setup_app_wear_label),
+                        name = stringResource(R.string.activity_setup_app_wear),
                         description = stringResource(R.string.activity_setup_app_wear_description),
                         icon = R.drawable.ic_round_watch_24
                     ),

@@ -201,7 +201,7 @@ private fun Content() {
             )
         }
         Text(
-            text = stringResource(R.string.activity_main_composable_setting_content_label_script),
+            text = stringResource(R.string.activity_main_composable_setting_content_script),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
@@ -249,7 +249,7 @@ private fun Content() {
             )
         }
         Text(
-            text = stringResource(R.string.activity_main_composable_setting_content_label_git),
+            text = stringResource(R.string.activity_main_composable_setting_content_git),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
@@ -302,7 +302,7 @@ private fun Content() {
             }
         }
         Text(
-            text = stringResource(R.string.activity_main_composable_setting_content_label_app),
+            text = stringResource(R.string.activity_main_composable_setting_content_app),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
@@ -343,7 +343,7 @@ private fun Content() {
         if (Storage.isScoped) {
             RowContent(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
-                    text = stringResource(R.string.composable_setting_app_access_storage_manager_permission),
+                    text = stringResource(R.string.activity_main_composable_setting_content_access_storage_manager_permission),
                     fontSize = 15.sp,
                     color = Color.Black
                 )
@@ -371,7 +371,7 @@ private fun Content() {
             }
         }
         Text(
-            text = stringResource(R.string.activity_main_composable_setting_content_label_ect),
+            text = stringResource(R.string.activity_main_composable_setting_content_etc),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)

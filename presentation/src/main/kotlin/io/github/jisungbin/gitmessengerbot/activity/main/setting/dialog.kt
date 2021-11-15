@@ -79,19 +79,19 @@ fun DonateDialog(visible: MutableState<Boolean>) {
                         Web.open(context, Web.Link.DonateOpenChat)
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_dialog_button_direct_go))
+                    Text(text = stringResource(R.string.activity_main_composable_setting_dialog_button_direct_go))
                 }
                 OutlinedButton(
                     onClick = {
-                        Util.copy(context, context.getString(R.string.kakaotalk_id))
+                        Util.copy(context, context.getString(R.string.activity_main_composable_setting_dialog_kakaotalk_id))
                     }
                 ) {
-                    Text(text = stringResource(R.string.composable_dialog_button_copy_kakaotalk_id))
+                    Text(text = stringResource(R.string.activity_main_composable_setting_dialog_button_copy_kakaotalk_id))
                 }
             },
             title = {
                 Text(
-                    text = stringResource(R.string.composable_dialog_donate),
+                    text = stringResource(R.string.activity_main_composable_setting_dialog_thanks_donate),
                     modifier = Modifier.padding(bottom = 30.dp)
                 )
             }
@@ -374,7 +374,7 @@ private fun ScriptDefaultCodeSettingDialog(
             title = {
                 Text(
                     text = stringResource(
-                        R.string.composable_dialog_edit_default_code,
+                        R.string.activity_main_composable_setting_dialog_edit_default_code,
                         scriptLang.toScriptLangName()
                     )
                 )
@@ -393,7 +393,7 @@ private fun ScriptDefaultCodeSettingDialog(
                         AppConfig.update { app ->
                             app.copy(scriptDefaultCode = scriptDefaultCode)
                         }
-                        toast(context, context.getString(R.string.composable_dialog_toast_saved))
+                        toast(context, context.getString(R.string.saved))
                         visible.value = false
                         innerVisible.value = false
                     }
@@ -453,7 +453,7 @@ private fun ApplicationItem(packageName: String) {
                         return@update if (kakaoTalkPackageNames.size == 1) {
                             toast(
                                 context,
-                                context.getString(R.string.composable_setting_dialog_toast_cant_delete_last_item)
+                                context.getString(R.string.activity_main_composable_setting_dialog_toast_cant_deleate_last_item)
                             )
                             app
                         } else {
