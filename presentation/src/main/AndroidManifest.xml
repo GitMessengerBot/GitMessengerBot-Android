@@ -77,17 +77,18 @@
             android:name=".activity.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activity.editor.js.JsEditorActivity" />
 
-        <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
+        <activity android:name=".test.TestActivity" />
 
         <activity android:name=".activity.debug.DebugActivty" />
 
         <activity android:name=".activity.exception.ExceptionActivity" />
 
-        <activity android:name="io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity" />
+        <activity android:name=".activity.editor.js.JsEditorActivity" />
 
-        <activity android:name=".test.TestActivity" />
+        <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
+
+        <activity android:name="io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity" />
 
         <service
             android:name="io.github.sungbin.gitmessengerbot.core.service.MessageService"

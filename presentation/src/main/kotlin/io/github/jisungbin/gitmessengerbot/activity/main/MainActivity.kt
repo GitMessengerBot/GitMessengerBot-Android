@@ -13,17 +13,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -124,7 +123,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
     @Composable
     private fun Content() {
         val navController = rememberNavController()
@@ -133,72 +132,78 @@ class MainActivity : ComponentActivity() {
         val dashboardState by vm.dashboardState.collectAsState()
 
         Scaffold(
-            // backgroundColor = if (dashboardState != Tab.Setting) twiceLightGray else Color.White,
             floatingActionButton = {
                 FloatingActionButton(
                     // TODO
-                    onClick = { },
-                    elevation = FloatingActionButtonDefaults.elevation(6.dp, 12.dp)
+                    onClick = { }
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_round_add_24),
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+                    Crossfade(dashboardState) {
+                        Icon(
+                            painter = painterResource(
+                                when (it) {
+                                    Tab.Script -> R.drawable.ic_round_add_24
+                                    Tab.Debug -> R.drawable.ic_round_trash_24
+                                    Tab.Setting -> R.drawable.ic_round_save_24
+                                    else -> R.drawable.ic_round_add_24 // TODO
+                                }
+                            ),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
             },
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center,
             bottomBar = {
-                BottomAppBar(
+                BottomNavigation(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    contentPadding = PaddingValues(0.dp)
+                    backgroundColor = Color.White
                 ) {
-                    BottomNavigation(backgroundColor = Color.White) {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-                        val fabs = listOf(
-                            Tab.Script,
-                            Tab.Debug,
-                            Tab.Empty,
-                            Tab.Empty,
-                            Tab.Kaven,
-                            Tab.Setting
-                        )
-                        fabs.forEach { fab ->
-                            if (fab == Tab.Empty) {
-                                CustomWidthBottomNavigationItem(
-                                    width = 35.dp,
-                                    selected = false,
-                                    onClick = {},
-                                    icon = {},
-                                    enabled = false,
-                                )
-                            } else {
-                                BottomNavigationItem(
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(fab.iconRes),
-                                            contentDescription = null
-                                        )
-                                    },
-                                    selectedContentColor = colors.primary,
-                                    unselectedContentColor = Color.LightGray,
-                                    alwaysShowLabel = false,
-                                    selected = currentDestination?.hierarchy?.any { it.route == fab.route } == true,
-                                    onClick = { // TODO: 백스택 뒤로가기 구현
-                                        navController.navigate(fab.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    val tabs = listOf(
+                        Tab.Script,
+                        Tab.Debug,
+                        Tab.Empty,
+                        Tab.Empty,
+                        Tab.Kaven,
+                        Tab.Setting
+                    )
+                    tabs.forEach { tab ->
+                        if (tab == Tab.Empty) {
+                            CustomWidthBottomNavigationItem(
+                                width = 35.dp,
+                                selected = false,
+                                onClick = {},
+                                icon = {},
+                                enabled = false,
+                            )
+                        } else {
+                            BottomNavigationItem(
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(tab.iconRes),
+                                        contentDescription = null
+                                    )
+                                },
+                                selectedContentColor = colors.primary,
+                                unselectedContentColor = Color.LightGray,
+                                alwaysShowLabel = false,
+                                selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
+                                onClick = { // TODO: 백스택 뒤로가기 구현
+                                    vm.updateDashboardState(tab)
+                                    navController.navigate(tab.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
                                         }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                )
-                            }
+                                }
+                            )
                         }
                     }
                 }
