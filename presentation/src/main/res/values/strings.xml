@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
   ~ GitMessengerBot license is under the GPL-3.0.
   ~
@@ -12,37 +12,32 @@
     <string name="copyright">© 2021 지성빈 &amp; 구환. all rights reserved.</string>
     <string name="kakaotalk_id">sungbin5304</string>
 
-    <string name="setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
-    <string name="setup_last_func">마지막으로,</string>
-    <string name="setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
-    <string name="setup_start_with_github_login">깃허브 로그인으로 시작하기</string>
-    <string name="setup_permission_storage_label">저장소 접근 권한</string>
-    <string name="setup_permission_storage_description">봇 데이터 저장을 위해 저장공간에 접근이 필요합니다.</string>
-    <string name="setup_permission_notification_label">알림 읽기 권한</string>
-    <string name="setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
-    <string name="setup_app_wear_label">안드로이드 웨어 설치</string>
-    <string name="setup_app_wear_description">봇이 정상적으로 작동하기 위해 필요합니다.</string>
-    <string name="setup_dialog_input_personal_key">개인 키 입력</string>
-    <string name="setup_dialog_way_to_get_personal_key">개인 키 얻는법</string>
-    <string name="setup_dialog_open_github">깃허브 열기</string>
-    <string name="setup_dialog_start">시작하기</string>
+    <string name="activity_setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
+    <string name="activity_setup_last_way">마지막으로,</string>
+    <string name="activity_setup_need_manage_permission">먼저 권한 설정을 해 주세요.</string>
+    <string name="activity_setup_start_with_github_login">깃허브 로그인으로 시작하기</string>
+    <string name="activity_setup_permission_storage_label">저장소 접근 권한</string>
+    <string name="activity_setup_permission_storage_description">봇 데이터 저장을 위해 저장공간에 접근이 필요합니다.</string>
+    <string name="activity_setup_permission_notification_label">알림 읽기 권한</string>
+    <string name="activity_setup_permission_notification_description">카카오톡 알림을 감지하기 위해 필요합니다.</string>
+    <string name="activity_setup_app_wear_label">안드로이드 웨어 설치</string>
+    <string name="activity_setup_app_wear_description">봇이 정상적으로 작동하기 위해 필요합니다.</string>
+    <string name="activity_setup_dialog_button_start">시작하기</string>
     <string name="activity_setup_toast_welcome">%s님 환영합니다! 🎉🎈</string>
 
-    <string name="composable_main_welcome">Hi, %s</string>
-    <string name="composable_main_header_power">메인 전원</string>
-    <string name="main_menu_on">On</string>
-    <string name="main_menu_off">Off</string>
-    <string name="main_menu_all_script_count">총 스크립트 수</string>
-    <string name="main_menu_running_script_count">실행중인\n스크립트 수</string>
-    <string name="main_menu_script_search">스크립트 검색</string>
     <string name="activity_main_toast_eval_loaded">eval 준비 완료</string>
+    <string name="activity_main_toast_eval_load_faled">eval 준비 실패\n\n%s</string>
     <string name="activity_main_toast_confirm_finish">정말 종료하실려면 뒤로가기를 한 번 더 눌러주세요.</string>
-    <string name="activity_main_toast_eval_load_fail">eval 준비 실패\n\n%s</string>
-    <string name="main_header_script_search">스크립트 검색</string>
-
-    <string name="composable_script_label">SCRIPT</string>
-    <string name="script_empty">스크립트가 비었어요</string>
-    <string name="composable_script_compile">컴파일</string>
+    <string name="activity_main_composable_dashboard_script_header_welcome">Hi, %s</string>
+    <string name="activity_main_composable_dashboard_script_header_power">메인 전원</string>
+    <string name="activity_main_composable_dashboard_script_header_menu_power_on">On</string>
+    <string name="activity_main_composable_dashboard_script_header_menu_power_off">Off</string>
+    <string name="activity_main_composable_dashboard_script_header_menu_all_script_count">총 스크립트 수</string>
+    <string name="activity_main_composable_dashboard_script_header_menu_running_script_count">실행중인\n스크립트 수</string>
+    <string name="activity_main_composable_dashboard_script_header_menu_search_script">스크립트 검색</string>
+    <string name="activity_main_composable_dashboard_script_content_label">SCRIPT</string>
+    <string name="activity_main_composable_dashboard_script_content_empty">스크립트가 비었어요</string>
+    <string name="activity_main_composable_dashboard_script_content_compile">컴파일</string>
     <string name="script_add_create_new">스크립트 추가</string>
     <string name="script_add_input_name">스크립트 이름을 입력해 주세요.</string>
     <string name="script_add_name">스크립트 이름</string>

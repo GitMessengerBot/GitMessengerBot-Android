@@ -14,13 +14,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -107,7 +105,7 @@ class MainActivity : ComponentActivity() {
                     onFailure = { exception ->
                         toast(
                             getString(
-                                R.string.activity_main_toast_eval_load_fail,
+                                R.string.activity_main_toast_eval_load_faled,
                                 exception.message
                             )
                         )
@@ -123,7 +121,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
     @Composable
     private fun Content() {
         val navController = rememberNavController()

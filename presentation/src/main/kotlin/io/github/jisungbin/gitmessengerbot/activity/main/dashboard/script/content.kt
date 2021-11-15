@@ -2,6 +2,15 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [content.kt] created by Ji Sungbin on 21. 11. 15. 오후 9:20
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
  * [content.kt] created by Ji Sungbin on 21. 6. 19. 오후 10:56.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
@@ -128,7 +137,7 @@ fun ScriptContent() {
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource(R.string.composable_script_label),
+                    text = stringResource(R.string.activity_main_composable_dashboard_script_content_label),
                     color = Color.Black,
                     modifier = Modifier.padding(start = 8.dp),
                     fontWeight = FontWeight.Bold,
@@ -178,7 +187,7 @@ private fun LazyScript(modifier: Modifier, search: String) { // TODO: 키보드 
                 composition = composition,
             )
             Text(
-                text = stringResource(R.string.script_empty),
+                text = stringResource(R.string.activity_main_composable_dashboard_script_content_empty),
                 color = Color.Gray
             )
         }
@@ -254,7 +263,7 @@ private fun ScriptItem(script: ScriptItem) {
             val compileStateTextColor by animateColorAsState(if (script.compiled) colors.primary else Color.White)
 
             Text(
-                text = stringResource(R.string.composable_script_compile),
+                text = stringResource(R.string.activity_main_composable_dashboard_script_content_compile),
                 color = compileStateTextColor,
                 fontSize = 13.sp,
                 modifier = Modifier

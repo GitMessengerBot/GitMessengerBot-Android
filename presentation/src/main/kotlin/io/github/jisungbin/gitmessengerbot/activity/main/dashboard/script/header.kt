@@ -2,6 +2,15 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
+ * [header.kt] created by Ji Sungbin on 21. 11. 15. 오후 9:17
+ *
+ * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+ */
+
+/*
+ * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+ * GitMessengerBot license is under the GPL-3.0.
+ *
  * [header.kt] created by Ji Sungbin on 21. 7. 24. 오전 1:28.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
@@ -9,7 +18,6 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
 
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import androidx.compose.animation.Crossfade
@@ -163,7 +171,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
         )
         Text(
             text = stringResource(
-                R.string.composable_main_welcome,
+                R.string.activity_main_composable_dashboard_script_header_welcome,
                 githubData.userName
             ),
             color = Color.White,
@@ -190,7 +198,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     MenuBox(
-                        title = stringResource(R.string.composable_main_header_power),
+                        title = stringResource(R.string.activity_main_composable_dashboard_script_header_power),
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(
@@ -198,8 +206,8 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                if (app.power) stringResource(R.string.main_menu_on)
-                                else stringResource(R.string.main_menu_off)
+                                if (app.power) stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_on)
+                                else stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_off)
                             )
                             Switch(
                                 checked = app.power,
@@ -223,7 +231,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         }
                     }
                     MenuBox(
-                        title = stringResource(R.string.main_menu_all_script_count),
+                        title = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_all_script_count),
                         modifier = Modifier.weight(1f)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -232,7 +240,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         }
                     }
                     MenuBox(
-                        title = stringResource(R.string.main_menu_running_script_count),
+                        title = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_running_script_count),
                         modifier = Modifier.weight(1f)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -244,7 +252,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         }
                     }
                     MenuBox(
-                        title = stringResource(R.string.main_menu_script_search),
+                        title = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_search_script),
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(

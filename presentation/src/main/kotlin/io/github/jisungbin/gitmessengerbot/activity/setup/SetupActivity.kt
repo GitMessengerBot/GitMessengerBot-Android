@@ -156,7 +156,7 @@ class SetupActivity : ComponentActivity() {
                 )
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
-                    text = with(AnnotatedString.Builder(stringResource(R.string.setup_title))) {
+                    text = with(AnnotatedString.Builder(stringResource(R.string.activity_setup_title))) {
                         addStyle(SpanStyle(fontWeight = FontWeight.Bold), 11, 19) // 아래의 권한들
                         toAnnotatedString()
                     },
@@ -186,8 +186,8 @@ class SetupActivity : ComponentActivity() {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                             )
                         },
-                        name = stringResource(R.string.setup_permission_storage_label),
-                        description = stringResource(R.string.setup_permission_storage_description),
+                        name = stringResource(R.string.activity_setup_permission_storage_label),
+                        description = stringResource(R.string.activity_setup_permission_storage_description),
                         icon = R.drawable.ic_round_folder_24
                     ),
                     permissionGranted = storagePermissionGranted,
@@ -196,8 +196,8 @@ class SetupActivity : ComponentActivity() {
                 PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.NotificationRead),
-                        name = stringResource(R.string.setup_permission_notification_label),
-                        description = stringResource(R.string.setup_permission_notification_description),
+                        name = stringResource(R.string.activity_setup_permission_notification_label),
+                        description = stringResource(R.string.activity_setup_permission_notification_description),
                         icon = R.drawable.ic_round_notifications_24
                     ),
                     permissionGranted = notificationPermissionGranted,
@@ -206,8 +206,8 @@ class SetupActivity : ComponentActivity() {
                 PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.Wear),
-                        name = stringResource(R.string.setup_app_wear_label),
-                        description = stringResource(R.string.setup_app_wear_description),
+                        name = stringResource(R.string.activity_setup_app_wear_label),
+                        description = stringResource(R.string.activity_setup_app_wear_description),
                         icon = R.drawable.ic_round_watch_24
                     ),
                     permissionGranted = wearAppInstalled,
@@ -225,7 +225,7 @@ class SetupActivity : ComponentActivity() {
                 val shape = RoundedCornerShape(15.dp)
 
                 Text(
-                    text = stringResource(R.string.setup_last_func),
+                    text = stringResource(R.string.activity_setup_last_way),
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -245,10 +245,10 @@ class SetupActivity : ComponentActivity() {
                                     Web.Link.Custom(SecretConfig.GithubOauthAddress)
                                 )
                             } else {
-                                toast(getString(R.string.setup_need_manage_permission))
+                                toast(getString(R.string.activity_setup_need_manage_permission))
                             }
                         }),
-                    text = stringResource(R.string.setup_start_with_github_login),
+                    text = stringResource(R.string.activity_setup_start_with_github_login),
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
