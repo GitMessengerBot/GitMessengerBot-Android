@@ -79,6 +79,12 @@
 1. [LiveData 대신에 StateFlow/SharedFlow를 사용해보자](https://jisungbin.medium.com/livedata-%EB%8C%80%EC%8B%A0%EC%97%90-stateflow-sharedflow%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90-c78b87ea4248)
 2. [코틀린 inline에 대해 한 번에 알아보자](https://jisungbin.medium.com/%EC%BD%94%ED%8B%80%EB%A6%B0%EC%9D%98-%EC%9D%B8%EB%9D%BC%EC%9D%B8%EC%97%90-%EB%8C%80%ED%95%B4-%ED%95%9C-%EB%B2%88%EC%97%90-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90-591c7da73219)
 3. [아직도 MVVM? 이젠 MVI 시대!](https://jisungbin.medium.com/%EC%95%84%EC%A7%81%EB%8F%84-mvvm-%EC%9D%B4%EC%A0%A0-mvi-%EC%8B%9C%EB%8C%80-319990c7d60)
+4. [모바일 UI 개발의 새로운 혁명(Jetpack Compose와 Swift UI를 이용한 새로운 UI 제작)](https://jisungbin.medium.com/%EB%AA%A8%EB%B0%94%EC%9D%BC-ui-%EA%B0%9C%EB%B0%9C%EC%9D%98-%EC%83%88%EB%A1%9C%EC%9A%B4-%ED%98%81%EB%AA%85-739c76a501b1)
+
+# 개발 라이브러리
+1. [ComposeTimeLineView](https://github.com/jisungbin/ComposeTimeLineView)
+2. [Erratum](https://github.com/jisungbin/erratum)
+3. [Logeukes](https://github.com/jisungbin/logeukes)
 
 # 라이선스
 
