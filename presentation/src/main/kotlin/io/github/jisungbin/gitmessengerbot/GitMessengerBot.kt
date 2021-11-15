@@ -37,7 +37,7 @@ class GitMessengerBot : Application() {
         super.onCreate()
         Erratum.setup(
             application = this,
-            registerExceptionActivityIntent = { thread, throwable, lastActivity ->
+            registerExceptionActivityIntent = { _, throwable, lastActivity ->
                 Intent(lastActivity, ExceptionActivity::class.java).apply {
                     putExtra(ErratumExceptionActivity.EXTRA_EXCEPTION_STRING, throwable.toString())
                     putExtra(
