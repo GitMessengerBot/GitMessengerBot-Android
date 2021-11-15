@@ -24,6 +24,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -130,6 +131,7 @@ class MainActivity : ComponentActivity() {
         Scaffold(
             floatingActionButton = {
                 FloatingActionButton(
+                    elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp),
                     onClick = { }, // TODO
                 ) {
                     Icon(
