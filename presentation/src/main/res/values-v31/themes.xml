@@ -2,7 +2,7 @@
   ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
   ~ GitMessengerBot license is under the GPL-3.0.
   ~
-  ~ [themes.xml] created by Ji Sungbin on 21. 5. 21. 오후 4:41.
+  ~ [themes.xml] created by Ji Sungbin on 21. 11. 15. 오후 5:03
   ~
   ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
   -->
@@ -10,6 +10,8 @@
 <resources>
 
     <style name="Theme.GitMessengerBot" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/colorPrimary</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_round_logo_150</item>
         <item name="android:windowBackground">@drawable/bg_splash</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
