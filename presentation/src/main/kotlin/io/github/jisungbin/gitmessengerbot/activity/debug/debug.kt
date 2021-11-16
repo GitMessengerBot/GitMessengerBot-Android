@@ -112,7 +112,7 @@ fun Debug(script: ScriptItem? = null) {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-@Composable
+@Composable // TODO: Remove
 private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
     val context = LocalContext.current
 
@@ -125,10 +125,10 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
                 Surface(
                     modifier = Modifier.combinedClickable(
                         onClick = {
-                            toast(
-                                context,
-                                context.getString(R.string.activity_main_composable_debug_toast_confirm_remove)
-                            )
+                            /* toast(
+                                 context,
+                                 context.getString(R.string.activity_main_composable_debug_toast_confirm_remove)
+                             )*/
                         },
                         onLongClick = {
                             toast(
@@ -151,11 +151,11 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
                             contentDescription = null,
                             tint = Color.White
                         )
-                        Text(
+                        /*Text(
                             text = stringResource(R.string.composable_debug_remove_all_history),
                             color = Color.White,
                             modifier = Modifier.padding(start = 8.dp)
-                        )
+                        )*/
                     }
                 }
             }

@@ -2,21 +2,12 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [header.kt] created by Ji Sungbin on 21. 11. 15. 오후 9:17
- *
- * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
- */
-
-/*
- * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
- * GitMessengerBot license is under the GPL-3.0.
- *
  * [header.kt] created by Ji Sungbin on 21. 7. 24. 오전 1:28.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-package io.github.jisungbin.gitmessengerbot.activity.main.dashboard
+package io.github.jisungbin.gitmessengerbot.activity.main.dashboard.script
 
 import android.app.ActivityOptions
 import android.content.Intent
@@ -71,6 +62,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.coil.CoilImage
 import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -79,7 +71,6 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity
 import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
@@ -308,7 +299,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         },
                         placeholder = {
                             Text(
-                                text = stringResource(R.string.main_header_script_search),
+                                text = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_search_script),
                                 color = Color.LightGray
                             )
                         },

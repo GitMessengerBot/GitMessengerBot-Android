@@ -79,7 +79,6 @@ import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.debug.DebugActivty
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.JsEditorActivity
 import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
-import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.Header
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
@@ -440,7 +439,10 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         .width(200.dp)
                         .wrapContentHeight()
                 ) {
-                    Text(text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_nane), color = Color.Black)
+                    Text(
+                        text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_nane),
+                        color = Color.Black
+                    )
                     TextField(
                         label = {
                             Text(
