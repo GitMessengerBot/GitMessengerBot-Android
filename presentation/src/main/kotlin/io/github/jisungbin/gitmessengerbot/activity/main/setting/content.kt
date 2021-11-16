@@ -412,7 +412,7 @@ private fun Content() {
             modifier = Modifier.padding(top = 15.dp),
             color = colors.primary
         )
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
