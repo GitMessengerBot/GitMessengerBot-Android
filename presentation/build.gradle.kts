@@ -11,6 +11,8 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.firebase-perf")
     id("dagger.hilt.android.plugin")
     id("com.google.android.gms.oss-licenses-plugin")
     id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
@@ -79,6 +81,8 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
+    implementation(platform(Dependencies.FirebaseBom))
+
     implementation(project(":core"))
     implementation(project(":common"))
     implementation(project(":data-kaven"))
@@ -91,6 +95,7 @@ dependencies {
     Dependencies.Jackson.forEach(::implementation)
     Dependencies.Compose.forEach(::implementation)
     Dependencies.Retrofit.forEach(::implementation)
+    Dependencies.Firebase.forEach(::implementation)
 
     Dependencies.Debug.forEach(::debugImplementation)
 

@@ -29,6 +29,7 @@ object Versions {
         const val CoreKtx = "1.7.0"
         const val Coroutines = "1.5.1"
         const val Gradle = "7.1.0-beta03"
+        const val GoogleService = "4.3.10"
     }
 
     object Bot {
@@ -79,6 +80,11 @@ object Versions {
         const val Master = "17.0.0"
         const val Classpath = "0.10.4"
     }
+
+    object Firebase {
+        const val Bom = "29.0.0"
+        const val Pref = "1.4.0"
+    }
 }
 
 object Dependencies {
@@ -92,6 +98,8 @@ object Dependencies {
     const val HiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Jetpack.Hilt}"
 
     const val RoomCompiler = "androidx.room:room-compiler:${Versions.Jetpack.Room}"
+
+    const val FirebaseBom = "com.google.firebase:firebase-bom:${Versions.Firebase.Bom}"
 
     val Essential = listOf(
         "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
@@ -150,5 +158,11 @@ object Dependencies {
         "com.facebook.soloader:soloader:${Versions.Util.SoLoader}",
         "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}",
         "com.facebook.flipper:flipper-leakcanary2-plugin:${Versions.Util.Flipper}"
+    )
+
+    val Firebase = listOf(
+        "com.google.firebase:firebase-perf-ktx",
+        "com.google.firebase:firebase-analytics-ktx",
+        "com.google.firebase:firebase-firestore-ktx",
     )
 }

@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.main.MainViewModel
 import io.github.jisungbin.gitmessengerbot.common.constant.BotConstant
 import io.github.jisungbin.gitmessengerbot.common.core.BatteryUtil
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
@@ -57,14 +56,11 @@ import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
 import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
 fun Setting() {
-    val vm: MainViewModel = composableActivityViewModel()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { Toolbar() },

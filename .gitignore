@@ -15,3 +15,4 @@ local.properties
 /common/build
 /app/build
 /data-github/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/github/secret
+/presentation/google-services.json

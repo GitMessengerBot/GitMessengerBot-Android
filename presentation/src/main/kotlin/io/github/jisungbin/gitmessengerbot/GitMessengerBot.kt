@@ -32,9 +32,9 @@ import leakcanary.LeakCanary
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
-
     override fun onCreate() {
         super.onCreate()
+
         Erratum.setup(
             application = this,
             registerExceptionActivityIntent = { _, throwable, lastActivity ->
@@ -47,6 +47,16 @@ class GitMessengerBot : Application() {
                 }
             }
         )
+
+        NotificationUtil.createChannel(
+            context = applicationContext,
+            name = getString(R.string.notification_channel_name),
+            description = getString(R.string.notification_channel_name)
+        )
+
+        Bot.scripts
+        AppConfig.app
+        DebugStore.items
 
         if (BuildConfig.DEBUG) {
             LeakCanary.config = LeakCanary.config.copy(
@@ -69,15 +79,5 @@ class GitMessengerBot : Application() {
                 }.start()
             }
         }
-
-        NotificationUtil.createChannel(
-            context = applicationContext,
-            name = getString(R.string.notification_channel_name),
-            description = getString(R.string.notification_channel_name)
-        )
-
-        Bot.scripts
-        AppConfig.app
-        DebugStore.items
     }
 }
