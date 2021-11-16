@@ -77,14 +77,17 @@
             android:name=".activity.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".activity.debug.DebugActivty"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.editor.js.JsEditorActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".test.TestActivity" />
 
-        <activity android:name=".activity.debug.DebugActivty" />
-
         <activity android:name=".activity.exception.ExceptionActivity" />
-
-        <activity android:name=".activity.editor.js.JsEditorActivity" />
 
         <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
 

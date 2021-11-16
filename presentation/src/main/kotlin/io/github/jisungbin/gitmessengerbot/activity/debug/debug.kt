@@ -87,8 +87,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Debug(script: ScriptItem? = null) {
-    val vm: MainViewModel = composableActivityViewModel()
-
     val app by AppConfig.app.collectAsState()
     val settingDialogVisible = remember { mutableStateOf(false) }
 
@@ -112,7 +110,7 @@ fun Debug(script: ScriptItem? = null) {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-@Composable // TODO: Remove
+@Composable
 private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
     val context = LocalContext.current
 
@@ -120,20 +118,20 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
         AlertDialog(
             onDismissRequest = { visible.value = false },
             buttons = {},
-            title = { Text(text = stringResource(R.string.activity_main_composable_debug_setting)) },
+            title = { Text(text = stringResource(R.string.activity_main_composable_debug_dialog_setting)) },
             text = {
                 Surface(
                     modifier = Modifier.combinedClickable(
                         onClick = {
-                            /* toast(
-                                 context,
-                                 context.getString(R.string.activity_main_composable_debug_toast_confirm_remove)
-                             )*/
+                            toast(
+                                context,
+                                context.getString(R.string.activity_main_composable_debug_dialog_toast_confirm_remove)
+                            )
                         },
                         onLongClick = {
                             toast(
                                 context,
-                                context.getString(R.string.activity_main_composable_debug_toast_removed)
+                                context.getString(R.string.activity_main_composable_debug_dialog_toast_removed)
                             )
                             DebugStore.removeAll(debugId)
                         },
@@ -151,11 +149,11 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
                             contentDescription = null,
                             tint = Color.White
                         )
-                        /*Text(
-                            text = stringResource(R.string.composable_debug_remove_all_history),
+                        Text(
+                            text = stringResource(R.string.activity_main_composable_debug_dialog_remove_all_history),
                             color = Color.White,
                             modifier = Modifier.padding(start = 8.dp)
-                        )*/
+                        )
                     }
                 }
             }
@@ -182,9 +180,10 @@ private fun DebugToolbar(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
+            val isAllDebug = script == null
             val (back, title, setting, switchDescription, modeSwitch) = createRefs()
 
-            if (script != null) {
+            if (!isAllDebug) { // 특정 스크립트 디버그 -> DebugActivity에서 실행 -> 설정 버튼 있음
                 Icon(
                     painter = painterResource(R.drawable.ic_round_arrow_left_24),
                     contentDescription = null,
@@ -201,7 +200,7 @@ private fun DebugToolbar(
                         }
                 )
                 Text(
-                    text = script.name,
+                    text = script!!.name,
                     color = Color.White,
                     modifier = Modifier.constrainAs(title) {
                         start.linkTo(back.end, 10.dp)
@@ -209,7 +208,21 @@ private fun DebugToolbar(
                         bottom.linkTo(back.bottom)
                     }
                 )
-            } else {
+                Icon(
+                    painter = painterResource(R.drawable.ic_round_settings_24),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .clickable {
+                            settingDialogVisible.value = true
+                        }
+                        .constrainAs(setting) {
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                )
+            } else { // 전체 디버그 -> MainActivity에서 실행 -> 설정 버튼 없음
                 Text(
                     text = stringResource(R.string.activity_main_composable_debug_title),
                     color = Color.White,
@@ -220,20 +233,6 @@ private fun DebugToolbar(
                     }
                 )
             }
-            Icon(
-                painter = painterResource(R.drawable.ic_round_settings_24),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .clickable {
-                        settingDialogVisible.value = true
-                    }
-                    .constrainAs(setting) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-            )
             Switch(
                 checked = evalMode,
                 onCheckedChange = { evalMode ->
@@ -242,9 +241,15 @@ private fun DebugToolbar(
                     }
                 },
                 modifier = Modifier.constrainAs(modeSwitch) {
-                    end.linkTo(setting.start, 16.dp)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
+                    if (isAllDebug) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    } else {
+                        end.linkTo(setting.start, 16.dp)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
@@ -298,6 +303,13 @@ private fun DebugContent(
             else -> {
                 items = items.getByScriptId(script.id)
                 debugId = script.id
+            }
+        }
+
+        if (script == null) { // 전체 디버그 -> MainActivity에서 실행 -> 설정 버튼 없음
+            val vm: MainViewModel = composableActivityViewModel()
+            vm.updateFabAction {
+                DebugStore.removeAll(debugId)
             }
         }
 

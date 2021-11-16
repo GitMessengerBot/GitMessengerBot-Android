@@ -216,7 +216,7 @@ private fun DrawerLayout(
         branch = repoBranch
     )
 
-    LaunchedEffect(vm) {
+    LaunchedEffect(vm) { // TODO: Fix #17; Git에 연결됨이 확인된 후에 커밋 히스토리 로드해야함
         vm.loadCommitHistory(userName = gitUser.userName, repoName = repoName)
     }
 
@@ -248,7 +248,12 @@ private fun DrawerLayout(
                 )
             }
         ) {
-            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_create_repo, script.name))
+            Text(
+                text = stringResource(
+                    R.string.activity_jseditor_composable_editor_drawer_create_repo,
+                    script.name
+                )
+            )
         }
         OutlinedButton(
             modifier = Modifier

@@ -53,8 +53,10 @@
 
     <string name="activity_main_composable_debug_title">DebugRoom</string>
     <string name="activity_main_composable_debug_eval_mode">eval mode</string>
-    <string name="activity_main_composable_debug_setting">디버그 설정</string>
-    <string name="activity_main_composable_debug_toast_removed">삭제되었습니다.</string>
+    <string name="activity_main_composable_debug_dialog_setting">디버그 설정</string>
+    <string name="activity_main_composable_debug_dialog_toast_removed">삭제되었습니다.</string>
+    <string name="activity_main_composable_debug_dialog_remove_all_history">디버그 기록 전체 삭제</string>
+    <string name="activity_main_composable_debug_dialog_toast_confirm_remove">정말 삭제하시려면 길게 눌러주세요.</string>
 
     <string name="activity_main_composable_setting_content_title">앱 설정</string>
     <string name="activity_main_composable_setting_content_editer">에디터</string>
