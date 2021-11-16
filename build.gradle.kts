@@ -24,6 +24,7 @@ buildscript {
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.Jetpack.Hilt}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Essential.Kotlin}")
         classpath("com.google.android.gms:oss-licenses-plugin:${Versions.OssLicense.Classpath}")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:${Versions.Firebase.Crashlytics}")
     }
 }
 

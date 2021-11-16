@@ -35,7 +35,7 @@ class GitMessengerBot : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Erratum.setup(
+        /*Erratum.setup(
             application = this,
             registerExceptionActivityIntent = { _, throwable, lastActivity ->
                 Intent(lastActivity, ExceptionActivity::class.java).apply {
@@ -46,7 +46,7 @@ class GitMessengerBot : Application() {
                     )
                 }
             }
-        )
+        )*/
 
         NotificationUtil.createChannel(
             context = applicationContext,

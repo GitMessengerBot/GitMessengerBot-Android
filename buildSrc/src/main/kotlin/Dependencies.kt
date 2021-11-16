@@ -22,7 +22,7 @@ object Application {
 }
 
 object Versions {
-    const val Orbit = "4.2.0"
+    const val Orbit = "4.3.0"
 
     object Essential {
         const val Kotlin = "1.5.31"
@@ -61,12 +61,12 @@ object Versions {
     }
 
     object Jetpack {
-        const val Hilt = "2.40"
+        const val Hilt = "2.40.1"
         const val Room = "2.3.0"
     }
 
     object Compose {
-        const val Lottie = "4.2.0"
+        const val Lottie = "4.2.1"
         const val Master = "1.0.5"
         const val Activity = "1.4.0"
         const val Lifecycle = "2.4.0"
@@ -84,6 +84,7 @@ object Versions {
     object Firebase {
         const val Bom = "29.0.0"
         const val Pref = "1.4.0"
+        const val Crashlytics = "2.8.0"
     }
 }
 
@@ -164,5 +165,6 @@ object Dependencies {
         "com.google.firebase:firebase-perf-ktx",
         "com.google.firebase:firebase-analytics-ktx",
         "com.google.firebase:firebase-firestore-ktx",
+        "com.google.firebase:firebase-crashlytics-ktx",
     )
 }
