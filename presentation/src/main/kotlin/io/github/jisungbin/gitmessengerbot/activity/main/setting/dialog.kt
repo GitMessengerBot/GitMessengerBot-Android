@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.jisungbin.gitmessengerbot.R
@@ -127,7 +128,7 @@ fun GitDefaultCommitMessageDialog(visible: MutableState<Boolean>) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Spacer()
+                    TextSpacer()
                     TextField(
                         value = commitMessageField,
                         onValueChange = { commitMessageField = it },
@@ -159,7 +160,7 @@ fun GitDefaultCreateRepoOptionsDialog(visible: MutableState<Boolean>) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Spacer()
+                    TextSpacer()
                     // TODO
                 }
             }
@@ -260,7 +261,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Spacer()
+                    TextSpacer()
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -327,7 +328,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Spacer()
+                    TextSpacer()
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -414,7 +415,7 @@ private fun ScriptDefaultCodeSettingDialog(
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    Spacer()
+                    TextSpacer()
                     TextField(
                         value = scriptDefaultCodeField,
                         onValueChange = { scriptDefaultCodeField = it },
@@ -433,8 +434,8 @@ private fun ScriptDefaultCodeSettingDialog(
 }
 
 @Composable
-private fun Spacer() {
-    Text(text = "", modifier = Modifier.height(10.dp))
+private fun TextSpacer(height: Dp = 10.dp) {
+    Text(text = "", modifier = Modifier.height(height))
 }
 
 @Composable

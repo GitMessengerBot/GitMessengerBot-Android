@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.width
@@ -363,10 +365,14 @@ private fun Content() {
                 color = Color.Black
             )
             OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
-                val isOptimization = BatteryUtil.isIgnoringBatteryOptimization(context)
-                val message =
-                    if (isOptimization) stringResource(R.string.activity_main_composable_setting_content_button_granted)
-                    else stringResource(R.string.activity_main_composable_setting_content_button_denied)
+                val isOptimized = BatteryUtil.isIgnoringBatteryOptimization(context)
+                val message = stringResource(
+                    if (isOptimized) {
+                        R.string.activity_main_composable_setting_content_button_granted
+                    } else {
+                        R.string.activity_main_composable_setting_content_button_denied
+                    }
+                )
                 Text(text = message)
             }
         }
@@ -406,6 +412,7 @@ private fun Content() {
             modifier = Modifier.padding(top = 15.dp),
             color = colors.primary
         )
+        Spacer(modifier = Modifier.height(15.dp))
     }
 }
 
