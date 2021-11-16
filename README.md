@@ -44,7 +44,7 @@
 # 개발 스킬
 
 0. 100% Kotlin [![awesome-kotlin](https://kotlin.link/awesome-kotlin.svg)](https://kotlin.link)
-1. 100% pure function
+1. ~~100% pure function~~
 2. Jetpack Compose
 3. MVW Pattern
 4. Coroutines, Flow
