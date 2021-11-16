@@ -283,6 +283,8 @@ private fun DebugContent(
             .fillMaxSize()
             .background(twiceLightGray)
     ) {
+        val context = LocalContext.current
+
         val (chats, textfield) = createRefs()
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -310,6 +312,10 @@ private fun DebugContent(
             val vm: MainViewModel = composableActivityViewModel()
             vm.updateFabAction {
                 DebugStore.removeAll(debugId)
+                toast(
+                    context,
+                    context.getString(R.string.activity_main_composable_debug_dialog_toast_removed)
+                )
             }
         }
 

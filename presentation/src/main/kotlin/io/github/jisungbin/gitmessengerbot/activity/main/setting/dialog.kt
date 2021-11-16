@@ -460,7 +460,7 @@ private fun ApplicationItem(packageName: String) {
                         return@update if (kakaoTalkPackageNames.size == 1) {
                             toast(
                                 context,
-                                context.getString(R.string.activity_main_composable_setting_dialog_toast_cant_deleate_last_item)
+                                context.getString(R.string.activity_main_composable_setting_dialog_toast_cant_remove_last_item)
                             )
                             app
                         } else {

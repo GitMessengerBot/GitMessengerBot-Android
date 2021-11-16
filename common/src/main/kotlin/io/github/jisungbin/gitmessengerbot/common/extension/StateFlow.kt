@@ -15,25 +15,27 @@ fun <T> MutableStateFlow<List<T>>.clear() {
     value = emptyList()
 }
 
+// predicate가 noninline이라 inline 필요 없음
 fun <T> MutableStateFlow<List<T>>.removeAll(predicate: (T) -> Boolean) {
     val value = this.value.toMutableList()
     value.removeAll(predicate)
     notifyDataSetChanged(value)
 }
 
+// predicate가 noninline이라 inline 필요 없음
 fun <T> MutableStateFlow<List<T>>.removeIf(predicate: (T) -> Boolean) {
     val value = this.value.toMutableList()
     value.removeIf(predicate)
     notifyDataSetChanged(value)
 }
 
-@PublishedApi
-internal fun <T> MutableStateFlow<List<T>>.notifyDataSetChanged(value: List<T>) {
-    this.value = value
-}
-
 inline fun <T> MutableStateFlow<List<T>>.edit(action: MutableList<T>.() -> Unit) {
     val items = value.toMutableList()
     action(items)
     notifyDataSetChanged(items)
+}
+
+@PublishedApi
+internal fun <T> MutableStateFlow<List<T>>.notifyDataSetChanged(value: List<T>) {
+    this.value = value
 }
