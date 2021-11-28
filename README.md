@@ -19,7 +19,7 @@
 
 # 다운로드
 
-~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~
+~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~ (작동 안할 가능성 높음, 비추천)
 
 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
 
