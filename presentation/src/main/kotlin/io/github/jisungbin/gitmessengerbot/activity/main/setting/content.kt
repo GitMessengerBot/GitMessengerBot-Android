@@ -10,6 +10,7 @@
 package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.content.Intent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
@@ -57,6 +59,7 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
+import io.github.jisungbin.gitmessengerbot.util.extension.shimmer
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 @Composable
@@ -81,6 +84,7 @@ private fun Toolbar() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Suppress("NewApi")
 @Composable
 private fun Content() {
@@ -396,7 +400,10 @@ private fun Content() {
                 fontSize = 15.sp,
                 color = Color.Black
             )
-            OutlinedButton(onClick = { donateDialogVisble.value = true }) {
+            Button(
+                modifier = Modifier.shimmer(duration = 1000),
+                onClick = { donateDialogVisble.value = true }
+            ) {
                 Text(text = stringResource(R.string.activity_main_composable_setting_content_button_thanks))
             }
         }

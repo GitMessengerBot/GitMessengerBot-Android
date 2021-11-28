@@ -30,22 +30,24 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.DocumentReference
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.erratum.ErratumExceptionActivity
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.common.constant.ExceptionConstant
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
-import java.util.Date
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExceptionActivity : ErratumExceptionActivity() {
+
+    @Inject
+    lateinit var exceptionFirestoreDocument: DocumentReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Firebase.firestore
-            .collection("exception")
-            .document(Date().toString())
-            .set(mapOf("data" to exceptionString!!))
+        exceptionFirestoreDocument.set(mapOf("data" to exceptionString!!))
         SystemUiController(window).setSystemBarsColor(Color.White)
         setContent {
             Content()
