@@ -17,9 +17,9 @@
 
 > 준비중...
 
-# 다운로드 (알파버전 업로드 상태)
+# 다운로드
 
-정식 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)
+~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~
 
 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
 
