@@ -50,31 +50,31 @@ object Versions {
         const val Jackson = "2.13.0"
         const val LeakCanary = "2.7"
         const val SoLoader = "0.10.3"
-        const val Flipper = "0.119.0"
+        const val Flipper = "0.122.0"
         const val KeyboardObserver = "1.0.1"
         const val CheckDependencyUpdates = "1.5.0"
     }
 
     object Network {
         const val Jsoup = "1.14.3"
-        const val OkHttp = "4.9.2"
+        const val OkHttp = "4.9.3"
         const val Retrofit = "2.9.0"
     }
 
     object Jetpack {
-        const val Hilt = "2.40.1"
+        const val Hilt = "2.40.2"
         const val Room = "2.3.0"
     }
 
     object Compose {
-        const val Lottie = "4.2.1"
-        const val Master = "1.0.5"
+        const val Lottie = "4.2.2"
+        const val Master = "1.1.0-beta03"
         const val Activity = "1.4.0"
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
-        const val LandscapistCoil = "1.4.2"
-        const val Navigation = "2.4.0-alpha09"
-        const val ConstraintLayout = "1.0.0-beta01"
+        const val LandscapistCoil = "1.4.3"
+        const val Navigation = "2.4.0-beta02"
+        const val ConstraintLayout = "1.0.0-beta02"
     }
 
     object OssLicense {

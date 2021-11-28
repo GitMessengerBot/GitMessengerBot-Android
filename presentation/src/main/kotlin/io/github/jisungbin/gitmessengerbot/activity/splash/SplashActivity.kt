@@ -17,6 +17,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.BuildConfig
 import io.github.jisungbin.gitmessengerbot.BuildOption
@@ -91,14 +91,13 @@ class SplashActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
-        ConstraintLayout(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colors.primary)
-                .padding(30.dp)
+                .padding(30.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            val footer = createRef()
-
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -123,12 +122,7 @@ class SplashActivity : ComponentActivity() {
             Text(
                 text = stringResource(R.string.copyright),
                 color = Color.White,
-                fontSize = 10.sp,
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+                fontSize = 10.sp
             )
         }
     }
