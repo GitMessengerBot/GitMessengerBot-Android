@@ -96,8 +96,6 @@ dependencies {
     Dependencies.Retrofit.forEach(::implementation)
     Dependencies.Firebase.forEach(::implementation)
 
-    implementation("com.valentinilk.shimmer:compose-shimmer:1.0.2")
-
     Dependencies.Debug.forEach(::debugImplementation)
 
     kapt(Dependencies.HiltCompiler) // TODO: ksp

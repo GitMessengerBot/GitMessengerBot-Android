@@ -68,10 +68,11 @@ object Versions {
 
     object Compose {
         const val Lottie = "4.2.2"
-        const val Master = "1.1.0-beta03"
+        const val Shimmer = "1.0.2"
         const val Activity = "1.4.0"
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
+        const val Master = "1.1.0-beta03"
         const val LandscapistCoil = "1.4.3"
         const val Navigation = "2.4.0-beta02"
         const val ConstraintLayout = "1.0.0-beta02"
@@ -144,6 +145,7 @@ object Dependencies {
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "io.github.jisungbin:timelineview:${Versions.Compose.TimeLineView}",
+        "com.valentinilk.shimmer:compose-shimmer:${Versions.Compose.Shimmer}",
         "androidx.navigation:navigation-compose:${Versions.Compose.Navigation}",
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Compose.Lifecycle}",
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.ConstraintLayout}"
