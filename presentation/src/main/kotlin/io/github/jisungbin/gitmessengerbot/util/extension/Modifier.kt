@@ -43,26 +43,26 @@ inline fun Modifier.noRippleClickable(
 fun Modifier.shimmer(duration: Int) = composed {
     val shimmer = rememberShimmer(
         shimmerBounds = ShimmerBounds.View,
-        theme = createCustomTheme(duration),
+        theme = createCustomShimmerTheme(duration),
     )
     shimmer(customShimmer = shimmer)
 }
 
-private fun createCustomTheme(duration: Int) = defaultShimmerTheme.copy(
+private fun createCustomShimmerTheme(duration: Int) = defaultShimmerTheme.copy(
     animationSpec = infiniteRepeatable(
         animation = tween(
             durationMillis = duration,
-            delayMillis = 2_400,
+            delayMillis = 1_500,
             easing = LinearEasing,
         ),
         repeatMode = RepeatMode.Restart,
     ),
-    rotation = 5f,
+    rotation = 10f,
     shaderColors = listOf(
         Color.Unspecified.copy(alpha = 1.0f),
         Color.Unspecified.copy(alpha = 0.2f),
         Color.Unspecified.copy(alpha = 1.0f),
     ),
     shaderColorStops = null,
-    shimmerWidth = 200.dp,
+    shimmerWidth = 150.dp,
 )
