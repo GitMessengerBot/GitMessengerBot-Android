@@ -11,6 +11,7 @@ package io.github.jisungbin.gitmessengerbot.activity.main.setting
 
 import android.content.Intent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -115,13 +117,13 @@ private fun Content() {
 
         Text(
             text = stringResource(R.string.activity_main_composable_setting_content_editer),
-            fontSize = 18.sp,
+            style = TextStyle(fontSize = 18.sp),
             color = Color.Gray
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_horizontal_scroll),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             Switch(
@@ -142,7 +144,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 16.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_choice_font),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(
@@ -159,7 +161,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_font_size),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             TextField(
@@ -182,7 +184,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_auto_save),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             TextField(
@@ -204,14 +206,14 @@ private fun Content() {
         }
         Text(
             text = stringResource(R.string.activity_main_composable_setting_content_script),
-            fontSize = 18.sp,
+            style = TextStyle(fontSize = 18.sp),
             color = Color.Gray,
             modifier = Modifier.padding(top = 30.dp)
         )
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_script_cpde),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { scriptAddDefaultCodeDialogVisible.value = true }) {
@@ -221,7 +223,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_script_language),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { scriptAddDefaultLanguageDialogVisible.value = true }) {
@@ -231,7 +233,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_script_function_name),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             TextField(
@@ -259,7 +261,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_branch),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             TextField(
@@ -281,7 +283,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_commit_message),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { gitDefaultCommitMessageDialogVisible.value = true }) {
@@ -296,7 +298,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_default_repo_create_option),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { gitDefaultCreateRepoOptionsDialogVisible.value = true }) {
@@ -312,7 +314,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_kakaotalk_package_names),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { kakaoTalkPackageNamesDialogVisible.value = true }) {
@@ -328,7 +330,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_noficiation_access_permission),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = {
@@ -346,7 +348,7 @@ private fun Content() {
             RowContent(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     text = stringResource(R.string.activity_main_composable_setting_content_access_storage_manager_permission),
-                    fontSize = 15.sp,
+                    style = TextStyle(fontSize = 15.sp),
                     color = Color.Black
                 )
                 OutlinedButton(onClick = { Storage.requestStorageManagePermission(activity) }) {
@@ -361,7 +363,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_battery_optimization),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = { BatteryUtil.requestIgnoreBatteryOptimization(context) }) {
@@ -385,7 +387,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_opensource_license),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             OutlinedButton(onClick = {
@@ -397,7 +399,7 @@ private fun Content() {
         RowContent(modifier = Modifier.padding(top = 8.dp)) {
             Text(
                 text = stringResource(R.string.activity_main_composable_setting_content_donate),
-                fontSize = 15.sp,
+                style = TextStyle(fontSize = 15.sp),
                 color = Color.Black
             )
             Button(
@@ -410,9 +412,11 @@ private fun Content() {
         Text(
             text = stringResource(
                 R.string.activity_main_composable_setting_content_donater,
-                "클라이드님" // TODO: firebase realtime update
+                "클라이드님, 띠까님, 시계톡톡님" // TODO: firebase realtime update
             ),
-            modifier = Modifier.padding(top = 15.dp),
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState()) // TODO: Auto Scroll
+                .padding(top = 15.dp),
             color = colors.primary
         )
         Spacer(modifier = Modifier.height(20.dp))

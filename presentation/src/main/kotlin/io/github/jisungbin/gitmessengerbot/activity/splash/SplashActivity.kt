@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,14 +116,14 @@ class SplashActivity : ComponentActivity() {
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    fontSize = 20.sp,
+                    style = TextStyle(fontSize = 20.sp),
                     modifier = Modifier.padding(top = 30.dp)
                 )
             }
             Text(
                 text = stringResource(R.string.copyright),
                 color = Color.White,
-                fontSize = 10.sp
+                style = TextStyle(fontSize = 10.sp)
             )
         }
     }

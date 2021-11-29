@@ -44,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -161,7 +162,7 @@ class SetupActivity : ComponentActivity() {
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    fontSize = 20.sp,
+                    style = TextStyle(fontSize = 20.sp),
                     textAlign = TextAlign.Center
                 )
             }
@@ -315,7 +316,7 @@ class SetupActivity : ComponentActivity() {
                 color = Color.White,
                 text = permission.description,
                 textAlign = TextAlign.Center,
-                fontSize = 13.sp
+                style = TextStyle(fontSize = 13.sp)
             )
         }
     }
