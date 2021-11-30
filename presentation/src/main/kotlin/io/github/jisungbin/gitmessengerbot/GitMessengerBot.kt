@@ -11,24 +11,14 @@ package io.github.jisungbin.gitmessengerbot
 
 import android.app.Application
 import android.content.Intent
-import com.facebook.flipper.android.AndroidFlipperClient
-import com.facebook.flipper.android.utils.FlipperUtils
-import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin
-import com.facebook.flipper.plugins.inspector.DescriptorMapping
-import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
-import com.facebook.flipper.plugins.leakcanary2.FlipperLeakListener
-import com.facebook.flipper.plugins.leakcanary2.LeakCanary2FlipperPlugin
-import com.facebook.soloader.SoLoader
 import dagger.hilt.android.HiltAndroidApp
 import io.github.jisungbin.erratum.Erratum
 import io.github.jisungbin.erratum.ErratumExceptionActivity
 import io.github.jisungbin.gitmessengerbot.activity.exception.ExceptionActivity
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
-import io.github.jisungbin.logeukes.Logeukes
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.debug.DebugStore
 import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
-import leakcanary.LeakCanary
 
 @HiltAndroidApp
 class GitMessengerBot : Application() {
@@ -58,7 +48,7 @@ class GitMessengerBot : Application() {
         AppConfig.app
         DebugStore.items
 
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             LeakCanary.config = LeakCanary.config.copy(
                 onHeapAnalyzedListener = FlipperLeakListener()
             )
@@ -78,6 +68,6 @@ class GitMessengerBot : Application() {
                     addPlugin(LeakCanary2FlipperPlugin())
                 }.start()
             }
-        }
+        }*/
     }
 }
