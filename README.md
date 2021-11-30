@@ -12,9 +12,11 @@ Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
 # 다운로드
 
+[dev/compose](https://github.com/GitMessengerBot/GitMessengerBot-Android/) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=io.github.jisungbin.gitmessengerbot&hl=ko) (현재 업로드 심사중)
+
 ~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~ (작동 안할 가능성 높음, 비추천)
 
-개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
+<!-- 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases) -->
 
 # 기능
 
