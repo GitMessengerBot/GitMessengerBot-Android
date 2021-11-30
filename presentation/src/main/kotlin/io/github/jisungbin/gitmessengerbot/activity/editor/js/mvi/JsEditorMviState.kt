@@ -9,10 +9,10 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi
 
-import io.github.jisungbin.gitmessengerbot.mvi.MviBaseState
+import io.github.jisungbin.gitmessengerbot.mvi.BaseMviState
 
-data class MviJsEditorState(
+data class JsEditorMviState(
     override val loaded: Boolean = false,
     override val exception: Exception? = null,
     val successType: MviJsEditorSuccessType = MviJsEditorSuccessType.None
-) : MviBaseState
+) : BaseMviState

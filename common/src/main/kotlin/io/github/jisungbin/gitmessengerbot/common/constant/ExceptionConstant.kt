@@ -10,5 +10,9 @@
 package io.github.jisungbin.gitmessengerbot.common.constant
 
 object ExceptionConstant {
-    val ObjectContents = listOf("눈덩이", "돌덩이", "나뭇가지", "새똥", "나뭇잎", "흙더미")
+    const val Unknown = "오류를 불러올 수 없음"
+    const val PathPrefix = "io.github.jisungbin.gitmessengerbot.common.exception."
+
+    val ObjectContents =
+        listOf("눈덩이", "돌덩이", "나뭇가지", "새똥", "나뭇잎", "흙더미", "돈뭉치")
 }

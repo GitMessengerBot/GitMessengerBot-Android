@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -267,7 +268,11 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                             .fillMaxWidth()
                             .height(40.dp)
                             .clip(scriptLangItemShape)
-                            .border(1.dp, colors.secondary, scriptLangItemShape)
+                            .border(
+                                width = 1.dp,
+                                color = colors.secondary,
+                                shape = scriptLangItemShape
+                            )
                     ) {
                         repeat(4) { scriptLang ->
                             @Composable
@@ -282,7 +287,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxHeight()
-                                    .background(scriptLangItemBackgroundColor(scriptLang))
+                                    .background(color = scriptLangItemBackgroundColor(scriptLang))
                                     .noRippleClickable(onClick = {
                                         AppConfig.update { app ->
                                             app.copy(scriptDefaultLang = scriptLang)
@@ -294,7 +299,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = scriptLangItemTextColor(scriptLang),
-                                    fontSize = 10.sp
+                                    style = TextStyle(fontSize = 10.sp)
                                 )
                             }
                         }
@@ -345,7 +350,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxHeight()
-                                    .background(Color.White)
+                                    .background(color = Color.White)
                                     .noRippleClickable(onClick = {
                                         scriptDefaultCodeLang.value = scriptLang
                                         scriptDefaultCodeSettingDialogVisible.value = true
@@ -356,7 +361,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = colors.primary,
-                                    fontSize = 10.sp
+                                    style = TextStyle(fontSize = 10.sp)
                                 )
                             }
                         }

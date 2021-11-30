@@ -12,8 +12,8 @@ package io.github.jisungbin.gitmessengerbot.activity.editor.js
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.BaseMviJsEditorSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.JsEditorMviState
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
 import io.github.jisungbin.gitmessengerbot.common.core.Web
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
@@ -44,9 +44,9 @@ class JsEditorViewModel @Inject constructor(
     private val githubCreateRepoUseCase: GithubCreateRepoUseCase,
     private val getCommitHistoryUseCase: GetCommitHistoryUseCase,
     private val getCommitContentUseCase: GetCommitContentUseCase,
-) : ContainerHost<MviJsEditorState, MviJsEditorSideEffect>, ViewModel() {
+) : ContainerHost<JsEditorMviState, BaseMviJsEditorSideEffect>, ViewModel() {
 
-    override val container = container<MviJsEditorState, MviJsEditorSideEffect>(MviJsEditorState())
+    override val container = container<JsEditorMviState, BaseMviJsEditorSideEffect>(JsEditorMviState())
 
     private enum class BeautifyType(val apiAddress: String) {
         Minify("https://javascript-minifier.com/raw"),
@@ -112,7 +112,7 @@ class JsEditorViewModel @Inject constructor(
             coroutineScope = viewModelScope
         ).doWhen(
             onSuccess = { fileContent ->
-                postSideEffect(MviJsEditorSideEffect.UpdateCodeField(Web.parse(fileContent.downloadUrl)))
+                postSideEffect(BaseMviJsEditorSideEffect.UpdateCodeField(Web.parse(fileContent.downloadUrl)))
                 reduce {
                     state.copy(
                         loaded = true,
@@ -210,7 +210,7 @@ class JsEditorViewModel @Inject constructor(
                     }
                 )
             }.join()
-            postSideEffect(MviJsEditorSideEffect.UpdateCommitHistoryItems(commitHistory))
+            postSideEffect(BaseMviJsEditorSideEffect.UpdateCommitHistoryItems(commitHistory))
             reduce {
                 state.copy(
                     loaded = true,
@@ -223,7 +223,7 @@ class JsEditorViewModel @Inject constructor(
 
     fun codeMinify(code: String) = intent {
         postSideEffect(
-            MviJsEditorSideEffect.UpdateCodeField(
+            BaseMviJsEditorSideEffect.UpdateCodeField(
                 codeBeautify(
                     beautifyType = BeautifyType.Minify,
                     code = code
@@ -237,7 +237,7 @@ class JsEditorViewModel @Inject constructor(
 
     fun codePretty(code: String) = intent {
         postSideEffect(
-            MviJsEditorSideEffect.UpdateCodeField(
+            BaseMviJsEditorSideEffect.UpdateCodeField(
                 codeBeautify(
                     beautifyType = BeautifyType.Pretty,
                     code = code

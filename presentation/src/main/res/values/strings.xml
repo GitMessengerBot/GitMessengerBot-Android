@@ -111,5 +111,7 @@
     <string name="activity_jseditor_composable_editor_drawer_minify">Minify</string>
     <string name="activity_jseditor_composable_editor_drawer_pretty">Pretty</string>
 
+    <string name="activity_exception_message">깃메봇이가 예상치 못한 %s에 맞았어요 🥲\n\n%s</string>
     <string name="activity_exception_button_retry_with_avoid">%s 피해 다시 시도해보기 🚀</string>
+    <string name="activity_exception_toast_longclick_to_copy_exception">길게 눌러 에러 로그를 복사할 수 있어요.</string>
 </resources>

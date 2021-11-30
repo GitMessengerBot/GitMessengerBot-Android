@@ -10,10 +10,10 @@
 package io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi
 
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.CommitHistoryItem
-import io.github.jisungbin.gitmessengerbot.mvi.MviToastSideEffect
+import io.github.jisungbin.gitmessengerbot.mvi.BaseMviToastSideEffect
 
-sealed class MviJsEditorSideEffect : MviToastSideEffect {
-    data class UpdateCodeField(val code: String) : MviJsEditorSideEffect()
+sealed class BaseMviJsEditorSideEffect : BaseMviToastSideEffect {
+    data class UpdateCodeField(val code: String) : BaseMviJsEditorSideEffect()
     data class UpdateCommitHistoryItems(val commitHistoryItems: List<CommitHistoryItem>) :
-        MviJsEditorSideEffect()
+        BaseMviJsEditorSideEffect()
 }

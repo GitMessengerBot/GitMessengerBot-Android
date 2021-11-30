@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -93,7 +94,7 @@ fun Debug(script: ScriptItem? = null) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DebugToolbar(
+            DebugTopBar(
                 script = script,
                 evalMode = app.evalMode,
                 settingDialogVisible = settingDialogVisible
@@ -162,7 +163,7 @@ private fun DebugSettingDialog(visible: MutableState<Boolean>, debugId: Int) {
 }
 
 @Composable
-private fun DebugToolbar(
+private fun DebugTopBar(
     activity: Activity = getActivity(),
     script: ScriptItem?,
     evalMode: Boolean,
@@ -261,7 +262,7 @@ private fun DebugToolbar(
             Text(
                 text = stringResource(R.string.activity_main_composable_debug_eval_mode),
                 color = Color.White,
-                fontSize = 13.sp,
+                style = TextStyle(fontSize = 13.sp),
                 modifier = Modifier.constrainAs(switchDescription) {
                     end.linkTo(modeSwitch.start, 5.dp)
                     top.linkTo(parent.top)
@@ -478,7 +479,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = item.message,
                         color = Color.Black,
-                        fontSize = 15.sp,
+                        style = TextStyle(fontSize = 15.sp),
                         modifier = Modifier
                             .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                             .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -488,7 +489,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = date,
                         color = Color.Gray,
-                        fontSize = 10.sp,
+                        style = TextStyle(fontSize = 10.sp),
                         modifier = Modifier.constrainAs(time) {
                             end.linkTo(message.end)
                             top.linkTo(message.bottom, 5.dp)
@@ -518,7 +519,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     )
                     Text(
                         text = item.sender,
-                        fontSize = 13.sp,
+                        style = TextStyle(fontSize = 13.sp),
                         modifier = Modifier.constrainAs(name) {
                             end.linkTo(parent.end, 60.dp)
                         }
@@ -542,7 +543,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                         Text(
                             text = item.message,
                             color = Color.Black,
-                            fontSize = 15.sp,
+                            style = TextStyle(fontSize = 15.sp),
                             modifier = Modifier
                                 .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                                 .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -565,7 +566,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                         Text(
                             text = item.message,
                             color = Color.Black,
-                            fontSize = 15.sp,
+                            style = TextStyle(fontSize = 15.sp),
                             modifier = Modifier
                                 .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                                 .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -576,7 +577,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = date,
                         color = Color.Gray,
-                        fontSize = 10.sp,
+                        style = TextStyle(fontSize = 10.sp),
                         modifier = Modifier.constrainAs(time) {
                             start.linkTo(message.start)
                             top.linkTo(message.bottom, 5.dp)

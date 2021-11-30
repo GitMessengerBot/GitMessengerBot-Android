@@ -65,6 +65,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -132,7 +133,7 @@ fun ScriptContent() {
                     color = Color.Black,
                     modifier = Modifier.padding(start = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    style = TextStyle(fontSize = 18.sp)
                 )
             }
             LazyScript(
@@ -168,7 +169,7 @@ private fun LazyScript(modifier: Modifier, search: String) { // TODO: 키보드 
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(Color.White, RoundedCornerShape(20.dp)),
+                .background(color = Color.White, shape = RoundedCornerShape(20.dp)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -228,7 +229,7 @@ private fun ScriptItem(script: ScriptItem) {
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .shadow(3.dp, shape)
+            .shadow(elevation = 3.dp, shape = shape)
             .clip(shape)
             .clickable {
                 val intent = Intent(context, JsEditorActivity::class.java).apply {
@@ -256,11 +257,11 @@ private fun ScriptItem(script: ScriptItem) {
             Text(
                 text = stringResource(R.string.activity_main_composable_dashboard_script_content_compile),
                 color = compileStateTextColor,
-                fontSize = 13.sp,
+                style = TextStyle(fontSize = 13.sp),
                 modifier = Modifier
                     .clip(compileStateShape)
-                    .background(compileStateBackgroundColor, compileStateShape)
-                    .border(1.dp, Color.White, compileStateShape)
+                    .background(color = compileStateBackgroundColor, shape = compileStateShape)
+                    .border(width = 1.dp, color = Color.White, shape = compileStateShape)
                     .padding(vertical = 2.dp, horizontal = 6.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
@@ -369,7 +370,7 @@ private fun ScriptItem(script: ScriptItem) {
                     top.linkTo(scriptLangDeco.top)
                     bottom.linkTo(scriptLangDeco.bottom)
                 },
-                fontSize = 13.sp
+                style = TextStyle(fontSize = 13.sp)
             )
             Switch(
                 checked = script.power,
@@ -396,7 +397,7 @@ private fun ScriptItem(script: ScriptItem) {
                     top.linkTo(scriptPower.top)
                     bottom.linkTo(scriptPower.bottom)
                 },
-                fontSize = 13.sp
+                style = TextStyle(fontSize = 13.sp)
             )
             Divider(
                 modifier = Modifier.constrainAs(scriptNameUnderline) {
@@ -447,7 +448,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         label = {
                             Text(
                                 text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_name_allow_only_english),
-                                fontSize = 10.sp
+                                style = TextStyle(fontSize = 10.sp)
                             )
                         },
                         value = scriptNameField,
@@ -512,7 +513,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = primaryColor,
-                                    fontSize = 13.sp,
+                                    style = TextStyle(fontSize = 13.sp),
                                     modifier = Modifier
                                         .constrainAs(name) {
                                             top.linkTo(parent.top)

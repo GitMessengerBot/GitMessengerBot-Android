@@ -55,8 +55,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorState
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.BaseMviJsEditorSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.JsEditorMviState
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -114,7 +114,7 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            ToolBar(
+            TopBar(
                 script = script,
                 scaffoldState = scaffoldState,
                 codeField = codeField,
@@ -149,15 +149,14 @@ fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
 }
 
 private inline fun handleState(
-    state: MviJsEditorState,
+    state: JsEditorMviState,
     toast: (Int) -> Unit,
     onExceptionChanged: (Exception) -> Unit
 ) {
     if (!state.isException()) {
         if (state.loaded) {
             when (state.successType) {
-                MviJsEditorSuccessType.None -> {
-                }
+                MviJsEditorSuccessType.None -> Unit
                 MviJsEditorSuccessType.GithubCreateRepo -> {
                     toast(R.string.activity_jseditor_composable_editor_toast_repo_create_success)
                 }
@@ -175,15 +174,15 @@ private inline fun handleState(
 }
 
 private inline fun handleSideEffect(
-    sideEffect: MviJsEditorSideEffect,
+    sideEffect: BaseMviJsEditorSideEffect,
     codeFieldChanged: (String) -> Unit,
     commitHistoryItemsChanged: (List<CommitHistoryItem>) -> Unit
 ) {
     when (sideEffect) {
-        is MviJsEditorSideEffect.UpdateCodeField -> {
+        is BaseMviJsEditorSideEffect.UpdateCodeField -> {
             codeFieldChanged(sideEffect.code)
         }
-        is MviJsEditorSideEffect.UpdateCommitHistoryItems -> {
+        is BaseMviJsEditorSideEffect.UpdateCommitHistoryItems -> {
             commitHistoryItemsChanged(sideEffect.commitHistoryItems)
         }
     }
@@ -232,7 +231,7 @@ private fun DrawerLayout(
             )
             Text(
                 text = stringResource(R.string.activity_jseditor_composable_editor_drawer_git),
-                fontSize = 30.sp,
+                style = TextStyle(fontSize = 30.sp),
                 modifier = Modifier.padding(start = 10.dp)
             )
         }
@@ -314,7 +313,7 @@ private fun DrawerLayout(
             Text(
                 text = stringResource(R.string.activity_jseditor_composable_editor_drawer_beautify),
                 modifier = Modifier.padding(start = 10.dp),
-                fontSize = 30.sp
+                style = TextStyle(fontSize = 30.sp)
             )
         }
         Row(
@@ -350,7 +349,7 @@ private fun DrawerLayout(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-private fun ToolBar(
+private fun TopBar(
     script: ScriptItem,
     scaffoldState: ScaffoldState,
     codeField: String,

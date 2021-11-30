@@ -9,12 +9,12 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.setup.mvi
 
-import io.github.jisungbin.gitmessengerbot.mvi.MviBaseState
+import io.github.jisungbin.gitmessengerbot.mvi.BaseMviState
 
-data class MviSetupState(
+data class SetupMviState(
     override val loaded: Boolean = false,
     override val exception: Exception? = null,
     val aouthToken: String = "",
     val userName: String = "",
     val profileImageUrl: String = "",
-) : MviBaseState
+) : BaseMviState

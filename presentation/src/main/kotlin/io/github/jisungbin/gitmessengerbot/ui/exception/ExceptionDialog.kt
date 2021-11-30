@@ -20,18 +20,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.github.jisungbin.gitmessengerbot.R
+import io.github.jisungbin.gitmessengerbot.common.constant.ExceptionConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExceptionDialog(exception: MutableState<Exception?>) {
     if (exception.value != null) {
         val context = LocalContext.current
-        val contents = listOf("눈덩이", "돌덩이", "나뭇가지", "새똥", "나뭇잎", "흙더미")
-        val exceptionMessage = (exception.value!!.message ?: "오류를 불러올 수 없음")
-            .split("io.github.jisungbin.gitmessengerbot.common.exception.")[1]
+        val content = ExceptionConstant.ObjectContents.random()
+        val exceptionMessage = (exception.value!!.message ?: ExceptionConstant.Unknown)
+            .split(ExceptionConstant.PathPrefix)[1]
 
         AlertDialog(
             onDismissRequest = { exception.value = null },
@@ -39,13 +43,22 @@ fun ExceptionDialog(exception: MutableState<Exception?>) {
             shape = RoundedCornerShape(30.dp),
             text = {
                 Text(
-                    text = "깃메봇이가 예상치 못한 ${contents.random()}에 맞았어요 \uD83E\uDD72\n\n$exceptionMessage",
+                    text = stringResource(
+                        R.string.activity_exception_message,
+                        content,
+                        exceptionMessage
+                    ),
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     modifier = Modifier
                         .fillMaxWidth()
                         .combinedClickable(
-                            onClick = {},
+                            onClick = {
+                                toast(
+                                    context,
+                                    context.getString(R.string.activity_exception_toast_longclick_to_copy_exception)
+                                )
+                            },
                             onLongClick = {
                                 Util.copy(context, exceptionMessage)
                             }

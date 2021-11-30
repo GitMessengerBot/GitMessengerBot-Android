@@ -12,8 +12,8 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.BaseMviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.SetupMviState
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.extension.toException
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
@@ -30,9 +30,9 @@ import org.orbitmvi.orbit.viewmodel.container
 class SetupViewModel @Inject constructor(
     private val githubRequestAouthTokenUseCase: GithubRequestAouthTokenUseCase,
     private val githubGetUserInfoUseCase: GithubGetUserInfoUseCase,
-) : ContainerHost<MviSetupState, MviSetupSideEffect>, ViewModel() {
+) : ContainerHost<SetupMviState, BaseMviSetupSideEffect>, ViewModel() {
 
-    override val container = container<MviSetupState, MviSetupSideEffect>(MviSetupState())
+    override val container = container<SetupMviState, BaseMviSetupSideEffect>(SetupMviState())
 
     fun login(requestCode: String) = intent {
         githubRequestAouthTokenUseCase(
@@ -50,7 +50,7 @@ class SetupViewModel @Inject constructor(
                             userName = userInfo.userName,
                             profileImageUrl = userInfo.profileImageUrl
                         )
-                        postSideEffect(MviSetupSideEffect.SaveData(githubData))
+                        postSideEffect(BaseMviSetupSideEffect.SaveData(githubData))
                         reduce {
                             state.copy(
                                 loaded = true,

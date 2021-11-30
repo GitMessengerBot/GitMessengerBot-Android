@@ -56,8 +56,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupSideEffect
-import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.MviSetupState
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.BaseMviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.SetupMviState
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
@@ -359,7 +359,7 @@ class SetupActivity : ComponentActivity() {
         vm.login(requestCode)
     }
 
-    private inline fun handleState(state: MviSetupState, onExceptionChanged: (Exception) -> Unit) {
+    private inline fun handleState(state: SetupMviState, onExceptionChanged: (Exception) -> Unit) {
         if (!state.isException()) {
             if (state.loaded) {
                 finish()
@@ -371,9 +371,9 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
-    private fun handleSideEffect(sideEffect: MviSetupSideEffect) {
+    private fun handleSideEffect(sideEffect: BaseMviSetupSideEffect) {
         when (sideEffect) {
-            is MviSetupSideEffect.SaveData -> {
+            is BaseMviSetupSideEffect.SaveData -> {
                 Storage.write(GithubConstant.DataPath, sideEffect.data.toJsonString())
             }
         }
