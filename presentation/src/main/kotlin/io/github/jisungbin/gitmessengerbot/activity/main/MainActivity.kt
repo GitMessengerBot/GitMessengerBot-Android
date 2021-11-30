@@ -13,6 +13,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,6 +50,7 @@ import io.github.jisungbin.gitmessengerbot.activity.main.composable.CustomWidthB
 import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
 import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
 import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
@@ -113,6 +115,14 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+        }
+
+        if (Storage.isScoped) {
+            AlertDialog.Builder(this)
+                .setMessage(R.string.activity_main_dialog_android_11_notice_title)
+                .setMessage(R.string.activity_main_dialog_android_11_notice_message)
+                .setPositiveButton(R.string.close, null)
+                .show()
         }
 
         setContent {

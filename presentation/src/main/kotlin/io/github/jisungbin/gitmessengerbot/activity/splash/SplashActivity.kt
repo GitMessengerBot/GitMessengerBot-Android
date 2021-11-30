@@ -66,12 +66,15 @@ class SplashActivity : ComponentActivity() {
         }
 
         val isSetupDone = Storage.read(GithubConstant.DataPath, null) != null
-        val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
-        val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
-            " ${builtDate.get(Calendar.MINUTE)}m " +
-            "${builtDate.get(Calendar.SECOND)}s"
 
-        toast("Built at: $builtTime")
+        if (BuildConfig.DEBUG) {
+            val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
+            val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
+                " ${builtDate.get(Calendar.MINUTE)}m " +
+                "${builtDate.get(Calendar.SECOND)}s"
+
+            toast("Built at: $builtTime")
+        }
 
         if (BuildOption.TestMode) {
             startActivity(Intent(this, TestActivity::class.java))
@@ -79,12 +82,16 @@ class SplashActivity : ComponentActivity() {
             lifecycleScope.launchWhenCreated {
                 doDelay(1500) {
                     finish()
-                    startActivity(
-                        Intent(
-                            this@SplashActivity,
-                            if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                    if (Storage.isScoped) {
+                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    } else {
+                        startActivity(
+                            Intent(
+                                this@SplashActivity,
+                                if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

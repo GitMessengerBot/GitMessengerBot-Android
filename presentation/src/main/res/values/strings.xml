@@ -13,6 +13,7 @@
     <string name="todo">개발 예정</string>
     <string name="save">저장</string>
     <string name="saved">저장되었습니다.</string>
+    <string name="close">닫기</string>
 
     <string name="activity_setup_title">새로운 시작을 위해,\n아래의 권한들을 허용해주세요.</string>
     <string name="activity_setup_last_way">마지막으로,</string>
@@ -27,9 +28,12 @@
     <string name="activity_setup_dialog_button_start">시작하기</string>
     <string name="activity_setup_toast_welcome">%s님 환영합니다! 🎉🎈</string>
 
+    <string name="activity_main_dialog_android_11_notice_title">안드로이드11 공지</string>
+    <string name="activity_main_dialog_android_11_notice_message">안드로이드11 부터는 구글 정책으로 인해 내부 저장소 접근이 불가능 합니다. (접근하려면 파일 관리자 앱 처럼 파일 접근 기능이 앱의 핵심 기능이여야 함)\n\n따라서 앱의 기능이 모두 작동하지 않을 수 있습니다.\n\n추후 product 버전에서는 이 문제 해결 및 앱의 정상적인 작동을 보장합니다.\n\n이 버전은 dev 버전이므로, 이해 부탁드립니다. 감사합니다.</string>
     <string name="activity_main_toast_eval_loaded">eval 준비 완료</string>
     <string name="activity_main_toast_eval_load_faled">eval 준비 실패\n\n%s</string>
     <string name="activity_main_toast_confirm_finish">정말 종료하실려면 뒤로가기를 한 번 더 눌러주세요.</string>
+
     <string name="activity_main_composable_dashboard_script_header_welcome">Hi, %s</string>
     <string name="activity_main_composable_dashboard_script_header_power">메인 전원</string>
     <string name="activity_main_composable_dashboard_script_header_menu_power_on">On</string>

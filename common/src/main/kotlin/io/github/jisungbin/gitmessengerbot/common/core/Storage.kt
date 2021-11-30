@@ -31,6 +31,7 @@ object Storage {
     private fun String.parsePath() = if (contains(sdcard)) this else "$sdcard/$this"
 
     fun write(path: String, content: String) {
+        if (isScoped) return
         val file = File(path.parsePath())
         if (!file.exists()) {
             File(file.path.substringBeforeLast("/")).mkdirs()
@@ -40,6 +41,7 @@ object Storage {
     }
 
     fun read(path: String, default: String?): String? {
+        if (isScoped) return default
         return try {
             val file = File(path.parsePath())
             if (file.exists()) {
@@ -53,26 +55,31 @@ object Storage {
     }
 
     fun append(path: String, prefix: String, appendContent: String) {
+        if (isScoped) return
         val preContent = read(path, "")
         val newContent = "$preContent$prefix$appendContent"
         write(path, newContent)
     }
 
     fun delete(path: String) {
+        if (isScoped) return
         File(path.parsePath()).delete()
     }
 
     fun deleteAll(path: String) {
+        if (isScoped) return
         File(path.parsePath()).deleteRecursively()
     }
 
-    fun fileList(path: String) = File(path.parsePath()).listFiles()?.toList() ?: emptyList()
+    fun fileList(path: String) =
+        if (isScoped) emptyList() else File(path.parsePath()).listFiles()?.toList() ?: emptyList()
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun isStorageManagerPermissionGranted() = Environment.isExternalStorageManager()
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun requestStorageManagePermission(activity: Activity) {
+        if (isScoped) return
         val intent = Intent(
             Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
             "package:${activity.packageName}".toUri()
