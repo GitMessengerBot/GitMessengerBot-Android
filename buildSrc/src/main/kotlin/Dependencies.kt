@@ -62,7 +62,7 @@ object Versions {
     }
 
     object Jetpack {
-        const val Hilt = "2.40.2"
+        const val Hilt = "2.40.3"
         const val Room = "2.3.0"
     }
 
