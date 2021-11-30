@@ -52,7 +52,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -71,6 +70,7 @@ import io.github.jisungbin.gitmessengerbot.common.exception.PresentationExceptio
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.util.extension.getActivity
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -100,7 +100,7 @@ private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp),
-            style = TextStyle(fontSize = 10.sp),
+            style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp),
             textAlign = TextAlign.Center,
             color = Color.White
         )
@@ -155,7 +155,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
         Text(
             text = stringResource(R.string.app_name),
             color = Color.LightGray,
-            style = TextStyle(fontSize = 13.sp),
+            style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
             modifier = Modifier.constrainAs(appName) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
@@ -167,8 +167,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                 githubData.userName
             ),
             color = Color.White,
-            fontWeight = FontWeight.Bold,
-            style = TextStyle(fontSize = 20.sp),
+            style = TextStyle(fontFamily = defaultFontFamily, fontSize = 23.sp),
             modifier = Modifier.constrainAs(profileName) {
                 start.linkTo(parent.start)
                 top.linkTo(appName.bottom, 8.dp)
@@ -194,12 +193,19 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.spacedBy(
+                                space = 1.dp,
+                                alignment = Alignment.CenterVertically
+                            ),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                if (app.power) stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_on)
-                                else stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_off)
+                                text = if (app.power) {
+                                    stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_on)
+                                } else {
+                                    stringResource(R.string.activity_main_composable_dashboard_script_header_menu_power_off)
+                                },
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp)
                             )
                             Switch(
                                 checked = app.power,
@@ -226,24 +232,30 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         title = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_all_script_count),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
                             Text(
                                 text = Bot.getAllScripts().size.toString(),
-                                style = TextStyle(fontSize = 25.sp)
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 25.sp)
                             )
-                            Text(text = "개", style = TextStyle(fontSize = 8.sp))
+                            Text(text = "개", style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp))
                         }
                     }
                     MenuBox(
                         title = stringResource(R.string.activity_main_composable_dashboard_script_header_menu_running_script_count),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
                             Text(
                                 text = Bot.getRunnableScripts().size.toString(),
-                                style = TextStyle(fontSize = 25.sp)
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 25.sp)
                             )
-                            Text(text = "개", style = TextStyle(fontSize = 8.sp))
+                            Text(text = "개", style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp))
                         }
                     }
                     MenuBox(

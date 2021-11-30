@@ -63,6 +63,7 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import io.github.sungbin.gitmessengerbot.core.bot.script.getScriptDefaultCode
@@ -299,7 +300,7 @@ fun ScriptAddDefaultLanguageDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = scriptLangItemTextColor(scriptLang),
-                                    style = TextStyle(fontSize = 10.sp)
+                                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp)
                                 )
                             }
                         }
@@ -361,7 +362,7 @@ fun ScriptAddDefaultCodeDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = colors.primary,
-                                    style = TextStyle(fontSize = 10.sp)
+                                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp)
                                 )
                             }
                         }

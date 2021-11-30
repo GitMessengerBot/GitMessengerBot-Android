@@ -67,6 +67,7 @@ import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Util
 import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.orange
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
@@ -262,7 +263,7 @@ private fun DebugTopBar(
             Text(
                 text = stringResource(R.string.activity_main_composable_debug_eval_mode),
                 color = Color.White,
-                style = TextStyle(fontSize = 13.sp),
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
                 modifier = Modifier.constrainAs(switchDescription) {
                     end.linkTo(modeSwitch.start, 5.dp)
                     top.linkTo(parent.top)
@@ -479,7 +480,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = item.message,
                         color = Color.Black,
-                        style = TextStyle(fontSize = 15.sp),
+                        style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp),
                         modifier = Modifier
                             .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                             .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -489,7 +490,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = date,
                         color = Color.Gray,
-                        style = TextStyle(fontSize = 10.sp),
+                        style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp),
                         modifier = Modifier.constrainAs(time) {
                             end.linkTo(message.end)
                             top.linkTo(message.bottom, 5.dp)
@@ -519,7 +520,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     )
                     Text(
                         text = item.sender,
-                        style = TextStyle(fontSize = 13.sp),
+                        style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
                         modifier = Modifier.constrainAs(name) {
                             end.linkTo(parent.end, 60.dp)
                         }
@@ -543,7 +544,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                         Text(
                             text = item.message,
                             color = Color.Black,
-                            style = TextStyle(fontSize = 15.sp),
+                            style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp),
                             modifier = Modifier
                                 .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                                 .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -566,7 +567,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                         Text(
                             text = item.message,
                             color = Color.Black,
-                            style = TextStyle(fontSize = 15.sp),
+                            style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp),
                             modifier = Modifier
                                 .requiredWidthIn(min = Dp.Unspecified, max = 200.dp)
                                 .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
@@ -577,7 +578,7 @@ private fun ChatBubble(prevItem: DebugItem?, item: DebugItem, nextItem: DebugIte
                     Text(
                         text = date,
                         color = Color.Gray,
-                        style = TextStyle(fontSize = 10.sp),
+                        style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp),
                         modifier = Modifier.constrainAs(time) {
                             start.linkTo(message.start)
                             top.linkTo(message.bottom, 5.dp)

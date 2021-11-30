@@ -17,6 +17,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -88,6 +89,7 @@ import io.github.jisungbin.gitmessengerbot.common.extension.toast
 import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
 import io.github.jisungbin.gitmessengerbot.common.script.toScriptLangName
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
 import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -133,7 +135,7 @@ fun ScriptContent() {
                     color = Color.Black,
                     modifier = Modifier.padding(start = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    style = TextStyle(fontSize = 18.sp)
+                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 18.sp)
                 )
             }
             LazyScript(
@@ -225,7 +227,7 @@ private fun ScriptItem(script: ScriptItem) {
         visible = compileErrorDialogVisible,
         exceptionMessage = compileErrorExceptionMessage
     )
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
@@ -257,7 +259,7 @@ private fun ScriptItem(script: ScriptItem) {
             Text(
                 text = stringResource(R.string.activity_main_composable_dashboard_script_content_compile),
                 color = compileStateTextColor,
-                style = TextStyle(fontSize = 13.sp),
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
                 modifier = Modifier
                     .clip(compileStateShape)
                     .background(color = compileStateBackgroundColor, shape = compileStateShape)
@@ -350,6 +352,23 @@ private fun ScriptItem(script: ScriptItem) {
                         bottom.linkTo(compileState.bottom)
                     }
             )
+            Switch(
+                checked = script.power,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = colors.primaryVariant,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.Black
+                ),
+                onCheckedChange = {
+                    script.power = it
+                    Bot.scriptDataSave(script)
+                },
+                modifier = Modifier.constrainAs(scriptPower) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+            )
             Icon(
                 painter = painterResource(R.drawable.ic_outline_circle_24),
                 contentDescription = null,
@@ -370,24 +389,7 @@ private fun ScriptItem(script: ScriptItem) {
                     top.linkTo(scriptLangDeco.top)
                     bottom.linkTo(scriptLangDeco.bottom)
                 },
-                style = TextStyle(fontSize = 13.sp)
-            )
-            Switch(
-                checked = script.power,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = colors.primaryVariant,
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = Color.Black
-                ),
-                onCheckedChange = {
-                    script.power = it
-                    Bot.scriptDataSave(script)
-                },
-                modifier = Modifier.constrainAs(scriptPower) {
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
             Text(
                 text = script.lastRun,
@@ -397,7 +399,7 @@ private fun ScriptItem(script: ScriptItem) {
                     top.linkTo(scriptPower.top)
                     bottom.linkTo(scriptPower.bottom)
                 },
-                style = TextStyle(fontSize = 13.sp)
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
             Divider(
                 modifier = Modifier.constrainAs(scriptNameUnderline) {
@@ -448,7 +450,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                         label = {
                             Text(
                                 text = stringResource(R.string.activity_main_composable_dashboard_script_content_dialog_script_name_allow_only_english),
-                                style = TextStyle(fontSize = 10.sp)
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 10.sp)
                             )
                         },
                         value = scriptNameField,
@@ -513,7 +515,7 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = primaryColor,
-                                    style = TextStyle(fontSize = 13.sp),
+                                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
                                     modifier = Modifier
                                         .constrainAs(name) {
                                             top.linkTo(parent.top)

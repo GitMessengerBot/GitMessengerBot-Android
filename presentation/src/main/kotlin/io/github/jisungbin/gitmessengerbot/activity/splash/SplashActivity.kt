@@ -49,6 +49,7 @@ import io.github.jisungbin.gitmessengerbot.test.TestActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import java.util.Calendar
 
 @SuppressLint("CustomSplashScreen")
@@ -115,14 +116,14 @@ class SplashActivity : ComponentActivity() {
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    style = TextStyle(fontSize = 20.sp),
+                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 20.sp),
                     modifier = Modifier.padding(top = 30.dp)
                 )
             }
             Text(
                 text = stringResource(R.string.copyright),
                 color = Color.White,
-                style = TextStyle(fontSize = 13.sp)
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
         }
     }

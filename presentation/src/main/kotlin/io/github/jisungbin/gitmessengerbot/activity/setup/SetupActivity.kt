@@ -71,6 +71,7 @@ import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
 import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
 import org.orbitmvi.orbit.viewmodel.observe
@@ -162,7 +163,7 @@ class SetupActivity : ComponentActivity() {
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    style = TextStyle(fontSize = 20.sp),
+                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 20.sp),
                     textAlign = TextAlign.Center
                 )
             }
@@ -316,7 +317,7 @@ class SetupActivity : ComponentActivity() {
                 color = Color.White,
                 text = permission.description,
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontSize = 13.sp)
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
         }
     }

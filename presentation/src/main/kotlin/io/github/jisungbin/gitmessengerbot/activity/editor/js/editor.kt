@@ -71,6 +71,7 @@ import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
 import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
 import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
@@ -231,7 +232,7 @@ private fun DrawerLayout(
             )
             Text(
                 text = stringResource(R.string.activity_jseditor_composable_editor_drawer_git),
-                style = TextStyle(fontSize = 30.sp),
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 30.sp),
                 modifier = Modifier.padding(start = 10.dp)
             )
         }
@@ -313,7 +314,7 @@ private fun DrawerLayout(
             Text(
                 text = stringResource(R.string.activity_jseditor_composable_editor_drawer_beautify),
                 modifier = Modifier.padding(start = 10.dp),
-                style = TextStyle(fontSize = 30.sp)
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 30.sp)
             )
         }
         Row(

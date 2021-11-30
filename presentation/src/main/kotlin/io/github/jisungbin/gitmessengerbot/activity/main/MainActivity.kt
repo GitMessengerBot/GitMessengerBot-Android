@@ -144,7 +144,8 @@ class MainActivity : ComponentActivity() {
                                         Tab.Script -> R.drawable.ic_round_add_24
                                         Tab.Debug -> R.drawable.ic_round_trash_24
                                         Tab.Setting -> R.drawable.ic_round_save_24
-                                        else -> R.drawable.ic_round_add_24 // TODO: Kaven
+                                        Tab.Kaven -> R.drawable.ic_round_code_24
+                                        else -> throw IndexOutOfBoundsException("알 수 없는 Tab: $tab")
                                     }
                                 ),
                                 contentDescription = null,
@@ -222,7 +223,7 @@ class MainActivity : ComponentActivity() {
                     Debug()
                 }
                 composable(Tab.Kaven.route) {
-                    Text(text = stringResource(id = R.string.app_name))
+                    Text(text = stringResource(R.string.todo))
                 }
                 composable(Tab.Setting.route) {
                     Setting()
