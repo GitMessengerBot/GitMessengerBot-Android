@@ -4,12 +4,6 @@
 
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
-> 12월 말까지 완성
->
-> 스타 100개를 향해,,,~~
-
-> 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
-
 -----
 
 # 미리보기
