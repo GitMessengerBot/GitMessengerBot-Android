@@ -1,27 +1,32 @@
-// 477
-<!-- <image src="https://raw.githubusercontent.com/GitMessengerBot/GitMessengerBot-Android/stable/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="right" /> -->
+<image src="https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/dev/compose/presentation/src/main/res/drawable/ic_round_logo_150.png?raw=true" align="right" />
 
 # GitMessengerBot 🚀 [![wakatime](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android.svg)](https://wakatime.com/badge/github/GitMessengerBot/GitMessengerBot-Android) ![ci](https://github.com/GitMessengerBot/GitMessengerBot-Android/actions/workflows/android-ci.yml/badge.svg)
 
 타입스크립트, V8 엔진의 자바스크립트, 파이썬 그리고 `Git`을 지원하는 **최첨단 메신저 봇!**
 
-> 12월 말까지 완성
->
-> 스타 100개를 향해,,,~~
-
-> 리펙토링 직전 커밋: [f2ab6d2](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/f2ab6d28cd2dc22babc39f0269bb2c5e27bf4b3b)
-
 -----
 
 # 미리보기
 
-> 준비중...
+Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
 # 다운로드
 
+[dev/compose](https://github.com/GitMessengerBot/GitMessengerBot-Android/) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=io.github.jisungbin.gitmessengerbot&hl=ko) (현재 업로드 검토중)
+
 ~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~ (작동 안할 가능성 높음, 비추천)
 
-개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases)
+<!-- 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases) -->
+
+# dev-0.1.0
+
+dev-0.1.0 버전입니다. **product 버전이 아닌, 개발중 버전이므로 모든 기능이 작동하지 않거나 미숙할 수 있습니다.**
+
+iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적으로 중단합니다. 따라서 dev 버전으로 미리 업로드 하게 되었습니다.
+
+스크립트 에디터 입장시 발생하는 에러는 Git 연동이 완료 되면 더 이상 발생하지 않습니다. (추후 수정 예정)
+
+이 프로젝트는 카톡봇이 망하지 않는 한, 무조건 끝까지 완성시킬 계획입니다.
 
 # 기능
 
