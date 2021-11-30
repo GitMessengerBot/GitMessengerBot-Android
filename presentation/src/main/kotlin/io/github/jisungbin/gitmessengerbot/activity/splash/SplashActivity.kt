@@ -12,7 +12,6 @@ package io.github.jisungbin.gitmessengerbot.activity.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -71,7 +70,7 @@ class SplashActivity : ComponentActivity() {
             " ${builtDate.get(Calendar.MINUTE)}m " +
             "${builtDate.get(Calendar.SECOND)}s"
 
-        toast("Built at: $builtTime", Toast.LENGTH_LONG)
+        toast("Built at: $builtTime")
 
         if (BuildOption.TestMode) {
             startActivity(Intent(this, TestActivity::class.java))
@@ -123,7 +122,7 @@ class SplashActivity : ComponentActivity() {
             Text(
                 text = stringResource(R.string.copyright),
                 color = Color.White,
-                style = TextStyle(fontSize = 10.sp)
+                style = TextStyle(fontSize = 13.sp)
             )
         }
     }

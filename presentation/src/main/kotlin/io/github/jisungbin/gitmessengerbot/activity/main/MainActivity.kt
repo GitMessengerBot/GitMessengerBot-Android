@@ -14,8 +14,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -27,6 +29,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -121,6 +124,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
+        val fabSize = 56.dp
         val navController = rememberNavController()
         val vm: MainViewModel = composableActivityViewModel()
         val fabAction by vm.fabAction.collectAsState()
@@ -129,19 +133,24 @@ class MainActivity : ComponentActivity() {
         Scaffold(
             floatingActionButton = {
                 FloatingActionButton(onClick = { fabAction() }) {
-                    Crossfade(dashboardState) {
-                        Icon(
-                            painter = painterResource(
-                                when (it) {
-                                    Tab.Script -> R.drawable.ic_round_add_24
-                                    Tab.Debug -> R.drawable.ic_round_trash_24
-                                    Tab.Setting -> R.drawable.ic_round_save_24
-                                    else -> R.drawable.ic_round_add_24 // TODO
-                                }
-                            ),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
+                    Crossfade(dashboardState) { tab ->
+                        Box(
+                            modifier = Modifier.size(fabSize),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    when (tab) {
+                                        Tab.Script -> R.drawable.ic_round_add_24
+                                        Tab.Debug -> R.drawable.ic_round_trash_24
+                                        Tab.Setting -> R.drawable.ic_round_save_24
+                                        else -> R.drawable.ic_round_add_24 // TODO: Kaven
+                                    }
+                                ),
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             },
