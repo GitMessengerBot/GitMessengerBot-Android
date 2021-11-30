@@ -11,7 +11,6 @@ package io.github.jisungbin.gitmessengerbot.data.github.repo
 
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.DataGithubException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.data.github.api.GithubRepoService
 import io.github.jisungbin.gitmessengerbot.data.github.mapper.toDomain
@@ -31,7 +30,7 @@ import retrofit2.Retrofit
 class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
     private val api = retrofit.create(GithubRepoService::class.java)
     private val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-        ?: throw DataGithubException("GithubConfig.DataPath 데이터가 null 이에요.")
+        ?: /*throw DataGithubException("GithubConfig.DataPath 데이터가 null 이에요.")*/ GithubData() // TODO: null 대응 (ScopedStorage 대응)
 
     override suspend fun getFileContent(
         repoName: String,

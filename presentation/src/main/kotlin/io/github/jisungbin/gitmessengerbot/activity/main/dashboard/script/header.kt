@@ -66,7 +66,6 @@ import io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivit
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
@@ -115,9 +114,9 @@ fun Header(searchField: MutableState<TextFieldValue>) {
 
     val app by AppConfig.app.collectAsState()
     val backgroundService = Intent(context, BackgroundService::class.java)
-    val githubJson = Storage.read(GithubConstant.DataPath, null)
-        ?: throw PresentationException("GithubConfig.DataPath의 값이 null 이에요.")
-    val githubData: GithubData = githubJson.toModel()
+    val githubJson =
+        Storage.read(GithubConstant.DataPath, null) // TODO: null 처리 (ScopedStorage 대응해서)
+    val githubData: GithubData = githubJson?.toModel() ?: GithubData(userName = "User")
     var searching by remember { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -208,6 +207,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                                 style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp)
                             )
                             Switch(
+                                modifier = Modifier.height(20.dp),
                                 checked = app.power,
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = Color.White,
@@ -240,7 +240,10 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                                 text = Bot.getAllScripts().size.toString(),
                                 style = TextStyle(fontFamily = defaultFontFamily, fontSize = 25.sp)
                             )
-                            Text(text = "개", style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp))
+                            Text(
+                                text = "개",
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp)
+                            )
                         }
                     }
                     MenuBox(
@@ -255,7 +258,10 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                                 text = Bot.getRunnableScripts().size.toString(),
                                 style = TextStyle(fontFamily = defaultFontFamily, fontSize = 25.sp)
                             )
-                            Text(text = "개", style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp))
+                            Text(
+                                text = "개",
+                                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 15.sp)
+                            )
                         }
                     }
                     MenuBox(

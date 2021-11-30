@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
 
         if (Storage.isScoped) {
             AlertDialog.Builder(this)
-                .setMessage(R.string.activity_main_dialog_android_11_notice_title)
+                .setTitle(R.string.activity_main_dialog_android_11_notice_title)
                 .setMessage(R.string.activity_main_dialog_android_11_notice_message)
                 .setPositiveButton(R.string.close, null)
                 .show()
