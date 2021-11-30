@@ -18,6 +18,14 @@ Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
 <!-- 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases) -->
 
+# dev-0.1.0
+
+dev-0.1.0 버전입니다. **product 버전이 아닌, 개발중 버전이므로 모든 기능이 작동하지 않거나 미숙할 수 있습니다.**
+
+iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적으로 중단합니다. 따라서 dev 버전으로 미리 업로드 하게 되었습니다.
+
+스크립트 에디터 입장시 발생하는 에러는 Git 연동이 완료 되면 더 이상 발생하지 않습니다. (추후 수정 예정)
+
 # 기능
 
 + **다중 스크립트 및 기능**
