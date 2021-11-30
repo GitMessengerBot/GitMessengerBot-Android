@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -89,7 +90,7 @@ private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -
             modifier = Modifier
                 .size(55.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(Color.White),
+                .background(color = Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             content = { content() }
@@ -99,7 +100,7 @@ private fun MenuBox(modifier: Modifier, title: String, content: @Composable () -
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp),
-            fontSize = 10.sp,
+            style = TextStyle(fontSize = 10.sp),
             textAlign = TextAlign.Center,
             color = Color.White
         )
@@ -154,7 +155,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
         Text(
             text = stringResource(R.string.app_name),
             color = Color.LightGray,
-            fontSize = 13.sp,
+            style = TextStyle(fontSize = 13.sp),
             modifier = Modifier.constrainAs(appName) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
@@ -167,7 +168,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
             ),
             color = Color.White,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
+            style = TextStyle(fontSize = 20.sp),
             modifier = Modifier.constrainAs(profileName) {
                 start.linkTo(parent.start)
                 top.linkTo(appName.bottom, 8.dp)
@@ -226,8 +227,11 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         modifier = Modifier.weight(1f)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = Bot.getAllScripts().size.toString(), fontSize = 25.sp)
-                            Text(text = "개", fontSize = 8.sp)
+                            Text(
+                                text = Bot.getAllScripts().size.toString(),
+                                style = TextStyle(fontSize = 25.sp)
+                            )
+                            Text(text = "개", style = TextStyle(fontSize = 8.sp))
                         }
                     }
                     MenuBox(
@@ -237,9 +241,9 @@ fun Header(searchField: MutableState<TextFieldValue>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = Bot.getRunnableScripts().size.toString(),
-                                fontSize = 25.sp
+                                style = TextStyle(fontSize = 25.sp)
                             )
-                            Text(text = "개", fontSize = 8.sp)
+                            Text(text = "개", style = TextStyle(fontSize = 8.sp))
                         }
                     }
                     MenuBox(
