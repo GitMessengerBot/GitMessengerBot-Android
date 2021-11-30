@@ -30,7 +30,7 @@ import retrofit2.Retrofit
 class GithubRepoRepositoryImpl(retrofit: Retrofit) : GithubRepoRepository {
     private val api = retrofit.create(GithubRepoService::class.java)
     private val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-        ?: /*throw DataGithubException("GithubConfig.DataPath 데이터가 null 이에요.")*/ GithubData() // TODO: null 대응 (ScopedStorage 대응)
+        ?: /*throw DataGithubException("GithubConfig.DataPath 데이터가 null 이에요.")*/ GithubData() // TODO: null 대응 (ScopedStorage 고려해서)
 
     override suspend fun getFileContent(
         repoName: String,

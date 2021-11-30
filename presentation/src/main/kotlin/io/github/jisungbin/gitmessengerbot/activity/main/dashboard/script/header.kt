@@ -115,7 +115,7 @@ fun Header(searchField: MutableState<TextFieldValue>) {
     val app by AppConfig.app.collectAsState()
     val backgroundService = Intent(context, BackgroundService::class.java)
     val githubJson =
-        Storage.read(GithubConstant.DataPath, null) // TODO: null 처리 (ScopedStorage 대응해서)
+        Storage.read(GithubConstant.DataPath, null) // TODO: null 처리 (ScopedStorage 고려해서)
     val githubData: GithubData = githubJson?.toModel() ?: GithubData(userName = "User")
     var searching by remember { mutableStateOf(false) }
 

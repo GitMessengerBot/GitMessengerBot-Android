@@ -18,7 +18,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
 import io.github.jisungbin.gitmessengerbot.di.qualifier.AouthRetrofit
 import io.github.jisungbin.gitmessengerbot.di.qualifier.SignedRetrofit
@@ -43,8 +42,8 @@ object RetrofitModule {
     private class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var builder = chain.request().newBuilder()
-            val githubData: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-                ?: throw PresentationException("GithubConfig.DataPath 값이 null 이에요.")
+            val githubData: GithubData =
+                Storage.read(GithubConstant.DataPath, null)?.toModel() ?: GithubData() // TODO: null 대응 (ScopedStorage 고려해서)
             builder = builder
                 .addHeader("Authorization", "token ${githubData.aouthToken}")
                 .addHeader("Accept", "application/json")

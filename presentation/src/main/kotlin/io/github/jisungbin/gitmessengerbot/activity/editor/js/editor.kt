@@ -60,7 +60,6 @@ import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.JsEditorMviSta
 import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
 import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
 import io.github.jisungbin.gitmessengerbot.common.core.Storage
-import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.common.extension.runIf
 import io.github.jisungbin.gitmessengerbot.common.extension.toBase64
 import io.github.jisungbin.gitmessengerbot.common.extension.toModel
@@ -201,7 +200,7 @@ private fun DrawerLayout(
 
     val repoName = script.name
     val gitUser: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
-        ?: throw PresentationException("GithubConfig.DataPath 데이터가 null 이에요.")
+        ?: GithubData() // TODO: null 대응 (ScopedStorage 고려해서)
     val repoPath = "script.${script.lang.getScriptSuffix()}"
     val repoDescription = GithubConstant.DefaultRepoDescription // TODO
     val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
