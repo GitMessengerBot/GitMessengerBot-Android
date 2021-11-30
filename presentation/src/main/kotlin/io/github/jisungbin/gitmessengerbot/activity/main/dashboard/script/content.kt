@@ -13,6 +13,7 @@ import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -73,6 +74,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -146,6 +148,7 @@ fun ScriptContent() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LazyScript(modifier: Modifier, search: String) { // TODO: 키보드 입력 1초동안 없을 때 검색하게 개선 필요
     val scripts = Bot.scripts.collectAsState().value.search(search)
@@ -162,7 +165,7 @@ private fun LazyScript(modifier: Modifier, search: String) { // TODO: 키보드 
                 items = scripts,
                 key = { script -> script.id }
             ) { script ->
-                ScriptItem(script = script)
+                ScriptItem(modifier = Modifier.animateItemPlacement(), script = script)
             }
         }
     } else {
@@ -209,7 +212,7 @@ private fun CompileErrorDialog(visible: MutableState<Boolean>, exceptionMessage:
 }
 
 @Composable
-private fun ScriptItem(script: ScriptItem) {
+private fun ScriptItem(modifier: Modifier, script: ScriptItem) {
     val shape = RoundedCornerShape(20.dp)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -228,7 +231,7 @@ private fun ScriptItem(script: ScriptItem) {
         exceptionMessage = compileErrorExceptionMessage
     )
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(110.dp)
             .shadow(elevation = 3.dp, shape = shape)
@@ -264,7 +267,7 @@ private fun ScriptItem(script: ScriptItem) {
                     .clip(compileStateShape)
                     .background(color = compileStateBackgroundColor, shape = compileStateShape)
                     .border(width = 1.dp, color = Color.White, shape = compileStateShape)
-                    .padding(vertical = 2.dp, horizontal = 6.dp)
+                    .padding(vertical = 4.dp, horizontal = 6.dp)
                     .constrainAs(compileState) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -367,6 +370,7 @@ private fun ScriptItem(script: ScriptItem) {
                 modifier = Modifier.constrainAs(scriptPower) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
+                    height = Dimension.value(25.dp)
                 }
             )
             Icon(
@@ -515,7 +519,10 @@ private fun ScriptAddDialog(visible: MutableState<Boolean>) {
                                 Text(
                                     text = scriptLang.toScriptLangName(),
                                     color = primaryColor,
-                                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp),
+                                    style = TextStyle(
+                                        fontFamily = defaultFontFamily,
+                                        fontSize = 13.sp
+                                    ),
                                     modifier = Modifier
                                         .constrainAs(name) {
                                             top.linkTo(parent.top)
