@@ -20,7 +20,7 @@ Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
 # dev-0.1.1
 
-dev-0.1.1 버전입니다. **product 버전이 아닌, 개발중 버전이므로 모든 기능이 작동하지 않거나 미숙할 수 있습니다.**
+dev 버전입니다. **product 버전이 아닌, 개발중 버전이므로 모든 기능이 작동하지 않거나 미숙할 수 있습니다.**
 
 iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적으로 중단합니다. 따라서 dev 버전으로 미리 업로드 하게 되었습니다.
 
@@ -88,6 +88,7 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
 5. [Composable끼리 ViewModel 공유하기](https://jisungbin.medium.com/composable%EB%81%BC%EB%A6%AC-viewmodel-%EA%B3%B5%EC%9C%A0%ED%95%98%EA%B8%B0-32ef53b24e8c)
 
 # 개발 라이브러리
+
 1. [ComposeTimeLineView](https://github.com/jisungbin/ComposeTimeLineView)
 2. [Erratum](https://github.com/jisungbin/erratum)
 3. [Logeukes](https://github.com/jisungbin/logeukes)
