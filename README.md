@@ -10,7 +10,7 @@
 
 Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
-# 다운로드
+# dev-0.1.1 다운로드
 
 [dev/compose](https://github.com/GitMessengerBot/GitMessengerBot-Android/) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=io.github.jisungbin.gitmessengerbot&hl=ko) (현재 업로드 검토중)
 
