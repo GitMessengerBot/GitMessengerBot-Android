@@ -55,7 +55,7 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
 5. Retrofit, OkHttp
 6. Dagger2 - Hilt
 7. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
-8. Room
+8. Room (kaven에 탑제 예정)
 9. Clean architecture
 10. multi-module
 
