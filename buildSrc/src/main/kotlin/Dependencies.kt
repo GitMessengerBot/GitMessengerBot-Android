@@ -23,7 +23,7 @@ object Application {
 
 object Versions {
     const val Orbit = "4.3.0"
-    const val FirebaseBom = "29.0.0"
+    const val FirebaseBom = "29.0.2"
 
     object Essential {
         const val Kotlin = "1.5.31"
@@ -50,7 +50,7 @@ object Versions {
         const val Jackson = "2.13.0"
         const val LeakCanary = "2.7"
         const val SoLoader = "0.10.3"
-        const val Flipper = "0.122.0"
+        const val Flipper = "0.125.0"
         const val KeyboardObserver = "1.0.1"
         const val CheckDependencyUpdates = "1.5.0"
     }
@@ -62,7 +62,7 @@ object Versions {
     }
 
     object Jetpack {
-        const val Hilt = "2.40.3"
+        const val Hilt = "2.40.5"
         const val Room = "2.3.0"
     }
 
@@ -73,7 +73,7 @@ object Versions {
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
         const val Master = "1.1.0-beta03"
-        const val LandscapistCoil = "1.4.3"
+        const val LandscapistCoil = "1.4.4"
         const val Navigation = "2.4.0-beta02"
         const val ConstraintLayout = "1.0.0-beta02"
     }
