@@ -12,17 +12,17 @@ Google Playstore에서 미리보기 스크린샷 확인 가능합니다.
 
 # 다운로드
 
-[dev/compose](https://github.com/GitMessengerBot/GitMessengerBot-Android/) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=io.github.jisungbin.gitmessengerbot&hl=ko) (현재 업로드 검토중)
+[dev/compose](https://github.com/GitMessengerBot/GitMessengerBot-Android/) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=io.github.jisungbin.gitmessengerbot&hl=ko) (**dev-0.1.1** 릴리즈 버전)
 
 ~~[alpha/xml](https://github.com/GitMessengerBot/GitMessengerBot-Android/tree/alpha/xml) 버전: [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.gitkakaobot&hl=ko)~~ (작동 안할 가능성 높음, 비추천)
 
 <!-- 개발 버전: [Github Release](https://github.com/GitMessengerBot/GitMessengerBot-Android/releases) -->
 
-# dev-0.1.0
+# dev-0.1.1 릴리즈
 
-dev-0.1.0 버전입니다. **product 버전이 아닌, 개발중 버전이므로 모든 기능이 작동하지 않거나 미숙할 수 있습니다.**
+dev 버전입니다. **product 버전이 아닌, 개발중 버전이므로 *모든* 기능이 작동하지 않거나 미숙할 수 있습니다.**
 
-iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적으로 중단합니다. 따라서 dev 버전으로 미리 업로드 하게 되었습니다.
+취준을 위해 메인 프로젝트 의외에 모든 프로젝트를 일시적으로 중단합니다. 따라서 dev 버전으로 미리 업로드 하게 되었습니다.
 
 스크립트 에디터 입장시 발생하는 에러는 Git 연동이 완료 되면 더 이상 발생하지 않습니다. (추후 수정 예정)
 
@@ -31,16 +31,15 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
 # 기능
 
 + **다중 스크립트 및 기능**
-  + 디버그
-  + 수정
-  + 전원
-  + 로그켓
-  + 마지막 작동 시간
+  + 개별 디버그, 전체 디버그
+  + 개별 전원, 전체 전원
+  + 개별 로그켓, 전체 로그켓 (예정)
+  + 스크립트별 마지막 작동 시간 (예정)
 + **다양한 언어**
   + 타입스크립트
   + 자바스크립트 ([V8 엔진](https://chromium.googlesource.com/v8/v8))
-  + 파이썬
-  + 간편 자동응답 (블럭코딩)
+  + 파이썬 (예정)
+  + 간편 자동응답 (블럭코딩, 예정)
 + **Git**
   + Commit and Push
   + Merge
@@ -56,7 +55,7 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
 5. Retrofit, OkHttp
 6. Dagger2 - Hilt
 7. [ktlint](https://github.com/GitMessengerBot/GitMessengerBot-Android#ktlint-)
-8. Room
+8. Room (kaven 개발에 쓰일 예정)
 9. Clean architecture
 10. multi-module
 
@@ -79,7 +78,7 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
    * ~~`composable`에서 Side-Effect 발생~~?
 3. ~~MVVM -> MVI 변경 필요~~ -> [#21](https://github.com/GitMessengerBot/GitMessengerBot-Android/pull/21) 완료
 
-# 개발 아티클
+# 작성 아티클
 
 1. [LiveData 대신에 StateFlow/SharedFlow를 사용해보자](https://jisungbin.medium.com/livedata-%EB%8C%80%EC%8B%A0%EC%97%90-stateflow-sharedflow%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90-c78b87ea4248)
 2. [코틀린 inline에 대해 한 번에 알아보자](https://jisungbin.medium.com/%EC%BD%94%ED%8B%80%EB%A6%B0%EC%9D%98-%EC%9D%B8%EB%9D%BC%EC%9D%B8%EC%97%90-%EB%8C%80%ED%95%B4-%ED%95%9C-%EB%B2%88%EC%97%90-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90-591c7da73219)
@@ -88,6 +87,7 @@ iOS 공부와 취준을 위해 모든 안드로이드 프로젝트를 일시적�
 5. [Composable끼리 ViewModel 공유하기](https://jisungbin.medium.com/composable%EB%81%BC%EB%A6%AC-viewmodel-%EA%B3%B5%EC%9C%A0%ED%95%98%EA%B8%B0-32ef53b24e8c)
 
 # 개발 라이브러리
+
 1. [ComposeTimeLineView](https://github.com/jisungbin/ComposeTimeLineView)
 2. [Erratum](https://github.com/jisungbin/erratum)
 3. [Logeukes](https://github.com/jisungbin/logeukes)
