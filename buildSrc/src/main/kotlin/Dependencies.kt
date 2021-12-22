@@ -23,13 +23,13 @@ object Application {
 
 object Versions {
     const val Orbit = "4.3.0"
-    const val FirebaseBom = "29.0.2"
+    const val FirebaseBom = "29.0.3"
 
     object Essential {
         const val Kotlin = "1.5.31"
         const val CoreKtx = "1.7.0"
         const val Coroutines = "1.5.1"
-        const val Gradle = "7.1.0-beta04"
+        const val Gradle = "7.1.0-beta05"
         const val GoogleService = "4.3.10"
     }
 
@@ -47,7 +47,7 @@ object Versions {
     object Util {
         const val Erratum = "1.0.1"
         const val Logeukes = "1.0.1"
-        const val Jackson = "2.13.0"
+        const val Jackson = "2.13.1"
         const val LeakCanary = "2.7"
         const val SoLoader = "0.10.3"
         const val Flipper = "0.125.0"
@@ -97,6 +97,8 @@ object Dependencies {
     const val RoomCompiler = "androidx.room:room-compiler:${Versions.Jetpack.Room}"
 
     const val FirebaseBom = "com.google.firebase:firebase-bom:${Versions.FirebaseBom}"
+
+    val Firebase = listOf("com.google.firebase:firebase-firestore-ktx")
 
     val Essential = listOf(
         "androidx.core:core-ktx:${Versions.Essential.CoreKtx}",
@@ -152,11 +154,6 @@ object Dependencies {
     )
 
     val Debug = listOf(
-        "com.facebook.flipper:flipper:${Versions.Util.Flipper}",
-        "com.facebook.soloader:soloader:${Versions.Util.SoLoader}",
-        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}",
-        "com.facebook.flipper:flipper-leakcanary2-plugin:${Versions.Util.Flipper}"
+        "com.squareup.leakcanary:leakcanary-android:${Versions.Util.LeakCanary}"
     )
-
-    val Firebase = listOf("com.google.firebase:firebase-firestore-ktx")
 }

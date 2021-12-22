@@ -47,27 +47,5 @@ class GitMessengerBot : Application() {
         Bot.scripts
         AppConfig.app
         DebugStore.items
-
-        /*if (BuildConfig.DEBUG) {
-            LeakCanary.config = LeakCanary.config.copy(
-                onHeapAnalyzedListener = FlipperLeakListener()
-            )
-
-            SoLoader.init(this, false)
-            Logeukes.setup()
-
-            if (FlipperUtils.shouldEnableFlipper(this)) {
-                AndroidFlipperClient.getInstance(this).apply {
-                    addPlugin(
-                        InspectorFlipperPlugin(
-                            this@GitMessengerBot,
-                            DescriptorMapping.withDefaults()
-                        )
-                    )
-                    addPlugin(CrashReporterPlugin.getInstance())
-                    addPlugin(LeakCanary2FlipperPlugin())
-                }.start()
-            }
-        }*/
     }
 }
