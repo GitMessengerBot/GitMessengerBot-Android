@@ -9,12 +9,12 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.script.ts2js
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Ts2JsResponse(
-    @SerializedName("diagnostics")
+internal data class Ts2JsResponse(
+    @field:JsonProperty("diagnostics")
     val diagnostics: List<Any>,
 
-    @SerializedName("outputText")
-    val jsCode: String
+    @field:JsonProperty("outputText")
+    val jsCode: String,
 )

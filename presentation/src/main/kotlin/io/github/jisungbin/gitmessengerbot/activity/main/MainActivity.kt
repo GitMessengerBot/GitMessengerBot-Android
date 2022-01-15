@@ -13,75 +13,75 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.FabPosition
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.sungbin.gitmessengerbot.core.script.ScriptContent
-import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.script.compiler.repo.ScriptCompiler
+import io.github.jisungbin.gitmessengerbot.activity.debug.Debug
+import io.github.jisungbin.gitmessengerbot.activity.main.composable.CustomWidthBottomNavigationItem
+import io.github.jisungbin.gitmessengerbot.activity.main.dashboard.script.ScriptContent
 import io.github.jisungbin.gitmessengerbot.activity.main.setting.Setting
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.StackManager
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
-import io.github.jisungbin.gitmessengerbot.repo.Result
-import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
+import io.github.jisungbin.gitmessengerbot.common.constant.ScriptConstant
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLine
-import io.github.jisungbin.gitmessengerbot.ui.timelineview.TimeLineItem
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.toast
-import javax.inject.Inject
-import me.sungbin.fancybottombar.FancyBottomBar
-import me.sungbin.fancybottombar.FancyColors
-import me.sungbin.fancybottombar.FancyItem
+import io.github.jisungbin.gitmessengerbot.util.extension.composableActivityViewModel
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.service.BackgroundService
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
+import kotlinx.coroutines.flow.collect
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private data class Item(override val key: Int) : TimeLineItem<Int>
-
-    @Inject
-    lateinit var scriptCompiler: ScriptCompiler
     private var onBackPressedTime = 0L
-    private var tab by mutableStateOf(Tab.Script)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Bot.app.value.power.value) {
-            startService(Intent(this, BackgroundService::class.java))
+        lifecycleScope.launchWhenCreated {
+            AppConfig.app
+                .flowWithLifecycle(lifecycle)
+                .collect { app ->
+                    val botCoreService = Intent(this@MainActivity, BackgroundService::class.java)
+                    if (app.power) {
+                        startService(botCoreService)
+                    } else {
+                        stopService(botCoreService)
+                    }
+                }
         }
 
         SystemUiController(window).run {
@@ -90,154 +90,153 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
-            if (StackManager.v8[io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId] == null) {
-                scriptCompiler.process(
-                    applicationContext,
-                    ScriptItem(
-                        id = io.github.jisungbin.gitmessengerbot.util.StringConfig.ScriptEvalId,
+            if (AppConfig.evalUsable) {
+                Bot.compileScript(
+                    context = applicationContext,
+                    script = ScriptItem(
+                        id = ScriptConstant.EvalId,
                         name = "",
                         lang = ScriptLang.JavaScript,
                         power = false,
                         compiled = false,
                         lastRun = ""
                     )
-                ).collect { result ->
-                    when (result) {
-                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                            this@MainActivity,
-                            getString(R.string.main_toast_eval_loaded)
-                        )
-                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.toast(
-                            this@MainActivity,
-                            getString(R.string.main_toast_eval_load_fail, result.exception.message)
+                ).doWhen(
+                    onSuccess = {
+                        toast(getString(R.string.activity_main_toast_eval_loaded))
+                    },
+                    onFailure = { exception ->
+                        toast(
+                            getString(
+                                R.string.activity_main_toast_eval_load_faled,
+                                exception.message
+                            )
                         )
                     }
-                }
+                )
             }
+        }
+
+        if (Storage.isScoped) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.activity_main_dialog_android_11_notice_title)
+                .setMessage(R.string.activity_main_dialog_android_11_notice_message)
+                .setPositiveButton(R.string.close, null)
+                .show()
         }
 
         setContent {
-            /*MaterialTheme {
-                Main()
-            }*/
+            MaterialTheme {
+                Content()
+            }
+        }
+    }
 
-            TimeLine(
-                items = listOf(
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(1),
-                    Item(2),
-                    Item(3),
-                    Item(4),
-                    Item(4),
-                    Item(4),
-                    Item(4),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                    Item(5),
-                ),
-                modifier = Modifier.background(Color.White)
-            ) { modifier, item ->
-                Surface(
-                    modifier = modifier,
-                    elevation = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(15.dp)
+    @Composable
+    private fun Content() {
+        val fabSize = 56.dp
+        val navController = rememberNavController()
+        val vm: MainViewModel = composableActivityViewModel()
+        val fabAction by vm.fabAction.collectAsState()
+        val dashboardState by vm.dashboardState.collectAsState()
+
+        Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(onClick = { fabAction() }) {
+                    Crossfade(dashboardState) { tab ->
+                        Box(
+                            modifier = Modifier.size(fabSize),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    when (tab) {
+                                        Tab.Script -> R.drawable.ic_round_add_24
+                                        Tab.Debug -> R.drawable.ic_round_trash_24
+                                        Tab.Setting -> R.drawable.ic_round_save_24
+                                        Tab.Kaven -> R.drawable.ic_round_code_24
+                                        else -> throw IndexOutOfBoundsException("알 수 없는 Tab: $tab")
+                                    }
+                                ),
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
+            },
+            isFloatingActionButtonDocked = true,
+            floatingActionButtonPosition = FabPosition.Center,
+            bottomBar = {
+                BottomNavigation(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    backgroundColor = Color.White
                 ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(30.dp)) {
-                        Text(
-                            text = item.key.toString(),
-                            fontSize = 15.sp,
-                            color = Color.White
-                        )
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    val tabs = listOf(
+                        Tab.Script,
+                        Tab.Debug,
+                        Tab.Empty,
+                        Tab.Empty,
+                        Tab.Kaven,
+                        Tab.Setting
+                    )
+                    tabs.forEach { tab ->
+                        if (tab == Tab.Empty) {
+                            CustomWidthBottomNavigationItem(
+                                width = 35.dp,
+                                selected = false,
+                                onClick = {},
+                                icon = {},
+                                enabled = false,
+                            )
+                        } else {
+                            BottomNavigationItem(
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(tab.iconRes),
+                                        contentDescription = null
+                                    )
+                                },
+                                selectedContentColor = colors.primary,
+                                unselectedContentColor = Color.LightGray,
+                                alwaysShowLabel = false,
+                                selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
+                                onClick = { // TODO: 백스택 뒤로가기 구현
+                                    vm.updateDashboardState(tab)
+                                    navController.navigate(tab.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }
-        }
-    }
-
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    private fun Main() {
-        val scriptAddDialogVisible = remember { mutableStateOf(false) }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.primary)
-        ) {
-            Crossfade(
-                targetState = tab,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 60.dp)
-            ) { index ->
-                when (index) {
-                    Tab.Script -> ScriptContent(
-                        activity = this@MainActivity,
-                        compiler = scriptCompiler,
-                        scriptAddDialogVisible = scriptAddDialogVisible
-                    )
-                    Tab.Debug -> Debug(activity = this@MainActivity)
-                    Tab.Setting -> Setting(this@MainActivity)
-                    else -> Text(text = "TODO")
-                }
-            }
-            Footer(scriptAddDialogVisible)
-        }
-    }
-
-    @OptIn(ExperimentalAnimationApi::class)
-    @Composable
-    private fun Footer(scriptAddDialogVisible: MutableState<Boolean>) {
-        val items = listOf(
-            FancyItem(icon = R.drawable.ic_round_script_24, id = 0),
-            FancyItem(icon = R.drawable.ic_round_debug_24, id = 1),
-            FancyItem(icon = R.drawable.ic_round_github_24, id = 2),
-            FancyItem(icon = R.drawable.ic_round_settings_24, id = 3)
-        )
-
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            FancyBottomBar(
-                fancyColors = FancyColors(primary = colors.primary),
-                items = items
-            ) { tab = id }
-            AnimatedVisibility(
-                visible = tab == Tab.Script,
-                enter = fadeIn(),
-                exit = fadeOut()
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Tab.Script.route,
+                modifier = Modifier.padding(innerPadding)
             ) {
-                Surface(
-                    modifier = Modifier
-                        .padding(bottom = 35.dp)
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            scriptAddDialogVisible.value = true
-                        },
-                    color = colors.primary,
-                    elevation = 2.dp
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_round_add_24),
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .align(Alignment.Center)
-                    )
+                composable(Tab.Script.route) {
+                    ScriptContent()
+                }
+                composable(Tab.Debug.route) {
+                    Debug()
+                }
+                composable(Tab.Kaven.route) {
+                    Text(text = stringResource(R.string.todo))
+                }
+                composable(Tab.Setting.route) {
+                    Setting()
                 }
             }
         }
@@ -247,8 +246,7 @@ class MainActivity : ComponentActivity() {
         val now = System.currentTimeMillis()
         if (now - onBackPressedTime >= 3000) {
             onBackPressedTime = now
-            io.github.jisungbin.gitmessengerbot.util.toast(this,
-                getString(R.string.main_toast_confirm_finish))
+            toast(getString(R.string.activity_main_toast_confirm_finish))
         } else {
             super.onBackPressed()
         }

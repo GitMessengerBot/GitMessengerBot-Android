@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
   ~ GitMessengerBot license is under the GPL-3.0.
   ~
@@ -9,17 +9,17 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.github.jisungbin.gitmessengerbot"
-    tools:ignore="ScopedStorage">
+    package="io.github.jisungbin.gitmessengerbot">
 
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <!-- https://developer.chrome.com/docs/android/custom-tabs/best-practices/#applications-targeting-android-11-api-level-30-or-above -->
     <queries>
@@ -33,7 +33,6 @@
     <application
         android:name=".GitMessengerBot"
         android:allowBackup="true"
-        android:fullBackupContent="true"
         android:fullBackupOnly="true"
         android:icon="@drawable/ic_round_logo_512"
         android:label="@string/app_name"
@@ -43,11 +42,17 @@
         <activity
             android:name=".activity.splash.SplashActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
 
         <activity
             android:name=".activity.setup.SetupActivity"
@@ -64,16 +69,28 @@
                     android:host="authorize"
                     android:scheme="gmb" />
             </intent-filter>
+
         </activity>
 
         <activity
             android:name=".activity.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activity.editor.js.JsEditorActivity" />
+        <activity
+            android:name=".activity.debug.DebugActivty"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.editor.js.JsEditorActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".test.TestActivity" />
+
+        <activity android:name=".activity.exception.ExceptionActivity" />
+
         <activity android:name=".activity.editor.simple.SimpleEditorActivity" />
-        <activity android:name=".ui.imageviewer.ImageViewActivity" />
-        <activity android:name=".activity.debug.DebugActivty" />
+
+        <activity android:name="io.github.jisungbin.gitmessengerbot.activity.imageviewer.ImageViewActivity" />
 
         <service
             android:name="io.github.sungbin.gitmessengerbot.core.service.MessageService"
@@ -84,6 +101,7 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
         <service android:name="io.github.sungbin.gitmessengerbot.core.service.BackgroundService" />
 
         <receiver android:name="io.github.sungbin.gitmessengerbot.core.service.NotifiactionService" />

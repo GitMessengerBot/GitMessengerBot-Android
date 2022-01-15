@@ -9,13 +9,14 @@
 
 package io.github.jisungbin.gitmessengerbot.activity.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,25 +31,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.lifecycleScope
 import io.github.jisungbin.gitmessengerbot.BuildConfig
+import io.github.jisungbin.gitmessengerbot.BuildOption
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
 import io.github.jisungbin.gitmessengerbot.activity.setup.SetupActivity
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.test.TestActivity
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.doDelay
-import io.github.jisungbin.gitmessengerbot.util.toast
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import java.util.Calendar
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,50 +61,53 @@ class SplashActivity : ComponentActivity() {
         SystemUiController(window).setSystemBarsColor(colors.primary)
         setContent {
             MaterialTheme {
-                Splash()
+                Content()
             }
         }
 
-        val isSetupDone = io.github.jisungbin.gitmessengerbot.util.Storage.read(io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData, null) != null
-        val builtDate = Calendar.getInstance()
-            .apply { timeInMillis = BuildConfig.TIMESTAMP }
-        val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
-            " ${builtDate.get(Calendar.MINUTE)}m " +
-            "${builtDate.get(Calendar.SECOND)}s"
-        io.github.jisungbin.gitmessengerbot.util.toast(this,
-            "Built at: $builtTime",
-            Toast.LENGTH_LONG)
+        val isSetupDone = Storage.read(GithubConstant.DataPath, null) != null
 
-        io.github.jisungbin.gitmessengerbot.util.doDelay(2000) {
-            finish()
-            startActivity(
-                Intent(
-                    this,
-                    if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
-                )
-            )
+        if (BuildConfig.DEBUG) {
+            val builtDate = Calendar.getInstance().apply { timeInMillis = BuildConfig.TIMESTAMP }
+            val builtTime = "${builtDate.get(Calendar.HOUR_OF_DAY)}h" +
+                " ${builtDate.get(Calendar.MINUTE)}m " +
+                "${builtDate.get(Calendar.SECOND)}s"
+
+            toast("Built at: $builtTime")
+        }
+
+        if (BuildOption.TestMode) {
+            startActivity(Intent(this, TestActivity::class.java))
+        } else {
+            lifecycleScope.launchWhenCreated {
+                doDelay(1500) {
+                    finish()
+                    if (Storage.isScoped) {
+                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    } else {
+                        startActivity(
+                            Intent(
+                                this@SplashActivity,
+                                if (isSetupDone) MainActivity::class.java else SetupActivity::class.java
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 
     @Composable
-    private fun Splash() {
-        ConstraintLayout(
+    private fun Content() {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colors.primary)
-                .padding(30.dp)
+                .padding(30.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            val (content, footer) = createRefs()
-
             Column(
-                modifier = Modifier.constrainAs(content) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.fillToConstraints
-                },
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -116,21 +123,14 @@ class SplashActivity : ComponentActivity() {
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    fontSize = 20.sp,
+                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 20.sp),
                     modifier = Modifier.padding(top = 30.dp)
                 )
             }
             Text(
                 text = stringResource(R.string.copyright),
                 color = Color.White,
-                fontSize = 10.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                }
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
         }
     }

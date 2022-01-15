@@ -39,14 +39,12 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
-
+    implementation(project(":common"))
     implementation(project(":domain-kaven"))
 
-    Dependencies.essential.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
-    Dependencies.room.forEach(::implementation)
+    Dependencies.Room.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
+    Dependencies.Retrofit.forEach(::implementation)
 
-    kapt(Dependencies.roomCompiler)
+    kapt(Dependencies.RoomCompiler)
 }

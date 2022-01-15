@@ -7,34 +7,62 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
-@file:Suppress("UnnecessaryComposedModifier")
-
 package io.github.jisungbin.gitmessengerbot.util.extension
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.defaultShimmerTheme
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 
-// https://stackoverflow.com/a/66839858/14299073
-inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit) = composed {
-    clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() }
-    ) {
-        onClick()
-    }
-}
-
+// https://stackoverflow.com/a/66839858/14299073s
 @OptIn(ExperimentalFoundationApi::class)
-inline fun Modifier.noRippleLongClickable(crossinline onLongClick: () -> Unit) = composed {
+inline fun Modifier.noRippleClickable(
+    crossinline onClick: () -> Unit,
+    crossinline onLongClick: (() -> Unit) = {},
+) = composed {
     combinedClickable(
         indication = null,
         interactionSource = remember { MutableInteractionSource() },
-        onClick = {},
+        onClick = { onClick() },
         onLongClick = { onLongClick() }
     )
 }
+
+fun Modifier.shimmer(duration: Int) = composed {
+    val shimmer = rememberShimmer(
+        shimmerBounds = ShimmerBounds.View,
+        theme = createCustomShimmerTheme(duration),
+    )
+    shimmer(customShimmer = shimmer)
+}
+
+private fun createCustomShimmerTheme(duration: Int) = defaultShimmerTheme.copy(
+    animationSpec = infiniteRepeatable(
+        animation = tween(
+            durationMillis = duration,
+            delayMillis = 1_500,
+            easing = LinearEasing,
+        ),
+        repeatMode = RepeatMode.Restart,
+    ),
+    rotation = 10f,
+    shaderColors = listOf(
+        Color.Unspecified.copy(alpha = 1.0f),
+        Color.Unspecified.copy(alpha = 0.2f),
+        Color.Unspecified.copy(alpha = 1.0f),
+    ),
+    shaderColorStops = null,
+    shimmerWidth = 150.dp,
+)

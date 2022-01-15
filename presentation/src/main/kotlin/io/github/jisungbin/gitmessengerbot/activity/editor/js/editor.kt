@@ -2,7 +2,7 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [editor.kt] created by Ji Sungbin on 21. 7. 10. 오전 4:41.
+ * [composable_editor.kt] created by Ji Sungbin on 21. 7. 10. 오전 4:41.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
@@ -10,11 +10,13 @@
 package io.github.jisungbin.gitmessengerbot.activity.editor.js
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,81 +32,114 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.FileContentResponse
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.GitFile
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.model.Repo
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
-import io.github.sungbin.gitmessengerbot.core.script.ScriptItem
-import io.github.sungbin.gitmessengerbot.core.script.ScriptLang
-import io.github.sungbin.gitmessengerbot.core.script.getScriptSuffix
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.jisungbin.gitmessengerbot.repo.Result
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.BaseMviJsEditorSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.JsEditorMviState
+import io.github.jisungbin.gitmessengerbot.activity.editor.js.mvi.MviJsEditorSuccessType
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.extension.runIf
+import io.github.jisungbin.gitmessengerbot.common.extension.toBase64
+import io.github.jisungbin.gitmessengerbot.common.extension.toModel
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.common.script.ScriptLang
+import io.github.jisungbin.gitmessengerbot.common.script.getScriptSuffix
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubFile
+import io.github.jisungbin.gitmessengerbot.domain.github.model.repo.GithubRepo
+import io.github.jisungbin.gitmessengerbot.domain.github.model.user.GithubData
 import io.github.jisungbin.gitmessengerbot.theme.colors
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
 import io.github.jisungbin.gitmessengerbot.theme.transparentTextFieldColors
-import io.github.jisungbin.gitmessengerbot.util.Util
-import io.github.jisungbin.gitmessengerbot.util.Web
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.runIf
-import io.github.jisungbin.gitmessengerbot.util.toast
-import kotlinx.coroutines.Dispatchers
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.sungbin.gitmessengerbot.core.bot.script.ScriptItem
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import org.jsoup.Jsoup
+import org.orbitmvi.orbit.viewmodel.observe
 
 @Composable
-fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
-    val codeField = remember { mutableStateOf(TextFieldValue(Bot.getCode(script))) }
-    val undoStack = remember { mutableStateOf("") }
+fun Editor(script: ScriptItem, scaffoldState: ScaffoldState) {
+    val vm: JsEditorViewModel = viewModel()
+    val context = LocalContext.current
+    val lifeCycle = LocalLifecycleOwner.current
+    var codeField by remember { mutableStateOf(script.getCode()) }
+    var undoStack by remember { mutableStateOf("") }
+    val exception = remember { mutableStateOf<Exception?>(null) }
+    val commitHistoryItems = remember { mutableListOf<CommitHistoryItem>() }
+
+    ExceptionDialog(exception = exception)
+    LaunchedEffect(vm) {
+        vm.observe(
+            lifecycleOwner = lifeCycle,
+            state = { state ->
+                handleState(
+                    state = state,
+                    toast = { stringRes -> toast(context, context.getString(stringRes)) },
+                    onExceptionChanged = { _exception -> exception.value = _exception }
+                )
+            },
+            sideEffect = { sideEffect ->
+                handleSideEffect(
+                    sideEffect = sideEffect,
+                    codeFieldChanged = { code -> codeField = code },
+                    commitHistoryItemsChanged = { items -> commitHistoryItems.addAll(items) }
+                )
+            }
+        )
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            ToolBar(
+            TopBar(
                 script = script,
-                codeField = codeField,
                 scaffoldState = scaffoldState,
-                undoStack = undoStack
+                codeField = codeField,
+                codeFieldChanged = { code -> codeField = code },
+                undoStack = undoStack,
+                clearUndoStack = { undoStack = "" },
             )
         },
         scaffoldState = scaffoldState,
         drawerContent = {
             DrawerLayout(
-                gitRepo = gitRepo,
                 script = script,
                 codeField = codeField,
-                undoStack = undoStack
+                undoStackChanged = { code -> undoStack = code },
+                commitHistoryItems = commitHistoryItems
             )
         },
         drawerShape = RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp)
     ) {
         TextField(
-            value = codeField.value,
-            onValueChange = { codeField.value = it },
+            value = codeField,
+            onValueChange = { code -> codeField = code },
             modifier = Modifier
                 .fillMaxSize()
-                .runIf(Bot.app.value.editorHorizontalScroll.value) {
+                .runIf(AppConfig.appValue.editorHorizontalScroll) {
                     horizontalScroll(rememberScrollState())
                 },
             colors = transparentTextFieldColors(backgroundColor = Color.White),
@@ -113,17 +148,76 @@ fun Editor(gitRepo: GitRepo, script: ScriptItem, scaffoldState: ScaffoldState) {
     }
 }
 
+private inline fun handleState(
+    state: JsEditorMviState,
+    toast: (Int) -> Unit,
+    onExceptionChanged: (Exception) -> Unit
+) {
+    if (!state.isException()) {
+        if (state.loaded) {
+            when (state.successType) {
+                MviJsEditorSuccessType.None -> Unit
+                MviJsEditorSuccessType.GithubCreateRepo -> {
+                    toast(R.string.activity_jseditor_composable_editor_toast_repo_create_success)
+                }
+                MviJsEditorSuccessType.GithubUpdateProject -> {
+                    toast(R.string.activity_jseditor_composable_editor_toast_file_update_success)
+                }
+                MviJsEditorSuccessType.GithubCommitAndPush -> {
+                    toast(R.string.activity_jseditor_composable_editor_toast_commit_success)
+                }
+            }
+        }
+    } else {
+        onExceptionChanged(state.exception!!)
+    }
+}
+
+private inline fun handleSideEffect(
+    sideEffect: BaseMviJsEditorSideEffect,
+    codeFieldChanged: (String) -> Unit,
+    commitHistoryItemsChanged: (List<CommitHistoryItem>) -> Unit
+) {
+    when (sideEffect) {
+        is BaseMviJsEditorSideEffect.UpdateCodeField -> {
+            codeFieldChanged(sideEffect.code)
+        }
+        is BaseMviJsEditorSideEffect.UpdateCommitHistoryItems -> {
+            commitHistoryItemsChanged(sideEffect.commitHistoryItems)
+        }
+    }
+}
+
 @OptIn(InternalCoroutinesApi::class)
 @Composable
 private fun DrawerLayout(
-    gitRepo: GitRepo,
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>,
-    undoStack: MutableState<String>
+    codeField: String,
+    undoStackChanged: (String) -> Unit,
+    commitHistoryItems: List<CommitHistoryItem>
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val vm: JsEditorViewModel = viewModel()
+
     val repoName = script.name
+    val gitUser: GithubData = Storage.read(GithubConstant.DataPath, null)?.toModel()
+        ?: GithubData() // TODO: null 대응 (ScopedStorage 고려해서)
+    val repoPath = "script.${script.lang.getScriptSuffix()}"
+    val repoDescription = GithubConstant.DefaultRepoDescription // TODO
+    val repoBranch = AppConfig.appValue.gitDefaultBranch // TODO
+    val repo = GithubRepo(name = repoName, description = repoDescription)
+
+    var commitHistoryVisible by remember { mutableStateOf(false) }
+    val commitMessage = AppConfig.appValue.gitDefaultCommitMessage // TODO
+    val githubFile = GithubFile(
+        message = commitMessage,
+        content = codeField.toBase64(),
+        sha = "",
+        branch = repoBranch
+    )
+
+    LaunchedEffect(vm) { // TODO: Fix #17; Git에 연결됨이 확인된 후에 커밋 히스토리 로드해야함
+        vm.loadCommitHistory(userName = gitUser.userName, repoName = repoName)
+    }
 
     Column(
         modifier = Modifier
@@ -136,8 +230,8 @@ private fun DrawerLayout(
                 contentDescription = null
             )
             Text(
-                text = stringResource(R.string.editor_drawer_git),
-                fontSize = 30.sp,
+                text = stringResource(R.string.activity_jseditor_composable_editor_drawer_git),
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 30.sp),
                 modifier = Modifier.padding(start = 10.dp)
             )
         }
@@ -146,190 +240,108 @@ private fun DrawerLayout(
                 .fillMaxWidth()
                 .padding(top = 10.dp),
             onClick = {
-                coroutineScope.launch {
-                    gitRepo.createRepo(
-                        repo = Repo(
-                            name = repoName,
-                            description = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultRepoDescription
-                        )
-                    ).collect { result ->
-                        when (result) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                                context,
-                                context.getString(R.string.editor_toast_repo_create_success)
-                            )
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_repo_create_error,
-                                    result.exception
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        ) {
-            Text(text = stringResource(R.string.editor_drawer_create_repo, script.name))
-        }
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            onClick = {
-                coroutineScope.launch {
-                    gitRepo.getFileContent(
-                        repoName = repoName,
-                        path = "script.${script.lang.getScriptSuffix()}"
-                    ).collect { commitResult ->
-                        when (commitResult) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
-                                gitRepo.updateFile(
-                                    repoName = repoName,
-                                    path = "script.${script.lang.getScriptSuffix()}",
-                                    gitFile = GitFile(
-                                        message = io.github.jisungbin.gitmessengerbot.util.StringConfig.GitDefaultCommitMessage,
-                                        content = codeField.value.text,
-                                        sha = (commitResult.response as FileContentResponse).sha
-                                    )
-                                ).collect { updateResult ->
-                                    when (updateResult) {
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> io.github.jisungbin.gitmessengerbot.util.toast(
-                                            context,
-                                            context.getString(R.string.editor_toast_commit_success)
-                                        )
-                                        is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
-                                            context,
-                                            context.getString(
-                                                R.string.editor_toast_commit_error,
-                                                updateResult.exception
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_content_get_error,
-                                    commitResult.exception
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        ) {
-            Text(text = stringResource(R.string.editor_drawer_commit_and_push))
-        }
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            onClick = {
-                coroutineScope.launch {
-                    gitRepo.getFileContent(
-                        repoName = repoName,
-                        path = "script.${script.lang.getScriptSuffix()}"
-                    ).collect { fileContentResult ->
-                        when (fileContentResult) {
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Success -> {
-                                val contentDownloadUrl =
-                                    (fileContentResult.response as FileContentResponse).downloadUrl
-                                codeField.value = TextFieldValue(io.github.jisungbin.gitmessengerbot.util.Web.parse(contentDownloadUrl))
-                                io.github.jisungbin.gitmessengerbot.util.toast(
-                                    context,
-                                    context.getString(R.string.editor_toast_file_update_success)
-                                )
-                            }
-                            is io.github.jisungbin.gitmessengerbot.repo.Result.Fail -> io.github.jisungbin.gitmessengerbot.util.Util.error(
-                                context,
-                                context.getString(
-                                    R.string.editor_toast_content_get_error,
-                                    fileContentResult.exception
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        ) {
-            Text(text = stringResource(R.string.editor_drawer_update_project))
-        }
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            onClick = {
-                // todo
-            }
-        ) {
-            Text(text = stringResource(R.string.editor_drawer_commit_history))
-        }
-        if (script.lang == ScriptLang.JavaScript) {
-            Row(
-                modifier = Modifier.padding(top = 30.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
-                    contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.editor_drawer_beautify),
-                    modifier = Modifier.padding(start = 10.dp),
-                    fontSize = 30.sp
+                vm.githubCreateRepo(
+                    path = repoPath,
+                    githubRepo = repo,
+                    githubFile = githubFile
                 )
             }
-            Row(
+        ) {
+            Text(
+                text = stringResource(
+                    R.string.activity_jseditor_composable_editor_drawer_create_repo,
+                    script.name
+                )
+            )
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = {
+                vm.githubCommitAndPush(
+                    repoName = repoName,
+                    path = repoPath,
+                    githubFile = githubFile
+                )
+            }
+        ) {
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_commit_and_push))
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = {
+                vm.githubUpdateProject(
+                    repoName = repoName,
+                    path = repoPath,
+                    branch = repoBranch
+                )
+            }
+        ) {
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_update_project))
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = {
+                commitHistoryVisible = !commitHistoryVisible
+            }
+        ) {
+            Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_commit_history))
+        }
+        Crossfade(commitHistoryVisible) { visible ->
+            if (visible) {
+                CommitHistory(
+                    modifier = Modifier.fillMaxSize(),
+                    items = commitHistoryItems
+                )
+            }
+        }
+    }
+    if (script.lang == ScriptLang.JavaScript) {
+        Row(
+            modifier = Modifier.padding(top = 30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_baseline_auto_awesome_24),
+                contentDescription = null
+            )
+            Text(
+                text = stringResource(R.string.activity_jseditor_composable_editor_drawer_beautify),
+                modifier = Modifier.padding(start = 10.dp),
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 30.sp)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    undoStackChanged(codeField)
+                    vm.codeMinify(codeField)
+                },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
+                    .weight(1f)
+                    .padding(end = 8.dp)
             ) {
-                OutlinedButton(
-                    onClick = {
-                        undoStack.value = codeField.value.text
-                        coroutineScope.launch {
-                            val minify = async(Dispatchers.IO) {
-                                Jsoup.connect("https://javascript-minifier.com/raw")
-                                    .ignoreContentType(true)
-                                    .ignoreHttpErrors(true)
-                                    .data("input", codeField.value.text)
-                                    .post()
-                                    .wholeText()
-                            }
-                            codeField.value = TextFieldValue(minify.await())
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                ) {
-                    Text(text = stringResource(R.string.editor_drawer_minify))
-                }
-                OutlinedButton(
-                    onClick = {
-                        undoStack.value = codeField.value.text
-                        coroutineScope.launch {
-                            val beautify = async(Dispatchers.IO) {
-                                JSONObject(
-                                    Jsoup.connect("https://amp.prettifyjs.net")
-                                        .ignoreContentType(true)
-                                        .ignoreHttpErrors(true)
-                                        .data("input", codeField.value.text)
-                                        .post()
-                                        .wholeText()
-                                ).getString("output")
-                            }
-                            codeField.value = TextFieldValue(beautify.await())
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp)
-                ) {
-                    Text(text = stringResource(R.string.editor_drawer_pretty))
-                }
+                Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_minify))
+            }
+            OutlinedButton(
+                onClick = {
+                    undoStackChanged(codeField)
+                    vm.codePretty(codeField)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text(text = stringResource(R.string.activity_jseditor_composable_editor_drawer_pretty))
             }
         }
     }
@@ -337,11 +349,13 @@ private fun DrawerLayout(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-private fun ToolBar(
+private fun TopBar(
     script: ScriptItem,
-    codeField: MutableState<TextFieldValue>,
     scaffoldState: ScaffoldState,
-    undoStack: MutableState<String>
+    codeField: String,
+    codeFieldChanged: (String) -> Unit,
+    undoStack: String,
+    clearUndoStack: () -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -388,9 +402,8 @@ private fun ToolBar(
             tint = Color.White,
             modifier = Modifier
                 .clickable {
-                    io.github.jisungbin.gitmessengerbot.util.toast(context,
-                        context.getString(R.string.editor_toast_saved))
-                    Bot.saveAndUpdate(script, codeField.value.text)
+                    toast(context, context.getString(R.string.saved))
+                    Bot.scriptCodeSave(script, codeField)
                 }
                 .constrainAs(save) {
                     end.linkTo(parent.end)
@@ -398,18 +411,18 @@ private fun ToolBar(
                 }
         )
         AnimatedVisibility(
-            visible = undoStack.value.isNotBlank(),
+            visible = undoStack.isNotBlank(),
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
-                        io.github.jisungbin.gitmessengerbot.util.toast(
+                        toast(
                             context,
-                            context.getString(R.string.editor_toast_confirm_undo_beautify)
+                            context.getString(R.string.activity_jseditor_composable_editor_toast_confirm_undo_beautify)
                         )
                     },
                     onLongClick = {
-                        codeField.value = TextFieldValue(undoStack.value)
-                        undoStack.value = ""
+                        codeFieldChanged(undoStack)
+                        clearUndoStack()
                     }
                 )
                 .constrainAs(undo) {

@@ -11,7 +11,9 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
+    id("com.google.android.gms.oss-licenses-plugin")
     id("name.remal.check-dependency-updates") version Versions.Util.CheckDependencyUpdates
 }
 
@@ -26,16 +28,12 @@ android {
         multiDexEnabled = true
         setProperty("archivesBaseName", "$versionName ($versionCode)")
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-
-            correctErrorTypes = true
-        }
-
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
         }
 
         buildConfigField("long", "TIMESTAMP", "${System.currentTimeMillis()}L")
@@ -50,6 +48,10 @@ android {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
+
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
     }
 
@@ -74,30 +76,31 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
-    implementation(Dependencies.hilt)
+    implementation(Dependencies.Hilt)
+    implementation(Dependencies.Orbit)
+    implementation(Dependencies.Jsoup)
     implementation(Dependencies.LandscapistCoil) {
         exclude(group = "androidx.appcompat", module = "appcompat")
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
+    implementation(platform(Dependencies.FirebaseBom))
+
     implementation(project(":core"))
-    implementation(project(":data-github"))
+    implementation(project(":common"))
     implementation(project(":data-kaven"))
-    implementation(project(":domain-github"))
+    implementation(project(":data-github"))
     implementation(project(":domain-kaven"))
-    implementation(project(":util"))
+    implementation(project(":domain-github"))
 
-    Dependencies.debug.forEach(::debugImplementation)
-    Dependencies.bot.forEach(::implementation)
-    Dependencies.essential.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
-    Dependencies.ui.forEach(::implementation)
-    Dependencies.util.forEach(::implementation)
-    Dependencies.compose.forEach(::implementation)
-    Dependencies.room.forEach(::implementation)
+    Dependencies.Ui.forEach(::implementation)
+    Dependencies.Util.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
+    Dependencies.Compose.forEach(::implementation)
+    Dependencies.Retrofit.forEach(::implementation)
+    Dependencies.Firebase.forEach(::implementation)
 
-    kapt(Dependencies.hiltCompiler)
-    kapt(Dependencies.roomCompiler)
+    Dependencies.Debug.forEach(::debugImplementation)
+
+    kapt(Dependencies.HiltCompiler) // TODO: ksp
 }

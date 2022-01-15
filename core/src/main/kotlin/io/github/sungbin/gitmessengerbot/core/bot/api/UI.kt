@@ -2,36 +2,18 @@
  * GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
  * GitMessengerBot license is under the GPL-3.0.
  *
- * [UI.kt] created by Ji Sungbin on 21. 7. 10. 오전 11:35.
+ * [toast.kt] created by Ji Sungbin on 21. 7. 10. 오전 11:35.
  *
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-class UI {
-    /*companion object {
-        private lateinit var context: Context
+import android.content.Context
 
-        fun init(context: Context) {
-            Companion.context = context
-        }
+// TODO: context 메모리 누수 해결
+internal class UI(private val context: Context) { // TODO
+    fun toast(message: String) {
+        io.github.jisungbin.gitmessengerbot.common.extension.toast(context, message)
     }
-
-    fun toast(message: String) = Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-
-    fun notification(title: String, message: String, id: Int) {
-        NotificationUtil.showNormalNotification(
-            context,
-            id,
-            title,
-            message,
-            R.mipmap.ic_launcher,
-            false
-        )
-    }
-
-    fun snackbar(view: View, message: String) {
-        UiUtil.snackbar(view, message)
-    }*/
 }

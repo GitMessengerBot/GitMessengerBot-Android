@@ -9,6 +9,6 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-class Api {
+internal class Api { // TODO
     // fun runRhino(source: String) = JsUtil.runRhino(source)
 }

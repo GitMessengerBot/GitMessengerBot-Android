@@ -9,34 +9,37 @@
 
 package io.github.sungbin.gitmessengerbot.core.service
 
-import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.util.Util
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import io.github.jisungbin.gitmessengerbot.common.exception.CoreException
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import io.github.sungbin.gitmessengerbot.core.bot.StackManager.sessions
+import io.github.sungbin.gitmessengerbot.core.setting.AppConfig
 
 class MessageService : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        toast(applicationContext, getString(R.string.service_message_bot_start))
+        toast(applicationContext, getString(R.string.service_message_toast_bot_start))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        toast(applicationContext, getString(R.string.service_message_bot_stop))
+        toast(applicationContext, getString(R.string.service_message_toast_bot_stop))
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         try {
-            if (!Bot.app.value.kakaoTalkPackageNames.contains(sbn.packageName)) return
-            val wExt = Notification.WearableExtender(sbn.notification)
+            if (!AppConfig.appValue.kakaoTalkPackageNames.contains(sbn.packageName)) return
+            val wExt = NotificationCompat.WearableExtender(sbn.notification)
             for (action in wExt.actions) {
-                if (action.remoteInputs.isNotEmpty()) {
+                val remoteInputs = action.remoteInputs ?: return
+                if (remoteInputs.isNotEmpty()) {
                     if (action.title.toString().lowercase().contains("reply") ||
                         action.title.toString().contains("답장")
                     ) {
@@ -50,18 +53,26 @@ class MessageService : NotificationListenerService() {
                         if (room == null) {
                             room = sender
                             isGroupChat = false
-                        } else isGroupChat = true
+                        } else {
+                            isGroupChat = true
+                        }
 
                         if (!sessions.containsKey(room)) sessions[room] = action
-                        /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
-                         sbn.notification.getLargeIcon().toBitmap(context)*/ // todo
 
-                        println(listOf(room, message, sender, isGroupChat))
+                        // TODO
+                        /* if (!PictureManager.profileImage.containsKey(room)) PictureManager.profileImage[sender] =
+                         sbn.notification.getLargeIcon().toBitmap(context)*/
+
+                        Log.i(
+                            "NotificationListenerService",
+                            listOf(room, message, sender, isGroupChat).joinToString()
+                        )
                         chatHook(room, message, sender, isGroupChat)
                     }
                 }
             }
-        } catch (ignored: Exception) {
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
@@ -69,22 +80,20 @@ class MessageService : NotificationListenerService() {
         room: String,
         message: String,
         sender: String,
-        isGroupChat: Boolean
+        isGroupChat: Boolean,
     ) {
         try {
-            for (script in Bot.getCompiledScripts()) {
+            for (script in Bot.getRunnableScripts()) {
                 Bot.callJsResponder(
-                    context = applicationContext,
                     script = script,
                     room = room,
                     message = message,
                     sender = sender,
-                    isGroupChat = isGroupChat,
-                    isDebugMode = false
+                    isGroupChat = isGroupChat
                 )
             }
         } catch (exception: Exception) {
-            Util.error(applicationContext, "chatHook 에러\n\n$exception")
+            throw CoreException(exception.message)
         }
     }
 }

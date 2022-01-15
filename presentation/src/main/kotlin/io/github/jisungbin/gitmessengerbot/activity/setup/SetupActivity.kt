@@ -12,11 +12,12 @@ package io.github.jisungbin.gitmessengerbot.activity.setup
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +31,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,45 +44,45 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jisungbin.gitmessengerbot.R
 import io.github.jisungbin.gitmessengerbot.activity.main.MainActivity
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.github.GithubRepository
-import io.github.jisungbin.gitmessengerbot.data.remote.github.secret.SecretConfig
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubData
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubTokenResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.model.GithubUserResponse
-import io.github.jisungbin.gitmessengerbot.domain.github.repository.DomainResult
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.BaseMviSetupSideEffect
+import io.github.jisungbin.gitmessengerbot.activity.setup.mvi.SetupMviState
+import io.github.jisungbin.gitmessengerbot.common.constant.GithubConstant
+import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.jisungbin.gitmessengerbot.common.core.Storage
+import io.github.jisungbin.gitmessengerbot.common.core.Wear
+import io.github.jisungbin.gitmessengerbot.common.core.Web
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
+import io.github.jisungbin.gitmessengerbot.common.extension.doDelay
+import io.github.jisungbin.gitmessengerbot.common.extension.toJsonString
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.jisungbin.gitmessengerbot.data.github.secret.SecretConfig
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.Json
-import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.Storage
-import io.github.jisungbin.gitmessengerbot.util.Wear
-import io.github.jisungbin.gitmessengerbot.util.Web
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.doDelay
-import io.github.jisungbin.gitmessengerbot.util.noRippleClickable
-import io.github.jisungbin.gitmessengerbot.util.toast
-import javax.inject.Inject
+import io.github.jisungbin.gitmessengerbot.theme.defaultFontFamily
+import io.github.jisungbin.gitmessengerbot.ui.exception.ExceptionDialog
+import io.github.jisungbin.gitmessengerbot.util.extension.noRippleClickable
+import org.orbitmvi.orbit.viewmodel.observe
 
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var githubRepository: GithubRepository
-
+    private val vm: SetupViewModel by viewModels()
+    private var wearAppInstalled by mutableStateOf(false)
     private var storagePermissionGranted by mutableStateOf(false)
     private var notificationPermissionGranted by mutableStateOf(false)
-    private var wearAppInstalled by mutableStateOf(false)
 
     private val permissionsContracts =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionRequest ->
@@ -88,22 +91,48 @@ class SetupActivity : ComponentActivity() {
             }
         }
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        wearAppInstalled = io.github.jisungbin.gitmessengerbot.util.Wear.checkInstalled(applicationContext)
-        SystemUiController(window).setSystemBarsColor(colors.primary)
+        wearAppInstalled = Wear.checkInstalled(applicationContext)
+        notificationPermissionGranted =
+            NotificationUtil.isNotificationListenerPermissionGranted(applicationContext)
 
+        storagePermissionGranted = if (Storage.isScoped) {
+            Storage.isStorageManagerPermissionGranted()
+        } else {
+            ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+        SystemUiController(window).setSystemBarsColor(colors.primary)
         setContent {
             MaterialTheme {
-                Setup()
+                Content()
             }
         }
     }
 
     @Composable
-    private fun Setup() {
-        val activity = this@SetupActivity
+    private fun Content() {
+        val exception = remember { mutableStateOf<Exception?>(null) }
+
+        ExceptionDialog(exception = exception)
+        LaunchedEffect(vm) {
+            vm.observe(
+                lifecycleOwner = this@SetupActivity,
+                state = { state ->
+                    handleState(state = state, onExceptionChanged = { exception.value = it })
+                },
+                sideEffect = ::handleSideEffect
+            )
+        }
 
         ConstraintLayout(
             modifier = Modifier
@@ -129,12 +158,12 @@ class SetupActivity : ComponentActivity() {
                 )
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
-                    text = with(AnnotatedString.Builder(stringResource(R.string.setup_title))) {
+                    text = with(AnnotatedString.Builder(stringResource(R.string.activity_setup_title))) {
                         addStyle(SpanStyle(fontWeight = FontWeight.Bold), 11, 19) // 아래의 권한들
                         toAnnotatedString()
                     },
                     color = Color.White,
-                    fontSize = 20.sp,
+                    style = TextStyle(fontFamily = defaultFontFamily, fontSize = 20.sp),
                     textAlign = TextAlign.Center
                 )
             }
@@ -149,9 +178,9 @@ class SetupActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
-                        permissions = if (io.github.jisungbin.gitmessengerbot.util.Storage.isScoped) {
+                        permissions = if (Storage.isScoped) {
                             listOf(PermissionType.ScopedStorage)
                         } else {
                             listOf(
@@ -159,28 +188,28 @@ class SetupActivity : ComponentActivity() {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                             )
                         },
-                        name = stringResource(R.string.setup_permission_storage_label),
-                        description = stringResource(R.string.setup_permission_storage_description),
+                        name = stringResource(R.string.activity_setup_permission_storage),
+                        description = stringResource(R.string.activity_setup_permission_storage_description),
                         icon = R.drawable.ic_round_folder_24
                     ),
                     permissionGranted = storagePermissionGranted,
                     padding = PermissionViewPadding(0.dp, 16.dp)
                 )
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.NotificationRead),
-                        name = stringResource(R.string.setup_permission_notification_label),
-                        description = stringResource(R.string.setup_permission_notification_description),
+                        name = stringResource(R.string.activity_setup_permission_notification),
+                        description = stringResource(R.string.activity_setup_permission_notification_description),
                         icon = R.drawable.ic_round_notifications_24
                     ),
                     permissionGranted = notificationPermissionGranted,
                     padding = PermissionViewPadding(16.dp, 16.dp)
                 )
-                PermissionView(
+                PermissionDisplay(
                     permission = Permission(
                         permissions = listOf(PermissionType.Wear),
-                        name = stringResource(R.string.setup_app_wear_label),
-                        description = stringResource(R.string.setup_app_wear_description),
+                        name = stringResource(R.string.activity_setup_app_wear),
+                        description = stringResource(R.string.activity_setup_app_wear_description),
                         icon = R.drawable.ic_round_watch_24
                     ),
                     permissionGranted = wearAppInstalled,
@@ -198,7 +227,7 @@ class SetupActivity : ComponentActivity() {
                 val shape = RoundedCornerShape(15.dp)
 
                 Text(
-                    text = stringResource(R.string.setup_last_func),
+                    text = stringResource(R.string.activity_setup_last_way),
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -211,20 +240,17 @@ class SetupActivity : ComponentActivity() {
                             shape = shape
                         )
                         .padding(8.dp)
-                        .noRippleClickable {
+                        .noRippleClickable(onClick = {
                             if (notificationPermissionGranted && storagePermissionGranted) {
-                                io.github.jisungbin.gitmessengerbot.util.Web.open(
+                                Web.open(
                                     applicationContext,
-                                    io.github.jisungbin.gitmessengerbot.util.Web.Link.Custom(SecretConfig.GithubOauthAddress)
+                                    Web.Link.Custom(SecretConfig.GithubOauthAddress)
                                 )
                             } else {
-                                io.github.jisungbin.gitmessengerbot.util.toast(
-                                    activity,
-                                    getString(R.string.setup_need_manage_permission)
-                                )
+                                toast(getString(R.string.activity_setup_need_manage_permission))
                             }
-                        },
-                    text = stringResource(R.string.setup_start_with_github_login),
+                        }),
+                    text = stringResource(R.string.activity_setup_start_with_github_login),
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
@@ -234,10 +260,10 @@ class SetupActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun PermissionView(
+    private fun PermissionDisplay(
         permission: Permission,
         permissionGranted: Boolean,
-        padding: PermissionViewPadding
+        padding: PermissionViewPadding,
     ) {
         Column(
             modifier = Modifier
@@ -249,7 +275,7 @@ class SetupActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .height(40.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(15.dp))
-                    .clickable { permission.requestAllPermissions() }
+                    .clickable { permission.requestPermission() }
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
             ) {
                 val (icon, name, granted) = createRefs()
@@ -291,32 +317,36 @@ class SetupActivity : ComponentActivity() {
                 color = Color.White,
                 text = permission.description,
                 textAlign = TextAlign.Center,
-                fontSize = 13.sp
+                style = TextStyle(fontFamily = defaultFontFamily, fontSize = 13.sp)
             )
         }
     }
 
     @SuppressLint("NewApi")
-    private fun Permission.requestAllPermissions() {
-        when (permissions.first()) {
-            PermissionType.NotificationRead -> {
-                io.github.jisungbin.gitmessengerbot.util.NotificationUtil.requestReadPermission(this@SetupActivity)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
-                    notificationPermissionGranted = true
+    private fun Permission.requestPermission() {
+        lifecycleScope.launchWhenCreated {
+            when (permissions.first()) {
+                PermissionType.NotificationRead -> {
+                    NotificationUtil.requestNotificationListenerPermission(this@SetupActivity)
+                    doDelay(1000) {
+                        notificationPermissionGranted = true
+                    }
                 }
-            }
-            PermissionType.Wear -> {
-                io.github.jisungbin.gitmessengerbot.util.Wear.install(applicationContext)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) { wearAppInstalled = true }
-            }
-            PermissionType.ScopedStorage -> {
-                io.github.jisungbin.gitmessengerbot.util.Storage.requestStorageManagePermission(this@SetupActivity)
-                io.github.jisungbin.gitmessengerbot.util.doDelay(1000) {
-                    storagePermissionGranted = true
+                PermissionType.Wear -> {
+                    Wear.install(applicationContext)
+                    doDelay(1000) {
+                        wearAppInstalled = true
+                    }
                 }
-            }
-            else -> {
-                permissionsContracts.launch(this.permissions.toTypedArray())
+                PermissionType.ScopedStorage -> {
+                    Storage.requestStorageManagePermission(this@SetupActivity)
+                    doDelay(1000) {
+                        storagePermissionGranted = true
+                    }
+                }
+                else -> {
+                    permissionsContracts.launch(this@requestPermission.permissions.toTypedArray())
+                }
             }
         }
     }
@@ -324,74 +354,28 @@ class SetupActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val activity = this@SetupActivity
-        val requestCode = intent!!.data!!.getQueryParameter("code")!!
+        val requestCode = intent?.data?.getQueryParameter("code")
+            ?: throw PresentationException("Github aouth request code intent가 null 이에요.")
 
-        lifecycleScope.launchWhenCreated {
-            githubRepository.getAccessToken(requestCode).collect { accessKeyResult ->
-                when (accessKeyResult) {
-                    is DomainResult.Success -> {
-                        var githubData = GithubData(
-                            token = (accessKeyResult.response as GithubTokenResponse).accessToken
-                        )
-                        githubRepository
-                            .getUserInfo(githubData.token)
-                            .collect { userResult ->
-                                when (userResult) {
-                                    is DomainResult.Success -> {
-                                        val user = userResult.response as GithubUserResponse
+        vm.login(requestCode)
+    }
 
-                                        githubData = githubData.copy(
-                                            userName = user.login,
-                                            profileImageUrl = user.avatarUrl
-                                        )
+    private inline fun handleState(state: SetupMviState, onExceptionChanged: (Exception) -> Unit) {
+        if (!state.isException()) {
+            if (state.loaded) {
+                finish()
+                startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+                toast(getString(R.string.activity_setup_toast_welcome, state.userName))
+            }
+        } else {
+            onExceptionChanged(state.exception!!)
+        }
+    }
 
-                                        io.github.jisungbin.gitmessengerbot.util.Storage.write(
-                                            io.github.jisungbin.gitmessengerbot.util.StringConfig.GithubData,
-                                            io.github.jisungbin.gitmessengerbot.util.Json.toString(githubData)
-                                        )
-
-                                        finish()
-                                        startActivity(
-                                            Intent(
-                                                activity,
-                                                MainActivity::class.java
-                                            )
-                                        )
-
-                                        io.github.jisungbin.gitmessengerbot.util.toast(
-                                            activity,
-                                            getString(
-                                                R.string.setup_toast_welcome_start,
-                                                user.login
-                                            )
-                                        )
-                                    }
-                                    is DomainResult.Fail -> {
-                                        io.github.jisungbin.gitmessengerbot.util.toast(
-                                            activity,
-                                            getString(
-                                                R.string.setup_toast_github_connect_error,
-                                                userResult.exception.message
-                                            ),
-                                            Toast.LENGTH_LONG
-                                        )
-                                        userResult.exception.printStackTrace()
-                                    }
-                                }
-                            }
-                    }
-                    is DomainResult.Fail -> {
-                        io.github.jisungbin.gitmessengerbot.util.toast(
-                            activity,
-                            activity.getString(
-                                R.string.setup_toast_github_authorize_error,
-                                accessKeyResult.exception.message
-                            )
-                        )
-                        accessKeyResult.exception.printStackTrace()
-                    }
-                }
+    private fun handleSideEffect(sideEffect: BaseMviSetupSideEffect) {
+        when (sideEffect) {
+            is BaseMviSetupSideEffect.SaveData -> {
+                Storage.write(GithubConstant.DataPath, sideEffect.data.toJsonString())
             }
         }
     }

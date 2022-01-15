@@ -13,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.jisungbin.logeukes.logeukes
 import javax.inject.Singleton
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -21,7 +22,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 object GlobalModule {
     @Provides
     @Singleton
-    fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    fun provideHttpLoggingInterceptor() =
+        HttpLoggingInterceptor { message -> logeukes("OkHttp") { message } }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
 }

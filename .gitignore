@@ -1,8 +1,10 @@
+secret.tar
 local.properties
 /.idea
 /.gradle
 /build
-/buildSrc
+/buildSrc/.gradle
+/buildSrc/build
 /presentation/release
 /presentation/build
 /data-github/build
@@ -10,4 +12,7 @@ local.properties
 /domain-github/build
 /domain-kaven/build
 /core/build
+/common/build
+/app/build
 /data-github/src/main/kotlin/io/github/jisungbin/gitmessengerbot/data/github/secret
+/presentation/google-services.json

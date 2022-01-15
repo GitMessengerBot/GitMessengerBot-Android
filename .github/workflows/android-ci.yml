@@ -1,0 +1,41 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ stable ]
+
+jobs:    
+  apk:
+    name: Generate APK
+    runs-on: ubuntu-latest
+
+    steps:        
+      - uses: actions/checkout@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+          
+      - name: Decrypt secret.tar.gpg
+        run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$SECRET_GPG_PASSWORD" --output secret.tar secret.tar.gpg
+
+        env:
+          SECRET_GPG_PASSWORD: ${{ secrets.SECRET_GPG_PASSWORD }}
+
+      - name: Unzip secret.tar
+        run: tar xvf secret.tar
+          
+      - name: Touch local properties
+        run: touch local.properties
+
+      - name: Create local properties
+        run: echo "hi=\"world\"" > ./local.properties
+          
+      - name: Build debug APK
+        run: bash ./gradlew assembleDebug --stacktrace
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: app
+          path: presentation/build/outputs/apk/debug

@@ -12,20 +12,24 @@ package io.github.jisungbin.gitmessengerbot.activity.debug
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.sungbin.gitmessengerbot.core.bot.debug.Debug
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
 import io.github.jisungbin.gitmessengerbot.theme.twiceLightGray
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 
 class DebugActivty : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentDebugScriptId, -1)
-        val script = Bot.getScriptById(scriptId)
+        val scriptId = intent.getIntExtra(IntentConstant.DebugScriptId, -1)
+        val script = try {
+            Bot.getAllScripts().first { it.id == scriptId }
+        } catch (exception: Exception) {
+            throw PresentationException("$scriptId 아이디를 가진 DebugItem 스크립트가 존재하지 않아요. (${exception.message})")
+        }
 
         SystemUiController(window).run {
             setStatusBarColor(colors.primary)
@@ -33,7 +37,7 @@ class DebugActivty : ComponentActivity() {
         }
         setContent {
             MaterialTheme {
-                Debug(activity = this, script = script)
+                Debug(script = script)
             }
         }
     }

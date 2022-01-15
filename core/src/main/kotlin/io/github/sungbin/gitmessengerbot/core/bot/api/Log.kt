@@ -9,20 +9,22 @@
 
 package io.github.sungbin.gitmessengerbot.core.bot.api
 
-class Log {
+import android.util.Log
+
+internal class Log { // TODO
     fun print(value: Any) {
-        println(value)
+        Log.i("Log API", value.toString())
     }
 
     /*fun e(message: String) {
-        // todo: error 로그 만들기
+
     }
 
     fun d(message: String) {
-        // todo: debug 로그 만들기
+
     }
 
     fun i(message: String) {
-        // todo: info 로그 만들기
+
     }*/
 }

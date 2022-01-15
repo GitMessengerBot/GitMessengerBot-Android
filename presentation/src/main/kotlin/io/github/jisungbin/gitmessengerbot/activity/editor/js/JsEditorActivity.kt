@@ -16,22 +16,18 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.activity.editor.git.repo.GitRepo
-import io.github.sungbin.gitmessengerbot.core.bot.Bot
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
+import io.github.jisungbin.gitmessengerbot.common.exception.PresentationException
 import io.github.jisungbin.gitmessengerbot.theme.MaterialTheme
 import io.github.jisungbin.gitmessengerbot.theme.SystemUiController
 import io.github.jisungbin.gitmessengerbot.theme.colors
-import io.github.jisungbin.gitmessengerbot.util.StringConfig
-import javax.inject.Inject
+import io.github.sungbin.gitmessengerbot.core.bot.Bot
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class JsEditorActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var gitRepo: GitRepo
-
-    private lateinit var onBackPressedAction: () -> Unit
+    private var onBackPressedAction: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +37,7 @@ class JsEditorActivity : ComponentActivity() {
             setNavigationBarColor(Color.White)
         }
 
-        val scriptId = intent.getIntExtra(io.github.jisungbin.gitmessengerbot.util.StringConfig.IntentScriptId, -1)
+        val scriptId = intent.getIntExtra(IntentConstant.ScriptId, -1)
 
         setContent {
             MaterialTheme {
@@ -58,9 +54,14 @@ class JsEditorActivity : ComponentActivity() {
                     }
                 }
 
+                val script = try {
+                    Bot.getAllScripts().first { it.id == scriptId }
+                } catch (exception: Exception) {
+                    throw PresentationException("$scriptId 스크립트가 존재하지 않아요. (${exception.message})")
+                }
+
                 Editor(
-                    script = Bot.getScriptById(scriptId),
-                    gitRepo = gitRepo,
+                    script = script,
                     scaffoldState = scaffoldState
                 )
             }
@@ -68,10 +69,6 @@ class JsEditorActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        if (::onBackPressedAction.isInitialized) {
-            onBackPressedAction()
-        } else {
-            super.onBackPressed()
-        }
+        onBackPressedAction?.invoke() ?: super.onBackPressed()
     }
 }

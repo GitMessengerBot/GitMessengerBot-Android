@@ -17,9 +17,9 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
-import io.github.jisungbin.gitmessengerbot.R
-import io.github.jisungbin.gitmessengerbot.util.NotificationUtil
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
+import io.github.jisungbin.gitmessengerbot.common.core.NotificationUtil
+import io.github.sungbin.gitmessengerbot.core.R
 
 class BackgroundService : Service() {
     private val pm by lazy { getSystemService(Context.POWER_SERVICE) as PowerManager }
@@ -38,14 +38,14 @@ class BackgroundService : Service() {
             context = applicationContext,
             channelId = getString(R.string.notification_channel_name),
             title = getString(R.string.app_name),
-            content = getString(R.string.service_notification_bot_running),
+            content = getString(R.string.service_background_notification_bot_running),
             icon = R.drawable.ic_round_logo_512,
             isOnGoing = true,
             showTimestamp = true
         )
 
         val botPowerToggleIntent = Intent(this, NotifiactionService::class.java).apply {
-            putExtra(StringConfig.IntentNotificationAction, StringConfig.IntentBotPowerToggle)
+            putExtra(IntentConstant.NotificationAction, IntentConstant.BotPowerToggle)
         }
 
         val botPowerTogglePendingIntent = PendingIntent.getBroadcast(
@@ -58,13 +58,13 @@ class BackgroundService : Service() {
         notification = notification.addAction(
             NotificationCompat.Action.Builder(
                 0,
-                getString(R.string.service_notification_action_bot_power_toggle),
+                getString(R.string.service_background_notification_action_bot_power_toggle),
                 botPowerTogglePendingIntent
             ).build()
         )
 
         val botRecompileIntent = Intent(this, NotifiactionService::class.java).apply {
-            putExtra(StringConfig.IntentNotificationAction, StringConfig.IntentBotRecompile)
+            putExtra(IntentConstant.NotificationAction, IntentConstant.BotAllRecompile)
         }
 
         val botRecompilePendingIntent = PendingIntent.getBroadcast(
@@ -77,7 +77,7 @@ class BackgroundService : Service() {
         notification = notification.addAction(
             NotificationCompat.Action.Builder(
                 0,
-                getString(R.string.service_notification_action_bot_all_recompile),
+                getString(R.string.service_background_notification_action_bot_all_recompile),
                 botRecompilePendingIntent
             ).build()
         )

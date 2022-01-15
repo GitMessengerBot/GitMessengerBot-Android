@@ -39,11 +39,9 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.json)
-
+    implementation(project(":common"))
     implementation(project(":domain-github"))
 
-    Dependencies.essential.forEach(::implementation)
-    Dependencies.retrofit.forEach(::implementation)
-    Dependencies.networkutil.forEach(::implementation)
+    Dependencies.Jackson.forEach(::implementation)
+    Dependencies.Retrofit.forEach(::implementation)
 }

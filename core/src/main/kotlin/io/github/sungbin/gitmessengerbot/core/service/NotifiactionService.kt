@@ -12,50 +12,56 @@ package io.github.sungbin.gitmessengerbot.core.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.compose.runtime.mutableStateOf
-import dagger.hilt.android.AndroidEntryPoint
-import io.github.jisungbin.gitmessengerbot.R
-import io.github.sungbin.gitmessengerbot.core.bot.script.compiler.repo.ScriptCompiler
+import io.github.jisungbin.gitmessengerbot.common.constant.IntentConstant
+import io.github.jisungbin.gitmessengerbot.common.extension.doWhen
+import io.github.jisungbin.gitmessengerbot.common.extension.toast
+import io.github.sungbin.gitmessengerbot.core.Injection
+import io.github.sungbin.gitmessengerbot.core.R
 import io.github.sungbin.gitmessengerbot.core.bot.Bot
-import io.github.jisungbin.gitmessengerbot.util.config.StringConfig
-import io.github.jisungbin.gitmessengerbot.util.extension.toast
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class NotifiactionService : BroadcastReceiver() {
 
-    @Inject
-    lateinit var scriptCompiler: ScriptCompiler
+    private val scriptCompiler = Injection.Compiler.provide
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.getStringExtra(StringConfig.IntentNotificationAction)) {
-            StringConfig.IntentBotPowerToggle -> {
-                if (Bot.app.value.power.value) {
+        when (intent?.getStringExtra(IntentConstant.NotificationAction)) {
+            IntentConstant.BotPowerToggle -> {
+                // TODO
+                /*if (Bot.app.value.power.value) {
                     context!!.startService(Intent(context, BackgroundService::class.java))
                 } else {
                     context!!.stopService(Intent(context, BackgroundService::class.java))
                 }
-                Bot.saveAndUpdate(Bot.app.value.copy(power = mutableStateOf(!Bot.app.value.power.value)))
+                Bot.scriptDataSaveAndUpdate(Bot.app.value.copy(power = mutableStateOf(!Bot.app.value.power.value)))*/
             }
-            StringConfig.IntentBotRecompile -> {
-                toast(context!!, context.getString(R.string.service_toast_active_scripts_recompile))
+            IntentConstant.BotAllRecompile -> {
                 CoroutineScope(Dispatchers.Default).launch {
-                    Bot.getPowerOnScripts().forEach { script ->
-                        scriptCompiler.process(context, script).collect { result ->
-                            if (result is Result.Fail) {
+                    toast(
+                        context!!,
+                        context.getString(R.string.service_notification_toast_running_scripts_recompile)
+                    )
+                    Bot.getRunnableScripts().forEach { script ->
+                        scriptCompiler.process(context, script).doWhen(
+                            onSuccess = {
+                                toast(
+                                    context,
+                                    context.getString(R.string.service_notification_toast_recompile_done)
+                                )
+                            },
+                            onFailure = { exception ->
                                 toast(
                                     context,
                                     context.getString(
-                                        R.string.service_toast_compile_error,
+                                        R.string.service_notification_toast_compile_error,
                                         script.name,
-                                        result.exception.message
+                                        exception.message
                                     )
                                 )
                             }
-                        }
+                        )
                     }
                 }
             }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ GitMessengerBot © 2021 지성빈 & 구환. all rights reserved.
+  ~ GitMessengerBot license is under the GPL-3.0.
+  ~
+  ~ [colors.xml] created by Ji Sungbin on 21. 8. 31. 오후 6:11
+  ~
+  ~ Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
+  -->
+
+<resources>
+    <color name="colorPrimary">#6b1aa5</color>
+</resources>
