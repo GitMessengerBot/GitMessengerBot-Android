@@ -77,6 +77,8 @@ dev 버전입니다. **product 버전이 아닌, 개발중 버전이므로 *모�
 2. Side-Effect
    * ~~`composable`에서 Side-Effect 발생~~?
 3. ~~MVVM -> MVI 변경 필요~~ -> [#21](https://github.com/GitMessengerBot/GitMessengerBot-Android/pull/21) 완료
+4. CI 빌드시 `Caused by: org.gradle.api.GradleException: File google-services.json is missing. The Google Services Plugin cannot function without it.` ... <br/>아니 이거 분명 처리 해놨는데?!
+5. 클린 아키텍처 50%만 적용됨
 
 # 작성 아티클
 
