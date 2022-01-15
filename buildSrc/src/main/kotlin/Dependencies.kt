@@ -29,7 +29,7 @@ object Versions {
         const val Kotlin = "1.5.31"
         const val CoreKtx = "1.7.0"
         const val Coroutines = "1.5.1"
-        const val Gradle = "7.1.0-beta05"
+        const val Gradle = "7.1.0-rc01"
         const val GoogleService = "4.3.10"
     }
 
