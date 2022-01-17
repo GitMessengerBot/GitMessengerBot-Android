@@ -7,6 +7,7 @@
  * Please see: https://github.com/GitMessengerBot/GitMessengerBot-Android/blob/master/LICENSE.
  */
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":presentation",
     ":domain-github",
@@ -16,5 +17,4 @@ include(
     ":core",
     ":common"
 )
-
 rootProject.name = "GitMessengerBot"

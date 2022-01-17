@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":domain-github"))
+    implementation(projects.common)
+    implementation(projects.domainGithub)
 
     Dependencies.Jackson.forEach(::implementation)
     Dependencies.Retrofit.forEach(::implementation)

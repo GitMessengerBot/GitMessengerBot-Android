@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":domain-kaven"))
+    implementation(projects.common)
+    implementation(projects.domainKaven)
 
     Dependencies.Room.forEach(::implementation)
     Dependencies.Jackson.forEach(::implementation)

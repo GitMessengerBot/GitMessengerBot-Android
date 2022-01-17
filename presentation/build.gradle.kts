@@ -76,6 +76,15 @@ android {
 }
 
 dependencies {
+    val allProjects = listOf(
+        projects.core,
+        projects.common,
+        projects.dataKaven,
+        projects.dataGithub,
+        projects.domainKaven,
+        projects.domainGithub
+    )
+
     implementation(Dependencies.Hilt)
     implementation(Dependencies.Orbit)
     implementation(Dependencies.Jsoup)
@@ -84,14 +93,8 @@ dependencies {
         exclude(group = "androidx.appcompat", module = "appcompat-resources")
     }
 
+    allProjects.forEach(::implementation)
     implementation(platform(Dependencies.FirebaseBom))
-
-    implementation(project(":core"))
-    implementation(project(":common"))
-    implementation(project(":data-kaven"))
-    implementation(project(":data-github"))
-    implementation(project(":domain-kaven"))
-    implementation(project(":domain-github"))
 
     Dependencies.Ui.forEach(::implementation)
     Dependencies.Util.forEach(::implementation)

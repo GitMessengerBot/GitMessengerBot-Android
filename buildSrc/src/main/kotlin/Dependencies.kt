@@ -8,6 +8,7 @@
  */
 
 import org.gradle.api.JavaVersion
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 object Application {
     const val minSdk = 24
@@ -41,16 +42,14 @@ object Versions {
 
     object Ui {
         const val Browser = "1.3.0"
-        const val Material = "1.4.0"
+        const val Material = "1.5.0" // TODO: useless dependency. must remove this.
     }
 
     object Util {
         const val Erratum = "1.0.1"
         const val Logeukes = "1.0.1"
         const val Jackson = "2.13.1"
-        const val LeakCanary = "2.7"
-        const val SoLoader = "0.10.3"
-        const val Flipper = "0.125.0"
+        const val LeakCanary = "2.8.1"
         const val KeyboardObserver = "1.0.1"
         const val CheckDependencyUpdates = "1.5.0"
     }
@@ -73,9 +72,9 @@ object Versions {
         const val Lifecycle = "2.4.0"
         const val TimeLineView = "1.0.2"
         const val Master = "1.1.0-beta03"
-        const val LandscapistCoil = "1.4.4"
+        const val LandscapistCoil = "1.4.5"
         const val Navigation = "2.4.0-beta02"
-        const val ConstraintLayout = "1.0.0-beta02"
+        const val ConstraintLayout = "1.0.0"
     }
 
     object OssLicense {
@@ -140,10 +139,8 @@ object Dependencies {
     )
 
     val Compose = listOf(
-        "androidx.compose.ui:ui:${Versions.Compose.Master}",
         "androidx.compose.ui:ui-tooling:${Versions.Compose.Master}",
         "com.airbnb.android:lottie-compose:${Versions.Compose.Lottie}",
-        "androidx.compose.compiler:compiler:${Versions.Compose.Master}",
         "androidx.compose.material:material:${Versions.Compose.Master}",
         "androidx.activity:activity-compose:${Versions.Compose.Activity}",
         "io.github.jisungbin:timelineview:${Versions.Compose.TimeLineView}",

@@ -44,9 +44,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.common)
     implementation(Dependencies.Jsoup)
-
-    implementation(project(":common"))
 
     Dependencies.Bot.forEach(::implementation)
     Dependencies.Jackson.forEach(::implementation)
