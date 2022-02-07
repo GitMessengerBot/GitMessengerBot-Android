@@ -39,7 +39,7 @@ android {
 
 dependencies {
     implementation(Dependencies.Jsoup)
-    implementation(Dependencies.browser)
+    implementation(Dependencies.Browser)
 
     Dependencies.Essential.forEach(::api)
     Dependencies.Jackson.forEach(::implementation)

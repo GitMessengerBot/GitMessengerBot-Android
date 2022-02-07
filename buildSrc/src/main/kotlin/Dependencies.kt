@@ -86,7 +86,7 @@ object Versions {
 object Dependencies {
     const val Jsoup = "org.jsoup:jsoup:${Versions.Network.Jsoup}"
     const val Orbit = "org.orbit-mvi:orbit-viewmodel:${Versions.Orbit}"
-    const val browser = "androidx.browser:browser:${Versions.Ui.Browser}"
+    const val Browser = "androidx.browser:browser:${Versions.Ui.Browser}"
     const val LandscapistCoil =
         "com.github.skydoves:landscapist-coil:${Versions.Compose.LandscapistCoil}"
 
